@@ -45,6 +45,11 @@
           "methods": [ "DELETE" ],
           "pathPattern": "/servint/refdata*",
           "permissionsRequired": [ "servint.refdata.delete" ]
+        },
+        {
+          "methods": [ "GET", "POST", "PUT", "DELETE" ],
+          "pathPattern": "/servint/user/{user}",
+          "permissionsRequired": []
         }
       ]
     },

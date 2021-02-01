@@ -9,7 +9,7 @@ databaseChangeLog = {
               constraints(nullable: "false")
           }
 
-          column(name: "up_user_uuid", type: "VARCHAR(255)")        
+          column(name: "up_user_uuid", type: "VARCHAR(255)")
       }
   }
 
@@ -38,10 +38,6 @@ databaseChangeLog = {
   }
 
   changeSet(author: "efreestone (manual)", id: "2021-02-01-1350-005") {
-    addPrimaryKey(columnNames: "dshb_id", constraintName: "dashboardPK", tableName: "dashboard")
-  }
-
-  changeSet(author: "efreestone (manual)", id: "2021-02-01-1350-006") {
     addForeignKeyConstraint(baseColumnNames: "dshb_owner_FK",
       baseTableName: "dashboard",
       constraintName: "dashboard_owner_fk",

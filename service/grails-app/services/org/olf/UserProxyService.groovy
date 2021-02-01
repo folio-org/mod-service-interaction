@@ -6,8 +6,8 @@ import org.olf.UserProxy
 
 class UserProxyService {
   UserProxy resolveUser(String uuid) {
-    UserProxy resolvedUser = UserProxy.findByUuid(uuid) ?: new UserProxy(
-                                                        userUUID: uuid
+    UserProxy resolvedUser = UserProxy.findByUserUuid(uuid) ?: new UserProxy(
+                                                        userUuid: uuid,
                                                         dashboards: []
                                                       ).save(flush:true, failOnError: true);
     resolvedUser

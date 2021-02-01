@@ -1,4 +1,4 @@
-package org.olf.general
+package org.olf
 
 import grails.gorm.MultiTenant
 
@@ -10,7 +10,7 @@ import org.olf.Dashboard
 class UserProxy implements MultiTenant<UserProxy> {
 
   String id
-  String userUUID
+  String userUuid
 
   static hasMany = [
     dashboards: Dashboard
@@ -18,7 +18,8 @@ class UserProxy implements MultiTenant<UserProxy> {
 
   static mapping = {
             id column: 'up_id', generator: 'uuid2', length:36
-      userUUID column: 'up_user_uuid'
+       version column: 'up_version'
+      userUuid column: 'up_user_uuid'
     dashboards cascade: 'all-delete-orphan'
   }
 

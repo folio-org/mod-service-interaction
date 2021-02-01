@@ -14,10 +14,8 @@ class UrlMappings {
       }
     }
 
-    // Call /servint/dashboard/user to fetch all dashboards associated with a given user
-    "/servint/dashboard" (controller: 'dashboard') {
-      "/$user" (controller 'dashboard', action: 'userDashboard')
-    }
+    // Call /servint/user/id to fetch all dashboards associated with a given user
+    "/servint/user/$user" (controller: 'userProxy', action: 'resolveUser')
 
   }
 }

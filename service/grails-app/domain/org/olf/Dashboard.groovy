@@ -1,4 +1,4 @@
-package org.olf.general
+package org.olf
 
 import grails.gorm.MultiTenant
 
@@ -15,6 +15,7 @@ class Dashboard implements MultiTenant<Dashboard> {
 
   static mapping = {
        id column:'dshb_id', generator: 'uuid2', length:36
+  version column: 'dshb_version'
      name column:'dshb_name'
     owner column: 'dshb_owner_FK'
   }
