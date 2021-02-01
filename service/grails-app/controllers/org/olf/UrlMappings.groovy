@@ -13,5 +13,11 @@ class UrlMappings {
         "/$domain/$property" (controller: 'refdata', action: 'lookup')
       }
     }
+
+    // Call /servint/dashboard/user to fetch all dashboards associated with a given user
+    "/servint/dashboard" (controller: 'dashboard') {
+      "/$user" (controller 'dashboard', action: 'userDashboard')
+    }
+
   }
 }

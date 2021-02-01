@@ -4,4 +4,5 @@ databaseChangeLog = {
   include file: 'setup-custom-properties.groovy'
   include file: 'setup-app-settings.groovy'
   include file: 'create-mod-service-interaction.groovy'
+  include file: 'intial-model.groovy'
 }
