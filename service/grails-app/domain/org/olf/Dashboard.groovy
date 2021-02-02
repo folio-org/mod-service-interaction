@@ -17,7 +17,7 @@ class Dashboard implements MultiTenant<Dashboard> {
        id column:'dshb_id', generator: 'uuid2', length:36
   version column: 'dshb_version'
      name column:'dshb_name'
-    owner column: 'dshb_owner_FK'
+    owner column: 'dshb_owner_fk'
   }
 
 }

@@ -29,7 +29,7 @@ databaseChangeLog = {
 
           column(name: "dshb_name", type: "VARCHAR(255)")
 
-          column(name: "dshb_owner_FK", type: "VARCHAR(36)")
+          column(name: "dshb_owner_fk", type: "VARCHAR(36)")
       }
   }
 
@@ -38,7 +38,7 @@ databaseChangeLog = {
   }
 
   changeSet(author: "efreestone (manual)", id: "2021-02-01-1350-005") {
-    addForeignKeyConstraint(baseColumnNames: "dshb_owner_FK",
+    addForeignKeyConstraint(baseColumnNames: "dshb_owner_fk",
       baseTableName: "dashboard",
       constraintName: "dashboard_owner_fk",
       deferrable: "false", initiallyDeferred: "false",

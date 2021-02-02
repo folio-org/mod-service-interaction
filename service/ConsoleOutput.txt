@@ -4,91 +4,81 @@ Checking for local settings at /home/ethan/FolioModules/ERM_Backend/mod-service-
 Configuring Spring Security Core ...
 ... finished configuring Spring Security Core
 
-2021-02-01 16:11:41.168 DEBUG --- [           main] c.k.w.t.l.ProxyAwareCachingLinkGenerator : Replacing the Default link generator with one that is Proxy aware.
-2021-02-01 16:11:41.652 DEBUG --- [           main] c.k.w.t.d.ExtendedWebDataBinder          : Create our new databinder
-2021-02-01 16:11:41.708  INFO --- [           main] com.k_int.okapi.OkapiClient              : Using default location for okapi at: http://localhost:9130
-2021-02-01 16:11:41.729  INFO --- [           main] com.k_int.okapi.OkapiClient              : Skipping registration with discovery as per config.
-2021-02-01 16:11:41.729  INFO --- [           main] com.k_int.okapi.OkapiClient              : Skipping deployment as per config.
-2021-02-01 16:11:42.476 DEBUG --- [           main] c.k.web.toolkit.WebToolkitGrailsPlugin   : Extending Domain classes.
+2021-02-02 12:48:11.581 DEBUG --- [           main] c.k.w.t.l.ProxyAwareCachingLinkGenerator : Replacing the Default link generator with one that is Proxy aware.
+2021-02-02 12:48:12.193 DEBUG --- [           main] c.k.w.t.d.ExtendedWebDataBinder          : Create our new databinder
+2021-02-02 12:48:12.256  INFO --- [           main] com.k_int.okapi.OkapiClient              : Using default location for okapi at: http://localhost:9130
+2021-02-02 12:48:12.279  INFO --- [           main] com.k_int.okapi.OkapiClient              : Skipping registration with discovery as per config.
+2021-02-02 12:48:12.279  INFO --- [           main] com.k_int.okapi.OkapiClient              : Skipping deployment as per config.
+2021-02-02 12:48:13.230 DEBUG --- [           main] c.k.web.toolkit.WebToolkitGrailsPlugin   : Extending Domain classes.
 Grails application running at http://localhost:8078 in environment: vagrant-db
-2021-02-01 16:12:00.769 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : allTenantIdentifiers is NULL - so establish the list and pull default values from the database
-2021-02-01 16:12:00.789 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_agreements does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.789 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_audit does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.789 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_calendar does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.789 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_circulation_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.789 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_configuration does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_courses does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_data_export does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_data_import_converter_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_email does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_event_config does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_feesfines does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_finance_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_inventory_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_kb_ebsco_java does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_licenses does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_login does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_notes does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_notify does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_oai_pmh does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_orders_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_organizations_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_password_validator does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_patron_blocks does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.790 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_permissions does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.791 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_pubsub does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.791 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_remote_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.791 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : Adding tenant diku and schema diku_mod_service_interaction
-2021-02-01 16:12:00.791 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_source_record_manager does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.791 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_source_record_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.791 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_tags does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.791 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_template_engine does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.791 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_users does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.791 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : information_schema does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.791 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : pg_catalog does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.791 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : public does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.791 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : pubsub_config does not end with schema suffix _mod_service_interaction, skipping
-2021-02-01 16:12:00.794 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-01 16:12:00.795 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-01 16:12:00.840 DEBUG --- [  XNIO-1 task-1] org.olf.UserProxyController              : UserProxyController::resolveUser called with userId 123abc
-2021-02-01 16:12:00.840 DEBUG --- [  XNIO-1 task-1] org.olf.UserProxyService                 : UserProxyService::resolveUser called with uuid 123abc
-2021-02-01 16:12:08.267 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-01 16:12:08.267 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-01 16:12:08.268 DEBUG --- [  XNIO-1 task-2] org.olf.UserProxyController              : UserProxyController::resolveUser called with userId 123abc
-2021-02-01 16:12:08.268 DEBUG --- [  XNIO-1 task-2] org.olf.UserProxyService                 : UserProxyService::resolveUser called with uuid 123abc
-2021-02-01 16:12:09.069 DEBUG --- [  XNIO-1 task-3] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-01 16:12:09.069 DEBUG --- [  XNIO-1 task-3] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-01 16:12:09.070 DEBUG --- [  XNIO-1 task-3] org.olf.UserProxyController              : UserProxyController::resolveUser called with userId 123abc
-2021-02-01 16:12:09.070 DEBUG --- [  XNIO-1 task-3] org.olf.UserProxyService                 : UserProxyService::resolveUser called with uuid 123abc
-2021-02-01 16:12:09.797 DEBUG --- [  XNIO-1 task-4] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-01 16:12:09.797 DEBUG --- [  XNIO-1 task-4] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-01 16:12:09.798 DEBUG --- [  XNIO-1 task-4] org.olf.UserProxyController              : UserProxyController::resolveUser called with userId 123abc
-2021-02-01 16:12:09.798 DEBUG --- [  XNIO-1 task-4] org.olf.UserProxyService                 : UserProxyService::resolveUser called with uuid 123abc
-2021-02-01 16:12:10.425 DEBUG --- [  XNIO-1 task-5] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-01 16:12:10.425 DEBUG --- [  XNIO-1 task-5] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-01 16:12:10.426 DEBUG --- [  XNIO-1 task-5] org.olf.UserProxyController              : UserProxyController::resolveUser called with userId 123abc
-2021-02-01 16:12:10.426 DEBUG --- [  XNIO-1 task-5] org.olf.UserProxyService                 : UserProxyService::resolveUser called with uuid 123abc
-2021-02-01 16:12:11.079 DEBUG --- [  XNIO-1 task-6] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-01 16:12:11.079 DEBUG --- [  XNIO-1 task-6] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-01 16:12:11.080 DEBUG --- [  XNIO-1 task-6] org.olf.UserProxyController              : UserProxyController::resolveUser called with userId 123abc
-2021-02-01 16:12:11.080 DEBUG --- [  XNIO-1 task-6] org.olf.UserProxyService                 : UserProxyService::resolveUser called with uuid 123abc
-2021-02-01 16:12:11.748 DEBUG --- [  XNIO-1 task-7] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-01 16:12:11.748 DEBUG --- [  XNIO-1 task-7] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-01 16:12:11.749 DEBUG --- [  XNIO-1 task-7] org.olf.UserProxyController              : UserProxyController::resolveUser called with userId 123abc
-2021-02-01 16:12:11.749 DEBUG --- [  XNIO-1 task-7] org.olf.UserProxyService                 : UserProxyService::resolveUser called with uuid 123abc
-2021-02-01 16:12:21.068 DEBUG --- [  XNIO-1 task-8] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-01 16:12:21.068 DEBUG --- [  XNIO-1 task-8] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-01 16:12:21.068 DEBUG --- [  XNIO-1 task-8] org.olf.UserProxyController              : UserProxyController::resolveUser called with userId 1234dcba
-2021-02-01 16:12:21.068 DEBUG --- [  XNIO-1 task-8] org.olf.UserProxyService                 : UserProxyService::resolveUser called with uuid 1234dcba
-2021-02-01 16:12:22.748 DEBUG --- [  XNIO-1 task-9] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-01 16:12:22.748 DEBUG --- [  XNIO-1 task-9] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-01 16:12:22.749 DEBUG --- [  XNIO-1 task-9] org.olf.UserProxyController              : UserProxyController::resolveUser called with userId 1234dcba
-2021-02-01 16:12:22.749 DEBUG --- [  XNIO-1 task-9] org.olf.UserProxyService                 : UserProxyService::resolveUser called with uuid 1234dcba
-2021-02-01 16:12:23.639 DEBUG --- [ XNIO-1 task-10] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-01 16:12:23.640 DEBUG --- [ XNIO-1 task-10] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-01 16:12:23.640 DEBUG --- [ XNIO-1 task-10] org.olf.UserProxyController              : UserProxyController::resolveUser called with userId 1234dcba
-2021-02-01 16:12:23.640 DEBUG --- [ XNIO-1 task-10] org.olf.UserProxyService                 : UserProxyService::resolveUser called with uuid 1234dcba
-2021-02-01 16:12:33.758 DEBUG --- [ XNIO-1 task-11] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-01 16:12:33.758 DEBUG --- [ XNIO-1 task-11] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-01 16:12:33.759 DEBUG --- [ XNIO-1 task-11] org.olf.UserProxyController              : UserProxyController::resolveUser called with userId 123abc
-2021-02-01 16:12:33.759 DEBUG --- [ XNIO-1 task-11] org.olf.UserProxyService                 : UserProxyService::resolveUser called with uuid 123abc
+2021-02-02 12:50:23.353 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : See if we already have a datastore for diku_mod_service_interaction
+2021-02-02 12:50:23.358 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : register module for tenant/schema (diku/diku_mod_service_interaction)
+2021-02-02 12:50:23.369 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : Execute -- create schema (if not exists) diku_mod_service_interaction
+2021-02-02 12:50:23.378 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : updateAccountSchema(diku_mod_service_interaction,diku)
+2021-02-02 12:50:25.498 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : Database migration completed
+2021-02-02 12:50:25.498 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : adding tenant for diku_mod_service_interaction
+2021-02-02 12:50:26.183 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : added schema
+2021-02-02 12:50:26.184 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : allTenantIdentifiers is NULL - so establish the list and pull default values from the database
+2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_agreements does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_audit does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_calendar does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_circulation_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_configuration does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_courses does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_data_export does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_data_import_converter_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_email does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_event_config does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_feesfines does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_finance_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_inventory_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_kb_ebsco_java does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_licenses does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_login does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_notes does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_notify does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_oai_pmh does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_orders_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_organizations_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_password_validator does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_patron_blocks does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_permissions does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_pubsub does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_remote_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : Adding tenant diku and schema diku_mod_service_interaction
+2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_source_record_manager does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_source_record_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_tags does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_template_engine does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_users does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : information_schema does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : pg_catalog does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : public does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : pubsub_config does not end with schema suffix _mod_service_interaction, skipping
+2021-02-02 12:50:26.209 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.settings.AppSetting for refData defaults
+2021-02-02 12:50:26.210 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyText for refData defaults
+2021-02-02 12:50:26.215 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyRefdataDefinition for refData defaults
+2021-02-02 12:50:26.216 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyRefdata for refData defaults
+2021-02-02 12:50:26.220 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyInteger for refData defaults
+2021-02-02 12:50:26.220 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyDecimal for refData defaults
+2021-02-02 12:50:26.220 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyContainer for refData defaults
+2021-02-02 12:50:26.220 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyBoolean for refData defaults
+2021-02-02 12:50:26.221 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyBlob for refData defaults
+2021-02-02 12:50:26.221 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class org.olf.Dashboard for refData defaults
+2021-02-02 12:50:26.221 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class org.olf.UserProxy for refData defaults
+2021-02-02 12:50:26.233 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : enableTenant exit cleanly
+
+
+***Completed tenant setup***
+2021-02-02 13:06:19.719 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
+2021-02-02 13:06:19.720 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
+2021-02-02 13:06:19.748 DEBUG --- [  XNIO-1 task-2] org.olf.DashboardController              : UserProxyController::getUserDashboards called with userId 123abc
+2021-02-02 13:06:21.947 DEBUG --- [  XNIO-1 task-3] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
+2021-02-02 13:06:21.948 DEBUG --- [  XNIO-1 task-3] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
+2021-02-02 13:06:21.948 DEBUG --- [  XNIO-1 task-3] org.olf.DashboardController              : UserProxyController::getUserDashboards called with userId 123abc
+2021-02-02 13:06:24.291 DEBUG --- [  XNIO-1 task-4] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
+2021-02-02 13:06:24.291 DEBUG --- [  XNIO-1 task-4] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
+2021-02-02 13:06:24.291 DEBUG --- [  XNIO-1 task-4] org.olf.DashboardController              : UserProxyController::getUserDashboards called with userId 123abc
+2021-02-02 13:06:25.124 DEBUG --- [  XNIO-1 task-5] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
+2021-02-02 13:06:25.124 DEBUG --- [  XNIO-1 task-5] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
+2021-02-02 13:06:25.125 DEBUG --- [  XNIO-1 task-5] org.olf.DashboardController              : UserProxyController::getUserDashboards called with userId 123abc

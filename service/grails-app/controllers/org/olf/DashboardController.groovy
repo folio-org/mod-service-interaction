@@ -12,14 +12,15 @@ import org.olf.UserProxyService
 
 @Slf4j
 @CurrentTenant
-class UserProxyController {
+class DashboardController {
   def userProxyService
   
   static responseFormats = ['json', 'xml']
   
-  Set<Dashboard> resolveUser(String user) {
-    log.debug("UserProxyController::resolveUser called with userId ${user}")
-    respond userProxyService.resolveUser(user)
+  Set<Dashboard> getUserDashboards(String user) {
+    log.debug("UserProxyController::getUserDashboards called with userId ${user}")
+    UserProxy proxiedUser = userProxyService.resolveUser(user)
+    respond proxiedUser.dashboards
   }
 
 }
