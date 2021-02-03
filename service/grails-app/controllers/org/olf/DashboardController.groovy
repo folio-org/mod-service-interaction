@@ -23,4 +23,15 @@ class DashboardController {
     respond proxiedUser.dashboards
   }
 
+  Dashboard getNamedUserDashboard(String user, String name) {
+    log.debug("UserProxyController::getNamedUserDashboard called with userId (${user}) and name (${name})")
+    UserProxy proxiedUser = userProxyService.resolveUser(user)
+    Dashboard dash = Dashboard.findByOwnerAndName(proxiedUser, name) ?: new Dashboard (
+      name: name,
+      owner: proxiedUser
+    )
+
+    respond dash
+  }
+
 }

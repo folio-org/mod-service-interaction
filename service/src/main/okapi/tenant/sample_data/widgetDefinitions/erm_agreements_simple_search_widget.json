@@ -1,0 +1,18 @@
+{
+  "widgetType": {
+    "name": "SimpleSearch",
+    "version": "v1.0.0"
+  },
+  "name":"ERM Agreements",
+  "definition":{
+    "baseUrl":"/erm/agreements",
+    "resultColumns":[
+      { "name":"agreementName", "accessPath":"name" },
+      { "name":"startDate", "accessPath":"periods.startDate" },
+      { "name":"vendor", "accessPath": "vendor.name" }
+    ],
+    "filterColumns":[
+      { "name":"vendor", "filterPath": "vendor.name", "valueType":"String" }
+    ]
+  }
+}

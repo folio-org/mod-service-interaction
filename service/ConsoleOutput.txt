@@ -4,81 +4,184 @@ Checking for local settings at /home/ethan/FolioModules/ERM_Backend/mod-service-
 Configuring Spring Security Core ...
 ... finished configuring Spring Security Core
 
-2021-02-02 12:48:11.581 DEBUG --- [           main] c.k.w.t.l.ProxyAwareCachingLinkGenerator : Replacing the Default link generator with one that is Proxy aware.
-2021-02-02 12:48:12.193 DEBUG --- [           main] c.k.w.t.d.ExtendedWebDataBinder          : Create our new databinder
-2021-02-02 12:48:12.256  INFO --- [           main] com.k_int.okapi.OkapiClient              : Using default location for okapi at: http://localhost:9130
-2021-02-02 12:48:12.279  INFO --- [           main] com.k_int.okapi.OkapiClient              : Skipping registration with discovery as per config.
-2021-02-02 12:48:12.279  INFO --- [           main] com.k_int.okapi.OkapiClient              : Skipping deployment as per config.
-2021-02-02 12:48:13.230 DEBUG --- [           main] c.k.web.toolkit.WebToolkitGrailsPlugin   : Extending Domain classes.
+2021-02-03 09:48:54.117 DEBUG --- [           main] c.k.w.t.l.ProxyAwareCachingLinkGenerator : Replacing the Default link generator with one that is Proxy aware.
+2021-02-03 09:48:54.535 DEBUG --- [           main] c.k.w.t.d.ExtendedWebDataBinder          : Create our new databinder
+2021-02-03 09:48:54.583  INFO --- [           main] com.k_int.okapi.OkapiClient              : Using default location for okapi at: http://localhost:9130
+2021-02-03 09:48:54.600  INFO --- [           main] com.k_int.okapi.OkapiClient              : Skipping registration with discovery as per config.
+2021-02-03 09:48:54.600  INFO --- [           main] com.k_int.okapi.OkapiClient              : Skipping deployment as per config.
+2021-02-03 09:48:55.258 DEBUG --- [           main] c.k.web.toolkit.WebToolkitGrailsPlugin   : Extending Domain classes.
 Grails application running at http://localhost:8078 in environment: vagrant-db
-2021-02-02 12:50:23.353 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : See if we already have a datastore for diku_mod_service_interaction
-2021-02-02 12:50:23.358 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : register module for tenant/schema (diku/diku_mod_service_interaction)
-2021-02-02 12:50:23.369 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : Execute -- create schema (if not exists) diku_mod_service_interaction
-2021-02-02 12:50:23.378 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : updateAccountSchema(diku_mod_service_interaction,diku)
-2021-02-02 12:50:25.498 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : Database migration completed
-2021-02-02 12:50:25.498 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : adding tenant for diku_mod_service_interaction
-2021-02-02 12:50:26.183 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : added schema
-2021-02-02 12:50:26.184 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : allTenantIdentifiers is NULL - so establish the list and pull default values from the database
-2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_agreements does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_audit does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_calendar does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_circulation_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_configuration does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_courses does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_data_export does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_data_import_converter_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_email does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.200 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_event_config does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_feesfines does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_finance_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_inventory_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_kb_ebsco_java does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_licenses does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_login does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_notes does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_notify does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_oai_pmh does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_orders_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_organizations_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_password_validator does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_patron_blocks does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_permissions does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_pubsub does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.201 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_remote_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : Adding tenant diku and schema diku_mod_service_interaction
-2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_source_record_manager does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_source_record_storage does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_tags does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_template_engine does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_users does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : information_schema does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : pg_catalog does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : public does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.202 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : pubsub_config does not end with schema suffix _mod_service_interaction, skipping
-2021-02-02 12:50:26.209 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.settings.AppSetting for refData defaults
-2021-02-02 12:50:26.210 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyText for refData defaults
-2021-02-02 12:50:26.215 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyRefdataDefinition for refData defaults
-2021-02-02 12:50:26.216 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyRefdata for refData defaults
-2021-02-02 12:50:26.220 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyInteger for refData defaults
-2021-02-02 12:50:26.220 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyDecimal for refData defaults
-2021-02-02 12:50:26.220 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyContainer for refData defaults
-2021-02-02 12:50:26.220 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyBoolean for refData defaults
-2021-02-02 12:50:26.221 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyBlob for refData defaults
-2021-02-02 12:50:26.221 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class org.olf.Dashboard for refData defaults
-2021-02-02 12:50:26.221 DEBUG --- [  XNIO-1 task-1] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class org.olf.UserProxy for refData defaults
-2021-02-02 12:50:26.233 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : enableTenant exit cleanly
+2021-02-03 09:48:57.834 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : TenantAdminService::purgeTenant(diku)
+2021-02-03 09:48:57.846 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : Execute -- drop schema diku_mod_service_interaction cascade
+2021-02-03 09:48:57.866 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : TenantAdminService::disableTenant(diku)
+2021-02-03 09:48:57.874 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : allTenantIdentifiers is NULL - so establish the list and pull default values from the database
+2021-02-03 09:48:57.893 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_audit does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.893 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_calendar does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.893 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_circulation_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.893 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_configuration does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.893 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_courses does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.893 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_data_export does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.893 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_data_import_converter_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.893 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_email does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.893 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_event_config does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.893 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_feesfines does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.893 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_finance_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_inventory_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_kb_ebsco_java does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_login does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_notes does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_notify does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_oai_pmh does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_orders_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_organizations_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_password_validator does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_patron_blocks does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_permissions does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_pubsub does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_remote_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_source_record_manager does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_source_record_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_tags does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_template_engine does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.894 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_users does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.895 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : information_schema does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.895 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : pg_catalog does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.895 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : public does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.895 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : pubsub_config does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 09:48:57.930 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : See if we already have a datastore for diku_mod_service_interaction
+2021-02-03 09:48:57.930 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : register module for tenant/schema (diku/diku_mod_service_interaction)
+2021-02-03 09:48:57.931 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : Execute -- create schema (if not exists) diku_mod_service_interaction
+2021-02-03 09:48:57.935 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : updateAccountSchema(diku_mod_service_interaction,diku)
+2021-02-03 09:48:59.705 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : Database migration completed
+2021-02-03 09:48:59.705 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : adding tenant for diku_mod_service_interaction
+2021-02-03 09:49:00.260 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : added schema
+2021-02-03 09:49:00.267 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.settings.AppSetting for refData defaults
+2021-02-03 09:49:00.267 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyText for refData defaults
+2021-02-03 09:49:00.271 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyRefdataDefinition for refData defaults
+2021-02-03 09:49:00.272 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyRefdata for refData defaults
+2021-02-03 09:49:00.276 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyInteger for refData defaults
+2021-02-03 09:49:00.276 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyDecimal for refData defaults
+2021-02-03 09:49:00.276 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyContainer for refData defaults
+2021-02-03 09:49:00.276 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyBoolean for refData defaults
+2021-02-03 09:49:00.276 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyBlob for refData defaults
+2021-02-03 09:49:00.277 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class org.olf.WidgetDefinition for refData defaults
+2021-02-03 09:49:00.277 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class org.olf.Dashboard for refData defaults
+2021-02-03 09:49:00.277 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class org.olf.UserProxy for refData defaults
+2021-02-03 09:49:00.277 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class org.olf.WidgetType for refData defaults
+2021-02-03 09:49:00.287 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : enableTenant exit cleanly
+2021-02-03 09:49:00.469 ERROR --- [pool-1-thread-1] com.k_int.okapi.DataloadingService       : Error executing tenant init script.
 
+org.springframework.orm.hibernate5.HibernateQueryException: could not resolve property: version of: org.olf.WidgetType; nested exception is org.hibernate.QueryException: could not resolve property: version of: org.olf.WidgetType
+	at org.springframework.orm.hibernate5.SessionFactoryUtils.convertHibernateAccessException(SessionFactoryUtils.java:257)
+	at org.grails.orm.hibernate.GrailsHibernateTemplate.convertHibernateAccessException(GrailsHibernateTemplate.java:717)
+	at org.grails.orm.hibernate.GrailsHibernateTemplate.doExecute(GrailsHibernateTemplate.java:301)
+	at org.grails.orm.hibernate.GrailsHibernateTemplate.execute(GrailsHibernateTemplate.java:241)
+	at org.grails.orm.hibernate.GrailsHibernateTemplate.executeWithNewSession(GrailsHibernateTemplate.java:153)
+	at org.grails.orm.hibernate.GrailsHibernateTemplate.executeWithExistingOrCreateNewSession(GrailsHibernateTemplate.java:207)
+	at org.grails.orm.hibernate.AbstractHibernateDatastore.withNewSession(AbstractHibernateDatastore.java:369)
+	at grails.gorm.multitenancy.Tenants$_withId_closure2.doCall(Tenants.groovy:258)
+	at grails.gorm.multitenancy.Tenants$_withId_closure2.call(Tenants.groovy)
+	at grails.gorm.multitenancy.Tenants$CurrentTenant.withTenant(Tenants.groovy:358)
+	at grails.gorm.multitenancy.Tenants.withId(Tenants.groovy:236)
+	at grails.gorm.multitenancy.Tenants.withId(Tenants.groovy:169)
+	at com.k_int.okapi.DataloadingService.executeTenantDataFile(DataloadingService.groovy:105)
+	at com.k_int.okapi.DataloadingService.onTenantLoadSample(DataloadingService.groovy:141)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:282)
+	at grails.events.subscriber.MethodSubscriber.call(MethodSubscriber.groovy:80)
+	at org.grails.events.EventSubscriberTrigger.proceed(EventSubscriberTrigger.groovy:34)
+	at org.grails.events.bus.ExecutorEventBus$_buildNotificationCallable_closure1$_closure3.doCall(ExecutorEventBus.groovy:36)
+	at org.grails.events.bus.ExecutorEventBus$_buildNotificationCallable_closure1$_closure3.call(ExecutorEventBus.groovy)
+	at groovy.lang.Closure.run(Closure.java:486)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+Caused by: org.hibernate.QueryException: could not resolve property: version of: org.olf.WidgetType
+	at org.hibernate.persister.entity.AbstractPropertyMapping.propertyException(AbstractPropertyMapping.java:73)
+	at org.hibernate.persister.entity.AbstractPropertyMapping.toType(AbstractPropertyMapping.java:67)
+	at org.hibernate.persister.entity.AbstractEntityPersister.getSubclassPropertyTableNumber(AbstractEntityPersister.java:2075)
+	at org.hibernate.persister.entity.BasicEntityPropertyMapping.toColumns(BasicEntityPropertyMapping.java:46)
+	at org.hibernate.persister.entity.AbstractEntityPersister.toColumns(AbstractEntityPersister.java:2017)
+	at org.hibernate.loader.criteria.CriteriaQueryTranslator.getColumns(CriteriaQueryTranslator.java:538)
+	at org.hibernate.loader.criteria.CriteriaQueryTranslator.findColumns(CriteriaQueryTranslator.java:553)
+	at org.hibernate.criterion.SimpleExpression.toSqlString(SimpleExpression.java:66)
+	at org.hibernate.loader.criteria.CriteriaQueryTranslator.getWhereCondition(CriteriaQueryTranslator.java:428)
+	at org.hibernate.loader.criteria.CriteriaJoinWalker.<init>(CriteriaJoinWalker.java:106)
+	at org.hibernate.loader.criteria.CriteriaJoinWalker.<init>(CriteriaJoinWalker.java:75)
+	at org.hibernate.loader.criteria.CriteriaLoader.<init>(CriteriaLoader.java:80)
+	at org.hibernate.internal.SessionImpl.list(SessionImpl.java:1861)
+	at org.hibernate.internal.CriteriaImpl.list(CriteriaImpl.java:370)
+	at org.grails.orm.hibernate.query.AbstractHibernateQuery.singleResultViaListCall(AbstractHibernateQuery.java:808)
+	at org.grails.orm.hibernate.query.AbstractHibernateQuery.singleResult(AbstractHibernateQuery.java:795)
+	at org.grails.datastore.gorm.finders.AbstractFindByFinder.invokeQuery(AbstractFindByFinder.java:35)
+	at org.grails.datastore.gorm.finders.AbstractFindByFinder$1.doInSession(AbstractFindByFinder.java:29)
+	at org.grails.datastore.mapping.core.DatastoreUtils.execute(DatastoreUtils.java:319)
+	at org.grails.datastore.gorm.finders.AbstractFinder.execute(AbstractFinder.java:42)
+	at org.grails.datastore.gorm.finders.AbstractFindByFinder.doInvokeInternal(AbstractFindByFinder.java:27)
+	at org.grails.datastore.gorm.finders.DynamicFinder.invoke(DynamicFinder.java:254)
+	at org.grails.datastore.gorm.finders.DynamicFinder.invoke(DynamicFinder.java:392)
+	at org.grails.datastore.gorm.finders.FinderMethod$invoke$0.call(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:47)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:115)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:143)
+	at org.grails.datastore.gorm.GormStaticApi.methodMissing(GormStaticApi.groovy:185)
+	at org.grails.datastore.gorm.GormEntity$Trait$Helper.staticMethodMissing(GormEntity.groovy:777)
+	at org.grails.datastore.gorm.GormEntity$Trait$Helper$staticMethodMissing$0.call(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:47)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:115)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:143)
+	at org.olf.WidgetType.staticMethodMissing(WidgetType.groovy)
+	at org.olf.WidgetType$staticMethodMissing.callStatic(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallStatic(CallSiteArray.java:55)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callStatic(AbstractCallSite.java:196)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callStatic(AbstractCallSite.java:216)
+	at org.olf.WidgetType.$static_methodMissing(WidgetType.groovy)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:101)
+	at groovy.lang.MetaClassImpl.invokeStaticMissingMethod(MetaClassImpl.java:1523)
+	at groovy.lang.MetaClassImpl.invokeStaticMethod(MetaClassImpl.java:1511)
+	at org.codehaus.groovy.runtime.callsite.StaticMetaClassSite.call(StaticMetaClassSite.java:50)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:47)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:115)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:135)
+	at Script1$_run_closure1.doCall(Script1.groovy:66)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:101)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:323)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:263)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1041)
+	at groovy.lang.Closure.call(Closure.java:405)
+	at groovy.lang.Closure.call(Closure.java:421)
+	at org.codehaus.groovy.runtime.ResourceGroovyMethods.traverse(ResourceGroovyMethods.java:1460)
+	at org.codehaus.groovy.runtime.ResourceGroovyMethods.traverse(ResourceGroovyMethods.java:1334)
+	at org.codehaus.groovy.runtime.dgm$1069.invoke(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.PojoMetaMethodSite$PojoMetaMethodSiteNoUnwrapNoCoerce.invoke(PojoMetaMethodSite.java:244)
+	at org.codehaus.groovy.runtime.callsite.PojoMetaMethodSite.call(PojoMetaMethodSite.java:53)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:47)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:115)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:135)
+	at Script1.run(Script1.groovy:63)
+	at com.k_int.okapi.DataloadingService$_executeTenantDataFile_closure2$_closure4.doCall(DataloadingService.groovy:110)
+	at com.k_int.okapi.DataloadingService$_executeTenantDataFile_closure2$_closure4.call(DataloadingService.groovy)
+	at grails.gorm.transactions.GrailsTransactionTemplate$2.doInTransaction(GrailsTransactionTemplate.groovy:94)
+	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:140)
+	at grails.gorm.transactions.GrailsTransactionTemplate.execute(GrailsTransactionTemplate.groovy:91)
+	at com.k_int.web.toolkit.utils.GormUtils.withTransaction(GormUtils.groovy:33)
+	at com.k_int.okapi.DataloadingService$_executeTenantDataFile_closure2.doCall(DataloadingService.groovy:109)
+	at com.k_int.okapi.DataloadingService$_executeTenantDataFile_closure2.call(DataloadingService.groovy)
+	at grails.gorm.multitenancy.Tenants$_withId_closure2$_closure6.doCall(Tenants.groovy:265)
+	at grails.gorm.multitenancy.Tenants$_withId_closure2$_closure6.call(Tenants.groovy)
+	at org.grails.orm.hibernate.GrailsHibernateTemplate.doExecute(GrailsHibernateTemplate.java:297)
+	... 26 common frames omitted
 
-***Completed tenant setup***
-2021-02-02 13:06:19.719 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-02 13:06:19.720 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-02 13:06:19.748 DEBUG --- [  XNIO-1 task-2] org.olf.DashboardController              : UserProxyController::getUserDashboards called with userId 123abc
-2021-02-02 13:06:21.947 DEBUG --- [  XNIO-1 task-3] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-02 13:06:21.948 DEBUG --- [  XNIO-1 task-3] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-02 13:06:21.948 DEBUG --- [  XNIO-1 task-3] org.olf.DashboardController              : UserProxyController::getUserDashboards called with userId 123abc
-2021-02-02 13:06:24.291 DEBUG --- [  XNIO-1 task-4] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-02 13:06:24.291 DEBUG --- [  XNIO-1 task-4] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-02 13:06:24.291 DEBUG --- [  XNIO-1 task-4] org.olf.DashboardController              : UserProxyController::getUserDashboards called with userId 123abc
-2021-02-02 13:06:25.124 DEBUG --- [  XNIO-1 task-5] com.k_int.okapi.OkapiTenantAdminService  : Checking to see if diku is already present in getAllTenantIds()  : true
-2021-02-02 13:06:25.124 DEBUG --- [  XNIO-1 task-5] com.k_int.okapi.OkapiTenantAdminService  : performSchemaCheck(diku) -- true - no action needed
-2021-02-02 13:06:25.125 DEBUG --- [  XNIO-1 task-5] org.olf.DashboardController              : UserProxyController::getUserDashboards called with userId 123abc

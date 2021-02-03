@@ -1,0 +1,75 @@
+{
+  "version": "v1.0.0",
+  "name": "SimpleSearch",
+  "schema": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "SimpleSearch widget",
+    "type": "object",
+    "description": "SimpleSearch widget type",
+    "additionalProperties": true,
+    "required": ["baseUrl", "resultColumns"],
+    "properties": {
+      "baseUrl": {
+        "type": "string",
+        "description": "The base url queries built with this widget will go to"
+      },
+      "resultColumns": {
+        "type": "array",
+        "items": { "$ref": "#/$defs/resultColumn" }
+      },
+      "filterColumns": {
+        "type": "array",
+        "items": { "$ref": "#/$defs/filterColumn" }
+      }
+    },
+    "$defs": {
+      "resultColumn": { 
+        "type": "object",
+        "title": "Result column",
+        "description": "Describes the columns to be made available in the output",
+        "additionalProperties": false,
+        "required": ["accessPath", "name"],
+        "properties": {
+          "accessPath": {
+            "type": "string",
+            "description": "a string defining the path to the specified object property"
+          },
+          "label": {
+            "type": "string",
+            "description": "an optional string prescribing the display label of the field"
+          },
+          "name": {
+            "type": "string",
+            "description": "a string defining the name of the property for this column"
+          }
+        }
+      },
+      "filterColumn": { 
+        "type": "object",
+        "title": "Filter column",
+        "description": "Describes the columns the output is able to filter on",
+        "additionalProperties": false,
+        "required": ["filterPath", "name", "valueType"],
+        "properties": {
+          "filterPath": {
+            "type": "string",
+            "description": "a string defining the path on which we must filter for this property"
+          },
+          "label": {
+            "type": "string",
+            "description": "an optional string prescribing the display label of the field"
+          },
+          "name": {
+            "type": "string",
+            "description": "a string defining the name of the property for this column"
+          },
+          "valueType": {
+            "type": "string",
+            "enum": ["String", "Integer", "Float", "Boolean"],
+            "description": "a string defining the type of property we are filtering on"
+          }
+        }
+      }
+    }
+  }
+}

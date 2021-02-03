@@ -11,6 +11,13 @@ import grails.databinding.SimpleMapDataBindingSource
 import static grails.async.Promises.*
 import com.k_int.web.toolkit.settings.AppSetting
 
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+import static groovy.io.FileType.FILES
+
+import org.olf.WidgetType
+import org.olf.WidgetDefinition
+
 CustomPropertyDefinition ensureRefdataProperty(String name, boolean local, String category, String label = null) {
 
   CustomPropertyDefinition result = null;
@@ -48,6 +55,26 @@ CustomPropertyDefinition ensureTextProperty(String name, boolean local = true, S
   return result;
 }
 
+
+def jsonSlurper = new JsonSlurper()
+
+log.info 'Importing widget types'
+def widgetTypeDirectory = new File('./src/main/okapi/tenant/sample_data/widgetTypes')
+widgetTypeDirectory.traverse (type: FILES, maxDepth: 0) { file ->
+  def wt = jsonSlurper.parse(file)
+
+  WidgetType widgetType = WidgetType.findByNameAndVersion(wt.name, wt.version) ?: new WidgetType(
+    name: wt.name,
+    version: wt.version,
+    schema: JsonOutput.toJson(wt.schema)
+  ).save(flush: true, failOnError: true)
+}
+
+
+log.info ' Importing widget definitions'
+// Here we should read in the files in ./widgetDefinitions and save them to the db
+// TODO eventually we should not be bootstrapping these, but instead each app which wants to use the dashboard
+// should be sending their definitions to an endpoint in mod-service-interaction.
 
 
 log.info 'Importing sample data'
