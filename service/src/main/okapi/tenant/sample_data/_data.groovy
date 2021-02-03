@@ -80,9 +80,9 @@ widgetDefDirectory.traverse (type: FILES, maxDepth: 0) { file ->
   WidgetType type = WidgetType.findByNameAndWidgetVersion(wd.type.name, wd.type.version)
   if (type != null) {
     WidgetDefinition widgetDef = WidgetDefinition.findByNameAndType(wd.name, type) ?: new WidgetType(
-      name: wt.name,
-      widgetVersion: wt.version,
-      schema: JsonOutput.toJson(wt.schema)
+      name: wd.name,
+      type: type,
+      definition: JsonOutput.toJson(wd.definition)
     ).save(flush: true, failOnError: true)
   } else {
     log.warn "WidgetType ${wd.type.name} ${wd.type.version} is not supported"
