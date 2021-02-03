@@ -6,101 +6,67 @@
     "title": "SimpleSearch widget",
     "type": "object",
     "description": "SimpleSearch widget type",
-    "additionalProperties": false,
-    "required": ["type", "name", "definition"],
+    "additionalProperties": true,
+    "required": ["baseUrl", "resultColumns"],
     "properties": {
-      "name": {
+      "baseUrl": {
         "type": "string",
-        "description": "The name of the WidgetDefinition, eg ERM Agreements SimpleSearch"
+        "description": "The base url queries built with this widget will go to"
       },
-      "type": { "$ref": "#/$defs/type" },
-      "definition": { "$ref": "#/$defs/definition" }
+      "resultColumns": {
+        "type": "array",
+        "items": { "$ref": "#/$defs/resultColumn" }
+      },
+      "filterColumns": {
+        "type": "array",
+        "items": { "$ref": "#/$defs/filterColumn" }
+      }
     },
     "$defs": {
-      "type": {
+      "resultColumn": { 
         "type": "object",
-        "title": "Widget Definition Type",
-        "description": "The WidgetType that this definition is created for",
+        "title": "Result column",
+        "description": "Describes the columns to be made available in the output",
         "additionalProperties": false,
-        "required": ["name", "version"],
+        "required": ["accessPath", "name"],
         "properties": {
+          "accessPath": {
+            "type": "string",
+            "description": "a string defining the path to the specified object property"
+          },
+          "label": {
+            "type": "string",
+            "description": "an optional string prescribing the display label of the field"
+          },
           "name": {
             "type": "string",
-            "description": "The name of the relevant WidgetType"
-          },
-          "version": {
-            "type": "string",
-            "description": "The version of the relevant WidgetType, of the form v1.0.0"
+            "description": "a string defining the name of the property for this column"
           }
         }
       },
-      "definition": {
+      "filterColumn": { 
         "type": "object",
-        "title": "SimpleSearch Widget Definition",
-        "description": "The actual JSON definition of an example SimpleSearch widget",
-        "additionalProperties": true,
-        "required": ["baseUrl", "resultColumns"],
+        "title": "Filter column",
+        "description": "Describes the columns the output is able to filter on",
+        "additionalProperties": false,
+        "required": ["filterPath", "name", "valueType"],
         "properties": {
-          "baseUrl": {
+          "filterPath": {
             "type": "string",
-            "description": "The base url queries built with this widget will go to"
+            "description": "a string defining the path on which we must filter for this property"
           },
-          "resultColumns": {
-            "type": "array",
-            "items": { "$ref": "#/$defs/resultColumn" }
+          "label": {
+            "type": "string",
+            "description": "an optional string prescribing the display label of the field"
           },
-          "filterColumns": {
-            "type": "array",
-            "items": { "$ref": "#/$defs/filterColumn" }
-          }
-        },
-        "$defs": {
-          "resultColumn": { 
-            "type": "object",
-            "title": "Result column",
-            "description": "Describes the columns to be made available in the output",
-            "additionalProperties": false,
-            "required": ["accessPath", "name"],
-            "properties": {
-              "accessPath": {
-                "type": "string",
-                "description": "a string defining the path to the specified object property"
-              },
-              "label": {
-                "type": "string",
-                "description": "an optional string prescribing the display label of the field"
-              },
-              "name": {
-                "type": "string",
-                "description": "a string defining the name of the property for this column"
-              }
-            }
+          "name": {
+            "type": "string",
+            "description": "a string defining the name of the property for this column"
           },
-          "filterColumn": { 
-            "type": "object",
-            "title": "Filter column",
-            "description": "Describes the columns the output is able to filter on",
-            "additionalProperties": false,
-            "required": ["filterPath", "name", "valueType"],
-            "properties": {
-              "filterPath": {
-                "type": "string",
-                "description": "a string defining the path on which we must filter for this property"
-              },
-              "label": {
-                "type": "string",
-                "description": "an optional string prescribing the display label of the field"
-              },
-              "name": {
-                "type": "string",
-                "description": "a string defining the name of the property for this column"
-              },
-              "valueType": {
-                "type": "string",
-                "enum": ["String", "Integer", "Float", "Boolean"],
-                "description": "a string defining the type of property we are filtering on"
-              }
-            }
+          "valueType": {
+            "type": "string",
+            "enum": ["String", "Integer", "Float", "Boolean"],
+            "description": "a string defining the type of property we are filtering on"
           }
         }
       }

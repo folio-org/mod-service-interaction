@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Widget Definition",
+  "type": "object",
+  "description": "The generic shape a widget definition must contain",
+  "additionalProperties": false,
+  "required": ["type", "name", "definition"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the WidgetDefinition, eg ERM Agreements SimpleSearch"
+    },
+    "type": { "$ref": "#/$defs/type" },
+    "definition": { "$ref": "#/$defs/definition" }
+  },
+  "$defs": {
+    "type": {
+      "type": "object",
+      "title": "Widget Definition Type",
+      "description": "The WidgetType that this definition is created for",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the relevant WidgetType"
+        },
+        "version": {
+          "type": "string",
+          "description": "The version of the relevant WidgetType, of the form v1.0.0"
+        }
+      }
+    },
+    "definition": {
+      "type": "object",
+      "title": "SimpleSearch Widget Definition",
+      "description": "The actual JSON definition of an example SimpleSearch widget",
+      "additionalProperties": true
+    }
+  }
+}
