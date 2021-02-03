@@ -30,7 +30,7 @@
           },
           "version": {
             "type": "string",
-            "description": "The version of the relevant WidgetType, of the form v1.0.0",
+            "description": "The version of the relevant WidgetType, of the form v1.0.0"
           }
         }
       },

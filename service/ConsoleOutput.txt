@@ -4,10 +4,153 @@ Checking for local settings at /home/ethan/FolioModules/ERM_Backend/mod-service-
 Configuring Spring Security Core ...
 ... finished configuring Spring Security Core
 
-2021-02-03 10:21:57.620 DEBUG --- [           main] c.k.w.t.l.ProxyAwareCachingLinkGenerator : Replacing the Default link generator with one that is Proxy aware.
-2021-02-03 10:21:58.071 DEBUG --- [           main] c.k.w.t.d.ExtendedWebDataBinder          : Create our new databinder
-2021-02-03 10:21:58.129  INFO --- [           main] com.k_int.okapi.OkapiClient              : Using default location for okapi at: http://localhost:9130
-2021-02-03 10:21:58.147  INFO --- [           main] com.k_int.okapi.OkapiClient              : Skipping registration with discovery as per config.
-2021-02-03 10:21:58.147  INFO --- [           main] com.k_int.okapi.OkapiClient              : Skipping deployment as per config.
-2021-02-03 10:21:58.835 DEBUG --- [           main] c.k.web.toolkit.WebToolkitGrailsPlugin   : Extending Domain classes.
+2021-02-03 10:34:08.870 DEBUG --- [           main] c.k.w.t.l.ProxyAwareCachingLinkGenerator : Replacing the Default link generator with one that is Proxy aware.
+2021-02-03 10:34:09.325 DEBUG --- [           main] c.k.w.t.d.ExtendedWebDataBinder          : Create our new databinder
+2021-02-03 10:34:09.376  INFO --- [           main] com.k_int.okapi.OkapiClient              : Using default location for okapi at: http://localhost:9130
+2021-02-03 10:34:09.393  INFO --- [           main] com.k_int.okapi.OkapiClient              : Skipping registration with discovery as per config.
+2021-02-03 10:34:09.393  INFO --- [           main] com.k_int.okapi.OkapiClient              : Skipping deployment as per config.
+2021-02-03 10:34:10.061 DEBUG --- [           main] c.k.web.toolkit.WebToolkitGrailsPlugin   : Extending Domain classes.
 Grails application running at http://localhost:8078 in environment: vagrant-db
+2021-02-03 10:34:41.269 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : TenantAdminService::purgeTenant(diku)
+2021-02-03 10:34:41.279 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : Execute -- drop schema diku_mod_service_interaction cascade
+2021-02-03 10:34:41.295 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : TenantAdminService::disableTenant(diku)
+2021-02-03 10:34:41.300 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : allTenantIdentifiers is NULL - so establish the list and pull default values from the database
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_audit does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_calendar does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_circulation_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_configuration does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_courses does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_data_export does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_data_import_converter_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_email does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_event_config does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_feesfines does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_finance_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_inventory_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_kb_ebsco_java does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_login does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.317 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_notes does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_notify does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_oai_pmh does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_orders_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_organizations_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_password_validator does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_patron_blocks does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_permissions does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_pubsub does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_remote_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_source_record_manager does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_source_record_storage does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_tags does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_template_engine does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : diku_mod_users does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : information_schema does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : pg_catalog does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : public does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.318 DEBUG --- [  XNIO-1 task-1] com.k_int.okapi.OkapiTenantAdminService  : pubsub_config does not end with schema suffix _mod_service_interaction, skipping
+2021-02-03 10:34:41.375 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : See if we already have a datastore for diku_mod_service_interaction
+2021-02-03 10:34:41.376 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : register module for tenant/schema (diku/diku_mod_service_interaction)
+2021-02-03 10:34:41.377 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : Execute -- create schema (if not exists) diku_mod_service_interaction
+2021-02-03 10:34:41.381 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : updateAccountSchema(diku_mod_service_interaction,diku)
+2021-02-03 10:34:43.244 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : Database migration completed
+2021-02-03 10:34:43.244 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : adding tenant for diku_mod_service_interaction
+2021-02-03 10:34:43.863 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : added schema
+2021-02-03 10:34:43.870 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.settings.AppSetting for refData defaults
+2021-02-03 10:34:43.871 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyText for refData defaults
+2021-02-03 10:34:43.875 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyRefdataDefinition for refData defaults
+2021-02-03 10:34:43.875 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyRefdata for refData defaults
+2021-02-03 10:34:43.878 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyInteger for refData defaults
+2021-02-03 10:34:43.879 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyDecimal for refData defaults
+2021-02-03 10:34:43.879 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyContainer for refData defaults
+2021-02-03 10:34:43.879 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyBoolean for refData defaults
+2021-02-03 10:34:43.879 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class com.k_int.web.toolkit.custprops.types.CustomPropertyBlob for refData defaults
+2021-02-03 10:34:43.879 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class org.olf.Dashboard for refData defaults
+2021-02-03 10:34:43.879 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class org.olf.WidgetType for refData defaults
+2021-02-03 10:34:43.879 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class org.olf.UserProxy for refData defaults
+2021-02-03 10:34:43.880 DEBUG --- [  XNIO-1 task-2] c.k.w.t.r.GrailsDomainRefdataHelpers     : Testing class org.olf.WidgetDefinition for refData defaults
+2021-02-03 10:34:43.891 DEBUG --- [  XNIO-1 task-2] com.k_int.okapi.OkapiTenantAdminService  : enableTenant exit cleanly
+WT NAME: SimpleSearch
+WT VERSION: v1.0.0
+2021-02-03 10:34:44.164 ERROR --- [pool-1-thread-1] com.k_int.okapi.DataloadingService       : Error executing tenant init script.
+
+grails.validation.ValidationException: Validation Error(s) occurred during save():
+- Field error in object 'org.olf.WidgetType' on field 'widgetVersion': rejected value [null]; codes [org.olf.WidgetType.widgetVersion.nullable.error.org.olf.WidgetType.widgetVersion,org.olf.WidgetType.widgetVersion.nullable.error.widgetVersion,org.olf.WidgetType.widgetVersion.nullable.error.java.lang.String,org.olf.WidgetType.widgetVersion.nullable.error,widgetType.widgetVersion.nullable.error.org.olf.WidgetType.widgetVersion,widgetType.widgetVersion.nullable.error.widgetVersion,widgetType.widgetVersion.nullable.error.java.lang.String,widgetType.widgetVersion.nullable.error,org.olf.WidgetType.widgetVersion.nullable.org.olf.WidgetType.widgetVersion,org.olf.WidgetType.widgetVersion.nullable.widgetVersion,org.olf.WidgetType.widgetVersion.nullable.java.lang.String,org.olf.WidgetType.widgetVersion.nullable,widgetType.widgetVersion.nullable.org.olf.WidgetType.widgetVersion,widgetType.widgetVersion.nullable.widgetVersion,widgetType.widgetVersion.nullable.java.lang.String,widgetType.widgetVersion.nullable,nullable.org.olf.WidgetType.widgetVersion,nullable.widgetVersion,nullable.java.lang.String,nullable]; arguments [widgetVersion,class org.olf.WidgetType]; default message [Property [{0}] of class [{1}] cannot be null]
+- Field error in object 'org.olf.WidgetType' on field 'schema': rejected value [null]; codes [org.olf.WidgetType.schema.nullable.error.org.olf.WidgetType.schema,org.olf.WidgetType.schema.nullable.error.schema,org.olf.WidgetType.schema.nullable.error.java.lang.String,org.olf.WidgetType.schema.nullable.error,widgetType.schema.nullable.error.org.olf.WidgetType.schema,widgetType.schema.nullable.error.schema,widgetType.schema.nullable.error.java.lang.String,widgetType.schema.nullable.error,org.olf.WidgetType.schema.nullable.org.olf.WidgetType.schema,org.olf.WidgetType.schema.nullable.schema,org.olf.WidgetType.schema.nullable.java.lang.String,org.olf.WidgetType.schema.nullable,widgetType.schema.nullable.org.olf.WidgetType.schema,widgetType.schema.nullable.schema,widgetType.schema.nullable.java.lang.String,widgetType.schema.nullable,nullable.org.olf.WidgetType.schema,nullable.schema,nullable.java.lang.String,nullable]; arguments [schema,class org.olf.WidgetType]; default message [Property [{0}] of class [{1}] cannot be null]
+
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+	at org.codehaus.groovy.reflection.CachedConstructor.invoke(CachedConstructor.java:80)
+	at org.codehaus.groovy.reflection.CachedConstructor.doConstructorInvoke(CachedConstructor.java:74)
+	at groovy.lang.MetaClassImpl.invokeConstructor(MetaClassImpl.java:1732)
+	at groovy.lang.MetaClassImpl.invokeConstructor(MetaClassImpl.java:1556)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokeConstructorOf(InvokerHelper.java:1042)
+	at org.codehaus.groovy.runtime.DefaultGroovyMethods.newInstance(DefaultGroovyMethods.java:17159)
+	at org.grails.orm.hibernate.AbstractHibernateGormInstanceApi.save(AbstractHibernateGormInstanceApi.groovy:134)
+	at org.grails.datastore.gorm.GormEntity$Trait$Helper.save(GormEntity.groovy:153)
+	at org.grails.datastore.gorm.GormEntity$Trait$Helper$save$1.call(Unknown Source)
+	at org.olf.WidgetType.save(WidgetType.groovy)
+	at org.olf.WidgetType.save(WidgetType.groovy)
+	at org.grails.datastore.gorm.GormEntity$save.call(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:47)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:115)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:127)
+	at Script1$_run_closure2.doCall(Script1.groovy:87)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:101)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:323)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:263)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1041)
+	at groovy.lang.Closure.call(Closure.java:405)
+	at groovy.lang.Closure.call(Closure.java:421)
+	at org.codehaus.groovy.runtime.ResourceGroovyMethods.traverse(ResourceGroovyMethods.java:1460)
+	at org.codehaus.groovy.runtime.ResourceGroovyMethods.traverse(ResourceGroovyMethods.java:1334)
+	at org.codehaus.groovy.runtime.dgm$1069.invoke(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.PojoMetaMethodSite$PojoMetaMethodSiteNoUnwrapNoCoerce.invoke(PojoMetaMethodSite.java:244)
+	at org.codehaus.groovy.runtime.callsite.PojoMetaMethodSite.call(PojoMetaMethodSite.java:53)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:47)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:115)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:135)
+	at Script1.run(Script1.groovy:79)
+	at com.k_int.okapi.DataloadingService$_executeTenantDataFile_closure2$_closure4.doCall(DataloadingService.groovy:110)
+	at com.k_int.okapi.DataloadingService$_executeTenantDataFile_closure2$_closure4.call(DataloadingService.groovy)
+	at grails.gorm.transactions.GrailsTransactionTemplate$2.doInTransaction(GrailsTransactionTemplate.groovy:94)
+	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:140)
+	at grails.gorm.transactions.GrailsTransactionTemplate.execute(GrailsTransactionTemplate.groovy:91)
+	at com.k_int.web.toolkit.utils.GormUtils.withTransaction(GormUtils.groovy:33)
+	at com.k_int.okapi.DataloadingService$_executeTenantDataFile_closure2.doCall(DataloadingService.groovy:109)
+	at com.k_int.okapi.DataloadingService$_executeTenantDataFile_closure2.call(DataloadingService.groovy)
+	at grails.gorm.multitenancy.Tenants$_withId_closure2$_closure6.doCall(Tenants.groovy:265)
+	at grails.gorm.multitenancy.Tenants$_withId_closure2$_closure6.call(Tenants.groovy)
+	at org.grails.orm.hibernate.GrailsHibernateTemplate.doExecute(GrailsHibernateTemplate.java:297)
+	at org.grails.orm.hibernate.GrailsHibernateTemplate.execute(GrailsHibernateTemplate.java:241)
+	at org.grails.orm.hibernate.GrailsHibernateTemplate.executeWithNewSession(GrailsHibernateTemplate.java:153)
+	at org.grails.orm.hibernate.GrailsHibernateTemplate.executeWithExistingOrCreateNewSession(GrailsHibernateTemplate.java:207)
+	at org.grails.orm.hibernate.AbstractHibernateDatastore.withNewSession(AbstractHibernateDatastore.java:369)
+	at grails.gorm.multitenancy.Tenants$_withId_closure2.doCall(Tenants.groovy:258)
+	at grails.gorm.multitenancy.Tenants$_withId_closure2.call(Tenants.groovy)
+	at grails.gorm.multitenancy.Tenants$CurrentTenant.withTenant(Tenants.groovy:358)
+	at grails.gorm.multitenancy.Tenants.withId(Tenants.groovy:236)
+	at grails.gorm.multitenancy.Tenants.withId(Tenants.groovy:169)
+	at com.k_int.okapi.DataloadingService.executeTenantDataFile(DataloadingService.groovy:105)
+	at com.k_int.okapi.DataloadingService.onTenantLoadSample(DataloadingService.groovy:141)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:282)
+	at grails.events.subscriber.MethodSubscriber.call(MethodSubscriber.groovy:80)
+	at org.grails.events.EventSubscriberTrigger.proceed(EventSubscriberTrigger.groovy:34)
+	at org.grails.events.bus.ExecutorEventBus$_buildNotificationCallable_closure1$_closure3.doCall(ExecutorEventBus.groovy:36)
+	at org.grails.events.bus.ExecutorEventBus$_buildNotificationCallable_closure1$_closure3.call(ExecutorEventBus.groovy)
+	at groovy.lang.Closure.run(Closure.java:486)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+
