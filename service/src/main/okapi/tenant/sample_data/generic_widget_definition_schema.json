@@ -4,7 +4,7 @@
   "type": "object",
   "description": "The generic shape a widget definition must contain",
   "additionalProperties": false,
-  "required": ["type", "name", "definition"],
+  "required": ["type", "name", "version", "definition"],
   "properties": {
     "name": {
       "type": "string",

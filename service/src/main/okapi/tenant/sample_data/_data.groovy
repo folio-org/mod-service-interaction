@@ -65,7 +65,7 @@ widgetTypeDirectory.traverse (type: FILES, maxDepth: 0) { file ->
 
   WidgetType widgetType = WidgetType.findByNameAndWidgetVersion(wt.name, wt.version) ?: new WidgetType(
     name: wt.name,
-    widgetVersion: wt.version,
+    typeVersion: wt.version,
     schema: JsonOutput.toJson(wt.schema)
   ).save(flush: true, failOnError: true)
 }
@@ -81,6 +81,7 @@ widgetDefDirectory.traverse (type: FILES, maxDepth: 0) { file ->
   if (type != null) {
     WidgetDefinition widgetDef = WidgetDefinition.findByNameAndType(wd.name, type) ?: new WidgetDefinition (
       name: wd.name,
+      definitionVersion: wd.version,
       type: type,
       definition: JsonOutput.toJson(wd.definition)
     ).save(flush: true, failOnError: true)

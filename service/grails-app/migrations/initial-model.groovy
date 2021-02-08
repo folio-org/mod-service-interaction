@@ -52,7 +52,7 @@ databaseChangeLog = {
         constraints(nullable: "false")
       }
       
-      column(name: "wtype_widget_version", type: "VARCHAR(36)")
+      column(name: "wtype_type_version", type: "VARCHAR(36)")
       column(name: "wtype_name", type: "VARCHAR(255)")
       column(name: "wtype_schema", type: "text")
     }
@@ -97,7 +97,8 @@ databaseChangeLog = {
       column(name: "wins_version", type: "BIGINT") {
         constraints(nullable: "false")
       }
-      column(name: "wins_name", type: "VARCHAR(255)")
+      column(name: "wins__definition_version", type: "VARCHAR(36)")
+        constraints(nullable: "false")
       column(name: "wins_definition_fk", type: "VARCHAR(36)")
       column(name: "wins_owner_fk", type: "VARCHAR(36)")
       column(name: "wins_configuration", type: "text")
