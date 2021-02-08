@@ -3,13 +3,14 @@
     "name": "SimpleSearch",
     "version": "v1.0.0"
   },
+  "version": "v1.0.0",
   "name":"ERM Agreements",
   "definition":{
     "baseUrl":"/erm/agreements",
     "resultColumns":[
-      { "name":"agreementName", "accessPath":"name" },
-      { "name":"startDate", "accessPath":"periods.startDate" },
-      { "name":"vendor", "accessPath": "vendor.name" }
+      { "name":"agreementName", "label": "Agreement name", "accessPath":"name" },
+      { "name":"startDate", "label": "Start date", "accessPath":"periods.startDate" },
+      { "name":"vendor", "label": "Vendor", "accessPath": "vendor.name" }
     ],
     "filterColumns":[
       { "name":"vendor", "filterPath": "vendor.name", "valueType":"String" }

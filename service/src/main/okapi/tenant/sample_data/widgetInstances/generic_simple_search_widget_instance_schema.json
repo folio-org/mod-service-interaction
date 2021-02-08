@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SimpleSearch widget instance",
+  "type": "object",
+  "description": "SimpleSearch widget instance",
+  "additionalProperties": true,
+  "required": ["resultColumns"],
+  "properties": {
+    "resultColumns": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/resultColumn" }
+    },
+    "filterColumns": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/filterColumn" }
+    }
+  },
+  "$defs": {
+    "resultColumn": { 
+      "type": "object",
+      "title": "Result column",
+      "description": "Describes the configured result columns",
+      "additionalProperties": false,
+      "required": ["column"],
+      "properties": {
+        "column": {
+          "type": "string",
+          "description": "The name of the column as laid out in the WidgetDefinition"
+        },
+        "label": {
+          "type": "string",
+          "description": "an optional string allowing the user to overwrite the display label of the field"
+        }
+      }
+    },
+    "filterColumn": { 
+      "type": "object",
+      "title": "Filter column",
+      "description": "Describes the configured filter columns",
+      "additionalProperties": false,
+      "required": ["column", "filterValue"],
+      "properties": {
+        "column": {
+          "type": "string",
+          "description": "The name of the column as laid out in the WidgetDefinition"
+        },
+        "filterValue": {
+          "description": "A value of type laid out by the widgetDefinition"
+        }
+      }
+    }
+  }
+}

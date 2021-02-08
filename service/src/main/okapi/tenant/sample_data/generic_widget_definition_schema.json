@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Widget Definition",
   "type": "object",
   "description": "The generic shape a widget definition must contain",
@@ -9,6 +9,10 @@
     "name": {
       "type": "string",
       "description": "The name of the WidgetDefinition, eg ERM Agreements SimpleSearch"
+    },
+    "version": {
+      "type": "string",
+      "description": "The version of this WidgetDefinition, of the form v1.0.0"
     },
     "type": { "$ref": "#/$defs/type" },
     "definition": { "$ref": "#/$defs/definition" }

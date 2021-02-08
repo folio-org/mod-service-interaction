@@ -8,8 +8,6 @@ databaseChangeLog = {
           column(name: "up_version", type: "BIGINT") {
               constraints(nullable: "false")
           }
-
-          column(name: "up_user_uuid", type: "VARCHAR(255)")
       }
   }
 
@@ -90,5 +88,41 @@ databaseChangeLog = {
       deferrable: "false", initiallyDeferred: "false",
       referencedColumnNames: "wtype_id", referencedTableName: "widget_type")
   }
-   
+
+  changeSet(author: "efreestone (manual)", id: "2021-02-08-1131-001") {
+    createTable(tableName: "widget_instance") {
+      column(name: "wins_id", type: "VARCHAR(36)") {
+        constraints(nullable: "false")
+      }
+      column(name: "wins_version", type: "BIGINT") {
+        constraints(nullable: "false")
+      }
+      column(name: "wins_name", type: "VARCHAR(255)")
+      column(name: "wins_definition_fk", type: "VARCHAR(36)")
+      column(name: "wins_owner_fk", type: "VARCHAR(36)")
+      column(name: "wins_configuration", type: "text")
+    }
+  }
+
+  changeSet(author: "efreestone (manual)", id: "2021-02-08-1131-002") {
+    addPrimaryKey(columnNames: "wins_id", constraintName: "widgetInstancePK", tableName: "widget_instance")
+  }
+
+  changeSet(author: "efreestone (manual)", id: "2021-02-08-1131-003") {
+    addForeignKeyConstraint(baseColumnNames: "wins_definition_fk",
+      baseTableName: "widget_instance",
+      constraintName: "widget_instance_definition_fk",
+      deferrable: "false", initiallyDeferred: "false",
+      referencedColumnNames: "wdef_id", referencedTableName: "widget_definition")
+    }
+  }
+
+  changeSet(author: "efreestone (manual)", id: "2021-02-08-1131-004") {
+    addForeignKeyConstraint(baseColumnNames: "wins_owner_fk",
+      baseTableName: "widget_instance",
+      constraintName: "widget_instance_owner_fk",
+      deferrable: "false", initiallyDeferred: "false",
+      referencedColumnNames: "dshb_id", referencedTableName: "dashboard")
+    }
+  }
 }

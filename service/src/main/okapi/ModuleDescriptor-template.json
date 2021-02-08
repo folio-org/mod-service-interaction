@@ -47,9 +47,34 @@
           "permissionsRequired": [ "servint.refdata.delete" ]
         },
         {
-          "methods": [ "GET", "POST", "PUT", "DELETE" ],
-          "pathPattern": "/servint/dashboard*",
-          "permissionsRequired": []
+          "methods": [ "GET" ],
+          "pathPattern": "/servint/dashboard",
+          "permissionsRequired": ["servint.dashboards.collection.get"]
+        },
+        {
+          "methods": [ "GET" ],
+          "pathPattern": "/servint/dashboard/my-dashboards",
+          "permissionsRequired": ["servint.dashboards.user.get"]
+        },
+        {
+          "methods": [ "GET" ],
+          "pathPattern": "/servint/dashboard/{id}",
+          "permissionsRequired": ["servint.dashboards.item.get"]
+        },
+        {
+          "methods": [ "POST" ],
+          "pathPattern": "/servint/dashboard/{id}",
+          "permissionsRequired": ["servint.dashboards.item.post"]
+        },
+        {
+          "methods": [ "PUT" ],
+          "pathPattern": "/servint/dashboard/{id}",
+          "permissionsRequired": ["servint.dashboards.item.put"]
+        },
+        {
+          "methods": [ "DELETE" ],
+          "pathPattern": "/servint/dashboard/{id}",
+          "permissionsRequired": ["servint.dashboards.item.delete"]
         }
       ]
     },
@@ -158,6 +183,66 @@
           "servint.refdata.post",
           "servint.refdata.put",
           "servint.refdata.delete"
+      ]
+    },
+    {
+      "permissionName": "servint.dashboards.user.get",
+      "displayName": "Dashboard user collection get",
+      "description": "Get a collection of dashboards for a user"
+    },
+    {
+      "permissionName": "servint.dashboards.item.get",
+      "displayName": "Dashboard user item get",
+      "description": "Get a dashboard item for a user"
+    },
+    {
+      "permissionName": "servint.dashboards.view",
+      "subPermissions": [
+        "servint.dashboards.user.get",
+        "servint.dashboards.item.get"
+      ]
+    },
+    {
+      "permissionName": "servint.dashboards.item.post",
+      "displayName": "Dashboard user item post",
+      "description": "Post a dashboard item for a user"
+    },
+    {
+      "permissionName": "servint.dashboards.item.put",
+      "displayName": "Dashboard user item put",
+      "description": "Put a dashboard item for a user"
+    },
+    {
+      "permissionName": "servint.dashboards.edit",
+      "subPermissions": [
+        "servint.dashboards.view",
+        "servint.dashboards.item.post",
+        "servint.dashboards.item.put"
+      ]
+    },
+    {
+      "permissionName": "servint.dashboards.item.delete",
+      "displayName": "Dashboard user item delete",
+      "description": "Delete a dashboard item for a user"
+    },
+    {
+      "permissionName": "servint.dashboards.manage",
+      "subPermissions": [
+        "servint.dashboards.edit",
+        "servint.dashboards.item.delete"
+      ]
+    },
+    {
+      "permissionName": "servint.dashboards.collection.get",
+      "displayName": "Dashboard collection get",
+      "description": "Get all dashboards"
+    },
+    {
+      "permissionName": "servint.dashboards.admin",
+      "displayName": "Dashboard admin",
+      "description": "Allow admin access to dashboards",
+      "subPermissions": [
+        "servint.dashboards.collection.get"
       ]
     }
   ],
