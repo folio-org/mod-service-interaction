@@ -3,6 +3,6 @@ import  org.olf.WidgetDefinition
 import groovy.transform.*
 
 @Field
-WidgetDefinition widgetDef
+WidgetDefinition widgetDefinition
 
-json g.render (widgetDef, [expand:['type']])
+json g.render (widgetDefinition)
