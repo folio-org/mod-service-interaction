@@ -114,8 +114,8 @@ databaseChangeLog = {
       baseTableName: "widget_instance",
       constraintName: "widget_instance_definition_fk",
       deferrable: "false", initiallyDeferred: "false",
-      referencedColumnNames: "wdef_id", referencedTableName: "widget_definition")
-    }
+      referencedColumnNames: "wdef_id", referencedTableName: "widget_definition"
+    )
   }
 
   changeSet(author: "efreestone (manual)", id: "2021-02-08-1131-004") {
@@ -123,7 +123,7 @@ databaseChangeLog = {
       baseTableName: "widget_instance",
       constraintName: "widget_instance_owner_fk",
       deferrable: "false", initiallyDeferred: "false",
-      referencedColumnNames: "dshb_id", referencedTableName: "dashboard")
-    }
+      referencedColumnNames: "dshb_id", referencedTableName: "dashboard"
+    )
   }
 }
