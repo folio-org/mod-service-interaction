@@ -63,7 +63,7 @@ def widgetTypeDirectory = new File('./src/main/okapi/tenant/sample_data/widgetTy
 widgetTypeDirectory.traverse (type: FILES, maxDepth: 0) { file ->
   def wt = jsonSlurper.parse(file)
 
-  WidgetType widgetType = WidgetType.findByNameAndWidgetVersion(wt.name, wt.version) ?: new WidgetType(
+  WidgetType widgetType = WidgetType.findByNameAndTypeVersion(wt.name, wt.version) ?: new WidgetType(
     name: wt.name,
     typeVersion: wt.version,
     schema: JsonOutput.toJson(wt.schema)
@@ -77,7 +77,7 @@ def widgetDefDirectory = new File('./src/main/okapi/tenant/sample_data/widgetDef
 widgetDefDirectory.traverse (type: FILES, maxDepth: 0) { file ->
   def wd = jsonSlurper.parse(file)
 
-  WidgetType type = WidgetType.findByNameAndWidgetVersion(wd.type.name, wd.type.version)
+  WidgetType type = WidgetType.findByNameAndTypeVersion(wd.type.name, wd.type.version)
   if (type != null) {
     WidgetDefinition widgetDef = WidgetDefinition.findByNameAndType(wd.name, type) ?: new WidgetDefinition (
       name: wd.name,
