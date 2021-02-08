@@ -3,6 +3,6 @@ import  org.olf.Dashboard
 import groovy.transform.*
 
 @Field
-Dashboard dash
+Dashboard dashboard
 
-json g.render (dash, [expand:['widgets']])
+json g.render (dashboard, [expand:['widgets']])

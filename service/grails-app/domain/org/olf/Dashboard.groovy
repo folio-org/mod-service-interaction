@@ -5,13 +5,13 @@ import grails.gorm.MultiTenant
 import com.k_int.web.toolkit.refdata.Defaults
 import com.k_int.web.toolkit.refdata.RefdataValue
 
-import org.olf.UserProxy
+import org.olf.ExternalUser
 
 class Dashboard implements MultiTenant<Dashboard> {
 
   String id
   String name
-  static belongsTo = [ owner: UserProxy ]
+  static belongsTo = [ owner: ExternalUser ]
   static hasMany = [ widgets: WidgetInstance ]
 
   static mapping = {

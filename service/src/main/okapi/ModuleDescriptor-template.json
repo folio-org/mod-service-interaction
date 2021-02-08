@@ -49,32 +49,38 @@
         {
           "methods": [ "GET" ],
           "pathPattern": "/servint/dashboard",
-          "permissionsRequired": ["servint.dashboards.collection.get"]
+          "permissionsRequired": ["servint.dashboards.collection.get"],
+          "permissionsDesired":["servint.dashboards.admin"]
         },
         {
           "methods": [ "GET" ],
           "pathPattern": "/servint/dashboard/my-dashboards",
-          "permissionsRequired": ["servint.dashboards.user.get"]
+          "permissionsRequired": ["servint.dashboards.user.get"],
+          "permissionsDesired":["servint.dashboards.admin"]
         },
         {
           "methods": [ "GET" ],
           "pathPattern": "/servint/dashboard/{id}",
-          "permissionsRequired": ["servint.dashboards.item.get"]
+          "permissionsRequired": ["servint.dashboards.item.get"],
+          "permissionsDesired":["servint.dashboards.admin"]
         },
         {
           "methods": [ "POST" ],
           "pathPattern": "/servint/dashboard",
-          "permissionsRequired": ["servint.dashboards.item.post"]
+          "permissionsRequired": ["servint.dashboards.item.post"],
+          "permissionsDesired":["servint.dashboards.admin"]
         },
         {
           "methods": [ "PUT" ],
           "pathPattern": "/servint/dashboard/{id}",
-          "permissionsRequired": ["servint.dashboards.item.put"]
+          "permissionsRequired": ["servint.dashboards.item.put"],
+          "permissionsDesired":["servint.dashboards.admin"]
         },
         {
           "methods": [ "DELETE" ],
           "pathPattern": "/servint/dashboard/{id}",
-          "permissionsRequired": ["servint.dashboards.item.delete"]
+          "permissionsRequired": ["servint.dashboards.item.delete"],
+          "permissionsDesired":["servint.dashboards.admin"]
         }
       ]
     },

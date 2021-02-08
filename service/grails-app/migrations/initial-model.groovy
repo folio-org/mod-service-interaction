@@ -1,18 +1,18 @@
 databaseChangeLog = {
   changeSet(author: "efreestone (manual)", id: "2021-02-01-1350-001") {
-      createTable(tableName: "user_proxy") {
-          column(name: "up_id", type: "VARCHAR(36)") {
+      createTable(tableName: "external_user") {
+          column(name: "eu_id", type: "VARCHAR(36)") {
               constraints(nullable: "false")
           }
 
-          column(name: "up_version", type: "BIGINT") {
+          column(name: "eu_version", type: "BIGINT") {
               constraints(nullable: "false")
           }
       }
   }
 
   changeSet(author: "efreestone (manual)", id: "2021-02-01-1350-002") {
-    addPrimaryKey(columnNames: "up_id", constraintName: "user_proxyPK", tableName: "user_proxy")
+    addPrimaryKey(columnNames: "eu_id", constraintName: "externalUserPK", tableName: "external_user")
   }
 
   changeSet(author: "efreestone (manual)", id: "2021-02-01-1350-003") {
@@ -40,7 +40,7 @@ databaseChangeLog = {
       baseTableName: "dashboard",
       constraintName: "dashboard_owner_fk",
       deferrable: "false", initiallyDeferred: "false",
-      referencedColumnNames: "up_id", referencedTableName: "user_proxy")
+      referencedColumnNames: "eu_id", referencedTableName: "external_user")
   }
 
   changeSet(author: "efreestone (manual)", id: "2021-02-02-1611-001") {
