@@ -30,7 +30,9 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
   }
 
   public boolean isOwner() {
-    println("HELP IM A FISH")
+    def dash = Dashboard.read(params.id)
+    log.debug("DASHBOARD OWNER ${dash.owner.id}")
+    log.debug("PATRON ${getPatron().id}")
     return true;
   }
 
@@ -42,6 +44,6 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
     if (!canRead()) {
       response.sendError(403)
     } 
-    super.show()
+    respond super.show()
   }
 }

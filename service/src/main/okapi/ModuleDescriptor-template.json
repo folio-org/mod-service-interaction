@@ -63,7 +63,7 @@
         },
         {
           "methods": [ "POST" ],
-          "pathPattern": "/servint/dashboard/{id}",
+          "pathPattern": "/servint/dashboard",
           "permissionsRequired": ["servint.dashboards.item.post"]
         },
         {
@@ -242,7 +242,8 @@
       "displayName": "Dashboard admin",
       "description": "Allow admin access to dashboards",
       "subPermissions": [
-        "servint.dashboards.collection.get"
+        "servint.dashboards.collection.get",
+        "servint.dashboards.manage"
       ]
     }
   ],
