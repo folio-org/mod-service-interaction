@@ -1,0 +1,8 @@
+import  org.olf.WidgetInstance
+
+import groovy.transform.*
+
+@Field
+WidgetInstance widgetInst
+
+json g.render (widgetInst, [expand:['definition']])

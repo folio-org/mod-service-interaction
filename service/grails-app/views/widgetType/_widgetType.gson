@@ -1,0 +1,8 @@
+import  org.olf.WidgetType
+
+import groovy.transform.*
+
+@Field
+WidgetType widgetType
+
+json g.render (widgetType)

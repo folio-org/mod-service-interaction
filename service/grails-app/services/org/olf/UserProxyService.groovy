@@ -22,10 +22,12 @@ class UserProxyService {
     ).save(flush:true, failOnError: true);
 
     //TODO remove the below, it just adds an example widget if none are there for testing purposes
-    if (dash.widgets.size() == 0) {
+    WidgetDefinition definition = WidgetDefinition.findByNameAndDefinitionVersion("ERM Agreements", "v1.0.0")
+    if (dash.widgets?.size() == 0) {
       def widgetInstance = new WidgetInstance(
         name: "ERM example widget",
         owner: dash,
+        definition: definition,
         configuration: """
         {
           "resultColumns": [

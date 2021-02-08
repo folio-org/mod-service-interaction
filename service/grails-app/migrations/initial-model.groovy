@@ -70,6 +70,7 @@ databaseChangeLog = {
       column(name: "wdef_version", type: "BIGINT") {
         constraints(nullable: "false")
       }
+      column(name: "wdef_definition_version", type: "VARCHAR(36)")
       column(name: "wdef_name", type: "VARCHAR(255)")
       column(name: "wdef_definition", type: "text")
       
@@ -97,8 +98,7 @@ databaseChangeLog = {
       column(name: "wins_version", type: "BIGINT") {
         constraints(nullable: "false")
       }
-      column(name: "wins__definition_version", type: "VARCHAR(36)")
-        constraints(nullable: "false")
+      column(name: "wins_name", type: "VARCHAR(255)")
       column(name: "wins_definition_fk", type: "VARCHAR(36)")
       column(name: "wins_owner_fk", type: "VARCHAR(36)")
       column(name: "wins_configuration", type: "text")

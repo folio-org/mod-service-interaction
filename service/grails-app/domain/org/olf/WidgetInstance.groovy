@@ -11,7 +11,6 @@ class WidgetInstance implements MultiTenant<WidgetInstance> {
 
   String id
   String name
-  String definitionVersion
   WidgetDefinition definition
 
   String configuration
@@ -21,7 +20,6 @@ class WidgetInstance implements MultiTenant<WidgetInstance> {
   static mapping = {
                  id column: 'wins_id', generator: 'uuid2', length:36
             version column: 'wins_version'
-  definitionVersion column: 'wins_definition_version'
                name column: 'wins_name'
          definition column: 'wins_definition_fk'
       configuration column: 'wins_configuration'
