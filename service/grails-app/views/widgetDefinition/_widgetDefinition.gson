@@ -5,4 +5,4 @@ import groovy.transform.*
 @Field
 WidgetDefinition widgetDefinition
 
-json g.render (widgetDefinition)
+json g.render (widgetDefinition, [expand: ['type']])
