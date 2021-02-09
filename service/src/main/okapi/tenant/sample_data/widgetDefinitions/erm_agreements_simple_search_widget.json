@@ -14,7 +14,7 @@
       { "name":"agreementStatus", "label": "Status", "accessPath":"agreementStatus.value" }
     ],
     "filterColumns":[
-      { "name":"agreementName", "label": "Agreement name", "accessPath":"name" },
+      { "name":"agreementName", "filterPath":"name", "valueType": "String" },
       { "name":"agreementStatus", "filterPath":"agreementStatus.value", "valueType": "String" }
     ]
   }

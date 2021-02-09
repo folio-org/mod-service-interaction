@@ -23,7 +23,7 @@
       "additionalProperties": false,
       "required": ["column"],
       "properties": {
-        "column": {
+        "name": {
           "type": "string",
           "description": "The name of the column as laid out in the WidgetDefinition"
         },
@@ -40,7 +40,7 @@
       "additionalProperties": false,
       "required": ["column", "filterValue"],
       "properties": {
-        "column": {
+        "name": {
           "type": "string",
           "description": "The name of the column as laid out in the WidgetDefinition"
         },
