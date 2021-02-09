@@ -6,14 +6,16 @@
   "version": "v1.0.0",
   "name":"ERM Agreements",
   "definition":{
-    "baseUrl":"/erm/agreements",
+    "baseUrl":"/erm/sas",
     "resultColumns":[
       { "name":"agreementName", "label": "Agreement name", "accessPath":"name" },
-      { "name":"startDate", "label": "Start date", "accessPath":"periods.startDate" },
-      { "name":"vendor", "label": "Vendor", "accessPath": "vendor.name" }
+      { "name":"startDate", "label": "Start date", "accessPath":"startDate" },
+      { "name":"endDate", "label": "End date", "accessPath":"endDate" },
+      { "name":"agreementStatus", "label": "Status", "accessPath":"agreementStatus.value" }
     ],
     "filterColumns":[
-      { "name":"vendor", "filterPath": "vendor.name", "valueType":"String" }
+      { "name":"agreementName", "label": "Agreement name", "accessPath":"name" },
+      { "name":"agreementStatus", "filterPath":"agreementStatus.value", "valueType": "String" }
     ]
   }
 }

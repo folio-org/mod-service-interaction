@@ -28,7 +28,7 @@ class ExternalUserService {
         name: "ERM example widget",
         owner: dash,
         definition: definition,
-        configuration: """{"resultColumns":[{"column":"agreementName","label":"Overwritten column label"},{"column":"startDate"}],"filterColumns":[{"column":"vendor","filterValue":"EBSCO"}]}"""
+        configuration: """{"resultColumns":[{"column":"agreementName","label":"Overwritten column label"},{"column":"startDate"}],"filterColumns":[{"column":"agreementStatus","filterValue":"active"}]}"""
       ).save(flush: true, failOnError: true)
     }
 
