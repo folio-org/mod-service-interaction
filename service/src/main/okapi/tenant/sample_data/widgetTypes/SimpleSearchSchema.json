@@ -6,23 +6,40 @@
     "title": "SimpleSearch widget",
     "type": "object",
     "description": "SimpleSearch widget type",
-    "additionalProperties": true,
-    "required": ["baseUrl", "resultColumns"],
+    "additionalProperties": false,
+    "required": ["baseUrl", "results"],
     "properties": {
       "baseUrl": {
         "type": "string",
         "description": "The base url queries built with this widget will go to"
       },
-      "resultColumns": {
-        "type": "array",
-        "items": { "$ref": "#/$defs/resultColumn" }
+      "results": {
+        "$ref": "#/$defs/results"
       },
-      "filterColumns": {
-        "type": "array",
-        "items": { "$ref": "#/$defs/filterColumn" }
+      "filters": {
+        "$ref": "#/$defs/filters"
+      },
+      "sort": {
+        "$ref": "#/$defs/sort"
+      },
+      "configurableProperties": {
+        "$ref": "#/$defs/configurableProperties"
       }
     },
     "$defs": {
+      "results": {
+        "type": "object",
+        "title": "Results",
+        "description": "Contains all the information the dashboard needs to fetch and parse results",
+        "additionalProperties": false,
+        "required": ["columns"],
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/resultColumn" }
+          }
+        }
+      },
       "resultColumn": { 
         "type": "object",
         "title": "Result column",
@@ -41,6 +58,19 @@
           "name": {
             "type": "string",
             "description": "a string defining the name of the property for this column"
+          }
+        }
+      },
+      "filters": {
+        "type": "object",
+        "title": "Filters",
+        "description": "Contains all the information the dashboard needs to perform filtering of results",
+        "additionalProperties": false,
+        "required": ["columns"],
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/filterColumn" }
           }
         }
       },
@@ -69,6 +99,141 @@
             "description": "a string defining the type of property we are filtering on"
           }
         }
+      },
+      "sort": {
+        "type": "object",
+        "title": "Sort",
+        "description": "Contains all the information the dashboard needs to perform sorting of results",
+        "additionalProperties": false,
+        "required": ["columns"],
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/sortColumn" }
+          },
+          "sortKeys": {
+            "$ref": "#/$defs/sortKeys"
+          }
+        }
+      },
+      "sortColumn": { 
+        "type": "object",
+        "title": "Sort column",
+        "description": "Describes the columns the output is able to sort on",
+        "additionalProperties": false,
+        "required": ["sortPath", "name", "sortTypes"],
+        "properties": {
+          "sortPath": {
+            "type": "string",
+            "description": "a string defining the path on which we must sort for this property"
+          },
+          "label": {
+            "type": "string",
+            "description": "an optional string prescribing the display label of the field"
+          },
+          "name": {
+            "type": "string",
+            "description": "a string defining the name of the property for this column"
+          },
+          "sortTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["asc", "desc"]
+            }
+          }
+        }
+      },
+      "sortKeys": {
+        "type": "object",
+        "title": "Sort keys",
+        "description": "An optional object to allow the dashboard to use non-asc/desc sorting API methods",
+        "additionalProperties": false,
+        "required": ["asc", "desc"],
+        "properties": {
+          "asc": {
+            "type": "string",
+            "description": "A string to use in place of 'asc' for sorting purposes"
+          },
+          "desc": {
+            "type": "string",
+            "description": "A string to use in place of 'desc' for sorting purposes"
+          }
+        }
+      },
+      "configurableProperties": {
+        "type": "object",
+        "title": "Other properties",
+        "description": "A collection of other properties which can be configured/made configurable",
+        "additionalProperties": false,
+        "properties": {
+          "urlLink": {
+            "$ref": "#/$defs/urlLink"
+          },
+          "numberOfRows": {
+            "$ref": "#/$defs/numberOfRows"
+          }
+        }
+      },
+      "urlLink": {
+        "type": "object",
+        "title": "URL link",
+        "description": "An external link to be accessed at the bottom of the widget",
+        "requiredProperties": ["configurable"],
+        "properties": {
+          "configurable": {
+            "$ref": "#/$defs/configurable"
+          },
+          "defValue": {
+            "type": "string",
+            "description": "an optional string containing a default link"
+          }
+        },
+        "anyOf": [
+          {
+            "not": {
+              "properties": {
+                "configurable": { "const": false }
+              },
+              "required": ["configurable"]
+            }
+          },
+          {
+            "required": ["defValue"]
+          }
+        ]
+      },
+      "numberOfRows": {
+        "type": "object",
+        "title": "Number of rows",
+        "description": "Define the max amount of entries to return from the endpoint",
+        "requiredProperties": ["configurable"],
+        "properties": {
+          "configurable": {
+            "$ref": "#/$defs/configurable"
+          },
+          "defValue": {
+            "type": "number",
+            "description": "an optional string containing a default link"
+          }
+        },
+        "anyOf": [
+          {
+            "not": {
+              "properties": {
+                "configurable": { "const": false }
+              },
+              "required": ["configurable"]
+            }
+          },
+          {
+            "required": ["defValue"]
+          }
+        ]
+      },
+      "configurable": {
+        "type": "boolean",
+        "description": "A true/false value which determines whether the user can configure beyond the default or not"
       }
     }
   }
