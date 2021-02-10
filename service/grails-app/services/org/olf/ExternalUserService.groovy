@@ -4,6 +4,10 @@ import grails.gorm.transactions.Transactional
 
 import org.olf.ExternalUser
 
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+@Transactional
 class ExternalUserService {
   ExternalUser resolveUser(String uuid) {
     ExternalUser resolvedUser = ExternalUser.read(uuid)
@@ -22,13 +26,17 @@ class ExternalUserService {
     ).save(flush:true, failOnError: true);
 
     //TODO remove the below, it just adds an example widget if none are there for testing purposes
+    def jsonSlurper = new JsonSlurper()
+    def file = new File('./src/main/okapi/tenant/sample_data/widgetInstances/example_erm_simple_search_widget.json')
+    def wi = jsonSlurper.parse(file)
+
     WidgetDefinition definition = WidgetDefinition.findByNameAndDefinitionVersion("ERM Agreements", "v1.0.0")
     if (dash.widgets?.size() == 0) {
       def widgetInstance = new WidgetInstance(
         name: "ERM example widget",
         owner: dash,
         definition: definition,
-        configuration: """{"resultColumns":[{"name":"agreementName","label":"Overwritten column label"},{"name":"startDate"}],"filterColumns":[{"name":"agreementStatus","filterValue":"active"}]}"""
+        configuration: JsonOutput.toJson(wi)
       ).save(flush: true, failOnError: true)
     }
 

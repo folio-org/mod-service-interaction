@@ -17,8 +17,9 @@
     },
     "filters": {
       "columns": [
-        { "name":"agreementName", "filterPath":"name", "valueType": "String" },
-        { "name":"agreementStatus", "filterPath":"agreementStatus.value", "valueType": "String" }
+        { "name":"agreementName", "filterPath":"name", "valueType": "String", "comparators": ["==", "!="] },
+        { "name":"agreementStatus", "filterPath":"agreementStatus.value", "valueType": "String", "comparators": ["==", "!="] },
+        { "name":"startDate", "filterPath":"startDate", "valueType": "String", "comparators": ["==", "!=", ">", ">=", "<", "<="] }
       ]
     },
     "sort": {
@@ -26,12 +27,22 @@
         {
           "name":"id",
           "sortPath":"id",
-          "sortTypes": ["asc", "desc"]
+          "sortTypes": ["asc"]
         },
         {
           "name":"agreementName",
           "sortPath":"name",
-          "sortTypes": ["asc"]
+          "sortTypes": ["asc", "desc"]
+        },
+        {
+          "name":"startDate",
+          "sortPath":"startDate",
+          "sortTypes": ["asc", "desc"]
+        },
+        {
+          "name":"endDate",
+          "sortPath":"endDate",
+          "sortTypes": ["asc", "desc"]
         }
       ]
     },
