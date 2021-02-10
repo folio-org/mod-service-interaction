@@ -21,5 +21,8 @@ class UrlMappings {
       }
     }
 
+    "/servint/widgets/definitions" (resources: 'widgetDefinition')
+    "/servint/widgets/instances" (resources: 'widgetInstance')
+
   }
 }

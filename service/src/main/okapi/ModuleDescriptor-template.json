@@ -81,6 +81,46 @@
           "pathPattern": "/servint/dashboard/{id}",
           "permissionsRequired": ["servint.dashboards.item.delete"],
           "permissionsDesired":["servint.dashboards.admin"]
+        },
+        {
+          "methods": [ "GET" ],
+          "pathPattern": "/servint/widgets/definitions",
+          "permissionsRequired": ["servint.widgetDefinitions.collection.get"]
+        },
+        {
+          "methods": [ "GET" ],
+          "pathPattern": "/servint/widgets/definitions/{id}",
+          "permissionsRequired": ["servint.widgetDefinitions.item.get"]
+        },
+        {
+          "methods": [ "GET" ],
+          "pathPattern": "/servint/widgets/instances",
+          "permissionsRequired": ["servint.widgetInstances.collection.get"],
+          "permissionsDesired":["servint.dashboards.admin"]
+        },
+        {
+          "methods": [ "GET" ],
+          "pathPattern": "/servint/widgets/instances/{id}",
+          "permissionsRequired": ["servint.widgetInstances.item.get"],
+          "permissionsDesired":["servint.dashboards.admin"]
+        },
+        {
+          "methods": [ "PUT" ],
+          "pathPattern": "/servint/widgets/instances/{id}",
+          "permissionsRequired": ["servint.widgetInstances.item.put"],
+          "permissionsDesired":["servint.dashboards.admin"]
+        },
+        {
+          "methods": [ "POST" ],
+          "pathPattern": "/servint/widgets/instances",
+          "permissionsRequired": ["servint.widgetInstances.item.post"],
+          "permissionsDesired":["servint.dashboards.admin"]
+        },
+        {
+          "methods": [ "DELETE" ],
+          "pathPattern": "/servint/widgets/instances/{id}",
+          "permissionsRequired": ["servint.widgetInstances.item.delete"],
+          "permissionsDesired":["servint.dashboards.admin"]
         }
       ]
     },
@@ -219,11 +259,67 @@
       "description": "Put a dashboard item for a user"
     },
     {
+      "permissionName": "servint.widgetDefinitions.collection.get",
+      "displayName": "WidgetDefinition collection get",
+      "description": "Get a collection of all WidgetDefinitions"
+    },
+    {
+      "permissionName": "servint.widgetDefinitions.item.get",
+      "displayName": "WidgetDefinition item get",
+      "description": "Get a WidgetDefinition item"
+    },
+    {
+      "permissionName": "servint.widgetinstances.collection.get",
+      "displayName": "WidgetInstance collection get ",
+      "description": "Get a collection of WidgetInstance items"
+    },
+    {
+      "permissionName": "servint.widgetinstances.item.get",
+      "displayName": "WidgetInstance item post",
+      "description": "Get a WidgetInstance item"
+    },
+    {
+      "permissionName": "servint.widgetinstances.item.post",
+      "displayName": "WidgetInstance item post",
+      "description": "Post a WidgetInstance item"
+    },
+    {
+      "permissionName": "servint.widgetinstances.item.put",
+      "displayName": "WidgetInstance item put",
+      "description": "Put a WidgetInstance item"
+    },
+    {
+      "permissionName": "servint.widgetinstances.item.delete",
+      "displayName": "WidgetInstance item delete",
+      "description": "Delete a WidgetInstance item"
+    },
+    {
+      "permissionName": "servint.widget.create",
+      "displayName": "Widget creation",
+      "description": "Allow user to access widgetDefinitions and post widgetInstances",
+      "subPermissions": [
+        "servint.widgetDefinitions.collection.get",
+        "servint.widgetDefinitions.item.get",
+        "servint.widgetinstances.item.post"
+      ]
+    },
+    {
+      "permissionName": "servint.widget.edit",
+      "displayName": "Widget editing",
+      "description": "Allow user to edit and delete widgetInstances",
+      "subPermissions": [
+        "servint.widgetinstances.item.put",
+        "servint.widgetinstances.item.delete"
+      ]
+    },
+    {
       "permissionName": "servint.dashboards.edit",
       "subPermissions": [
         "servint.dashboards.view",
         "servint.dashboards.item.post",
-        "servint.dashboards.item.put"
+        "servint.dashboards.item.put",
+        "servint.widget.create",
+        "servint.widget.edit"
       ]
     },
     {
@@ -248,6 +344,7 @@
       "displayName": "Dashboard admin",
       "description": "Allow admin access to dashboards",
       "subPermissions": [
+        "servint.widgetinstances.collection.get",
         "servint.dashboards.collection.get",
         "servint.dashboards.manage"
       ]
