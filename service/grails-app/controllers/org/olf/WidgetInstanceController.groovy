@@ -13,7 +13,7 @@ import com.k_int.okapi.OkapiTenantAwareController
 class WidgetInstanceController extends OkapiTenantAwareController<WidgetInstanceController> {
   WidgetInstanceController() {
     super(WidgetInstance)
-  },
+  }
 
   public boolean isOwner() {
     def wi = WidgetInstance.read(params.id)
