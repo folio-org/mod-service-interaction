@@ -18,15 +18,15 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
   }
 
   def externalUserService
-
   static responseFormats = ['json', 'xml']
 
   public getUserSpecificDashboards() {
     String patronId = getPatron().id
     log.debug("ExternalUserController::getUserSpecificDashboards called for patron (${patronId}) ")
     ExternalUser proxiedUser = externalUserService.resolveUser(patronId)
-    def result = proxiedUser.dashboards
-    render result as JSON
+    respond doTheLookup({
+        eq 'owner', proxiedUser
+    })
   }
 
   public boolean isOwner() {
