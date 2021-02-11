@@ -25,7 +25,7 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
     log.debug("ExternalUserController::getUserSpecificDashboards called for patron (${patronId}) ")
     ExternalUser proxiedUser = externalUserService.resolveUser(patronId)
     respond doTheLookup({
-        eq 'owner', proxiedUser
+        eq 'owner.id', proxiedUser.id
     })
   }
 
