@@ -314,6 +314,8 @@
     },
     {
       "permissionName": "servint.dashboards.edit",
+      "displayName": "Dashboards edit",
+      "description": "Allow user to create, edit and add widgets to dashboards",
       "subPermissions": [
         "servint.dashboards.view",
         "servint.dashboards.item.post",
@@ -329,6 +331,8 @@
     },
     {
       "permissionName": "servint.dashboards.manage",
+      "displayName": "Dashboards manage",
+      "description": "Dashboard edit and delete",
       "subPermissions": [
         "servint.dashboards.edit",
         "servint.dashboards.item.delete"
