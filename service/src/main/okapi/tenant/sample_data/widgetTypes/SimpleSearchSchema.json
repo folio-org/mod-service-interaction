@@ -45,7 +45,7 @@
         "title": "Result column",
         "description": "Describes the columns to be made available in the output",
         "additionalProperties": false,
-        "required": ["accessPath", "name"],
+        "required": ["accessPath", "name", "valueType"],
         "properties": {
           "accessPath": {
             "type": "string",
@@ -58,6 +58,11 @@
           "name": {
             "type": "string",
             "description": "a string defining the name of the property for this column"
+          },
+          "valueType": {
+            "type": "string",
+            "enum": ["String", "Integer", "Float", "Boolean", "Date"],
+            "description": "a string defining the type of property we are displaying"
           }
         }
       },
@@ -95,7 +100,7 @@
           },
           "valueType": {
             "type": "string",
-            "enum": ["String", "Integer", "Float", "Boolean"],
+            "enum": ["String", "Integer", "Float", "Boolean", "Date"],
             "description": "a string defining the type of property we are filtering on"
           },
           "comparators": {

@@ -9,17 +9,17 @@
     "baseUrl":"/erm/sas",
     "results": {
       "columns": [
-        { "name":"agreementName", "label": "Agreement name", "accessPath":"name" },
-        { "name":"startDate", "label": "Start date", "accessPath":"startDate" },
-        { "name":"endDate", "label": "End date", "accessPath":"endDate" },
-        { "name":"agreementStatus", "label": "Status", "accessPath":"agreementStatus.value" }
+        { "name":"agreementName", "label": "Agreement name", "accessPath":"name", "valueType": "String" },
+        { "name":"startDate", "label": "Start date", "accessPath":"startDate", "valueType": "Date" },
+        { "name":"endDate", "label": "End date", "accessPath":"endDate", "valueType": "Date" },
+        { "name":"agreementStatus", "label": "Status", "accessPath":"agreementStatus.value", "valueType": "String" }
       ]
     },
     "filters": {
       "columns": [
         { "name":"agreementName", "filterPath":"name", "valueType": "String", "comparators": ["==", "!="] },
         { "name":"agreementStatus", "filterPath":"agreementStatus.value", "valueType": "String", "comparators": ["==", "!="] },
-        { "name":"startDate", "filterPath":"startDate", "valueType": "String", "comparators": ["==", "!=", ">", ">=", "<", "<="] }
+        { "name":"startDate", "filterPath":"startDate", "valueType": "Date", "comparators": ["==", "!=", ">", ">=", "<", "<="] }
       ]
     },
     "sort": {
