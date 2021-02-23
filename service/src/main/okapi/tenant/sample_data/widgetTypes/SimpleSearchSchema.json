@@ -105,10 +105,7 @@
           },
           "enumValues": {
             "type": "array",
-            "items":  {
-              "type": "string",
-              "description": "One of the enum values for the field"
-            },
+            "items":  { "$ref": "#/$defs/enumValues" },
             "description": "A collection of options for the value, where valueType is 'Enum'"
           },
           "comparators": {
@@ -133,6 +130,23 @@
             "required": ["enumValues"]
           }
         ]
+      },
+      "enumValues": {
+        "type": "object",
+        "title": "Enum Values",
+        "description": "One of the enum values for the field",
+        "additionalProperties": false,
+        "required": ["value"],
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "A value for this enum"
+          },
+          "label": {
+            "type": "string",
+            "description": "An optional label to replace the value of the enum"
+          }
+        }
       },
       "sort": {
         "type": "object",
