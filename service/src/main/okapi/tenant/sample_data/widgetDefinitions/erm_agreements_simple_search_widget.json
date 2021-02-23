@@ -17,9 +17,9 @@
     },
     "filters": {
       "columns": [
-        { "name":"agreementName", "filterPath":"name", "valueType": "String", "comparators": ["==", "!="] },
-        { "name":"agreementStatus", "filterPath":"agreementStatus.value", "valueType": "String", "comparators": ["==", "!="] },
-        { "name":"startDate", "filterPath":"startDate", "valueType": "Date", "comparators": ["==", "!=", ">", ">=", "<", "<="] }
+        { "name":"agreementName", "label": "Agreement name", "filterPath":"name", "valueType": "String", "comparators": ["==", "!="] },
+        { "name":"agreementStatus", "label": "Agreement status", "filterPath":"agreementStatus.value", "valueType": "String", "comparators": ["==", "!="] },
+        { "name":"startDate", "label": "Start date", "filterPath":"startDate", "valueType": "Date", "comparators": ["==", "!=", ">", ">=", "<", "<="] }
       ]
     },
     "sort": {
