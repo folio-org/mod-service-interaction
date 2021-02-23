@@ -100,8 +100,16 @@
           },
           "valueType": {
             "type": "string",
-            "enum": ["String", "Integer", "Float", "Boolean", "Date"],
+            "enum": ["String", "Integer", "Float", "Boolean", "Date", "Enum"],
             "description": "a string defining the type of property we are filtering on"
+          },
+          "enumValues": {
+            "type": "array",
+            "items":  {
+              "type": "string",
+              "description": "One of the enum values for the field"
+            },
+            "description": "A collection of options for the value, where valueType is 'Enum'"
           },
           "comparators": {
             "type": "array",
@@ -111,7 +119,20 @@
             },
             "description": "An array of comparators valid for this filter"
           }
-        }
+        },
+        "anyOf": [
+          {
+            "not": {
+              "properties": {
+                "valueType": { "const": "Enum" }
+              },
+              "required": ["valueType"]
+            }
+          },
+          {
+            "required": ["enumValues"]
+          }
+        ]
       },
       "sort": {
         "type": "object",

@@ -18,7 +18,7 @@
     "filters": {
       "columns": [
         { "name":"agreementName", "label": "Agreement name", "filterPath":"name", "valueType": "String", "comparators": ["==", "!="] },
-        { "name":"agreementStatus", "label": "Agreement status", "filterPath":"agreementStatus.value", "valueType": "String", "comparators": ["==", "!="] },
+        { "name":"agreementStatus", "label": "Agreement status", "filterPath":"agreementStatus.value", "valueType": "Enum", "enumValues": ["active", "closed", "in_negotiation"], "comparators": ["==", "!="] },
         { "name":"startDate", "label": "Start date", "filterPath":"startDate", "valueType": "Date", "comparators": ["==", "!=", ">", ">=", "<", "<="] }
       ]
     },
