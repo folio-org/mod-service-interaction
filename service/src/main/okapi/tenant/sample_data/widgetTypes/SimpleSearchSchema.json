@@ -216,20 +216,7 @@
             "type": "string",
             "description": "an optional string containing a default link"
           }
-        },
-        "anyOf": [
-          {
-            "not": {
-              "properties": {
-                "configurable": { "const": false }
-              },
-              "required": ["configurable"]
-            }
-          },
-          {
-            "required": ["defValue"]
-          }
-        ]
+        }
       },
       "numberOfRows": {
         "type": "object",
