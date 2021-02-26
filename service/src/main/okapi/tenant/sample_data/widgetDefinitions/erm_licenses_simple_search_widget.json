@@ -6,7 +6,7 @@
   "version": "v1.0.0",
   "name":"ERM Licenses",
   "definition":{
-    "baseUrl":"/licenses",
+    "baseUrl":"/licenses/licenses",
     "results": {
       "columns": [
         { 
