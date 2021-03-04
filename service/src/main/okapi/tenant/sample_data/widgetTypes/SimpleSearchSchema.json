@@ -100,7 +100,7 @@
           },
           "valueType": {
             "type": "string",
-            "enum": ["String", "Integer", "Float", "Boolean", "Date", "Enum"],
+            "enum": ["String", "Integer", "Float", "Boolean", "Date", "Enum", "UUID"],
             "description": "a string defining the type of property we are filtering on"
           },
           "enumValues": {
