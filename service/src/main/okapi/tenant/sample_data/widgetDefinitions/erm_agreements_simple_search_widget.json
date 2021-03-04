@@ -42,7 +42,7 @@
           "label": "Agreement name",
           "filterPath":"name",
           "valueType": "String",
-          "comparators": ["==", "!="]
+          "comparators": ["=~", "!~"]
         },
         {
           "name":"agreementStatus",

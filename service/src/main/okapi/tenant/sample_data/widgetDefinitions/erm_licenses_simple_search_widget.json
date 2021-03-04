@@ -54,7 +54,7 @@
           "label": "License name",
           "filterPath":"name",
           "valueType": "String",
-          "comparators": ["==", "!="]
+          "comparators": ["=~", "!~"]
         },
         {
           "name":"licenseStatus",
