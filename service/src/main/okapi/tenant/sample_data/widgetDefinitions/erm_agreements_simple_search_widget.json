@@ -69,6 +69,13 @@
           "filterPath":"endDate",
           "valueType": "Date",
           "comparators": ["==", "!=", ">", ">=", "<", "<=", "isNull", "isNotNull"]
+        },
+        {
+          "name":"internalContact",
+          "label": "Internal contact",
+          "filterPath":"contacts.id",
+          "valueType": "UUID",
+          "comparators": ["==", "!="]
         }
       ]
     },
