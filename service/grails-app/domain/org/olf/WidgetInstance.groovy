@@ -41,7 +41,7 @@ class WidgetInstance implements MultiTenant<WidgetInstance> {
         """SELECT MAX(wi.weight) FROM WidgetInstance wi WHERE wi.owner.id = :ownerId AND wi.weight = :weightInt"""
       , [ownerId: this.owner.id, weightInt: this.weight])[0]
 
-    if (!this.weight) {
+    if (this.weight == null) {
       // If weight is undefined, set it to the highest weight on the owner + 1
       if (maxWeight != null) {
         this.weight = maxWeight + 1;
