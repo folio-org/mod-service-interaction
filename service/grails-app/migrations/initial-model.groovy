@@ -126,4 +126,10 @@ databaseChangeLog = {
       referencedColumnNames: "dshb_id", referencedTableName: "dashboard"
     )
   }
+
+  changeSet(author: "efreestone (manual)", id: "2021-03-08-1243-001") {
+    addColumn (tableName: "widget_instance" ) {
+      column(name: "wins_weight", type: "int8")
+    }
+  }
 }
