@@ -5,4 +5,4 @@ import groovy.transform.*
 @Field
 Dashboard dashboard
 
-json g.render (dashboard, [expand:['widgets']])
+json g.render (dashboard)
