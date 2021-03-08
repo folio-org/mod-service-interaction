@@ -33,12 +33,16 @@ class WidgetInstance implements MultiTenant<WidgetInstance> {
   }
 
   def beforeValidate() {
-    if (!this.weight) {
-      // If weight is undefined, set it to the highest weight on the owner + 1
-      def maxWeight = WidgetInstance.executeQuery(
+    def maxWeight = WidgetInstance.executeQuery(
         """SELECT MAX(wi.weight) FROM WidgetInstance wi WHERE wi.owner.id = : ownerId"""
       , [ownerId: this.owner.id])[0]
+    
+    def matchingWeight = WidgetInstance.executeQuery(
+        """SELECT MAX(wi.weight) FROM WidgetInstance wi WHERE wi.owner.id = :ownerId AND wi.weight = :weightInt"""
+      , [ownerId: this.owner.id, weightInt: this.weight])[0]
 
+    if (!this.weight) {
+      // If weight is undefined, set it to the highest weight on the owner + 1
       if (maxWeight != null) {
         this.weight = maxWeight + 1;
       } else {
