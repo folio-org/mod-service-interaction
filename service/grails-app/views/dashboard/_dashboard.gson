@@ -10,5 +10,6 @@ json g.render (dashboard) {
   widgets ( dashboard.widgets ) { WidgetInstance wi ->
     id wi.id
     weight wi.weight
+    name wi.name
   }
 }
