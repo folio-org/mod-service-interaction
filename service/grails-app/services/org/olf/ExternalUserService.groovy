@@ -22,7 +22,8 @@ class ExternalUserService {
     // Create default dashboard if not exists
     Dashboard dash = Dashboard.findByOwnerAndName(resolvedUser, "DEFAULT") ?: new Dashboard (
       name: "DEFAULT",
-      owner: resolvedUser
+      owner: resolvedUser,
+      widgets: [],
     ).save(flush:true, failOnError: true);
 
     //Refetch user in case dashboard has been added
