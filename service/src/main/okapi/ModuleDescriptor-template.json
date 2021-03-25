@@ -100,6 +100,12 @@
         },
         {
           "methods": [ "GET" ],
+          "pathPattern": "/servint/widgets/instances/my-widgets",
+          "permissionsRequired": ["servint.widgetInstances.user.get"],
+          "permissionsDesired":["servint.dashboards.admin"]
+        },
+        {
+          "methods": [ "GET" ],
           "pathPattern": "/servint/widgets/instances/{id}",
           "permissionsRequired": ["servint.widgetInstances.item.get"],
           "permissionsDesired":["servint.dashboards.admin"]
@@ -269,6 +275,11 @@
       "description": "Get a WidgetDefinition item"
     },
     {
+      "permissionName": "servint.widgetInstances.user.get",
+      "displayName": "Widget instances user collection get",
+      "description": "Get a collection of WidgetInstances for a user"
+    },
+    {
       "permissionName": "servint.widgetInstances.collection.get",
       "displayName": "WidgetInstance collection get ",
       "description": "Get a collection of WidgetInstance items"
@@ -294,10 +305,20 @@
       "description": "Delete a WidgetInstance item"
     },
     {
+      "permissionName": "servint.widget.view",
+      "displayName": "Widget view",
+      "description": "Allow user to view their own widgets",
+      "subPermissions": [
+        "servint.widgetInstances.item.get",
+        "servint.widgetInstances.user.get"
+      ]
+    },
+    {
       "permissionName": "servint.widget.create",
       "displayName": "Widget creation",
       "description": "Allow user to access widgetDefinitions and post widgetInstances",
       "subPermissions": [
+        "servint.widget.view",
         "servint.widgetDefinitions.collection.get",
         "servint.widgetDefinitions.item.get",
         "servint.widgetInstances.item.post"

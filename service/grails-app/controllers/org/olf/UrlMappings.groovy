@@ -22,7 +22,11 @@ class UrlMappings {
     }
 
     "/servint/widgets/definitions" (resources: 'widgetDefinition')
-    "/servint/widgets/instances" (resources: 'widgetInstance')
+    "/servint/widgets/instances" (resources: 'widgetInstance') {
+      collection {
+        "/my-widgets" (controller: 'widgetInstance', action: 'getUserSpecificWidgetInstances')
+      }
+    }
 
   }
 }
