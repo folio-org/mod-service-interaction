@@ -16,7 +16,7 @@ class ExternalUserService {
         dashboards: []
       )
       resolvedUser.id = uuid
-      resolvedUser.save(failOnError: true);
+      resolvedUser.save(flush:true, failOnError: true);
     }
 
     // Create default dashboard if not exists

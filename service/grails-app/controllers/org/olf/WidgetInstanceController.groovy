@@ -14,13 +14,15 @@ class WidgetInstanceController extends OkapiTenantAwareController<WidgetInstance
   WidgetInstanceController() {
     super(WidgetInstance)
   }
+  def externalUserService
 
   public getUserSpecificWidgetInstances() {
     String patronId = getPatron().id
     log.debug("WidgetInstanceController::getUserSpecificWidgetInstances called for patron (${patronId}) ")
     ExternalUser proxiedUser = externalUserService.resolveUser(patronId)
     respond doTheLookup({
-        eq 'owner.id', proxiedUser.id
+      createAlias ('owner', 'widget_owner')
+        eq 'widget_owner.owner.id', proxiedUser.id
     })
   }
 
