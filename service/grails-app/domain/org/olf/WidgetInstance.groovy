@@ -34,7 +34,7 @@ class WidgetInstance implements MultiTenant<WidgetInstance> {
 
   def beforeValidate() {
     def maxWeight = WidgetInstance.executeQuery(
-        """SELECT MAX(wi.weight) FROM WidgetInstance wi WHERE wi.owner.id = : ownerId"""
+        """SELECT MAX(wi.weight) FROM WidgetInstance wi WHERE wi.owner.id = :ownerId"""
       , [ownerId: this.owner.id])[0]
     
     def matchingWeight = WidgetInstance.executeQuery(
