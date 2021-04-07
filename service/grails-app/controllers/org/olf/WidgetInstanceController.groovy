@@ -27,11 +27,16 @@ class WidgetInstanceController extends OkapiTenantAwareController<WidgetInstance
   }
 
   public boolean isOwner() {
-    def wi = WidgetInstance.read(params.id)
-    def dash = Dashboard.read(wi.owner.id)
+    def widgetDashboard = WidgetInstance.executeQuery("""
+      SELECT owner.id from WidgetInstance as wi WHERE wi.id = :wiId
+    """, [wiId: params.id])[0]
+
+    def dashboardOwner = Dashboard.executeQuery("""
+      SELECT owner.id from Dashboard as d WHERE d.id = :dId
+    """,[dId: widgetDashboard])[0]
 
     // Bear in mind dash.owner.id is the id of a ExternalUser, which SHOULD always be the FOLIO ID
-    return matchesCurrentUser(dash.owner.id)
+    return matchesCurrentUser(dashboardOwner)
   }
 
   public boolean matchesCurrentUser(String id) {
@@ -64,7 +69,7 @@ class WidgetInstanceController extends OkapiTenantAwareController<WidgetInstance
   def delete() {
     if (!canDelete()) {
       response.sendError(403)
-    } 
+    }
     super.delete()
   }
 
