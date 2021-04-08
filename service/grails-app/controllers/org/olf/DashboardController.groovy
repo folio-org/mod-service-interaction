@@ -30,9 +30,11 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
   }
 
   public boolean isOwner() {
-    def dash = Dashboard.read(params.id)
+    def dashboardOwner = Dashboard.executeQuery("""
+      SELECT owner.id from Dashboard as d WHERE d.id = :dId
+    """,[dId: params.id])[0]
     // Bear in mind dash.owner.id is the id of a ExternalUser, which SHOULD always be the FOLIO ID
-    return matchesCurrentUser(dash.owner.id)
+    return matchesCurrentUser(dashboardOwner)
   }
 
   public boolean matchesCurrentUser(String id) {
