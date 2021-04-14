@@ -12,6 +12,10 @@ class WidgetType implements MultiTenant<WidgetType> {
   String typeVersion
   String schema
 
+  static constraints = {
+    name(unique: 'typeVersion')
+  }
+
   static mapping = {
                id column: 'wtype_id', generator: 'uuid2', length:36
           version column: 'wtype_version'

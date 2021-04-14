@@ -15,6 +15,10 @@ class WidgetDefinition implements MultiTenant<WidgetDefinition> {
   String definitionVersion
   WidgetType type
 
+  static constraints = {
+    name(unique: 'definitionVersion')
+  }
+
   static mapping = {
                    id column: 'wdef_id', generator: 'uuid2', length:36
               version column: 'wdef_version'
