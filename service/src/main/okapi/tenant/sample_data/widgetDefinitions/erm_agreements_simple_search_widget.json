@@ -82,6 +82,14 @@
           "filterPath":"contacts.user",
           "valueType": "UUID",
           "comparators": ["==", "!="]
+        },
+        {
+          "name":"linkedLicense",
+          "label": "Linked license",
+          "filterPath":"linkedLicenses.remoteId",
+          "valueType": "UUID",
+          "resource": "license",
+          "comparators": ["==", "!="]
         }
       ]
     },
