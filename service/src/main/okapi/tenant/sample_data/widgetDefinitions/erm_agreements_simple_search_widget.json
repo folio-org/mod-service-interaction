@@ -81,6 +81,7 @@
           "label": "Internal contact",
           "filterPath":"contacts.user",
           "valueType": "UUID",
+          "resource": "user",
           "comparators": ["==", "!="]
         },
         {
