@@ -4,7 +4,7 @@ pipeline {
 
   environment {
     ORG_GRADLE_PROJECT_appName = 'mod-service-interaction'
-    GRADLEW_OPTS = '--console plain --no-daemon'
+    GRADLEW_OPTS = '--console plain --no-daemon -x integrationTest'
     BUILD_DIR = "${env.WORKSPACE}/service"
     MD = "${env.WORKSPACE}/service/build/resources/main/okapi/ModuleDescriptor.json"
     doKubeDeploy = true
@@ -57,7 +57,7 @@ pipeline {
     stage('Gradle Build') { 
       steps {
         dir(env.BUILD_DIR) {
-          sh "./gradlew $env.GRADLEW_OPTS -PappVersion=${env.version} assemble"
+          sh "./gradlew $env.GRADLEW_OPTS -PappVersion=${env.version} clean build"
         }
       }
     }
