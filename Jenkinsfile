@@ -46,7 +46,7 @@ pipeline {
             }
             else {
               env.dockerRepo = 'folioci'
-              env.version = "${gradleVersion}-SNAPSHOT.${env.BUILD_NUMBER}"
+              env.version = "${gradleVersion}.${env.BUILD_NUMBER}"
             }
           }
         }
@@ -64,8 +64,8 @@ pipeline {
    
     stage('Build Docker') {
       steps {
-        dir(env.BUILD_DIR) {
-          sh "./gradlew $env.GRADLEW_OPTS -PappVersion=${env.version} -PdockerRepo=${env.dockerRepo} buildImage"
+        dir(env.WORKSPACE) {
+          sh "docker build --pull=true --no-cache=true -t ${env.name}:${env.version} ."
         }
         // debug
         sh "cat $env.MD"
@@ -82,7 +82,8 @@ pipeline {
       steps {
         script {
           docker.withRegistry('https://index.docker.io/v1/', 'DockerHubIDJenkins') {
-            sh "docker tag ${env.dockerRepo}/${env.name}:${env.version} ${env.dockerRepo}/${env.name}:latest"
+            sh "docker tag ${env.name}:${env.version} ${env.dockerRepo}/${env.name}:latest"
+            sh "docker tag ${env.name}:${env.version} ${env.dockerRepo}/${env.name}:${env.version}"
             sh "docker push ${env.dockerRepo}/${env.name}:${env.version}"
             sh "docker push ${env.dockerRepo}/${env.name}:latest"
           }
@@ -105,23 +106,6 @@ pipeline {
         postModuleDescriptor(env.MD)
       }
     }
-
-    // disbale kubeDeploy temporarily --ian
-    //stage('Kubernetes Deploy'){
-    //  when {
-    //    branch 'master'
-    //    expression { return env.doKubeDeploy }  
-    //  }
-    //  steps {
-    //    echo "Deploying to kubernetes cluster"
-    //    kubeDeploy('folio-default',
-    //              "[{" +
-    //                "\"name\" : \"${env.name}\"," +
-    //                "\"version\" : \"${env.version}\"," +
-    //                "\"deploy\":true" +
-    //              "}]")
-    //  }
-    //}
 
   } // end stages
 
