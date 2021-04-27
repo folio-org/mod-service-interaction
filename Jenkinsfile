@@ -65,15 +65,29 @@ pipeline {
         }
       }
     }
-   
+
     stage('Build Docker') {
       steps {
         dir(env.WORKSPACE) {
           sh "docker build --pull=true --no-cache=true -t ${env.name}:${env.dockerTagVersion} ."
         }
-        // debug
-        sh "cat $env.MD"
       } 
+    }
+
+    stage('update moduleDescriptor') { 
+      steps {
+        dir(env.BUILD_DIR) {
+          // md version number is handled in build.gradle
+          // update with docker repo information
+          sh "mv $modDescriptor ${modDescriptor}.orig"
+          sh """
+          jq '.launchDescriptor.dockerImage |= \"${env.dockerRepo}/${env.name}:${env.dockerTagVersion}\" |
+              .launchDescriptor.dockerPull |= \"true\"'
+          ${modDescriptor}.orig > $modDescriptor
+          """
+          sh "cat $env.MD"
+        }
+      }
     }
 
     stage('Publish Docker Image') { 
@@ -103,14 +117,6 @@ pipeline {
         }
       }
       steps {
-        // md version number is handled in build.gradle
-        // update with docker repo information
-        sh "mv $modDescriptor ${modDescriptor}.orig"
-        sh """
-        jq '.launchDescriptor.dockerImage |= \"${env.dockerRepo}/${env.name}:${env.dockerTagVersion}\" |
-            .launchDescriptor.dockerPull |= \"true\"'
-        ${modDescriptor}.orig > $modDescriptor
-        """
         postModuleDescriptor(env.MD)
       }
     }
