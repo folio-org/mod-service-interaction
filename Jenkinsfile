@@ -81,9 +81,8 @@ pipeline {
           // update with docker repo information
           sh "mv $MD ${MD}.orig"
           sh """
-          jq '.launchDescriptor.dockerImage |= \"${env.dockerRepo}/${env.name}:${env.dockerTagVersion}\" |
-              .launchDescriptor.dockerPull |= \"true\"'
-          ${MD}.orig > $MD
+          cat ${MD}.orig | jq '.launchDescriptor.dockerImage |= \"${env.dockerRepo}/${env.name}:${env.dockerTagVersion}\" |
+              .launchDescriptor.dockerPull |= \"true\"' > $MD
           """
           sh "cat $env.MD"
         }
