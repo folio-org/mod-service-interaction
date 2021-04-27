@@ -104,7 +104,13 @@ pipeline {
       }
       steps {
         // md version number is handled in build.gradle
-        // just take whats in there
+        // update with docker repo information
+        sh "mv $modDescriptor ${modDescriptor}.orig"
+        sh """
+        jq '.launchDescriptor.dockerImage |= \"${env.dockerRepo}/${env.name}:${env.dockerTagVersion}\" |
+            .launchDescriptor.dockerPull |= \"true\"'
+        ${modDescriptor}.orig > $modDescriptor
+        """
         postModuleDescriptor(env.MD)
       }
     }
