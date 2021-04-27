@@ -74,7 +74,7 @@ pipeline {
       } 
     }
 
-    stage('Update moduleDescriptor') { 
+    stage('Update MD') {
       steps {
         dir(env.BUILD_DIR) {
           // md version number is handled in build.gradle
