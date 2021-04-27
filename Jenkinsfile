@@ -74,16 +74,16 @@ pipeline {
       } 
     }
 
-    stage('update moduleDescriptor') { 
+    stage('Update moduleDescriptor') { 
       steps {
         dir(env.BUILD_DIR) {
           // md version number is handled in build.gradle
           // update with docker repo information
-          sh "mv $modDescriptor ${modDescriptor}.orig"
+          sh "mv $MD ${MD}.orig"
           sh """
           jq '.launchDescriptor.dockerImage |= \"${env.dockerRepo}/${env.name}:${env.dockerTagVersion}\" |
               .launchDescriptor.dockerPull |= \"true\"'
-          ${modDescriptor}.orig > $modDescriptor
+          ${MD}.orig > $MD
           """
           sh "cat $env.MD"
         }
