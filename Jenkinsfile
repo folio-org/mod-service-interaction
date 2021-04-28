@@ -39,6 +39,7 @@ pipeline {
                 env.isRelease = true 
                 env.dockerRepo = 'folioorg'
                 env.version = gradleVersion
+                env.dockerTagVersion = "${env.version}"
               }
               else { 
                 error('Git release tag and Maven version mismatch')
@@ -46,7 +47,10 @@ pipeline {
             }
             else {
               env.dockerRepo = 'folioci'
-              env.version = "${gradleVersion}.${env.BUILD_NUMBER}"
+              // build number is set in build.gradle
+              env.version = "${gradleVersion}"
+              // not using gradle to build dockerfile, so set build number here
+              env.dockerTagVersion = "${gradleVersion}.${env.BUILD_NUMBER}"
             }
           }
         }
@@ -61,15 +65,28 @@ pipeline {
         }
       }
     }
-   
+
     stage('Build Docker') {
       steps {
         dir(env.WORKSPACE) {
-          sh "docker build --pull=true --no-cache=true -t ${env.name}:${env.version} ."
+          sh "docker build --pull=true --no-cache=true -t ${env.name}:${env.dockerTagVersion} ."
         }
-        // debug
-        sh "cat $env.MD"
       } 
+    }
+
+    stage('Update MD') {
+      steps {
+        dir(env.BUILD_DIR) {
+          // md version number is handled in build.gradle
+          // update with docker repo information
+          sh "mv $MD ${MD}.orig"
+          sh """
+          cat ${MD}.orig | jq '.launchDescriptor.dockerImage |= \"${env.dockerRepo}/${env.name}:${env.dockerTagVersion}\" |
+              .launchDescriptor.dockerPull |= \"true\"' > $MD
+          """
+          sh "cat $env.MD"
+        }
+      }
     }
 
     stage('Publish Docker Image') { 
@@ -82,9 +99,9 @@ pipeline {
       steps {
         script {
           docker.withRegistry('https://index.docker.io/v1/', 'DockerHubIDJenkins') {
-            sh "docker tag ${env.name}:${env.version} ${env.dockerRepo}/${env.name}:latest"
-            sh "docker tag ${env.name}:${env.version} ${env.dockerRepo}/${env.name}:${env.version}"
-            sh "docker push ${env.dockerRepo}/${env.name}:${env.version}"
+            sh "docker tag ${env.name}:${env.dockerTagVersion} ${env.dockerRepo}/${env.name}:latest"
+            sh "docker tag ${env.name}:${env.dockerTagVersion} ${env.dockerRepo}/${env.name}:${env.dockerTagVersion}"
+            sh "docker push ${env.dockerRepo}/${env.name}:${env.dockerTagVersion}"
             sh "docker push ${env.dockerRepo}/${env.name}:latest"
           }
         }
@@ -99,10 +116,6 @@ pipeline {
         }
       }
       steps {
-        script {
-          def foliociLib = new org.folio.foliociCommands()
-          foliociLib.updateModDescriptor(env.MD) 
-        }
         postModuleDescriptor(env.MD)
       }
     }
@@ -111,7 +124,11 @@ pipeline {
 
   post {
     always {
-      dockerCleanup()
+      echo "Cleaning up temporary docker artifacts"
+      sh "docker rmi ${env.name}:${env.dockerTagVersion} || exit 0"
+      sh "docker rmi ${env.name}:latest || exit 0"
+      sh "docker rmi ${env.dockerRepo}/${env.name}:${env.dockerTagVersion} || exit 0"
+      sh "docker rmi ${env.dockerRepo}/${env.name}:latest || exit 0"
       sendNotifications currentBuild.result 
     }
   }
