@@ -18,6 +18,7 @@ final String version_regex = /^(((\d+)\.\d+)\.\d+)(-([a-zA-Z]+(\.\d+)?))?$/
 Map<String, String> env = System.getenv();
 String calculated_version = null;
 
+// If we are building in a Jenkins environment append the build number onto the snapshot tag
 if ( ( appVersion.contains('SNAPSHOT') ) && ( env.BUILD_NUMBER != null ) ) {
   println("Detected snapshot version and build number - appending");
   calculated_version = "${appVersion}.${env.BUILD_NUMBER}".toString()
