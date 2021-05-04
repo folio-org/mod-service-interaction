@@ -63,28 +63,27 @@ PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternRe
 
 def jsonSlurper = new JsonSlurper()
 
-Resource widgetTypes = resolver.getResources("classpath*:sample_data/widgetTypes")[0]
-Resource widgetDefs = resolver.getResources("classpath*:sample_data/widgetDefinitions")[0]
-
 log.info 'Importing widget types'
 
+Resource[] widgetTypes = resolver.getResources("classpath*:/sample_data/widgetTypes/*")
 
-def widgetTypeDirectory = widgetTypes.getFile()
-widgetTypeDirectory.traverse (type: FILES, maxDepth: 0) { file ->
+widgetTypes.each { resource ->
+  def file = resource.getFile()
   def wt = jsonSlurper.parse(file)
 
   WidgetType widgetType = WidgetType.findByNameAndTypeVersion(wt.name, wt.version) ?: new WidgetType(
     name: wt.name,
     typeVersion: wt.version,
     schema: JsonOutput.toJson(wt.schema)
-  ).save(flush: true, failOnError: true)
+  ).save(flush: true, failOnError: true) 
 }
-
 
 log.info 'Importing widget definitions'
 
-def widgetDefDirectory = widgetDefs.getFile()
-widgetDefDirectory.traverse (type: FILES, maxDepth: 0) { file ->
+
+Resource[] widgetDefs = resolver.getResources("classpath*:/sample_data/widgetDefinitions/*")
+widgetDefs.each { resource ->
+  def file = resource.getFile()
   def wd = jsonSlurper.parse(file)
 
   WidgetType type = WidgetType.findByNameAndTypeVersion(wd.type.name, wd.type.version)

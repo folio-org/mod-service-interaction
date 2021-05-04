@@ -15,5 +15,5 @@ the_jar_file=`ls build/libs/mod-service-interaction*.jar | tail -n 1`
 echo Attempting to start jar $the_jar_file
 
 # THis DOES work as expected however - 
-java -jar $the_jar_file -Xmx1G --grails.server.host=10.0.2.2 --dataSource.username=folio_admin --dataSource.password=folio_admin --dataSource.url=jdbc:postgresql://localhost:54321/okapi_modules
+java -Dserver.port=8078 -jar $the_jar_file -Xmx1G --grails.server.host=10.0.2.2 --dataSource.username=folio_admin --dataSource.password=folio_admin --dataSource.url=jdbc:postgresql://localhost:54321/okapi_modules
 
