@@ -63,8 +63,8 @@ PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternRe
 
 def jsonSlurper = new JsonSlurper()
 
-Resource widgetTypes = resolver.getResources("classpath*:/sample_data/widgetTypes")[0]
-Resource widgetDefs = resolver.getResources("classpath*:/sample_data/widgetDefinitions")[0]
+Resource widgetTypes = resolver.getResources("classpath*:sample_data/widgetTypes")[0]
+Resource widgetDefs = resolver.getResources("classpath*:sample_data/widgetDefinitions")[0]
 
 log.info 'Importing widget types'
 
