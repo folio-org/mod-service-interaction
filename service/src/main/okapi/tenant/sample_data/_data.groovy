@@ -59,7 +59,7 @@ CustomPropertyDefinition ensureTextProperty(String name, boolean local = true, S
 def jsonSlurper = new JsonSlurper()
 
 log.info 'Importing widget types'
-def widgetTypeDirectory = new File('./src/main/okapi/tenant/sample_data/widgetTypes')
+def widgetTypeDirectory = new File('./main/sample_data/widgetTypes')
 widgetTypeDirectory.traverse (type: FILES, maxDepth: 0) { file ->
   def wt = jsonSlurper.parse(file)
 
@@ -73,7 +73,7 @@ widgetTypeDirectory.traverse (type: FILES, maxDepth: 0) { file ->
 
 log.info 'Importing widget definitions'
 
-def widgetDefDirectory = new File('./src/main/okapi/tenant/sample_data/widgetDefinitions')
+def widgetDefDirectory = new File('./main/sample_data/widgetDefinitions')
 widgetDefDirectory.traverse (type: FILES, maxDepth: 0) { file ->
   def wd = jsonSlurper.parse(file)
 
