@@ -11,6 +11,8 @@ import grails.databinding.SimpleMapDataBindingSource
 import static grails.async.Promises.*
 import com.k_int.web.toolkit.settings.AppSetting
 
+import org.grails.io.support.PathMatchingResourcePatternResolver
+import org.grails.io.support.Resource
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 import static groovy.io.FileType.FILES
@@ -56,10 +58,18 @@ CustomPropertyDefinition ensureTextProperty(String name, boolean local = true, S
 }
 
 
+// TODO remove all of this when bootstrapping is no longer required
+PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver()
+
 def jsonSlurper = new JsonSlurper()
 
+Resource widgetTypes = resolver.getResources("classpath*:/sample_data/widgetTypes")[0]
+Resource widgetDefs = resolver.getResources("classpath*:/sample_data/widgetDefinitions")[0]
+
 log.info 'Importing widget types'
-def widgetTypeDirectory = new File('./main/sample_data/widgetTypes')
+
+
+def widgetTypeDirectory = widgetTypes.getFile()
 widgetTypeDirectory.traverse (type: FILES, maxDepth: 0) { file ->
   def wt = jsonSlurper.parse(file)
 
@@ -73,7 +83,7 @@ widgetTypeDirectory.traverse (type: FILES, maxDepth: 0) { file ->
 
 log.info 'Importing widget definitions'
 
-def widgetDefDirectory = new File('./main/sample_data/widgetDefinitions')
+def widgetDefDirectory = widgetDefs.getFile()
 widgetDefDirectory.traverse (type: FILES, maxDepth: 0) { file ->
   def wd = jsonSlurper.parse(file)
 
