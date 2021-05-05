@@ -65,11 +65,11 @@ def jsonSlurper = new JsonSlurper()
 
 log.info 'Importing widget types'
 
-Resource[] widgetTypes = resolver.getResources("classpath*:/sample_data/widgetTypes/*")
+Resource[] widgetTypes = resolver.getResources("classpath:sample_data/widgetTypes/*")
 
 widgetTypes.each { resource ->
-  def file = resource.getFile()
-  def wt = jsonSlurper.parse(file)
+  def stream = resource.getInputStream()
+  def wt = jsonSlurper.parse(stream)
 
   WidgetType widgetType = WidgetType.findByNameAndTypeVersion(wt.name, wt.version) ?: new WidgetType(
     name: wt.name,
@@ -81,10 +81,10 @@ widgetTypes.each { resource ->
 log.info 'Importing widget definitions'
 
 
-Resource[] widgetDefs = resolver.getResources("classpath*:/sample_data/widgetDefinitions/*")
+Resource[] widgetDefs = resolver.getResources("classpath:sample_data/widgetDefinitions/*")
 widgetDefs.each { resource ->
-  def file = resource.getFile()
-  def wd = jsonSlurper.parse(file)
+  def stream = resource.getInputStream()
+  def wd = jsonSlurper.parse(stream)
 
   WidgetType type = WidgetType.findByNameAndTypeVersion(wd.type.name, wd.type.version)
   if (type != null) {
