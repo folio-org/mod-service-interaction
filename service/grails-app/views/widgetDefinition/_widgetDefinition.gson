@@ -1,13 +1,19 @@
 import  org.olf.WidgetDefinition
 
+import groovy.json.JsonSlurper
+
 import groovy.transform.*
 
 @Field
 WidgetDefinition widgetDefinition
+def slurper = new JsonSlurper()
 
-json g.render (widgetDefinition) {
+json g.render (widgetDefinition, [includes: []]) {
   type {
     name widgetDefinition.type.name
     version widgetDefinition.type.typeVersion
   }
+  version widgetDefinition.definitionVersion
+  name widgetDefinition.name
+  definition slurper.parseText(widgetDefinition.definition)
 }
