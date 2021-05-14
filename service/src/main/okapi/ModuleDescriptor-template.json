@@ -85,11 +85,16 @@
         {
           "methods": [ "GET" ],
           "pathPattern": "/servint/widgets/definitions",
+          "permissionsRequired": []
+        },
+        {
+          "methods": [ "GET" ],
+          "pathPattern": "/servint/widgets/definitions/local",
           "permissionsRequired": ["servint.widgetDefinitions.collection.get"]
         },
         {
           "methods": [ "GET" ],
-          "pathPattern": "/servint/widgets/definitions/{id}",
+          "pathPattern": "/servint/widgets/definitions/local/{id}",
           "permissionsRequired": ["servint.widgetDefinitions.item.get"]
         },
         {
@@ -127,6 +132,18 @@
           "pathPattern": "/servint/widgets/instances/{id}",
           "permissionsRequired": ["servint.widgetInstances.item.delete"],
           "permissionsDesired":["servint.dashboards.admin"]
+        }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "interfaceType": "multiple",
+      "version": "1.0",
+      "handlers": [
+        {
+          "methods": [ "GET" ],
+          "pathPattern": "/dashboard/definitions",
+          "permissionsRequired": []
         }
       ]
     },

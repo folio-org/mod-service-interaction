@@ -21,12 +21,18 @@ class UrlMappings {
       }
     }
 
-    "/servint/widgets/definitions" (resources: 'widgetDefinition')
+    "/servint/widgets/definitions" (controller: 'widgetDefinition', action: 'fetchDefinitions') {
+      collection {
+        "/local" (resources: 'widgetDefinition')
+      }
+    }
+
     "/servint/widgets/instances" (resources: 'widgetInstance') {
       collection {
         "/my-widgets" (controller: 'widgetInstance', action: 'getUserSpecificWidgetInstances')
       }
     }
 
+    "/dashboard/definitions" (resources: 'widgetDefinition', method: 'GET')
   }
 }
