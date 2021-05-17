@@ -85,7 +85,7 @@
         {
           "methods": [ "GET" ],
           "pathPattern": "/servint/widgets/definitions/global",
-          "permissionsRequired": ["servint.dashboards.admin"]
+          "permissionsRequired": ["servint.widgetDefinitions.collection.global.get"]
         },
         {
           "methods": [ "GET" ],
@@ -132,6 +132,11 @@
           "pathPattern": "/servint/widgets/instances/{id}",
           "permissionsRequired": ["servint.widgetInstances.item.delete"],
           "permissionsDesired":["servint.dashboards.admin"]
+        },
+        {
+          "methods": [ "GET" ],
+          "pathPattern": "/servint/widgets/types",
+          "permissionsRequired": ["servint.widgetTypes.collection.get"]
         }
       ]
     },
@@ -282,6 +287,17 @@
       "description": "Put a dashboard item for a user"
     },
     {
+      "permissionName": "servint.widgetTypes.collection.get",
+      "displayName": "WidgetTypes collection get",
+      "description": "Get a collection of all WidgetTypes"
+    },
+    {
+      "permissionName": "servint.widgetDefinitions.collection.global.get",
+      "displayName": "WidgetDefinition collection global get",
+      "description": "Get list of all WidgetDefinitions from all implementing modules"
+    },
+    
+    {
       "permissionName": "servint.widgetDefinitions.collection.get",
       "displayName": "WidgetDefinition collection get",
       "description": "Get a collection of all WidgetDefinitions"
@@ -326,6 +342,8 @@
       "displayName": "Widget view",
       "description": "Allow user to view their own widgets",
       "subPermissions": [
+        "servint.widgetTypes.collection.get",
+        "servint.widgetDefinitions.collection.global.get",
         "servint.widgetInstances.item.get",
         "servint.widgetInstances.user.get"
       ]
@@ -336,8 +354,6 @@
       "description": "Allow user to access widgetDefinitions and post widgetInstances",
       "subPermissions": [
         "servint.widget.view",
-        "servint.widgetDefinitions.collection.get",
-        "servint.widgetDefinitions.item.get",
         "servint.widgetInstances.item.post"
       ]
     },
@@ -382,13 +398,23 @@
       "description": "Get all dashboards"
     },
     {
+      "permissionName": "servint.widgetDefinitions.manage",
+      "displayName": "Manage local WidgetDefinitions admin",
+      "description": "Permissions to manage the local store of tenant defined WidgetDefinitions",
+      "subPermissions": [
+        "servint.widgetDefinitions.collection.get",
+        "servint.widgetDefinitions.item.get"
+      ]
+    },
+    {
       "permissionName": "servint.dashboards.admin",
       "displayName": "Dashboard admin",
       "description": "Allow admin access to dashboards",
       "subPermissions": [
         "servint.widgetInstances.collection.get",
         "servint.dashboards.collection.get",
-        "servint.dashboards.manage"
+        "servint.dashboards.manage",
+        "servint.widgetDefinitions.manage"
       ]
     }
   ],

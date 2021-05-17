@@ -33,6 +33,8 @@ class UrlMappings {
       }
     }
 
+    "/servint/widgets/types" (resources: 'widgetType')
+
     "/dashboard/definitions" (resources: 'widgetDefinition', method: 'GET')
   }
 }

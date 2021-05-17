@@ -1,9 +1,9 @@
 {
   "type": {
     "name": "SimpleSearch",
-    "version": "v1.0.0"
+    "version": "1.0"
   },
-  "version": "v1.0.0",
+  "version": "1.0",
   "name":"Bootstrapped ERM Agreements Def",
   "definition":{
     "baseUrl":"/erm/sas",
