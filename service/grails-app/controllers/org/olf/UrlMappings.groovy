@@ -21,9 +21,9 @@ class UrlMappings {
       }
     }
 
-    "/servint/widgets/definitions" (controller: 'widgetDefinition', action: 'fetchDefinitions') {
+    "/servint/widgets/definitions" (resources: 'widgetDefinition') {
       collection {
-        "/local" (resources: 'widgetDefinition')
+        "/global" (controller: 'widgetDefinition', action: 'fetchDefinitions')
       }
     }
 

@@ -84,17 +84,17 @@
         },
         {
           "methods": [ "GET" ],
-          "pathPattern": "/servint/widgets/definitions",
-          "permissionsRequired": []
+          "pathPattern": "/servint/widgets/definitions/global",
+          "permissionsRequired": ["servint.dashboards.admin"]
         },
         {
           "methods": [ "GET" ],
-          "pathPattern": "/servint/widgets/definitions/local",
+          "pathPattern": "/servint/widgets/definitions",
           "permissionsRequired": ["servint.widgetDefinitions.collection.get"]
         },
         {
           "methods": [ "GET" ],
-          "pathPattern": "/servint/widgets/definitions/local/{id}",
+          "pathPattern": "/servint/widgets/definitions/{id}",
           "permissionsRequired": ["servint.widgetDefinitions.item.get"]
         },
         {
