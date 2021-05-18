@@ -13,7 +13,8 @@ class WidgetDefinition implements MultiTenant<WidgetDefinition> {
   String name
   String definition
   String definitionVersion
-  WidgetType type
+  String typeName
+  String typeVersion
 
   static constraints = {
     name(unique: 'definitionVersion')
@@ -25,7 +26,8 @@ class WidgetDefinition implements MultiTenant<WidgetDefinition> {
     definitionVersion column: 'wdef_definition_version'
                  name column: 'wdef_name'
            definition column: 'wdef_definition'
-                 type column: "wdef_type_fk"
+             typeName column: 'wdef_type_name'
+          typeVersion column: 'wdef_type_version'
   }
 
 }

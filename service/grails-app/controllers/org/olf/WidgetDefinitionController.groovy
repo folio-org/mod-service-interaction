@@ -21,6 +21,6 @@ class WidgetDefinitionController extends OkapiTenantAwareController<WidgetDefini
 
   // Return all the widgetDefinitions from implementing modules
   def fetchDefinitions () {
-    respond widgetDefinitionService.fetchDefinitions()
+    respond widgetDefinitionService.fetchDefinitions(params.name, params.nameLike, params.version)
   }
 }

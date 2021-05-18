@@ -88,10 +88,11 @@ widgetDefs.each { resource ->
 
   WidgetType type = WidgetType.findByNameAndTypeVersion(wd.type.name, wd.type.version)
   if (type != null) {
-    WidgetDefinition widgetDef = WidgetDefinition.findByNameAndType(wd.name, type) ?: new WidgetDefinition (
+    WidgetDefinition widgetDef = WidgetDefinition.findByNameAndDefinitionVersion(wd.name, wd.version) ?: new WidgetDefinition (
       name: wd.name,
       definitionVersion: wd.version,
-      type: type,
+      typeName: type.name,
+      typeVersion: type.version,
       definition: JsonOutput.toJson(wd.definition)
     ).save(flush: true, failOnError: true)
   } else {
