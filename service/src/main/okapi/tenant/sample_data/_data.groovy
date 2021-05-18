@@ -92,7 +92,7 @@ widgetDefs.each { resource ->
       name: wd.name,
       definitionVersion: wd.version,
       typeName: type.name,
-      typeVersion: type.version,
+      typeVersion: type.typeVersion,
       definition: JsonOutput.toJson(wd.definition)
     ).save(flush: true, failOnError: true)
   } else {
