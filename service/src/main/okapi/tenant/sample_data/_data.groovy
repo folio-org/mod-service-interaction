@@ -86,18 +86,13 @@ widgetDefs.each { resource ->
   def stream = resource.getInputStream()
   def wd = jsonSlurper.parse(stream)
 
-  WidgetType type = WidgetType.findByNameAndTypeVersion(wd.type.name, wd.type.version)
-  if (type != null) {
-    WidgetDefinition widgetDef = WidgetDefinition.findByNameAndDefinitionVersion(wd.name, wd.version) ?: new WidgetDefinition (
-      name: wd.name,
-      definitionVersion: wd.version,
-      typeName: type.name,
-      typeVersion: type.typeVersion,
-      definition: JsonOutput.toJson(wd.definition)
-    ).save(flush: true, failOnError: true)
-  } else {
-    log.warn "WidgetType ${wd.type.name} ${wd.type.version} is not supported"
-  }
+  WidgetDefinition widgetDef = WidgetDefinition.findByNameAndDefinitionVersion(wd.name, wd.version) ?: new WidgetDefinition (
+    name: wd.name,
+    definitionVersion: wd.version,
+    typeName: wd.type?.name,
+    typeVersion: wd.type?.version,
+    definition: JsonOutput.toJson(wd.definition)
+  ).save(flush: true, failOnError: true)
 }
 
 // TODO eventually we should not be bootstrapping these, but instead each app which wants to use the dashboard
