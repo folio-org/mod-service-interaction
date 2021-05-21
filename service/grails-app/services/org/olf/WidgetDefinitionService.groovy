@@ -153,6 +153,8 @@ class WidgetDefinitionService {
         resultsList << ldef
       }
     }
+
+    resultsList
   }
 
   // Return all the widgetDefinitions from implementing modules
