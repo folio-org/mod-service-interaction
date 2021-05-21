@@ -1,8 +1,3 @@
-configurations.all {
-  // Check for updates every build
-  resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
-
 buildscript {
   repositories {
     jcenter()
@@ -65,12 +60,13 @@ eclipse {
 }
 
 repositories {
-  mavenLocal()
+  //mavenLocal()
   maven { url 'https://maven.k-int.com/content/repositories/public' }
   jcenter()
   maven { url 'https://repo.grails.org/grails/core' }
   maven { url 'https://maven.indexdata.com/' }
   maven { url "https://maven.k-int.com/content/repositories/releases" }
+  maven { url "https://jitpack.io" }
 }
 
 sourceSets {
@@ -149,16 +145,14 @@ dependencies {
 
   compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'     // TODO: Migrate away from this resource.
   compile 'com.k_int.grails:web-toolkit-ce:5.2.0'
-  //TODO Put this back to normal
-  //compile 'com.k_int.okapi:grails-okapi:4.0.0-rc.1'
-  compile group: 'com.k_int.okapi', name: 'grails-okapi', version: '4.1.0-SNAPSHOT', changing: true
-
+  compile 'com.k_int.okapi:grails-okapi:4.1.0'
 
   // Custom non profile deps.
   compile 'org.apache.kafka:kafka-clients:2.3.0'
   runtime "org.grails.plugins:async"
   runtime "org.grails.plugins:events"
   compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
+  compile 'com.github.everit-org.json-schema:org.everit.json.schema:1.12.2'
   
   // Better test reports.
   testCompile( 'com.athaydes:spock-reports:1.6.1' ) {

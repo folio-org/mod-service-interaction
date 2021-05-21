@@ -9,6 +9,9 @@ import com.k_int.okapi.OkapiClient
 
 class WidgetDefinitionService {
   OkapiClient okapiClient;
+  def utilityService
+  def widgetTypeService
+
   static Set dashboardImplementors = [];
   static ArrayList definitions = []
 
@@ -26,38 +29,6 @@ class WidgetDefinitionService {
     }
     return result
   }
-
-  // Will return true if incomingVersion is compatible with comparisonVersion
-  def compatibleVersion (String incomingVersion, String comparisonVersion) {
-
-    def incomingMatcher = incomingVersion =~ /(?<MAJOR>0|(?:[1-9]\d*))\.(?<MINOR>0|(?:[1-9]\d*))/
-    def comparisonMatcher = comparisonVersion =~ /(?<MAJOR>0|(?:[1-9]\d*))\.(?<MINOR>0|(?:[1-9]\d*))/
-
-
-    def result = false;
-    if (incomingMatcher.matches() && comparisonMatcher.matches()) {
-      // If both matches succeed we have valid versioning. Else return false
-      def incomingMajor = incomingMatcher.group('MAJOR')
-      def comparisonMajor = comparisonMatcher.group('MAJOR')
-
-      if (incomingMajor == comparisonMajor) {
-        // If majors are equal, continue, else we can discard this as being compatible
-
-        // Should be able to parse these to ints because the regex has already matched them as digits
-        def incomingMinor = incomingMatcher.group('MINOR') as Integer
-        def comparisonMinor = comparisonMatcher.group('MINOR') as Integer
-
-        if (incomingMinor >= comparisonMinor) {
-          result = true;
-        }
-      }
-    } else {
-      log.warn("Semver version match error for ${incomingVersion} and/or ${comparisonVersion}")
-    }
-
-    return result;
- 
- }
 
   /*
    * This takes in a list of existing definitions and a list of incoming definitions,
@@ -90,34 +61,19 @@ class WidgetDefinitionService {
    * or does not validate within the type schema, and true if it does.
    */
   def validateDefinition (def widgetDefinition) {
+    log.info("WidgetDefinitionService::validateDefinition : ${widgetDefinition.name} v${widgetDefinition.version}")
     def valid = false
     def defType = widgetDefinition.type
-    log.debug("\n\nWIDGETDEF: ${widgetDefinition.name} (v${widgetDefinition.version})")
-    log.debug("LOOKING FOR TYPE: ${defType.name} (v${defType.version})")
 
     if (defType?.name && defType?.version) {
-      // Fetch list of Types by name, then parse that list for those that are valid
-      List<WidgetType> types = WidgetType.findAll(
-        "FROM WidgetType as type WHERE type.name = :name", [name: defType.name]
-      ).findAll { wt -> compatibleVersion(wt.typeVersion, defType.version) }
-      
-      // TODO This process should weed out the latest version (currently breaks)
-      types.each {type ->
-        types.removeAll { type1 -> compatibleVersion(type.typeVersion, type1.typeVersion)}
+      def compatibleType = widgetTypeService.latestCompatibleType(defType.name, defType.version)
+      if (compatibleType) {
+        valid = utilityService.validateJsonAgainstSchema(widgetDefinition.definition, compatibleType.schema)
       }
-
-      log.debug("COMPATIBLE TYPES: ${typeListToString(types)}")
-   
-   }
+    }
     
     valid
   }
-
-  // TODO REMOVE
-  def typeListToString ( List types ) {
-    types.collect { t -> "${t.name} (v${t.typeVersion})"}
-  }
-
 
   def defListToString ( List defs ) {
     defs.collect { d -> "${d.name} (v${d.version})"}
@@ -136,14 +92,14 @@ class WidgetDefinitionService {
     // At this point we have an incoming list of definitions with names unique to the module
     // The next step is to resolve the versions and validate against the type.
     incomingDefinitions.each {idef ->
-      def compatibleDefs = definitionList.findAll {d -> d.name == idef.name && compatibleVersion(d.version, idef.version)}
+      def compatibleDefs = definitionList.findAll {d -> d.name == idef.name && utilityService.compatibleVersion(d.version, idef.version)}
       
       // If we have compatible definitions already in the list, ie with minor version >= incoming version, discard
       if (compatibleDefs?.size() == 0) {
         // At this point we have a version ie 1.4 which none of the existing versions are compatible with.
         
         // This includes versions 2.3 AND 1.2. The former is irrelevant but we want to remove 1.2 as part of including 1.4
-        definitionList.removeAll { d -> d.name == idef.name && compatibleVersion(idef.version, d.version)}
+        definitionList.removeAll { d -> d.name == idef.name && utilityService.compatibleVersion(idef.version, d.version)}
 
         // Now we can add in our new version
 
@@ -191,7 +147,7 @@ class WidgetDefinitionService {
       // if no name parameter we don't want to filter the list on that, same for version
       (!name || defn.name.toLowerCase() == name.toLowerCase()) &&
       (!nameLike || defn.name =~ /(?i)$nameLike/) &&
-      (!version || compatibleVersion (defn.version, version))
+      (!version || utilityService.compatibleVersion (defn.version, version))
     }
     
     return returnList
