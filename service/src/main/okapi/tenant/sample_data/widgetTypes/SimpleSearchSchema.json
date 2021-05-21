@@ -13,6 +13,10 @@
         "type": "string",
         "description": "The base url queries built with this widget will go to"
       },
+      "resource": {
+      	"type": "string",
+        "description": "the resource that this SimpleSearch definition is fetching. Used by the Registry"
+      },
       "results": {
         "$ref": "#/$defs/results"
       },
@@ -45,11 +49,11 @@
         "title": "Result column",
         "description": "Describes the columns to be made available in the output",
         "additionalProperties": false,
-        "required": ["accessPath", "name", "valueType"],
+        "required": ["name", "valueType"],
         "properties": {
           "accessPath": {
             "type": "string",
-            "description": "a string defining the path to the specified object property"
+            "description": "a string defining the path to the specified object property. Can be absent in the case of a 'resultColumn' being defined by the Registry entry for a resource."
           },
           "label": {
             "type": "string",
@@ -115,21 +119,34 @@
               "description": "a string containing a comparator for this filter value, eg '>' or '=='"
             },
             "description": "An array of comparators valid for this filter"
+          },
+		  "resource": {
+          	"type": "string",
+            "description": "A string defining the resource type this filterField belongs to. Used by the Registry."
           }
         },
         "anyOf": [
           {
-            "not": {
-              "properties": {
-                "valueType": { "const": "Enum" }
-              },
-              "required": ["valueType"]
-            }
+            "properties": {
+              "valueType": { "not" : { "const": "Enum" } }
+            },
+            "not": { "required": ["enumValues"] }
           },
           {
+            "properties": {
+              "valueType": { "const": "Enum" }
+            },
             "required": ["enumValues"]
           }
-        ]
+        ],
+        "not": {
+          "properties": {
+            "valueType": {
+              "not": { "const": "UUID" }
+            }
+          },
+          "required": ["resource"]
+        }
       },
       "enumValues": {
         "type": "object",
