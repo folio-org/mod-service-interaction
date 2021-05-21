@@ -4,7 +4,6 @@ import org.olf.WidgetType
 class WidgetTypeService {
   def utilityService
 
-
   WidgetType latestCompatibleType(String name, String version) {
     // Fetch list of Types by name, then parse that list for those that are valid
     List<WidgetType> types = WidgetType.findAll(
