@@ -115,21 +115,42 @@ class WidgetDefinitionService {
     def validDefinitions = incomingDefinitions.findAll { id -> validateDefinition(id)}
     
     // Then we weed out all those where the name already exists in our list
-    def uniquelyNamedDefinitions = parseOutExistingDefinitionNames(definitionList, validDefinitions)
+    parseOutExistingDefinitionNames(definitionList, validDefinitions).each {und ->
+      definitionList << und
+    }
+  }
+
+  /*
+   * This method should return the latest compatible definition when handed a version,
+   * or the latest compatible version for ALL majors if it is not
+   */
+  def getLatestCompatibleDefinitions (String name = null, String nameLike = null, String version = null) {
     
-    // At this point we have an incoming list of definitions with names unique to the module. The next step is to resolve the versions.
-    uniquelyNamedDefinitions.each {und ->
-      def compatibleDefs = definitionList.findAll {d -> d.name == und.name && utilityService.compatibleVersion(d.version, und.version)}
-      
+    // If handed a name, or namelike, deal with that first
+    def definitionsList = definitions.findAll{defn ->
+      // if no name parameter we don't want to filter the list on that, same for version
+      (!name || defn.name.toLowerCase() == name.toLowerCase()) &&
+      (!nameLike || defn.name =~ /(?i)$nameLike/)
+    }
+
+    // Then deal with only getting versions compatible with any version handed in
+    if (version) {
+      definitionsList = definitionsList.findAll {defn -> utilityService.compatibleVersion (defn.version, version) }
+    }
+
+    def resultsList = []
+
+    definitionsList.each {ldef ->
       // If we have compatible definitions already in the list, ie with minor version >= incoming version, discard
+      def compatibleDefs = resultsList.findAll {rdef -> rdef.name == ldef.name && utilityService.compatibleVersion(rdef.version, ldef.version)}
       if (compatibleDefs?.size() == 0) {
         // At this point we have a version ie 1.4 which none of the existing versions are compatible with.
         
         // This includes versions 2.3 AND 1.2. The former is irrelevant but we want to remove 1.2 as part of including 1.4
-        definitionList.removeAll { d -> d.name == und.name && utilityService.compatibleVersion(und.version, d.version)}
+        resultsList.removeAll { rdef -> rdef.name == ldef.name && utilityService.compatibleVersion(ldef.version, rdef.version)}
 
         // Now we can add in our new version
-        definitionList << und
+        resultsList << ldef
       }
     }
   }
@@ -160,15 +181,6 @@ class WidgetDefinitionService {
     }
 
     // Now deal with non-static fetching of specific definitions
-    def returnList = definitions
-
-    returnList = definitions.findAll{defn ->
-      // if no name parameter we don't want to filter the list on that, same for version
-      (!name || defn.name.toLowerCase() == name.toLowerCase()) &&
-      (!nameLike || defn.name =~ /(?i)$nameLike/) &&
-      (!version || utilityService.compatibleVersion (defn.version, version))
-    }
-    
-    return returnList
+    return getLatestCompatibleDefinitions(name, nameLike, version)
   }
 }
