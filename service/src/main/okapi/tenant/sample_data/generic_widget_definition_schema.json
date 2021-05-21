@@ -8,11 +8,12 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "The name of the WidgetDefinition, eg ERM Agreements SimpleSearch"
+      "description": "The name of the WidgetDefinition, eg ERM Agreements"
     },
     "version": {
       "type": "string",
-      "description": "The version of this WidgetDefinition, of the form v1.0.0"
+      "description": "The version of this WidgetDefinition, of the form 1.0",
+      "pattern": "^(0|(?:[1-9]\\d*))\\.(0|(?:[1-9]\\d*))$"
     },
     "type": { "$ref": "#/$defs/type" },
     "definition": { "$ref": "#/$defs/definition" }
@@ -31,7 +32,8 @@
         },
         "version": {
           "type": "string",
-          "description": "The version of the relevant WidgetType, of the form v1.0.0"
+          "description": "The version of the relevant WidgetType, of the form 1.0",
+          "pattern": "^(0|(?:[1-9]\\d*))\\.(0|(?:[1-9]\\d*))$"
         }
       }
     },

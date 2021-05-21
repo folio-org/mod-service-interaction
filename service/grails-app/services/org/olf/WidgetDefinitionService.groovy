@@ -1,8 +1,5 @@
 package org.olf
 
-import groovy.json.JsonSlurper
-import groovy.json.JsonOutput
-
 import org.olf.WidgetType
 
 import com.k_int.okapi.OkapiClient
@@ -14,6 +11,17 @@ class WidgetDefinitionService {
 
   static Set dashboardImplementors = [];
   static ArrayList definitions = []
+
+  static generic_definition_schema
+
+  def getGenericDefinitionSchema() {
+    if (!generic_definition_schema) {
+      generic_definition_schema = utilityService.getJSONFileFromClassPath("sample_data/generic_widget_definition_schema.json")
+    }
+
+    generic_definition_schema
+  }
+
 
   boolean implementorsChanged() {
     boolean result = false
@@ -37,8 +45,8 @@ class WidgetDefinitionService {
    * name as another module's WidgetDefinition
    */
   def parseOutExistingDefinitionNames (List definitionList, List incomingDefinitions) {
-
     def returnList = []
+
     if (definitionList.size() == 0) {
       returnList = incomingDefinitions
     } else {
@@ -63,12 +71,17 @@ class WidgetDefinitionService {
   def validateDefinition (def widgetDefinition) {
     log.info("WidgetDefinitionService::validateDefinition : ${widgetDefinition.name} v${widgetDefinition.version}")
     def valid = false
-    def defType = widgetDefinition.type
 
-    if (defType?.name && defType?.version) {
-      def compatibleType = widgetTypeService.latestCompatibleType(defType.name, defType.version)
-      if (compatibleType) {
-        valid = utilityService.validateJsonAgainstSchema(widgetDefinition.definition, compatibleType.schema)
+    // First check that the definition is in the generic shape we understand
+    def genSchema = getGenericDefinitionSchema()
+    if (utilityService.validateJsonAgainstSchema(widgetDefinition, genSchema)) {
+      def defType = widgetDefinition.type
+
+      if (defType?.name && defType?.version) {
+        def compatibleType = widgetTypeService.latestCompatibleType(defType.name, defType.version)
+        if (compatibleType) {
+          valid = utilityService.validateJsonAgainstSchema(widgetDefinition.definition, compatibleType.schema)
+        }
       }
     }
 
@@ -93,25 +106,25 @@ class WidgetDefinitionService {
    * Else add to list
    */
   def resolveDefinitions (List definitionList, List incomingDefinitions) {
-    def uniquelyNamedDefinitions = parseOutExistingDefinitionNames(definitionList, incomingDefinitions)
-    // At this point we have an incoming list of definitions with names unique to the module
+    // Firstly we validate all the incoming definitions
+    def validDefinitions = incomingDefinitions.findAll { id -> validateDefinition(id)}
     
-    // The next step is to validate all the incoming definitions
-    def validDefinitions = uniquelyNamedDefinitions.findAll { und -> validateDefinition(und)}
+    // Then we weed out all those where the name already exists in our list
+    def uniquelyNamedDefinitions = parseOutExistingDefinitionNames(definitionList, validDefinitions)
     
-    // At this point we have a list of valid definitions. The next step is to resolve the versions.
-    validDefinitions.each {vdef ->
-      def compatibleDefs = definitionList.findAll {d -> d.name == vdef.name && utilityService.compatibleVersion(d.version, vdef.version)}
+    // At this point we have an incoming list of definitions with names unique to the module. The next step is to resolve the versions.
+    uniquelyNamedDefinitions.each {und ->
+      def compatibleDefs = definitionList.findAll {d -> d.name == und.name && utilityService.compatibleVersion(d.version, und.version)}
       
       // If we have compatible definitions already in the list, ie with minor version >= incoming version, discard
       if (compatibleDefs?.size() == 0) {
         // At this point we have a version ie 1.4 which none of the existing versions are compatible with.
         
         // This includes versions 2.3 AND 1.2. The former is irrelevant but we want to remove 1.2 as part of including 1.4
-        definitionList.removeAll { d -> d.name == vdef.name && utilityService.compatibleVersion(vdef.version, d.version)}
+        definitionList.removeAll { d -> d.name == und.name && utilityService.compatibleVersion(und.version, d.version)}
 
         // Now we can add in our new version
-        definitionList << vdef
+        definitionList << und
       }
     }
   }

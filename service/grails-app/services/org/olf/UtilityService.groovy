@@ -2,6 +2,11 @@ package org.olf
 
 import java.util.regex.Matcher
 
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+import org.grails.io.support.PathMatchingResourcePatternResolver
+import org.grails.io.support.Resource
+
 import org.everit.json.schema.Schema
 import org.everit.json.schema.loader.SchemaLoader
 import org.json.JSONObject
@@ -9,6 +14,23 @@ import org.json.JSONTokener
 import org.everit.json.schema.ValidationException
 
 class UtilityService {
+  def jsonSlurper = new JsonSlurper()
+  PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver()
+
+  def getJSONFileFromClassPath(classPath) {
+    Resource jsonFile = resolver.getResource("classpath:${classPath}")
+    def stream = jsonFile.getInputStream()
+    return jsonSlurper.parse(stream)
+  }
+
+  def getJSONFilesFromClassPath(classPath) {
+    Resource[] jsonFiles = resolver.getResources("classpath:${classPath}")
+    return jsonFiles.collect {jf -> 
+      def stream = jf.getInputStream()
+      def parsedJson = jsonSlurper.parse(stream)
+      return parsedJson
+    }
+  }
 
   public Matcher versionMatcher (String version) {
     return version =~ /(?<MAJOR>0|(?:[1-9]\d*))\.(?<MINOR>0|(?:[1-9]\d*))/
