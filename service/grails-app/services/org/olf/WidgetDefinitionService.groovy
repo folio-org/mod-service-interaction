@@ -71,6 +71,11 @@ class WidgetDefinitionService {
         valid = utilityService.validateJsonAgainstSchema(widgetDefinition.definition, compatibleType.schema)
       }
     }
+
+    // Log a warning if invalid
+    if (!valid) {
+      log.warn("WidgetDefinition ${widgetDefinition.name} (v${widgetDefinition.version}) is not valid")
+    }
     
     valid
   }
@@ -90,27 +95,23 @@ class WidgetDefinitionService {
   def resolveDefinitions (List definitionList, List incomingDefinitions) {
     def uniquelyNamedDefinitions = parseOutExistingDefinitionNames(definitionList, incomingDefinitions)
     // At this point we have an incoming list of definitions with names unique to the module
-    // The next step is to resolve the versions and validate against the type.
-    incomingDefinitions.each {idef ->
-      def compatibleDefs = definitionList.findAll {d -> d.name == idef.name && utilityService.compatibleVersion(d.version, idef.version)}
+    
+    // The next step is to validate all the incoming definitions
+    def validDefinitions = uniquelyNamedDefinitions.findAll { und -> validateDefinition(und)}
+    
+    // At this point we have a list of valid definitions. The next step is to resolve the versions.
+    validDefinitions.each {vdef ->
+      def compatibleDefs = definitionList.findAll {d -> d.name == vdef.name && utilityService.compatibleVersion(d.version, vdef.version)}
       
       // If we have compatible definitions already in the list, ie with minor version >= incoming version, discard
       if (compatibleDefs?.size() == 0) {
         // At this point we have a version ie 1.4 which none of the existing versions are compatible with.
         
         // This includes versions 2.3 AND 1.2. The former is irrelevant but we want to remove 1.2 as part of including 1.4
-        definitionList.removeAll { d -> d.name == idef.name && utilityService.compatibleVersion(idef.version, d.version)}
+        definitionList.removeAll { d -> d.name == vdef.name && utilityService.compatibleVersion(vdef.version, d.version)}
 
         // Now we can add in our new version
-
-        // Now we check if the definition is valid
-
-        if (validateDefinition(idef)) {
-          definitionList << idef
-        } else {
-          log.warn("WidgetDefinition ${idef.name} (v${idef.version}) is not valid")
-        }
-        
+        definitionList << vdef
       }
     }
   }

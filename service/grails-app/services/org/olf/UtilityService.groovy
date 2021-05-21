@@ -51,7 +51,7 @@ class UtilityService {
     if (e.causingExceptions.size() > 0) {
       // We have causing exceptions, go one step deeper
       e.causingExceptions.stream().each {ce ->
-        validationExceptionLogger(ce, tabLevel + 1)      
+        validationExceptionLogger(ce, tabLevel + 1)
       }
     }
   }
