@@ -80,9 +80,11 @@ class UtilityService {
 
   /* Utility function to validate incoming JSON object against a JSON schema */
   public boolean validateJsonAgainstSchema(def json, def schema) {
-    log.info("UtilityService::validateAgainstSchema : Validating against schema (${schema.title})")
     boolean result = true;
     JSONObject rawSchema = new JSONObject(schema)
+
+    log.info("UtilityService::validateAgainstSchema : Validating against schema (${rawSchema.title})")
+
     Schema loadedSchema = SchemaLoader.load(rawSchema)
 
     try {
