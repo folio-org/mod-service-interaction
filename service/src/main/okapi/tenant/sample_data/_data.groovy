@@ -58,9 +58,7 @@ CustomPropertyDefinition ensureTextProperty(String name, boolean local = true, S
 }
 
 
-// TODO remove all of this when bootstrapping is no longer required
 PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver()
-
 def jsonSlurper = new JsonSlurper()
 
 log.info 'Importing widget types'
@@ -78,9 +76,7 @@ widgetTypes.each { resource ->
   ).save(flush: true, failOnError: true) 
 }
 
-log.info 'Importing widget definitions'
-
-
+// TODO remove this code eventually in favour of direct API calls to mod-serv-int
 Resource[] widgetDefs = resolver.getResources("classpath:sample_data/widgetDefinitions/*")
 widgetDefs.each { resource ->
   def stream = resource.getInputStream()
@@ -94,10 +90,6 @@ widgetDefs.each { resource ->
     definition: JsonOutput.toJson(wd.definition)
   ).save(flush: true, failOnError: true)
 }
-
-// TODO eventually we should not be bootstrapping these, but instead each app which wants to use the dashboard
-// should be sending their definitions to an endpoint in mod-service-interaction.
-
 
 log.info 'Importing sample data'
 
