@@ -47,7 +47,7 @@ class WidgetDefinitionService {
         if (!defWithMatchingName) {
           returnList << idef
         } else {
-          log.warn ("WidgetDefinition with name: ${idef.name} is already implemented by another module, discarding")
+          log.error ("WidgetDefinitionService::parseOutExistingDefinitionNames : WidgetDefinition with name: ${idef.name} is already implemented by another module")
         }
       }
     }
