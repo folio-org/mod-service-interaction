@@ -81,13 +81,18 @@ class WidgetDefinitionService {
         def compatibleType = widgetTypeService.latestCompatibleType(defType.name, defType.version)
         if (compatibleType) {
           valid = utilityService.validateJsonAgainstSchema(widgetDefinition.definition, compatibleType.schema)
+        } else {
+          log.error("No compatible WidgetType found for ${defType.name} v${defType.version}")
         }
+      } else {
+        // Shouldn't be possible to get here, as the generic schema should enforce these fields
+        log.error("Missing information, cannot resolve WidgetType")
       }
     }
 
     // Log a warning if invalid
     if (!valid) {
-      log.warn("WidgetDefinition ${widgetDefinition.name} (v${widgetDefinition.version}) is not valid")
+      log.error("WidgetDefinition ${widgetDefinition.name} (v${widgetDefinition.version}) is not valid")
     }
     
     valid
