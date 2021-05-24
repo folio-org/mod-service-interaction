@@ -35,4 +35,8 @@ dataSource:
 server:
   host: localhost
   port: 8078
- 
+
+okapi: 
+  service:
+    host: localhost
+    port: 9130

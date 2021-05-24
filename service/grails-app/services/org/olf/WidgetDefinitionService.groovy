@@ -174,7 +174,7 @@ class WidgetDefinitionService {
           if (jsonReturn instanceof Collection) {
             resolveDefinitions(fetchedDefinitions, jsonReturn)
           } else {
-            resolveDefinitions(fetchedDefinitions, [jsonReturn])
+            log.warn("WidgetDefinitionServie::fetchDefinitions expected an array, recieved an object instead, discarding")
           }
         }
 
