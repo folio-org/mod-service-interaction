@@ -76,21 +76,6 @@ widgetTypes.each { resource ->
   ).save(flush: true, failOnError: true) 
 }
 
-// TODO remove this code eventually in favour of direct API calls to mod-serv-int
-Resource[] widgetDefs = resolver.getResources("classpath:sample_data/widgetDefinitions/*")
-widgetDefs.each { resource ->
-  def stream = resource.getInputStream()
-  def wd = jsonSlurper.parse(stream)
-
-  WidgetDefinition widgetDef = WidgetDefinition.findByNameAndDefinitionVersion(wd.name, wd.version) ?: new WidgetDefinition (
-    name: wd.name,
-    definitionVersion: wd.version,
-    typeName: wd.type?.name,
-    typeVersion: wd.type?.version,
-    definition: JsonOutput.toJson(wd.definition)
-  ).save(flush: true, failOnError: true)
-}
-
 log.info 'Importing sample data'
 
 AppSetting test_app_setting = AppSetting.findByKey('test_app_setting') ?: new AppSetting(
