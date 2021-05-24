@@ -40,8 +40,7 @@ logger ('org.grails.gorm.graphql', WARN)
 logger ('mod.directory', INFO)
 logger ('com.k_int.okapi', WARN)
 
-// TODO CHANGE THIS BACK
-logger ('com.k_int.okapi.OkapiClient', TRACE)
+logger ('com.k_int.okapi.OkapiClient', DEBUG)
 // logger ('org.olf.okapi.modules.directory.CustomBinders', WARN)
 
 // LOG SQL - VERBOSE!!!!!!
@@ -50,11 +49,8 @@ logger ('com.k_int.okapi.OkapiClient', TRACE)
 // This one for SQL bind parameters
 // logger 'org.hibernate.type.descriptor.sql.BasicBinder', TRACE, ['STDOUT']
  
-logger 'groovy.net.http.JavaHttpBuilder', DEBUG
-
 if (Environment.currentEnvironment == Environment.TEST) {
-  // TODO CHANGE THIS BACK
-  //logger 'groovy.net.http.JavaHttpBuilder', DEBUG
+  logger 'groovy.net.http.JavaHttpBuilder', DEBUG
   logger 'groovy.net.http.JavaHttpBuilder.content', DEBUG
   logger 'groovy.net.http.JavaHttpBuilder.headers', DEBUG
 }
