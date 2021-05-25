@@ -49,7 +49,7 @@
         "title": "Result column",
         "description": "Describes the columns to be made available in the output",
         "additionalProperties": false,
-        "required": ["name", "valueType"],
+        "required": ["name"],
         "properties": {
           "accessPath": {
             "type": "string",
@@ -65,10 +65,26 @@
           },
           "valueType": {
             "type": "string",
-            "enum": ["String", "Integer", "Float", "Boolean", "Date"],
-            "description": "a string defining the type of property we are displaying"
+            "enum": ["String", "Integer", "Float", "Boolean", "Date", "Link", "Array"],
+            "description": "a string defining the type of property we are displaying. Not required if using registry to display column"
+          },
+          "arrayDisplayPath": {
+          	"type": "string",
+            "description": "a string defining the path to the property within the array object to display. If left blank then the entire array will attempt to display."
           }
-        }
+        },
+        "allOf": [
+          {
+            "not": {
+              "properties": {
+                "valueType": {
+                  "not": { "const": "Array" }
+                }
+              },
+              "required": ["arrayDisplayPath"]
+            }
+          }
+        ]
       },
       "filters": {
         "type": "object",
@@ -83,7 +99,7 @@
           }
         }
       },
-      "filterColumn": { 
+      "filterColumn": {
         "type": "object",
         "title": "Filter column",
         "description": "Describes the columns the output is able to filter on",
@@ -104,7 +120,7 @@
           },
           "valueType": {
             "type": "string",
-            "enum": ["String", "Integer", "Float", "Boolean", "Date", "Enum", "UUID"],
+            "enum": ["String", "Integer", "Float", "Boolean", "Date", "Enum", "UUID", "Array"],
             "description": "a string defining the type of property we are filtering on"
           },
           "enumValues": {
@@ -125,28 +141,34 @@
             "description": "A string defining the resource type this filterField belongs to. Used by the Registry."
           }
         },
-        "anyOf": [
+        "allOf": [
           {
-            "properties": {
-              "valueType": { "not" : { "const": "Enum" } }
-            },
-            "not": { "required": ["enumValues"] }
+            "anyOf": [
+              {
+                "properties": {
+                  "valueType": { "not" : { "const": "Enum" } }
+                },
+                "not": { "required": ["enumValues"] }
+              },
+              {
+                "properties": {
+                  "valueType": { "const": "Enum" }
+                },
+                "required": ["enumValues"]
+              }
+            ]
           },
           {
-            "properties": {
-              "valueType": { "const": "Enum" }
-            },
-            "required": ["enumValues"]
-          }
-        ],
-        "not": {
-          "properties": {
-            "valueType": {
-              "not": { "const": "UUID" }
+            "not": {
+              "properties": {
+                "valueType": {
+                  "not": { "const": "UUID" }
+                }
+              },
+              "required": ["resource"]
             }
-          },
-          "required": ["resource"]
-        }
+          }
+        ]
       },
       "enumValues": {
         "type": "object",

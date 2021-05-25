@@ -13,6 +13,11 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import org.everit.json.schema.ValidationException
 
+import org.grails.io.support.PathMatchingResourcePatternResolver
+import org.grails.io.support.Resource
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
 class UtilityService {
   def jsonSlurper = new JsonSlurper()
   PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver()
@@ -95,6 +100,27 @@ class UtilityService {
     }
 
     result;
+  }
+
+  public void triggerTypeImport() {
+    log.info("UtilityService::TriggerTypeImport")
+    PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver()
+    def jsonSlurper = new JsonSlurper()
+
+    log.info 'Importing widget types'
+
+    Resource[] widgetTypes = resolver.getResources("classpath:sample_data/widgetTypes/*")
+
+    widgetTypes.each { resource ->
+      def stream = resource.getInputStream()
+      def wt = jsonSlurper.parse(stream)
+
+      WidgetType widgetType = WidgetType.findByNameAndTypeVersion(wt.name, wt.version) ?: new WidgetType(
+        name: wt.name,
+        typeVersion: wt.version,
+        schema: JsonOutput.toJson(wt.schema)
+      ).save(flush: true, failOnError: true) 
+    }
   }
 
 }

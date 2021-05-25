@@ -137,6 +137,11 @@
           "methods": [ "GET" ],
           "pathPattern": "/servint/widgets/types",
           "permissionsRequired": ["servint.widgetTypes.collection.get"]
+        },
+        {
+          "methods": ["GET"],
+          "pathPattern": "/servint/admin/*",
+          "permissionsRequired": ["servint.admin.action"]
         }
       ]
     },
@@ -167,6 +172,20 @@
          "pathPattern" : "/_/tenant/disable"
         }
 
+      ]
+    },
+    {
+      "id": "_timer",
+      "version": "1.0",
+      "interfaceType": "system",
+      "handlers": [
+        {
+          "permissionsRequired" : [],
+          "methods": [ "GET" ],
+          "pathPattern": "/erm/admin/triggerTypeImport",
+          "unit": "minute",
+          "delay": "5" 
+        }
       ]
     }
   ],
@@ -407,6 +426,11 @@
       ]
     },
     {
+      "permissionName": "servint.admin.action",
+      "displayName": "Administrator actions",
+      "description": "Allow administrator to perform actions"
+    },
+    {
       "permissionName": "servint.dashboards.admin",
       "displayName": "Dashboard admin",
       "description": "Allow admin access to dashboards",
@@ -414,6 +438,7 @@
         "servint.widgetInstances.collection.get",
         "servint.dashboards.collection.get",
         "servint.dashboards.manage",
+        "servint.admin.action",
         "servint.widgetDefinitions.manage"
       ]
     }

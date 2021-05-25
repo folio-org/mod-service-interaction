@@ -11,12 +11,6 @@ import grails.databinding.SimpleMapDataBindingSource
 import static grails.async.Promises.*
 import com.k_int.web.toolkit.settings.AppSetting
 
-import org.grails.io.support.PathMatchingResourcePatternResolver
-import org.grails.io.support.Resource
-import groovy.json.JsonSlurper
-import groovy.json.JsonOutput
-import static groovy.io.FileType.FILES
-
 import org.olf.WidgetType
 import org.olf.WidgetDefinition
 
@@ -55,25 +49,6 @@ CustomPropertyDefinition ensureTextProperty(String name, boolean local = true, S
                                         label:label
                                       ).save(flush:true, failOnError:true);
   return result;
-}
-
-
-PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver()
-def jsonSlurper = new JsonSlurper()
-
-log.info 'Importing widget types'
-
-Resource[] widgetTypes = resolver.getResources("classpath:sample_data/widgetTypes/*")
-
-widgetTypes.each { resource ->
-  def stream = resource.getInputStream()
-  def wt = jsonSlurper.parse(stream)
-
-  WidgetType widgetType = WidgetType.findByNameAndTypeVersion(wt.name, wt.version) ?: new WidgetType(
-    name: wt.name,
-    typeVersion: wt.version,
-    schema: JsonOutput.toJson(wt.schema)
-  ).save(flush: true, failOnError: true) 
 }
 
 log.info 'Importing sample data'
