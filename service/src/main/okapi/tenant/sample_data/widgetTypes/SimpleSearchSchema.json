@@ -104,7 +104,7 @@
         "title": "Filter column",
         "description": "Describes the columns the output is able to filter on",
         "additionalProperties": false,
-        "required": ["comparators", "filterPath", "name", "valueType"],
+        "required": ["filterPath", "name", "valueType"],
         "properties": {
           "filterPath": {
             "type": "string",
@@ -155,6 +155,21 @@
                   "valueType": { "const": "Enum" }
                 },
                 "required": ["enumValues"]
+              }
+            ]
+          },
+          {
+            "anyOf": [
+              {
+                "properties": {
+                  "valueType": {"not": { "const": "Boolean" } }
+                },
+                "required": ["comparators"]
+              },
+              {
+                "properties": {
+                  "valueType": { "const": "Boolean" }
+                }
               }
             ]
           },
