@@ -72,7 +72,7 @@ Finish the part off with
 
 ### In window #2
 
-Build and run mod-agreements stand alone
+Build and run mod-mod-service-int stand alone
 
     cd service
     grails war
@@ -80,18 +80,22 @@ Build and run mod-agreements stand alone
 
 ### In window #3
 
-Register the module and load some test data
+Register the module
 
   cd scripts
   ./register_and_enable.sh
-  ./dev_submit_pkg.sh
-  ./dev_trigger_kb_sync.sh 
+
 
 ### In window #4
 
-Run up a stripes platform containing erm
+Run up a stripes platform containing [ui-dashboard](https://github.com/folio-org/ui-dashboard)
 
-See [UI Agreements quick start](https://github.com/folio-org/ui-agreements/blob/master/README.md)
+---
+**NOTE**
+
+platform-erm does not yet contain ui-dashboard, it will soon.
+
+---
 
 This section is run in a local setup, not from any particular checked out project, YMMV
 
