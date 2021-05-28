@@ -65,7 +65,7 @@
           },
           "valueType": {
             "type": "string",
-            "enum": ["String", "Integer", "Float", "Boolean", "Date", "Link", "Array"],
+            "enum": ["String", "Integer", "Float", "Boolean", "Date", "DateTime", "Link", "Array"],
             "description": "a string defining the type of property we are displaying. Not required if using registry to display column"
           },
           "arrayDisplayPath": {
