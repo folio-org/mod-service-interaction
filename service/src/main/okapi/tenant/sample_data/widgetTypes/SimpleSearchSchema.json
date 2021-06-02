@@ -86,6 +86,69 @@
           }
         ]
       },
+      "matches": {
+        "type": "object",
+        "title": "Matches",
+        "description": "Contains all the information the dashboard needs to configure 'match' type queries",
+        "additionalProperties": false,
+        "required": ["columns", "termConfigurable"],
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/matchColumn" }
+          },
+          "defaultTerm": {
+            "type": "string",
+            "description": "A string housing the default term used for match queries for a definition"
+          },
+          "termConfigurable": {
+            "type": "boolean",
+            "description": "A boolean value which determines if the match term is user configurable or not."
+          }
+        },
+        "allOf": [
+          {
+            "anyOf": [
+              {
+                "properties": {
+                  "termConfigurable": { "const": false }
+                },
+                "required": ["defaultTerm"]
+              },
+              {
+                "properties": {
+                  "termConfigurable": { "not": { "const": false } }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "matchColumn": {
+        "type": "object",
+        "title": "Match column",
+        "description": "Describes the columns to be made available for match searching",
+        "additionalProperties": false,
+        "required": ["accessPath", "default", "name"],
+        "properties": {
+          "accessPath": {
+            "type": "string",
+            "description": "a string defining the path to the specified object property."
+          },
+          "default" : {
+            "type": "boolean",
+            "description": "A boolean value used to check whether or not this match should be set by default"
+          },
+          "label": {
+            "type": "string",
+            "description": "an optional string prescribing the display label of the field"
+          },
+          "name": {
+            "type": "string",
+            "description": "a string defining the name of the property for this column"
+          }
+        }
+      },
       "filters": {
         "type": "object",
         "title": "Filters",
