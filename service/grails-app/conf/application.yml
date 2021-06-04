@@ -206,13 +206,16 @@ environments:
         abandonWhenPercentageFull: 50
         jdbcInterceptors: ConnectionState
         defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
- 
+
+  development:
+    okapi:
+      service:
+        host: localhost
+        port: 9130
+
 okapi:
   schema:
     appName: 'mod-service-interaction'
   service:
-    host: localhost
-    port: 9130
     register: false
     deploy: false
-

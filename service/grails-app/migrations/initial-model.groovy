@@ -73,21 +73,13 @@ databaseChangeLog = {
       column(name: "wdef_definition_version", type: "VARCHAR(36)")
       column(name: "wdef_name", type: "VARCHAR(255)")
       column(name: "wdef_definition", type: "text")
-      
-      column(name: "wdef_type_fk", type: "VARCHAR(36)")
+      column(name: "wdef_type_name", type: "VARCHAR(255)")
+      column(name: "wdef_type_version", type: "VARCHAR(36)")
     }
   }
 
   changeSet(author: "efreestone (manual)", id: "2021-02-02-1611-004") {
     addPrimaryKey(columnNames: "wdef_id", constraintName: "widgetDefinitionPK", tableName: "widget_definition")
-  }
-
-  changeSet(author: "efreestone (manual)", id: "2021-02-02-1611-005") {
-    addForeignKeyConstraint(baseColumnNames: "wdef_type_fk",
-      baseTableName: "widget_definition",
-      constraintName: "widget_definition_type_fk",
-      deferrable: "false", initiallyDeferred: "false",
-      referencedColumnNames: "wtype_id", referencedTableName: "widget_type")
   }
 
   changeSet(author: "efreestone (manual)", id: "2021-02-08-1131-001") {
@@ -99,7 +91,8 @@ databaseChangeLog = {
         constraints(nullable: "false")
       }
       column(name: "wins_name", type: "VARCHAR(255)")
-      column(name: "wins_definition_fk", type: "VARCHAR(36)")
+      column(name: "wins_definition_name", type: "VARCHAR(255)")
+      column(name: "wins_definition_version", type: "VARCHAR(36)")
       column(name: "wins_owner_fk", type: "VARCHAR(36)")
       column(name: "wins_configuration", type: "text")
     }
@@ -107,15 +100,6 @@ databaseChangeLog = {
 
   changeSet(author: "efreestone (manual)", id: "2021-02-08-1131-002") {
     addPrimaryKey(columnNames: "wins_id", constraintName: "widgetInstancePK", tableName: "widget_instance")
-  }
-
-  changeSet(author: "efreestone (manual)", id: "2021-02-08-1131-003") {
-    addForeignKeyConstraint(baseColumnNames: "wins_definition_fk",
-      baseTableName: "widget_instance",
-      constraintName: "widget_instance_definition_fk",
-      deferrable: "false", initiallyDeferred: "false",
-      referencedColumnNames: "wdef_id", referencedTableName: "widget_definition"
-    )
   }
 
   changeSet(author: "efreestone (manual)", id: "2021-02-08-1131-004") {

@@ -12,7 +12,8 @@ class WidgetInstance implements MultiTenant<WidgetInstance> {
   String id
   String name
   Integer weight
-  WidgetDefinition definition
+  String definitionName
+  String definitionVersion
 
   String configuration
 
@@ -23,7 +24,8 @@ class WidgetInstance implements MultiTenant<WidgetInstance> {
             version column: 'wins_version'
                name column: 'wins_name'
              weight column: 'wins_weight'
-         definition column: 'wins_definition_fk'
+     definitionName column: 'wins_definition_name'
+  definitionVersion column: 'wins_definition_version'
       configuration column: 'wins_configuration'
               owner column: 'wins_owner_fk'
   }

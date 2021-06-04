@@ -21,12 +21,22 @@ class UrlMappings {
       }
     }
 
-    "/servint/widgets/definitions" (resources: 'widgetDefinition')
+    "/servint/widgets/definitions" (resources: 'widgetDefinition') {
+      collection {
+        "/global" (controller: 'widgetDefinition', action: 'fetchDefinitions')
+      }
+    }
+
     "/servint/widgets/instances" (resources: 'widgetInstance') {
       collection {
         "/my-widgets" (controller: 'widgetInstance', action: 'getUserSpecificWidgetInstances')
       }
     }
 
+    "/servint/widgets/types" (resources: 'widgetType')
+
+    "/erm/admin/$action"(controller:'admin')
+
+    "/dashboard/definitions" (resources: 'widgetDefinition', method: 'GET')
   }
 }

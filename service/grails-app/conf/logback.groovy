@@ -49,7 +49,6 @@ logger ('com.k_int.okapi.OkapiClient', DEBUG)
 // This one for SQL bind parameters
 // logger 'org.hibernate.type.descriptor.sql.BasicBinder', TRACE, ['STDOUT']
  
-
 if (Environment.currentEnvironment == Environment.TEST) {
   logger 'groovy.net.http.JavaHttpBuilder', DEBUG
   logger 'groovy.net.http.JavaHttpBuilder.content', DEBUG

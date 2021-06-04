@@ -15,7 +15,6 @@ import org.grails.io.support.PathMatchingResourcePatternResolver
 import org.grails.io.support.Resource
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
-import static groovy.io.FileType.FILES
 
 import org.olf.WidgetType
 import org.olf.WidgetDefinition
@@ -58,9 +57,7 @@ CustomPropertyDefinition ensureTextProperty(String name, boolean local = true, S
 }
 
 
-// TODO remove all of this when bootstrapping is no longer required
 PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver()
-
 def jsonSlurper = new JsonSlurper()
 
 log.info 'Importing widget types'
@@ -77,31 +74,6 @@ widgetTypes.each { resource ->
     schema: JsonOutput.toJson(wt.schema)
   ).save(flush: true, failOnError: true) 
 }
-
-log.info 'Importing widget definitions'
-
-
-Resource[] widgetDefs = resolver.getResources("classpath:sample_data/widgetDefinitions/*")
-widgetDefs.each { resource ->
-  def stream = resource.getInputStream()
-  def wd = jsonSlurper.parse(stream)
-
-  WidgetType type = WidgetType.findByNameAndTypeVersion(wd.type.name, wd.type.version)
-  if (type != null) {
-    WidgetDefinition widgetDef = WidgetDefinition.findByNameAndType(wd.name, type) ?: new WidgetDefinition (
-      name: wd.name,
-      definitionVersion: wd.version,
-      type: type,
-      definition: JsonOutput.toJson(wd.definition)
-    ).save(flush: true, failOnError: true)
-  } else {
-    log.warn "WidgetType ${wd.type.name} ${wd.type.version} is not supported"
-  }
-}
-
-// TODO eventually we should not be bootstrapping these, but instead each app which wants to use the dashboard
-// should be sending their definitions to an endpoint in mod-service-interaction.
-
 
 log.info 'Importing sample data'
 
