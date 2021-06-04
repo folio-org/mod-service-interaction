@@ -150,7 +150,19 @@
             "type": "string",
             "description": "a string defining the name of the property for this column"
           }
-        }
+        },
+        "allOf": [
+          {
+            "not": {
+              "properties": {
+                "valueType": {
+                  "not": { "const": "Array" }
+                }
+              },
+              "required": ["arrayDisplayPath"]
+            }
+          }
+        ]
       },
       "filters": {
         "type": "object",
