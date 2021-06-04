@@ -20,6 +20,9 @@
       "results": {
         "$ref": "#/$defs/results"
       },
+      "matches": {
+        "$ref": "#/$defs/matches"
+      },
       "filters": {
         "$ref": "#/$defs/filters"
       },
