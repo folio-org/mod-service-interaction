@@ -61,27 +61,25 @@ endpoints:
         enabled: true
 
 management:
-    security:
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: '/admin'
+      exposure:
+        include:
+          - health
+          - info
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+      
+  health:
+     datasource:
         enabled: true
-    endpoints:
-        enabled-by-default: true
-        jmx:
-            enabled: true
-        health:
-            enabled: true
-            db:
-                enabled: true
-            defaults:
-                enabled: true
-        info:
-            enabled: true
-        configprops:
-            enabled: true
-        loggers:
-            enabled: true
-        web:
-            exposure:
-                include: 'health,info'
+     defaults:
+        enabled: false
 ---
 grails:
     mime:
