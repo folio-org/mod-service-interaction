@@ -112,6 +112,7 @@ class UtilityService {
     Resource[] widgetTypes = resolver.getResources("classpath:sample_data/widgetTypes/*")
 
     if (cleanSlate) {
+      log.info 'Deleting existing widget types'
       WidgetType.executeUpdate('delete from WidgetType')
     }
 

@@ -35,7 +35,7 @@ class UrlMappings {
 
     "/servint/widgets/types" (resources: 'widgetType')
 
-    "/erm/admin/$action"(controller:'admin')
+    "/servint/admin/$action"(controller:'admin')
 
     "/dashboard/definitions" (resources: 'widgetDefinition', method: 'GET')
   }
