@@ -102,7 +102,7 @@ class UtilityService {
     result;
   }
 
-  public void triggerTypeImport() {
+  public void triggerTypeImport(boolean cleanSlate = false) {
     log.info("UtilityService::TriggerTypeImport")
     PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver()
     def jsonSlurper = new JsonSlurper()
@@ -110,6 +110,10 @@ class UtilityService {
     log.info 'Importing widget types'
 
     Resource[] widgetTypes = resolver.getResources("classpath:sample_data/widgetTypes/*")
+
+    if (cleanSlate) {
+      WidgetType.executeUpdate('delete from WidgetType')
+    }
 
     widgetTypes.each { resource ->
       def stream = resource.getInputStream()

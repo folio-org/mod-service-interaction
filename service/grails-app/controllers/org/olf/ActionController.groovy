@@ -20,5 +20,14 @@ class AdminController {
     result.status = 'OK'
     render result as JSON
   }
+
+  public triggerTypeImportClean() {
+    def result = [:]
+    log.debug("AdminController::triggerTypeImportClean");
+    utilityService.triggerTypeImport(true)
+
+    result.status = 'OK'
+    render result as JSON
+  }
 }
 
