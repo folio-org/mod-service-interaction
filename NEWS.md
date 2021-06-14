@@ -1,4 +1,5 @@
 ## 1.0.0 (IN PROGRESS)
+* ERM-1738: Support health check endpoint for mod-service-interaction
 * ERM-1643: Manage tenant widget definitions for different applications
 * ERM-1580 Added weight to WidgetInstances on dashboard
 * ERM-1579 WidgetDef tweaks, added UUID valueType
