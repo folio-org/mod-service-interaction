@@ -6,4 +6,5 @@ databaseChangeLog = {
   include file: 'create-mod-service-interaction.groovy'
   include file: 'initial-model.groovy'
   include file: 'number-generator-model.groovy'
+  include file: 'service-interaction-1-3.groovy'
 }

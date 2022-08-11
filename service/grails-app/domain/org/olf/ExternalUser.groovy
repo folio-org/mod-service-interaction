@@ -12,14 +12,9 @@ class ExternalUser implements MultiTenant<ExternalUser> {
   // We shouldn't really add any properties to it
   String id
 
-  static hasMany = [
-    dashboards: Dashboard
-  ]
-
   static mapping = {
             id column: 'eu_id', generator: 'assigned'
        version column: 'eu_version'
-    dashboards cascade: 'all-delete-orphan'
   }
 
 }
