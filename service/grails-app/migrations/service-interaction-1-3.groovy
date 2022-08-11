@@ -86,9 +86,8 @@ databaseChangeLog = {
         """.toString())
         String manage_id = manage_rdv['rdv_id'];
         
-        // For each dashboard in the system, create a dashboard access object
-        sql.eachRow("SELECT dshb.dshb_id, dshb.dshb_owner_fk FROM ${database.defaultSchemaName}.dashboard as dshb".toString()) { def dashMap ->
-          
+        // For each dashboard in the system, create a dashboard access object and rename (Should all be called DEFAULT, rename to DEFAULT_userID)
+        sql.eachRow("SELECT dshb.dshb_id, dshb.dshb_owner_fk, dshb.dshb_name FROM ${database.defaultSchemaName}.dashboard as dshb".toString()) { def dashMap ->
           sql.execute("""
             INSERT INTO ${database.defaultSchemaName}.dashboard_access
             (da_id, da_version, da_dashboard_fk, da_user_fk, da_access_fk)
@@ -98,6 +97,13 @@ databaseChangeLog = {
               :user as da_user_fk,
               :manage as da_access_fk
           """.toString(), [dashboard: dashMap['dshb_id'], user: dashMap['dshb_owner_fk'], manage: manage_id])
+
+          // Rename dashboards to include user id in first instance to ensure uniqueness
+          sql.execute("""
+            UPDATE ${database.defaultSchemaName}.dashboard
+            SET dshb_name = :dashName
+            WHERE dshb_id = :dashId
+          """.toString(), [dashName: "${dashMap['dshb_name']}_${dashMap['dshb_owner_fk']}".toString(), dashId: dashMap['dshb_id']])
         }
       }
     }

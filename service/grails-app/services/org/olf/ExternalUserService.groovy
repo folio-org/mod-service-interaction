@@ -24,9 +24,9 @@ class ExternalUserService {
         """SELECT COUNT(dash.id) FROM Dashboard as dash WHERE dash.owner.id = :ownerId"""
       , [ownerId: resolvedUser.id])[0]
     if (userDashboards < 1) {
-      // No existing dashboards, create one called DEFAULT
+      // No existing dashboards, create one called DEFAULT_<id>
       new Dashboard (
-        name: "DEFAULT",
+        name: "DEFAULT_${resolvedUser.id}",
         owner: resolvedUser,
         widgets: [],
       ).save(flush:true, failOnError: true);
