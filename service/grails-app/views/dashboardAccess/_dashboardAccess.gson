@@ -1,0 +1,8 @@
+import  org.olf.DashboardAccess
+
+import groovy.transform.*
+
+@Field
+DashboardAccess dashboardAccess
+
+json g.render (dashboardAccess, [expand: ['dashboard', 'access']])

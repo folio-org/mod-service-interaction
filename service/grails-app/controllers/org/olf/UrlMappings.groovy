@@ -19,6 +19,8 @@ class UrlMappings {
       collection {
         "/my-dashboards" (controller: 'dashboard', action: 'getUserSpecificDashboards')
       }
+      "/users" ( action:'getDashboardUsers', method: 'GET')
+      "/widgets" (action: 'widgets', method: 'GET')
     }
 
     "/servint/widgets/definitions" (resources: 'widgetDefinition') {

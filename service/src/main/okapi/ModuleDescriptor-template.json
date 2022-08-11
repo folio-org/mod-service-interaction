@@ -65,6 +65,18 @@
           "permissionsDesired":["servint.dashboards.admin"]
         },
         {
+          "methods": [ "GET" ],
+          "pathPattern": "/servint/dashboard/{id}/users",
+          "permissionsRequired": ["servint.dashboards.item.get"],
+          "permissionsDesired":["servint.dashboards.admin"]
+        },
+        {
+          "methods": [ "GET" ],
+          "pathPattern": "/servint/dashboard/{id}/widgets",
+          "permissionsRequired": ["servint.dashboards.item.get"],
+          "permissionsDesired":["servint.dashboards.admin"]
+        },
+        {
           "methods": [ "POST" ],
           "pathPattern": "/servint/dashboard",
           "permissionsRequired": ["servint.dashboards.item.post"],
@@ -101,12 +113,6 @@
           "methods": [ "GET" ],
           "pathPattern": "/servint/widgets/instances",
           "permissionsRequired": ["servint.widgetInstances.collection.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
-        },
-        {
-          "methods": [ "GET" ],
-          "pathPattern": "/servint/widgets/instances/my-widgets",
-          "permissionsRequired": ["servint.widgetInstances.user.get"],
           "permissionsDesired":["servint.dashboards.admin"]
         },
         {

@@ -57,7 +57,7 @@ databaseChangeLog = {
   changeSet(author: "ethanfreestone (manual)", id: "2022-08-11-1021-004") {
     grailsChange {
       change {
-        sql.execute("INSERT INTO ${database.defaultSchemaName}.refdata_category (rdc_id, rdc_version, rdc_description) SELECT md5(random()::text || clock_timestamp()::text) as id, 0 as version, 'DashboardAccess.Access' as description WHERE NOT EXISTS (SELECT rdc_description FROM ${database.defaultSchemaName}.refdata_category WHERE (rdc_description)=('DashboardAccess.Access') LIMIT 1);".toString())
+        sql.execute("INSERT INTO ${database.defaultSchemaName}.refdata_category (rdc_id, rdc_version, internal, rdc_description) SELECT md5(random()::text || clock_timestamp()::text) as id, 0 as version, true as internal, 'DashboardAccess.Access' as description WHERE NOT EXISTS (SELECT rdc_description FROM ${database.defaultSchemaName}.refdata_category WHERE (rdc_description)=('DashboardAccess.Access') LIMIT 1);".toString())
       }
     }
   }

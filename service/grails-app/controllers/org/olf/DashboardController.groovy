@@ -9,32 +9,57 @@ import groovy.util.logging.Slf4j
 import com.k_int.okapi.OkapiTenantAwareController
 
 import org.olf.ExternalUserService
+import org.olf.DashboardService
 
 @Slf4j
 @CurrentTenant
 class DashboardController extends OkapiTenantAwareController<DashboardController> {
+
   DashboardController() {
     super(Dashboard)
   }
 
-  def externalUserService
+  ExternalUserService externalUserService
+  DashboardService dashboardService
+
   static responseFormats = ['json', 'xml']
 
-  public getUserSpecificDashboards() {
+  public def getUserSpecificDashboards() {
     String patronId = getPatron().id
     log.debug("DashboardController::getUserSpecificDashboards called for patron (${patronId}) ")
-    ExternalUser proxiedUser = externalUserService.resolveUser(patronId)
-    respond doTheLookup({
-        eq 'owner.id', proxiedUser.id
-    })
+    ExternalUser user = externalUserService.resolveUser(patronId);
+
+    // For now create default dashboard if user has no dashboards when trying to view all their dashboards.
+    // TODO probably want to remove this, and have splash screen on frontend when no dashboards exist
+    def count = dashboardService.countUserDashboards(user)
+    if (count == 0) {
+      dashboardService.createDefaultDashboard(user)
+    }
+
+    respond doTheLookup(DashboardAccess) {
+      eq 'user.id', user.id
+    }
   }
 
-  public boolean isOwner() {
-    def dashboardOwner = Dashboard.executeQuery("""
-      SELECT owner.id from Dashboard as d WHERE d.id = :dId
-    """,[dId: params.id])[0]
-    // Bear in mind dash.owner.id is the id of a ExternalUser, which SHOULD always be the FOLIO ID
-    return matchesCurrentUser(dashboardOwner)
+  public def getDashboardUsers() {
+    respond doTheLookup(DashboardAccess) {
+      eq 'dashboard.id', params.id
+    }
+  }
+
+  public def widgets() {
+    respond doTheLookup(WidgetInstance) {
+      eq 'owner.id', params.dashboardId
+    }
+  }
+
+  public boolean hasAccess(String desiredAccessLevel) {
+    String patronId = getPatron().id
+    dashboardService.hasAccess(desiredAccessLevel, params.id, patronId)
+  }
+
+  public boolean hasAdminPerm() {
+    hasAuthority('okapi.servint.dashboards.admin')
   }
 
   public boolean matchesCurrentUser(String id) {
@@ -42,19 +67,22 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
   }
 
   public boolean canRead() {
-    return isOwner() || hasAuthority('okapi.servint.dashboards.admin')
+    return hasAccess('view') || hasAdminPerm()
   }
 
   public boolean canDelete() {
-    return isOwner() || hasAuthority('okapi.servint.dashboards.admin')
+    return hasAccess('manage') || hasAdminPerm()
   }
 
   public boolean canEdit() {
-    return isOwner() || hasAuthority('okapi.servint.dashboards.admin')
+    return hasAccess('edit') || hasAdminPerm()
   }
 
-  public boolean canPost(String ownerId) {
-    matchesCurrentUser(ownerId) || hasAuthority('okapi.servint.dashboards.admin')
+  def index(Integer max) {
+    if (!hasAdminPerm()) {
+      response.sendError(403)
+    }
+    super.index(max)
   }
 
   def show() {
@@ -80,6 +108,13 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
 
   def save() {
     def data = getObjectToBind()
+    String patronId = getPatron().id
+    ExternalUser user = externalUserService.resolveUser(patronId);
+
+    respond dashboardService.createDashboard(data, user);
+
+  /* 
+    // Dashboard creation is going to be a bit different
     // Check owner details match current patron, or that user has authority
     if (!canPost(data.owner?.id)) {
       response.sendError(403, "User does not have permission to POST a dashboard with owner (${data.owner?.id})")
@@ -90,6 +125,6 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
       }
       // ONLY save if perms valid AND user exists
       super.save()
-    }
+    } */
   }
 }
