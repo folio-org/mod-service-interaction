@@ -47,6 +47,13 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
     }
   }
 
+  public def editDashboardUsers() {
+    def data = getObjectToBind();
+    // FIXME ensure that the person making the call cannot change their own access
+
+    respond dashboardService.updateAccessToDashboard(params.dashboardId, data)
+  }
+
   public def widgets() {
     respond doTheLookup(WidgetInstance) {
       eq 'owner.id', params.dashboardId
@@ -130,5 +137,5 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
       // ONLY save if perms valid AND user exists
       super.save()
     } */
-  }
+  } 
 }

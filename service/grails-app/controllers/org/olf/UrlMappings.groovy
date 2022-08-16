@@ -19,7 +19,11 @@ class UrlMappings {
       collection {
         "/my-dashboards" (controller: 'dashboard', action: 'getUserSpecificDashboards')
       }
-      "/users" ( action:'getDashboardUsers', method: 'GET')
+
+      "/users" ( controller: 'dashboard') {
+        action = [GET: 'getDashboardUsers', POST: 'editDashboardUsers']
+      }
+
       "/widgets" (action: 'widgets', method: 'GET')
     }
 

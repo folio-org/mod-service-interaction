@@ -11,6 +11,8 @@ import com.k_int.web.toolkit.refdata.RefdataValue
 
 @Transactional
 class DashboardService {
+  ExternalUserService externalUserService
+
   // Create a dashboard for a resolved user
   Dashboard createDashboard(Map dashboardParams, ExternalUser user) {
     // Set up a dashboard with the parameters defined in POST, and Dashboard Access Object alongside it
@@ -65,5 +67,20 @@ class DashboardService {
     DashboardAccess.executeUpdate("""
       DELETE FROM DashboardAccess WHERE dashboard.id = :dashId
     """.toString(), [dashId: dashboardId])
+  }
+
+  public Collection<DashboardAccess> updateAccessToDashboard(String dashboardId, Collection<Map> userAccess) {
+    userAccess.each { access ->
+      DashboardAccess.withNewTransaction {
+        // If we are not editing an existing access object then we can just create a new one
+        if (!access.id) {
+          // First check one doesn't already exist for this user (easiest is by checking access level)
+          String accessLevel = accessLevel(dashboardId, access.user)
+          log.debug("LOGDEBUG ACCESS LEVEL: ${accessLevel}")
+
+          //DashboardAccess accessObj = new DashboardAccess(access).save()
+        }
+      }
+    }
   }
 }

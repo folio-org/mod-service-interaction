@@ -71,6 +71,12 @@
           "permissionsDesired":["servint.dashboards.admin"]
         },
         {
+          "methods": [ "POST" ],
+          "pathPattern": "/servint/dashboard/{id}/users",
+          "permissionsRequired": ["servint.dashboards.item.put"],
+          "permissionsDesired":["servint.dashboards.admin"]
+        },
+        {
           "methods": [ "GET" ],
           "pathPattern": "/servint/dashboard/{id}/widgets",
           "permissionsRequired": ["servint.dashboards.item.get"],
