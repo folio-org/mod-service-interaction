@@ -24,6 +24,32 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
 
   static responseFormats = ['json', 'xml']
 
+  public boolean hasAccess(String desiredAccessLevel) {
+    String patronId = getPatron().id
+    dashboardService.hasAccess(desiredAccessLevel, params.id, patronId)
+  }
+
+  public boolean hasAdminPerm() {
+    hasAuthority('okapi.servint.dashboards.admin')
+  }
+
+  public boolean matchesCurrentUser(String id) {
+    return id == getPatron().id
+  }
+
+  public boolean canView() {
+    return hasAccess('view') || hasAdminPerm()
+  }
+
+  public boolean canManage() {
+    return hasAccess('manage') || hasAdminPerm()
+  }
+
+  public boolean canEdit() {
+    return hasAccess('edit') || hasAdminPerm()
+  }
+
+
   public def getUserSpecificDashboards() {
     String patronId = getPatron().id
     log.debug("DashboardController::getUserSpecificDashboards called for patron (${patronId}) ")
@@ -42,48 +68,36 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
   }
 
   public def getDashboardUsers() {
+    if (!canView()) {
+      response.sendError(403)
+    }
+
     respond doTheLookup(DashboardAccess) {
       eq 'dashboard.id', params.dashboardId
     }
   }
 
   public def editDashboardUsers() {
+    if (!canManage()) {
+      response.sendError(403)
+    }
+
     def data = getObjectToBind();
+    String patronId = getPatron().id
     // FIXME ensure that the person making the call cannot change their own access
 
-    dashboardService.updateAccessToDashboard(params.dashboardId, data)
+    dashboardService.updateAccessToDashboard(params.dashboardId, data, patronId)
     getDashboardUsers()
   }
 
   public def widgets() {
+    if (!canView()) {
+      response.sendError(403)
+    }
+
     respond doTheLookup(WidgetInstance) {
       eq 'owner.id', params.dashboardId
     }
-  }
-
-  public boolean hasAccess(String desiredAccessLevel) {
-    String patronId = getPatron().id
-    dashboardService.hasAccess(desiredAccessLevel, params.id, patronId)
-  }
-
-  public boolean hasAdminPerm() {
-    hasAuthority('okapi.servint.dashboards.admin')
-  }
-
-  public boolean matchesCurrentUser(String id) {
-    return id == getPatron().id
-  }
-
-  public boolean canRead() {
-    return hasAccess('view') || hasAdminPerm()
-  }
-
-  public boolean canDelete() {
-    return hasAccess('manage') || hasAdminPerm()
-  }
-
-  public boolean canEdit() {
-    return hasAccess('edit') || hasAdminPerm()
   }
 
   def index(Integer max) {
@@ -94,14 +108,14 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
   }
 
   def show() {
-    if (!canRead()) {
+    if (!canView()) {
       response.sendError(403)
     } 
     super.show()
   }
 
   def delete() {
-    if (!canDelete()) {
+    if (!canManage()) {
       response.sendError(403)
     }
 

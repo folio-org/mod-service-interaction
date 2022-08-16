@@ -88,16 +88,22 @@ class DashboardService {
         access: <Refdata binding object, either .id or direct string value>
       }
     ]
+   * and currentUserId must be the UUID pertaining to the currently logged in user.
+   * The logic will ignore any requests to change or add the currently logged in user's access
+   *
    * As with other methods in this service, permissions/access level must be checked by the calling code.
    */
-  public void updateAccessToDashboard(String dashboardId, Collection<Map> userAccess) {
+  public void updateAccessToDashboard(String dashboardId, Collection<Map> userAccess, String currentUserId) {
     log.debug("DashboardService::updateAccessToDashboard called for (${dashboardId}) with access ${userAccess}")
     Dashboard dash = Dashboard.get(dashboardId);
     
     userAccess.each { access ->
       DashboardAccess.withNewTransaction {
-        // If we are not editing an existing access object then we can just create a new one
-        if (!access.id) {
+        if (access.user.id == currentUserId) {
+          log.warn("DashboardAccess can not currently be changed for the currently logged in user")
+        } else if (!access.id) {
+          // If we are not editing an existing access object then we can just create a new one
+
           // First check one doesn't already exist for this user (easiest is by checking access level
           if (hasAccess('view', dashboardId, access.user.id)) {
             // There is an existing DashboardAccess object for this user already -- need decision on what to do here
