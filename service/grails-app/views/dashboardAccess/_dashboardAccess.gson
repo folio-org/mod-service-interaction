@@ -5,4 +5,10 @@ import groovy.transform.*
 @Field
 DashboardAccess dashboardAccess
 
-json g.render (dashboardAccess, [expand: ['dashboard', 'access']])
+def expand = ['access']
+
+if (controllerName == 'dashboard' && actionName != 'getDashboardUsers') {
+  expand << 'dashboard'
+}
+
+json g.render (dashboardAccess, [expand: expand])

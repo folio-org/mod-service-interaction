@@ -14,7 +14,10 @@ class DashboardService {
   // Create a dashboard for a resolved user
   Dashboard createDashboard(Map dashboardParams, ExternalUser user) {
     // Set up a dashboard with the parameters defined in POST, and Dashboard Access Object alongside it
-    Dashboard dashboard = new Dashboard (dashboardParams).save(flush:true, failOnError: true);
+    Dashboard dashboard = new Dashboard ([
+      name: dashboardParams.name,
+      widgets: dashboardParams.widgets ?: [],
+    ]).save(flush:true, failOnError: true);
 
     DashboardAccess dashboardAccess = new DashboardAccess([
       dashboard: dashboard,
@@ -53,5 +56,14 @@ class DashboardService {
         log.error("Cannot declare access for unknown access level ${desiredAccessLevel}")
         return false;
     }
+  }
+
+  // This method WILL delete all access objects associated with a dashboard.
+  // It is PARAMOUNT that the calling code checks the correct access level or
+  // permission is in place before this is called.
+  public void deleteAccessObjects(String dashboardId) {
+    DashboardAccess.executeUpdate("""
+      DELETE FROM DashboardAccess WHERE dashboard.id = :dashId
+    """.toString(), [dashId: dashboardId])
   }
 }

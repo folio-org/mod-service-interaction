@@ -14,6 +14,7 @@ databaseChangeLog = {
       column(name: "da_user_fk", type: "VARCHAR(36)")
       column(name: "da_access_fk", type: "VARCHAR(36)")
 
+      column(name: "da_date_created", type: "TIMESTAMP WITHOUT TIME ZONE")
     }
   }
 

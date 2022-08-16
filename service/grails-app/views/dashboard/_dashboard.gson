@@ -6,7 +6,7 @@ import groovy.transform.*
 @Field
 Dashboard dashboard
 
-json g.render (dashboard) {
+json g.render (dashboard, [excludes: ['widgets']]) {
   widgets ( dashboard.widgets ) { WidgetInstance wi ->
     id wi.id
     weight wi.weight

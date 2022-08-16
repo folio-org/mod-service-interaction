@@ -43,7 +43,7 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
 
   public def getDashboardUsers() {
     respond doTheLookup(DashboardAccess) {
-      eq 'dashboard.id', params.id
+      eq 'dashboard.id', params.dashboardId
     }
   }
 
@@ -95,7 +95,11 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
   def delete() {
     if (!canDelete()) {
       response.sendError(403)
-    } 
+    }
+
+    // Ensure you delete all dashboard access objects before the dash itself
+    dashboardService.deleteAccessObjects(params.id)
+
     super.delete()
   }
 
