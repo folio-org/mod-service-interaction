@@ -51,7 +51,8 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
     def data = getObjectToBind();
     // FIXME ensure that the person making the call cannot change their own access
 
-    respond dashboardService.updateAccessToDashboard(params.dashboardId, data)
+    dashboardService.updateAccessToDashboard(params.dashboardId, data)
+    getDashboardUsers()
   }
 
   public def widgets() {

@@ -6,8 +6,9 @@ import groovy.transform.*
 DashboardAccess dashboardAccess
 
 def expand = ['access']
+def doNotExpandDashboardActions = ['getDashboardUsers', 'editDashboardUsers']
 
-if (controllerName == 'dashboard' && actionName != 'getDashboardUsers') {
+if (controllerName == 'dashboard' && !doNotExpandDashboardActions.contains(actionName)) {
   expand << 'dashboard'
 }
 
