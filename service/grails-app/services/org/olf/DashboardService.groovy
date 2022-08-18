@@ -35,7 +35,7 @@ class DashboardService {
   }
 
   Integer countUserDashboards(ExternalUser user) {
-    DashboardAccess.executeQuery("""SELECT COUNT(DISTINCT d.id) FROM DashboardAccess da INNER JOIN Dashboard d ON da.dashboard.id = d.id""")[0]
+    DashboardAccess.executeQuery("""SELECT COUNT(DISTINCT d.id) FROM DashboardAccess da INNER JOIN Dashboard d ON da.dashboard.id = d.id WHERE da.user.id = :userId""".toString(), [userId: user.id])[0]
   }
 
 

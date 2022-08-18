@@ -24,13 +24,24 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
 
   static responseFormats = ['json', 'xml']
 
+  public String getDashboardId() {
+    // This feels v flaky... the default REST endpoints use `id` and the others use dashboardId
+    // May need better logic in future
+    params.id ?: params.dashboardId
+  }
+
+  // TODO at some point in the future, we should look into replacing the explicit user checks
+  // with granting internal spring permissions based on the access objects,
+  // then querying for those permissions... Ask Steve. Should allow int-testing based on mocked perms
   public boolean hasAccess(String desiredAccessLevel) {
     String patronId = getPatron().id
-    dashboardService.hasAccess(desiredAccessLevel, params.id, patronId)
+    String dashboardId = getDashboardId()
+
+    dashboardService.hasAccess(desiredAccessLevel, dashboardId, patronId)
   }
 
   public boolean hasAdminPerm() {
-    hasAuthority('okapi.servint.dashboards.admin')
+    return hasAuthority('okapi.servint.dashboards.admin')
   }
 
   public boolean matchesCurrentUser(String id) {
@@ -70,66 +81,66 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
   public def getDashboardUsers() {
     if (!canView()) {
       response.sendError(403)
-    }
-
-    respond doTheLookup(DashboardAccess) {
-      eq 'dashboard.id', params.dashboardId
+    } else {
+      respond doTheLookup(DashboardAccess) {
+        eq 'dashboard.id', getDashboardId()
+      }
     }
   }
 
   public def editDashboardUsers() {
     if (!canManage()) {
       response.sendError(403)
+    } else {
+      def data = getObjectToBind();
+      String patronId = getPatron().id
+      dashboardService.updateAccessToDashboard(getDashboardId(), data, patronId)
+      getDashboardUsers()
     }
-
-    def data = getObjectToBind();
-    String patronId = getPatron().id
-    // FIXME ensure that the person making the call cannot change their own access
-
-    dashboardService.updateAccessToDashboard(params.dashboardId, data, patronId)
-    getDashboardUsers()
   }
 
   public def widgets() {
     if (!canView()) {
       response.sendError(403)
-    }
-
-    respond doTheLookup(WidgetInstance) {
-      eq 'owner.id', params.dashboardId
+    } else {
+      respond doTheLookup(WidgetInstance) {
+        eq 'owner.id', getDashboardId()
+      }
     }
   }
 
   def index(Integer max) {
     if (!hasAdminPerm()) {
       response.sendError(403)
+    } else {
+      super.index(max)
     }
-    super.index(max)
   }
 
   def show() {
     if (!canView()) {
       response.sendError(403)
-    } 
-    super.show()
+    } else {
+      super.show()
+    }
   }
 
   def delete() {
     if (!canManage()) {
       response.sendError(403)
+    } else {
+      // Ensure you delete all dashboard access objects before the dash itself
+      dashboardService.deleteAccessObjects(getDashboardId())
+      super.delete()
     }
-
-    // Ensure you delete all dashboard access objects before the dash itself
-    dashboardService.deleteAccessObjects(params.id)
-
-    super.delete()
   }
 
   def update() {
     if (!canEdit()) {
       response.sendError(403)
+    } else {
+      super.update()
     }
-    super.update()
   }
 
   def save() {
@@ -138,19 +149,5 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
     ExternalUser user = externalUserService.resolveUser(patronId);
 
     respond dashboardService.createDashboard(data, user);
-
-  /* 
-    // Dashboard creation is going to be a bit different
-    // Check owner details match current patron, or that user has authority
-    if (!canPost(data.owner?.id)) {
-      response.sendError(403, "User does not have permission to POST a dashboard with owner (${data.owner?.id})")
-    } else {
-      def userExists = ExternalUser.read(data.owner?.id)
-      if (!userExists) {
-        response.sendError(404, "Cannot create user proxy through the dashboard. User must log in and access the endpoint '/servint/dashboards/my-dashboard' before dashboards can be assigned to them.")
-      }
-      // ONLY save if perms valid AND user exists
-      super.save()
-    } */
   } 
 }
