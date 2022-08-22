@@ -1,4 +1,5 @@
-## 1.2.0 In progress
+## 2.0.0 In progress
+  * ERM-2312 Managed Dashboards: backend model
 
 ## 1.1.0 2022-06-29
   * ERM-2134 Service Interaction - mod-service-interaction lacks memory limit in launch descriptor
