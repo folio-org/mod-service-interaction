@@ -88,6 +88,7 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
     }
   }
 
+  // Endpoint to edit the set of user access objects for a specific dashboard
   public def editDashboardUsers() {
     if (!canManage()) {
       response.sendError(403)
@@ -96,6 +97,38 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
       String patronId = getPatron().id
       dashboardService.updateAccessToDashboard(getDashboardId(), data, patronId)
       getDashboardUsers()
+    }
+  }
+
+  // Endpoint to edit dashboard access objects for a given user (For order weight, default etc)
+  public def editUserDashboards() {
+    def data = getObjectToBind();
+    String patronId = getPatron().id
+
+    for (def access : data) {
+      if (!access.id) {
+        response.sendError(400, "Can not edit access object with unspecified id. (${access})")
+        return;
+      }
+
+      if (!access.user.id) {
+        response.sendError(400, "Can not edit access object with unspecified user id. (${access})")
+        return;
+      }
+
+      if (access.user.id != patronId) {
+        response.sendError(403, "User (${patronId}) can not edit access object for another user. (${access})")
+        return;
+      }
+    }
+
+    log.debug("LOGDEBUG GOT HERE THOUGH :/")
+
+    if (data.any { access -> access.user.id != patronId }) {
+      response.sendError(403, "User (${patronId}) cannot edit user dashboards for another user")
+    } else {
+      dashboardService.updateUserDashboards(data, patronId)
+      getUserSpecificDashboards()
     }
   }
 

@@ -15,6 +15,7 @@ databaseChangeLog = {
       column(name: "da_access_fk", type: "VARCHAR(36)")
 
       column(name: "da_date_created", type: "TIMESTAMP WITHOUT TIME ZONE")
+      column(name: "da_user_dashboard_weight", type: "int8")
     }
   }
 
@@ -88,23 +89,24 @@ databaseChangeLog = {
         String manage_id = manage_rdv['rdv_id'];
         
         // For each dashboard in the system, create a dashboard access object and rename (Should all be called DEFAULT, rename to DEFAULT_userID)
-        sql.eachRow("SELECT dshb.dshb_id, dshb.dshb_owner_fk, dshb.dshb_name FROM ${database.defaultSchemaName}.dashboard as dshb".toString()) { def dashMap ->
+        sql.eachRow("SELECT dshb.dshb_id, dshb.dshb_owner_fk FROM ${database.defaultSchemaName}.dashboard as dshb".toString()) { def dashMap ->
           sql.execute("""
             INSERT INTO ${database.defaultSchemaName}.dashboard_access
-            (da_id, da_version, da_dashboard_fk, da_user_fk, da_access_fk)
+            (da_id, da_version, da_dashboard_fk, da_user_fk, da_access_fk, da_user_dashboard_weight)
               SELECT md5(random()::text || clock_timestamp()::text) as da_id,
               0 as da_version,
               :dashboard as da_dashboard_fk,
               :user as da_user_fk,
-              :manage as da_access_fk
+              :manage as da_access_fk,
+              0 as da_user_dashboard_weight
           """.toString(), [dashboard: dashMap['dshb_id'], user: dashMap['dshb_owner_fk'], manage: manage_id])
 
-          // Rename dashboards to include user id in first instance to ensure uniqueness
+          // Rename dashboards "my dashboard" from "DEFAULT"
           sql.execute("""
             UPDATE ${database.defaultSchemaName}.dashboard
-            SET dshb_name = :dashName
+            SET dshb_name = 'My dashboard'
             WHERE dshb_id = :dashId
-          """.toString(), [dashName: "${dashMap['dshb_name']}_${dashMap['dshb_owner_fk']}".toString(), dashId: dashMap['dshb_id']])
+          """.toString(), [dashId: dashMap['dshb_id']])
         }
       }
     }

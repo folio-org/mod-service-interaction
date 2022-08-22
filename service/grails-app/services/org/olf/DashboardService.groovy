@@ -30,8 +30,9 @@ class DashboardService {
     return dashboard;
   }
 
+  // TODO eventually we should be always creating these from client and so this method will vanish
   Dashboard createDefaultDashboard(ExternalUser user) {
-    return createDashboard([name: "DEFAULT_${user.id}", widgets: []], user);
+    return createDashboard([name: "My dashboard", widgets: []], user);
   }
 
   Integer countUserDashboards(ExternalUser user) {
@@ -77,6 +78,10 @@ class DashboardService {
 
 
   /*
+   * A method to update a list of users on a dashboard, or more accurately to
+   * bulk update a list of DashboardAccess objects which all point at a given dashboard,
+   * to edit the access granted to certain users on said dashboard.
+   *
    * Accepts userAccess block of the form
     [
       {
@@ -90,6 +95,7 @@ class DashboardService {
     ]
    * and currentUserId must be the UUID pertaining to the currently logged in user.
    * The logic will ignore any requests to change or add the currently logged in user's access
+   * Changes to user level characteristics like order weight and "default" dashboard will be ignored
    *
    * As with other methods in this service, permissions/access level must be checked by the calling code.
    */
@@ -111,10 +117,14 @@ class DashboardService {
             log.warn("Ignoring DashboardAccess creation request since a DashboardAccess object already exists for this user (${access.user.id})")
           } else {
             // We have a genuinely new access object being requested.
+            ExternalUser user = externalUserService.resolveUser(access.user.id);
+            Integer dashboardCount = dashboardCount(user);
+
             new DashboardAccess([
-              user: externalUserService.resolveUser(access.user.id),
+              user: user,
               dashboard: dash,
-              access: access.access
+              access: access.access,
+              userDashboardWeight: dashboardCount // Hopefully append to end of dashboards list from a weight perspective
             ]).save(flush: true, failOnError: true)
           }
         } else {
@@ -122,8 +132,9 @@ class DashboardService {
 
           // Fetch the existing DashboardAccess object for comparison
           DashboardAccess existingAccess = DashboardAccess.get(access.id);
-
-          if (access._delete) {
+          if (access.dashboard.id != dashboardId) {
+            log.warn("Dashboard access object (${access.id}) dashboard id mismatch. Expected ${dashboardId}, but got ${access.dashboard.id}. Ignoring any requested changes")
+          } else if (access._delete) {
             // We need to remove this access
             existingAccess.delete()
           } else {
@@ -135,7 +146,8 @@ class DashboardService {
               id: existingAccess.id,
               access: access.access,
               user: existingAccess.user,
-              dashboard: existingAccess.dashboard
+              dashboard: existingAccess.dashboard,
+              userDashboardWeight: existingAccess.userDashboardWeight
             ]
 
             // If access has not changed, do nothing to avoid database churn
@@ -143,6 +155,68 @@ class DashboardService {
               existingAccess.save(flush: true, failOnError: true)
             }
           }
+        }
+      }
+    }
+  }
+
+
+  /*
+   * A method to update a list of user dashboards, or more accurately to
+   * bulk update a list of DashboardAccess objects which all point at a given user,
+   * to edit characteristics like order weight or "default" marked dashboard.
+   *
+   * Accepts userAccess block of the form
+    [
+      {
+        id: <id of access object>
+        user: {
+          id: <user uuid>
+        },
+        dashboard: {
+          id: <dashboard uuid>
+        },
+        userDashboardWeight: <Integer>
+      },
+      ...
+    ]
+   * and currentUserId must be the UUID pertaining to the currently logged in user.
+   * This method will then set the user dashboard weight fields for each of the specified access objects
+   * Any access objects NOT for the currentUserId will be ignored.
+   *
+   * Access level and user changes will be ignored
+   */
+  public void updateUserDashboards(Collection<Map> userAccess, String currentUserId) {
+    log.debug("DashboardService::updateUserDashboards called for user (${currentUserId}) with access ${userAccess}")
+    userAccess.each { access ->
+      DashboardAccess.withNewTransaction {
+        if (!access.id) {
+          // Do not allow creation of access objects through this method
+          log.warn("DashboardAccess can not be created through DashboardService::updateUserDashboards, ignoring.")
+        } else if (access.user.id != currentUserId) {
+          // This should probably be initially denied in the controller
+          log.warn("DashboardAccess can not be changed for other users through DashboardService::updateUserDashboards, ignoring.")
+        } else {
+          // At this stage we have an existing dashboard access object for the currently logged in user
+          // Fetch the access Object
+          DashboardAccess existingAccess = DashboardAccess.get(access.id);
+          Integer existingAccessWeight = existingAccess.userDashboardWeight;
+
+          // Change order weight if necessary
+          existingAccess.properties = [
+            id: existingAccess.id,
+            access: existingAccess.access,
+            user: existingAccess.user,
+            dashboard: existingAccess.dashboard,
+            userDashboardWeight: access.userDashboardWeight
+          ]
+
+          // If weight has not changed, do nothing to avoid database churn
+          if (existingAccessWeight != existingAccess.userDashboardWeight) {
+            existingAccess.save(flush: true, failOnError: true)
+          }
+
+          // TODO add "default dash" logic here
         }
       }
     }
