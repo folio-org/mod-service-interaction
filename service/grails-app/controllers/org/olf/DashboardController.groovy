@@ -111,7 +111,7 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
         return;
       }
 
-      if (!access.user.id) {
+      if (!access.user?.id) {
         response.sendError(400, "Can not edit access object with unspecified user id. (${access})")
         return;
       }
@@ -122,14 +122,8 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
       }
     }
 
-    log.debug("LOGDEBUG GOT HERE THOUGH :/")
-
-    if (data.any { access -> access.user.id != patronId }) {
-      response.sendError(403, "User (${patronId}) cannot edit user dashboards for another user")
-    } else {
-      dashboardService.updateUserDashboards(data, patronId)
-      getUserSpecificDashboards()
-    }
+    dashboardService.updateUserDashboards(data, patronId)
+    getUserSpecificDashboards()
   }
 
   public def widgets() {

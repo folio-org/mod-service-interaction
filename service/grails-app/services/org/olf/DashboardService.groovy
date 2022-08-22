@@ -79,7 +79,6 @@ class DashboardService {
     """.toString(), [dashId: dashboardId])
   }
 
-
   /*
    * A method to update a list of users on a dashboard, or more accurately to
    * bulk update a list of DashboardAccess objects which all point at a given dashboard,
@@ -199,6 +198,9 @@ class DashboardService {
         if (!access.id) {
           // Do not allow creation of access objects through this method
           log.warn("DashboardAccess can not be created through DashboardService::updateUserDashboards, ignoring.")
+        } else if (!access.user.id) {
+          // This should probably be initially denied in the controller
+          log.warn("DashboardAccess can not be changed for other undefined user, ignoring.")
         } else if (access.user.id != currentUserId) {
           // This should probably be initially denied in the controller
           log.warn("DashboardAccess can not be changed for other users through DashboardService::updateUserDashboards, ignoring.")
@@ -206,7 +208,6 @@ class DashboardService {
           // At this stage we have an existing dashboard access object for the currently logged in user
           // Fetch the access Object
           DashboardAccess existingAccess = DashboardAccess.get(access.id);
-
           Integer existingAccessWeight = existingAccess.userDashboardWeight;
           boolean existingDefault = existingAccess.defaultUserDashboard;
 
@@ -217,10 +218,32 @@ class DashboardService {
             user: existingAccess.user,
             dashboard: existingAccess.dashboard,
             userDashboardWeight: access.userDashboardWeight,
-            defaultUserDashboard: access.defaultUserDashboard
+            // This will never set true -> false, which means that if
+            // no default: true comes in at all, the default will remain the same
+            // This RELIES on the fact that a _new_ default: true will set all other access to default: false
+            // TODO check this behaviour with Owen -- we may actually want the ability to set no default
+            defaultUserDashboard: existingAccess.defaultUserDashboard ?: access.defaultUserDashboard
           ]
 
-          // If weight/default has not changed, do nothing to avoid database churn
+
+          // NOTE this will only trigger if an incoming access is marked as "default"
+          // If none are marked as default then the default will remain the same
+          // If multiple are marked as default then only the last one will actually become "default"
+          if (access.defaultUserDashboard == true && !existingDefault) {
+            // Default has changed, set all other access objects to not-default and save them
+            Collection<DashboardAccess> userAccessObjects = DashboardAccess.executeQuery("""
+              SELECT da FROM DashboardAccess as da
+              WHERE da.user.id = :userId
+            """.toString(), [userId: existingAccess.user.id])
+            userAccessObjects.each { uao ->
+              if (uao.id != existingAccess.id && uao.defaultUserDashboard == true) {
+                uao.defaultUserDashboard = false
+                uao.save(flush: true, failOnError: true)
+              }
+            }
+          }
+
+          // If weight/default have not changed, do nothing to avoid database churn
           if (
             existingAccessWeight != existingAccess.userDashboardWeight ||
             existingDefault != existingAccess.defaultUserDashboard

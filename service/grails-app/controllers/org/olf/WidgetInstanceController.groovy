@@ -65,8 +65,6 @@ class WidgetInstanceController extends OkapiTenantAwareController<WidgetInstance
   }
 
   public boolean canPost(String dashId) {
-    log.debug("LOGDEBUG CANPOST CALLED FOR DASH ID: ${dashId}")
-
     hasAccessToDashboard('edit', dashId) || hasAdminPerm()
   }
 
@@ -106,7 +104,6 @@ class WidgetInstanceController extends OkapiTenantAwareController<WidgetInstance
     def data = getObjectToBind()
     def dash = Dashboard.read(data.owner?.id)
 
-    log.debug("LOGDEBUG DASH ID: ${dash.id}")
     // Check owner details match current patron, or that user has authority
     if (!dash) {
       response.sendError(404, "Cannot create dashboard through the widgetInstance.") 
