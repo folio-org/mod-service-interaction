@@ -16,7 +16,16 @@ databaseChangeLog = {
 
       column(name: "da_date_created", type: "TIMESTAMP WITHOUT TIME ZONE")
       column(name: "da_user_dashboard_weight", type: "int8")
+      column(name: "da_default_user_dashboard", type: "boolean")
     }
+  }
+
+  changeSet(author: "efreestone (manual)", id: "2022-08-22-1638-001") {
+    addNotNullConstraint(
+      tableName: "dashboard_access",
+      columnName: "da_default_user_dashboard",
+      columnDataType: "boolean"
+    )
   }
 
   changeSet(author: "efreestone (manual)", id: "2022-08-11-1021-001") {
@@ -92,13 +101,14 @@ databaseChangeLog = {
         sql.eachRow("SELECT dshb.dshb_id, dshb.dshb_owner_fk FROM ${database.defaultSchemaName}.dashboard as dshb".toString()) { def dashMap ->
           sql.execute("""
             INSERT INTO ${database.defaultSchemaName}.dashboard_access
-            (da_id, da_version, da_dashboard_fk, da_user_fk, da_access_fk, da_user_dashboard_weight)
+            (da_id, da_version, da_dashboard_fk, da_user_fk, da_access_fk, da_user_dashboard_weight, da_default_user_dashboard)
               SELECT md5(random()::text || clock_timestamp()::text) as da_id,
               0 as da_version,
               :dashboard as da_dashboard_fk,
               :user as da_user_fk,
               :manage as da_access_fk,
-              0 as da_user_dashboard_weight
+              0 as da_user_dashboard_weight,
+              TRUE as da_default_user_dashboard
           """.toString(), [dashboard: dashMap['dshb_id'], user: dashMap['dshb_owner_fk'], manage: manage_id])
 
           // Rename dashboards "my dashboard" from "DEFAULT"

@@ -14,17 +14,20 @@ class DashboardService {
   ExternalUserService externalUserService
 
   // Create a dashboard for a resolved user
-  Dashboard createDashboard(Map dashboardParams, ExternalUser user) {
+  Dashboard createDashboard(Map dashboardParams, ExternalUser user, boolean defaultUserDashboard = false) {
     // Set up a dashboard with the parameters defined in POST, and Dashboard Access Object alongside it
     Dashboard dashboard = new Dashboard ([
       name: dashboardParams.name,
       widgets: dashboardParams.widgets ?: [],
     ]).save(flush:true, failOnError: true);
 
+    Integer dashboardCount = countUserDashboards(user);
     DashboardAccess dashboardAccess = new DashboardAccess([
       dashboard: dashboard,
       user: user,
-      access: RefdataValue.lookupOrCreate('DashboardAccess.Access', 'manage')
+      access: RefdataValue.lookupOrCreate('DashboardAccess.Access', 'manage'),
+      userDashboardWeight: dashboardCount,
+      defaultUserDashboard: defaultUserDashboard
     ]).save(flush:true, failOnError: true);
 
     return dashboard;
@@ -32,7 +35,7 @@ class DashboardService {
 
   // TODO eventually we should be always creating these from client and so this method will vanish
   Dashboard createDefaultDashboard(ExternalUser user) {
-    return createDashboard([name: "My dashboard", widgets: []], user);
+    return createDashboard([name: "My dashboard", widgets: []], user, true);
   }
 
   Integer countUserDashboards(ExternalUser user) {
@@ -118,13 +121,14 @@ class DashboardService {
           } else {
             // We have a genuinely new access object being requested.
             ExternalUser user = externalUserService.resolveUser(access.user.id);
-            Integer dashboardCount = dashboardCount(user);
+            Integer dashboardCount = countUserDashboards(user);
 
             new DashboardAccess([
               user: user,
               dashboard: dash,
               access: access.access,
-              userDashboardWeight: dashboardCount // Hopefully append to end of dashboards list from a weight perspective
+              userDashboardWeight: dashboardCount, // Hopefully append to end of dashboards list from a weight perspective
+              defaultUserDashboard: (dashboardCount == 0) // Set to default if the first dashboard this user has
             ]).save(flush: true, failOnError: true)
           }
         } else {
@@ -147,7 +151,8 @@ class DashboardService {
               access: access.access,
               user: existingAccess.user,
               dashboard: existingAccess.dashboard,
-              userDashboardWeight: existingAccess.userDashboardWeight
+              userDashboardWeight: existingAccess.userDashboardWeight,
+              defaultUserDashboard: existingAccess.defaultUserDashboard,
             ]
 
             // If access has not changed, do nothing to avoid database churn
@@ -176,7 +181,8 @@ class DashboardService {
         dashboard: {
           id: <dashboard uuid>
         },
-        userDashboardWeight: <Integer>
+        userDashboardWeight: <Integer>,
+        defaultUserDashboard: <boolean>
       },
       ...
     ]
@@ -200,7 +206,9 @@ class DashboardService {
           // At this stage we have an existing dashboard access object for the currently logged in user
           // Fetch the access Object
           DashboardAccess existingAccess = DashboardAccess.get(access.id);
+
           Integer existingAccessWeight = existingAccess.userDashboardWeight;
+          boolean existingDefault = existingAccess.defaultUserDashboard;
 
           // Change order weight if necessary
           existingAccess.properties = [
@@ -208,15 +216,17 @@ class DashboardService {
             access: existingAccess.access,
             user: existingAccess.user,
             dashboard: existingAccess.dashboard,
-            userDashboardWeight: access.userDashboardWeight
+            userDashboardWeight: access.userDashboardWeight,
+            defaultUserDashboard: access.defaultUserDashboard
           ]
 
-          // If weight has not changed, do nothing to avoid database churn
-          if (existingAccessWeight != existingAccess.userDashboardWeight) {
+          // If weight/default has not changed, do nothing to avoid database churn
+          if (
+            existingAccessWeight != existingAccess.userDashboardWeight ||
+            existingDefault != existingAccess.defaultUserDashboard
+          ) {
             existingAccess.save(flush: true, failOnError: true)
           }
-
-          // TODO add "default dash" logic here
         }
       }
     }

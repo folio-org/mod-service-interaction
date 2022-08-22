@@ -181,6 +181,12 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
     String patronId = getPatron().id
     ExternalUser user = externalUserService.resolveUser(patronId);
 
-    respond dashboardService.createDashboard(data, user);
+    Integer dashboardCount = dashboardService.countUserDashboards(user);
+
+    if (dashboardCount == 0) {
+      respond dashboardService.createDashboard(data, user, true);
+    } else {
+      respond dashboardService.createDashboard(data, user);
+    }
   } 
 }
