@@ -30,35 +30,6 @@ public class HousekeepingService {
         // Load default sequences available for all installations
         AppSetting.withTransaction {
           [
-/*             [
-              code:'openAccess',
-              name:'Open Access',
-              sequences: [
-                [ name: 'Request sequence', code:'requestSequence',     'format':'000000000',         'checkDigitAlgo':'EAN13',    'outputTemplate':'oa-${generated_number}-${checksum}' ]
-              ]
-            ],
-            [
-              code:'patronRequest',
-              name:'Patron Request (ILL)',
-              sequences: [
-                [ name: 'Request sequence', code:'requestSequence',     'format':'000000000',         'checkDigitAlgo':'EAN13',    'outputTemplate':'ill-${generated_number}-${checksum}' ]
-              ]
-            ],
-            [
-              code:'Patron',
-              name:'Patron',
-              sequences: [
-                [ name: 'Patron', code:'patron',     'format':'000000000',         'checkDigitAlgo':'EAN13',    'outputTemplate':'P${generated_number}-${checksum}' ],
-                [ name: 'Staff', code:'staff',      'format':'000000000',         'checkDigitAlgo':'EAN13',    'outputTemplate':'S${generated_number}-${checksum}' ]
-              ]
-            ],
-            [
-              code:'Vendor',
-              name:'Vendor',
-              sequences: [
-                [ name: 'Vendor', code:'vendor',     'format':'000',         'checkDigitAlgo':'None',    'outputTemplate':'K${generated_number}' ],
-              ]
-            ], */
             [
               /*
                 -- IMPORTANT --
