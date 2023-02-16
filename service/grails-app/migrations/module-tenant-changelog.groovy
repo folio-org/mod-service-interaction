@@ -7,4 +7,7 @@ databaseChangeLog = {
   include file: 'initial-model.groovy'
   include file: 'number-generator-model.groovy'
   include file: 'service-interaction-1-3.groovy'
+  include file: 'wtk/multi-value-custprops.feat.groovy'
+  include file: 'wtk/hidden-appsetting.feat.groovy'
+  include file: 'service-interaction-2-2.groovy'
 }
