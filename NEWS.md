@@ -1,3 +1,5 @@
+## 2.3.0 In progress
+
 ## 2.2.0 2023-02-20
   * ERM-2433 Bumped dependencies of postgres, opencsv, web-toolkit and grails-okapi
     * Addec migrations to handle updates to grails-okapi and web-toolkit
