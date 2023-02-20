@@ -1,7 +1,9 @@
-## 2.2.0 In progress
+## 2.2.0 2023-02-20
   * ERM-2433 Bumped dependencies of postgres, opencsv, web-toolkit and grails-okapi
     * Addec migrations to handle updates to grails-okapi and web-toolkit
   * Added migrations for better number generator generator names/codes (Code changes only for those not in use in production already)
+  * Number generator names bootstrapped into the system were too generic, changes to bootstrapped data and migrations for existing data made
+  * Fix for initialiseDefaultSequence, wasn't saving thanks to non-nullable name field
 
 ## 2.1.0 2023-01-10
   * Fix for CheckDigitAlgo
