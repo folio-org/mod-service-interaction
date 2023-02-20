@@ -1,4 +1,6 @@
-## 2.2.0 2023-02-20
+## 2.3.0 In progress
+
+## 2.2.1 2023-02-20
   * ERM-2433 Bumped dependencies of postgres, opencsv, web-toolkit and grails-okapi
     * Addec migrations to handle updates to grails-okapi and web-toolkit
   * Added migrations for better number generator generator names/codes (Code changes only for those not in use in production already)
