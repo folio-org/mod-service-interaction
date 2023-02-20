@@ -41,21 +41,21 @@ class SILifecycleSpec extends BaseSpec {
         'defaultSequenceCode': 'patron',
         'description' : 'User Barcode Test Cases',
         'sequences':[
-          [ 'code':'patron',    'prefix':'user',   'postfix':null,   'format':'000000000', 'enabled':true ],
-          [ 'code':'staff',     'prefix':'staff',  'postfix':'test', 'format':'000,000,000', 'enabled':true ],
-          [ 'code':'noformat',  'prefix':'nf', 'enabled':true ],
-          [ 'code':'highinit',  'prefix':'hi', 'format':'000000000', 'nextValue':100000, 'enabled':true ],
-          [ 'code':'mod10test', 'format':'000000000', 'nextValue':100000, 'checkDigitAlgo':'Modulo10', 'enabled':true ],
-          [ 'code':'mod11test', 'format':'000000000', 'nextValue':100000, 'checkDigitAlgo':'Modulo11', 'enabled':true ],
-          [ 'code':'mod16test', 'format':'000000000', 'nextValue':100000, 'checkDigitAlgo':'Modulo16', 'enabled':true ],
-          [ 'code':'mod43test', 'format':'000000000', 'nextValue':100000, 'checkDigitAlgo':'Modulo43' ],
-          [ 'code':'mod47test', 'format':'000000000', 'nextValue':100000, 'checkDigitAlgo':'Modulo47' ],
-          [ 'code':'069',       'prefix':'069', 'postfix':'1', 'format':'000000000', 'nextValue':1, 'checkDigitAlgo':'EAN13', 'enabled':true ],
-          [ 'code':'0698',      'format':'000000000', 'nextValue':1, 'checkDigitAlgo':'EAN13', 'outputTemplate':'0698${generated_number}${checksum}', 'enabled':true ],
-          [ 'code':'0699',      'format':'000000000', 'nextValue':1, 'checkDigitAlgo':'EAN13', 'outputTemplate':'0699-${generated_number}-${checksum}-post', 'enabled':true ],
-          [ 'code':'0700',      'format':'000000000', 'nextValue':1, 'checkDigitAlgo':'EAN13', 'outputTemplate':'0700-${generated_number.substring(0,4)}-${checksum}-${generated_number.substring(4,9)}-post', 'enabled':true ],
-          [ 'code':'DD',        'prefix':'DD',   'format':'000000000', 'nextValue':1, 'enabled':true ],
-          [ 'code':'distest',   'prefix':'DD',   'format':'000000000', 'nextValue':1, 'enabled':false, 'description': 'THis one is disabled' ]
+          [ 'name': 'patron',    'code': 'patron',    'prefix':'user',      'postfix':null,       'format':'000000000',         'enabled':true ],
+          [ 'name': 'staff',     'code': 'staff',     'prefix':'staff',     'postfix':'test',     'format':'000,000,000',       'enabled':true ],
+          [ 'name': 'noformat',  'code': 'noformat',  'prefix':'nf',        'enabled':true ],
+          [ 'name': 'highinit',  'code': 'highinit',  'prefix':'hi',        'format':'000000000', 'nextValue':100000,           'enabled':true ],
+          [ 'name': 'mod10test', 'code': 'mod10test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'Modulo10', 'enabled':true ],
+          [ 'name': 'mod11test', 'code': 'mod11test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'Modulo11', 'enabled':true ],
+          [ 'name': 'mod16test', 'code': 'mod16test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'Modulo16', 'enabled':true ],
+          [ 'name': 'mod43test', 'code': 'mod43test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'Modulo43' ],
+          [ 'name': 'mod47test', 'code': 'mod47test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'Modulo47' ],
+          [ 'name': '069',       'code': '069',       'prefix':'069',       'postfix':'1',        'format':'000000000',         'enabled':true,  'nextValue':1,   'checkDigitAlgo':'EAN13' ],
+          [ 'name': '0698',      'code': '0698',      'format':'000000000', 'nextValue':1,        'checkDigitAlgo': 'EAN13',    'enabled':true,  'outputTemplate':'0698${generated_number}${checksum}',  ],
+          [ 'name': '0699',      'code': '0699',      'format':'000000000', 'nextValue':1,        'checkDigitAlgo': 'EAN13',    'enabled':true,  'outputTemplate':'0699-${generated_number}-${checksum}-post'],
+          [ 'name': '0700',      'code': '0700',      'format':'000000000', 'nextValue':1,        'checkDigitAlgo': 'EAN13',    'enabled':true,  'outputTemplate':'0700-${generated_number.substring(0,4)}-${checksum}-${generated_number.substring(4,9)}-post'],
+          [ 'name': 'DD',        'code': 'DD',        'prefix':'DD',        'format':'000000000', 'nextValue':1,                'enabled':true ],
+          [ 'name': 'distest',   'code': 'distest',   'prefix':'DD',        'format':'000000000', 'nextValue':1,                'enabled':false, 'description': 'THis one is disabled' ]
         ]
       ]
 
