@@ -1,3 +1,6 @@
+## 2.2.2 2023-03-14
+  * ERM-2642 Hibernate JPA Criteria SQL Injection (CVE-2020-25638)
+
 ## 2.2.1 2023-02-20
   * ERM-2433 Bumped dependencies of postgres, opencsv, web-toolkit and grails-okapi
     * Addec migrations to handle updates to grails-okapi and web-toolkit
