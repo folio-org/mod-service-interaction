@@ -22,7 +22,7 @@ public class HousekeepingService {
 
   @Subscriber('okapi:dataload:reference')
   public void onLoadReference (final String tenantId, String value, final boolean existing_tenant, final boolean upgrading, final String toVersion, final String fromVersion) {
-    log.debug("ErmHousekeepingService::onLoadReference(${tenantId},${value},${existing_tenant},${upgrading},${toVersion},${fromVersion})");
+    log.debug("ServintHousekeepingService::onLoadReference(${tenantId},${value},${existing_tenant},${upgrading},${toVersion},${fromVersion})");
     final String tenant_schema_id = OkapiTenantResolver.getTenantSchemaName(tenantId)
     try {
       Tenants.withId(tenant_schema_id) {
@@ -31,32 +31,101 @@ public class HousekeepingService {
         AppSetting.withTransaction {
           [
             [
+              /*
+                -- IMPORTANT --
+                this one was created before we decided to standardise,
+                so only label can change, but future generators should have more specific
+                names AND codes -- see vendor code below
+              */
               code:'openAccess',
-              name:'Open Access',
+              name:'Open access: Publication request number',
               sequences: [
                 [ name: 'Request sequence', code:'requestSequence',     'format':'000000000',         'checkDigitAlgo':'EAN13',    'outputTemplate':'oa-${generated_number}-${checksum}' ]
               ]
             ],
             [
+              /*
+                -- IMPORTANT --
+                this one was created before we decided to standardise,
+                so only label can change, but future generators should have more specific
+                names AND codes -- see vendor code below
+              */
               code:'patronRequest',
-              name:'Patron Request (ILL)',
+              name:'ILL: Patron request number',
               sequences: [
                 [ name: 'Request sequence', code:'requestSequence',     'format':'000000000',         'checkDigitAlgo':'EAN13',    'outputTemplate':'ill-${generated_number}-${checksum}' ]
               ]
             ],
             [
-              code:'Patron',
-              name:'Patron',
+              name:'Users: Patron barcode',
+              code:'users_patronBarcode',
               sequences: [
-                [ name: 'Patron', code:'patron',     'format':'000000000',         'checkDigitAlgo':'EAN13',    'outputTemplate':'P${generated_number}-${checksum}' ],
-                [ name: 'Staff', code:'staff',      'format':'000000000',         'checkDigitAlgo':'EAN13',    'outputTemplate':'S${generated_number}-${checksum}' ]
+                [
+                  name: 'Patron',
+                  code: 'patron',
+                  format: '000000000',
+                  checkDigitAlgo: 'EAN13',
+                  outputTemplate: 'P${generated_number}-${checksum}'
+                ],
+                [
+                  name: 'Staff',
+                  code: 'staff',
+                  format: '000000000',
+                  checkDigitAlgo: 'EAN13',
+                  outputTemplate: 'S${generated_number}-${checksum}'
+                ]
               ]
             ],
             [
-              code:'Vendor',
-              name:'Vendor',
+              name:'Organizations: Vendor code',
+              code:'organizations_vendorCode',
               sequences: [
-                [ name: 'Vendor', code:'vendor',     'format':'000',         'checkDigitAlgo':'None',    'outputTemplate':'K${generated_number}' ],
+                [
+                  name: 'Vendor',
+                  code: 'vendor',
+                  format: '000',
+                  checkDigitAlgo: 'None',
+                  outputTemplate:'K${generated_number}'
+                ],
+              ]
+            ],
+            [
+              name:'Inventory: Accession number',
+              code:'inventory_accessionNumber',
+              sequences: [
+                [
+                  name: 'Accession number',
+                  code:'accessionNumber',
+                  format:'00000',
+                  checkDigitAlgo:'None',
+                  outputTemplate:'31A-2023-${generated_number}'
+                ],
+              ]
+            ],
+            [
+              name:'Inventory: Call number',
+              code:'inventory_callNumber',
+              sequences: [
+                [
+                  name: 'Call number',
+                  code:'callNumber',
+                  format:'00000',
+                  checkDigitAlgo:'None',
+                  outputTemplate:'B 2023 / ${generated_number}'
+                ],
+              ]
+            ],
+            [
+              name:'Inventory: Item barcode',
+              code:'inventory_itemBarcode',
+              sequences: [
+                [
+                  name: 'Item barcode',
+                  code:'itemBarcode',
+                  format:'0000000000',
+                  checkDigitAlgo:'None',
+                  outputTemplate:'${generated_number}'
+                ],
               ]
             ],
           ].each { ng_defn ->

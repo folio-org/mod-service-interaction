@@ -101,6 +101,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
     NumberGeneratorSequence result = null;
     NumberGenerator ng = NumberGenerator.findByCode(generator) ?: new NumberGenerator(code:generator, name:generator).save(flush:true, failOnError:true)
     result = new NumberGeneratorSequence(owner: ng,
+                                         name: sequence, // Set up default name
                                          code: sequence,
                                          prefix: null,
                                          postfix: null,
