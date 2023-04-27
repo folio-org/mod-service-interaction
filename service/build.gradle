@@ -143,6 +143,14 @@ bootRun {
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }
 
+sourceSets {
+  main {
+    resources {
+      srcDir 'grails-app/migrations'
+    }
+  }
+}
+
 tasks.withType(GroovyCompile) {
     configure(groovyOptions) {
         forkOptions.jvmArgs = ['-Xmx1024m']

@@ -6,15 +6,7 @@
     <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
       <charset>UTF-8</charset> 
       <pattern>
-        <!--Date-->
-        %clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint}
-        <!--Log level-->
-        %clr(%5p)
-        <!--Thread-->
-        %clr(---){faint} %clr([%15.15t]){faint}
-        <!--Logger-->
-        %clr(%-40.40logger{39}){cyan} %clr(:){faint}
-        %m%n%wex
+        <!--Date-->%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} <!--Log level--> %clr(%5p) <!--Thread--> %clr(---){faint} %clr([%15.15t]){faint} <!--Logger-->%clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wex
       </pattern>
     </encoder>
   </appender>
