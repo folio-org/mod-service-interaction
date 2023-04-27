@@ -1,14 +1,21 @@
+configurations.all {
+	// Check for updates every build
+	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 buildscript {
-    repositories {
-        maven { url "https://plugins.gradle.org/m2/" }
-        maven { url "https://repo.grails.org/grails/core" }
-        maven { url "https://repo.grails.org/grails/plugins" }
-    }
-    dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
-        classpath "org.grails.plugins:hibernate5:7.3.0"
-        classpath "org.grails.plugins:views-gradle:2.3.2"
-    }
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		maven { url "https://plugins.gradle.org/m2/" }
+		maven { url "https://repo.grails.org/grails/core" }
+		maven { url "https://repo.grails.org/grails/plugins" }
+	}
+	dependencies {
+		classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
+		classpath "org.grails.plugins:hibernate5:7.3.0"
+		classpath "org.grails.plugins:views-gradle:2.3.2"
+	}
 }
 
 final String version_regex = /^(((\d+)\.\d+)\.\d+)(-([a-zA-Z]+(\.\d+)?))?$/
@@ -17,146 +24,193 @@ String calculated_version = null;
 
 // If we are building in a Jenkins environment append the build number onto the snapshot tag
 if ( ( appVersion.contains('SNAPSHOT') ) && ( env.BUILD_NUMBER != null ) ) {
-  println("Detected snapshot version and build number - appending");
-  calculated_version = "${appVersion}.${env.BUILD_NUMBER}".toString()
+	println("Detected snapshot version and build number - appending");
+	calculated_version = "${appVersion}.${env.BUILD_NUMBER}".toString()
 }
 else {
-  println("Release version");
-  calculated_version = "${appVersion}".toString()
+	println("Release version");
+	calculated_version = "${appVersion}".toString()
 }
 
 version "${calculated_version}"
 group "org.olf"
 
-apply plugin:"eclipse"
-apply plugin:"idea"
-apply plugin:"war"
-apply plugin:"org.grails.grails-web"
-apply plugin:"org.grails.plugins.views-json"
+apply plugin: "eclipse"
+apply plugin: 'eclipse-wtp'
+apply plugin: "idea"
+//apply plugin:"war"
+apply plugin: "org.grails.grails-web"
+apply plugin: "org.grails.plugins.views-json"
 
 configurations.all {
-  // Check for updates every build
-  resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
-
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-    maven { url "https://repo.grails.org/grails/core" }
-    maven { url "https://repo.grails.org/grails/plugins" }
-    maven { url "https://jitpack.io" }
-}
-
-configurations {
-    developmentOnly
-    runtimeClasspath {
-        extendsFrom developmentOnly
-    }
-}
-
-dependencies {
-    /* ---- Grails 5 ---- */
-    //developmentOnly("org.springframework.boot:spring-boot-devtools")
-    compileOnly "io.micronaut:micronaut-inject-groovy"
-    console "org.grails:grails-console"
-    implementation "org.springframework.boot:spring-boot-starter-logging"
-    //implementation "org.springframework.boot:spring-boot-starter-validation"
-    implementation "org.springframework.boot:spring-boot-autoconfigure"
-    implementation "org.grails:grails-core"
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
-    //implementation "org.springframework.boot:spring-boot-starter-tomcat"
-    implementation "org.grails:grails-plugin-url-mappings"
-    implementation "org.grails:grails-plugin-rest"
-    implementation "org.grails:grails-plugin-codecs"
-    implementation "org.grails:grails-plugin-interceptors"
-    implementation "org.grails:grails-plugin-services"
-    implementation "org.grails:grails-plugin-datasource"
-    implementation "org.grails:grails-plugin-databinding"
-    implementation "org.grails:grails-web-boot"
-    implementation "org.grails:grails-logging"
-    //implementation "org.grails.plugins:cache"
-    implementation "org.grails.plugins:async"
-    implementation "org.grails.plugins:hibernate5"
-    implementation "org.hibernate:hibernate-core:5.6.11.Final"
-    implementation "org.grails.plugins:events"
-    implementation "org.grails.plugins:views-json"
-    implementation "org.grails.plugins:views-json-templates"
-    profile "org.grails.profiles:rest-api"
-    //runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"
-    //runtimeOnly "com.h2database:h2"
-    //runtimeOnly "org.apache.tomcat:tomcat-jdbc"
-    runtimeOnly "javax.xml.bind:jaxb-api:2.3.1"
-    testImplementation "io.micronaut:micronaut-inject-groovy"
-    testImplementation "org.grails:grails-gorm-testing-support"
-    testImplementation "org.mockito:mockito-core"
-    //testImplementation "io.micronaut:micronaut-http-client"
-    testImplementation "org.grails:grails-web-testing-support"
-    //testImplementation "org.grails:views-json-testing-support"
-    //testImplementation "org.hibernate.validator:hibernate-validator:6.1.7.Final"
-
-    /*  ---- Manually installed dependencies ---- */
-    implementation 'org.grails.plugins:spring-security-core:5.2.1'
-    implementation 'com.k_int.grails:web-toolkit:8.0.1-SNAPSHOT'
-    implementation 'com.k_int.okapi:grails-okapi:6.0.1-SNAPSHOT'
-    implementation 'io.github.http-builder-ng:http-builder-ng-core:1.0.4'
-    implementation 'org.codehaus.janino:janino:3.1.9'
-    implementation "org.springframework.boot:spring-boot-starter-undertow" // Replaces spring-boot-starter-tomcat
-    implementation "org.hibernate:hibernate-java8:5.4.28.Final"
-    runtimeOnly "com.zaxxer:HikariCP:3.4.5"                             // Replaces Tomcat JDBC pool
-    runtimeOnly "org.postgresql:postgresql:42.5.3"
-    implementation ('org.grails.plugins:database-migration:4.2.0')
-
-    implementation 'com.opencsv:opencsv:5.7.1'
-    implementation 'commons-io:commons-io:2.6'
-
-
-    /*  ---- Manually installed testing dependencies ---- */
-    implementation "org.grails:grails-gorm-testing-support:2.6.1"
-    implementation "org.grails:grails-web-testing-support:2.6.1"
-    testImplementation "org.grails.plugins:geb"
-    testImplementation "org.seleniumhq.selenium:selenium-remote-driver:3.14.0"
-    testImplementation "org.seleniumhq.selenium:selenium-api:3.14.0"
-    testImplementation "org.seleniumhq.selenium:selenium-support:3.14.0"
-    testRuntimeOnly "org.seleniumhq.selenium:selenium-chrome-driver:3.14.0"
-    testRuntimeOnly "org.seleniumhq.selenium:selenium-firefox-driver:3.14.0"
-    implementation 'org.z3950.zing:cql-java:1.13'
-
-    /* ---- Custom non profile deps ---- */
-    implementation 'org.apache.kafka:kafka-clients:2.3.0'
-    implementation 'com.github.everit-org.json-schema:org.everit.json.schema:1.12.2'
-    // Better test reports.
-    testImplementation( 'com.athaydes:spock-reports:1.6.1' ) {
-        transitive = false // this avoids affecting your version of Groovy/Spock
-    }
-}
-
-bootRun {
-    ignoreExitValue true
-    jvmArgs(
-        '-Dspring.output.ansi.enabled=always', 
-        '-noverify', 
-        '-XX:TieredStopAtLevel=1',
-        '-Xmx1024m')
-    sourceResources sourceSets.main
-    String springProfilesActive = 'spring.profiles.active'
-    systemProperty springProfilesActive, System.getProperty(springProfilesActive)
+	// Check for updates every build
+	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 sourceSets {
-  main {
-    resources {
-      srcDir 'grails-app/migrations'
-    }
-  }
+	main {
+		resources {
+			srcDir 'grails-app/migrations'
+			srcDir 'src/main/okapi/tenant'
+		}
+	}
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	maven { url "https://repo.grails.org/grails/core" }
+	maven { url "https://repo.grails.org/grails/plugins" }
+	maven { url "https://jitpack.io" }
+	maven { url 'https://maven.indexdata.com/' }
+}
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+}
+
+dependencies {
+	/* ---- Grails 5 ---- */
+	//developmentOnly("org.springframework.boot:spring-boot-devtools")
+	compileOnly "io.micronaut:micronaut-inject-groovy"
+	console "org.grails:grails-console"
+	implementation "org.springframework.boot:spring-boot-starter-logging"
+	//implementation "org.springframework.boot:spring-boot-starter-validation"
+	implementation "org.springframework.boot:spring-boot-autoconfigure"
+	implementation "org.grails:grails-core"
+	implementation "org.springframework.boot:spring-boot-starter-actuator"
+	//implementation "org.springframework.boot:spring-boot-starter-tomcat"
+	implementation "org.grails:grails-plugin-url-mappings"
+	implementation "org.grails:grails-plugin-rest"
+	implementation "org.grails:grails-plugin-codecs"
+	implementation "org.grails:grails-plugin-interceptors"
+	implementation "org.grails:grails-plugin-services"
+	implementation "org.grails:grails-plugin-datasource"
+	implementation "org.grails:grails-plugin-databinding"
+	implementation "org.grails:grails-web-boot"
+	implementation "org.grails:grails-logging"
+	//implementation "org.grails.plugins:cache"
+	implementation "org.grails.plugins:async"
+	implementation "org.grails.plugins:hibernate5"
+	implementation "org.hibernate:hibernate-core:5.6.11.Final"
+	implementation "org.grails.plugins:events"
+	implementation "org.grails.plugins:views-json"
+	implementation "org.grails.plugins:views-json-templates"
+	profile "org.grails.profiles:rest-api"
+	//runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"
+	//runtimeOnly "com.h2database:h2"
+	//runtimeOnly "org.apache.tomcat:tomcat-jdbc"
+	runtimeOnly "javax.xml.bind:jaxb-api:2.3.1"
+	testImplementation "io.micronaut:micronaut-inject-groovy"
+	testImplementation "org.grails:grails-gorm-testing-support"
+	testImplementation "org.mockito:mockito-core"
+	//testImplementation "io.micronaut:micronaut-http-client"
+	testImplementation "org.grails:grails-web-testing-support"
+	//testImplementation "org.grails:views-json-testing-support"
+	//testImplementation "org.hibernate.validator:hibernate-validator:6.1.7.Final"
+
+	/*  ---- Manually installed dependencies ---- */
+	implementation 'org.grails.plugins:spring-security-core:5.2.1'
+	
+	implementation 'com.k_int.grails:web-toolkit-ce:8.0.1-SNAPSHOT'
+	implementation 'com.k_int.okapi:grails-okapi:6.0.1-SNAPSHOT'
+	
+	implementation 'io.github.http-builder-ng:http-builder-ng-core:1.0.4'
+	implementation 'org.codehaus.janino:janino:3.1.9'
+	implementation "org.springframework.boot:spring-boot-starter-undertow" // Replaces spring-boot-starter-tomcat
+	implementation "org.hibernate:hibernate-java8:5.4.28.Final"
+	runtimeOnly "com.zaxxer:HikariCP:3.4.5"                             // Replaces Tomcat JDBC pool
+	runtimeOnly "org.postgresql:postgresql:42.5.3"
+	implementation ('org.grails.plugins:database-migration:4.2.0')
+
+	implementation 'com.opencsv:opencsv:5.7.1'
+	implementation 'commons-io:commons-io:2.6'
+
+
+	/*  ---- Manually installed testing dependencies ---- */
+	implementation "org.grails:grails-gorm-testing-support:2.6.1"
+	implementation "org.grails:grails-web-testing-support:2.6.1"
+	testImplementation "org.grails.plugins:geb"
+	testImplementation "org.seleniumhq.selenium:selenium-remote-driver:3.14.0"
+	testImplementation "org.seleniumhq.selenium:selenium-api:3.14.0"
+	testImplementation "org.seleniumhq.selenium:selenium-support:3.14.0"
+	testRuntimeOnly "org.seleniumhq.selenium:selenium-chrome-driver:3.14.0"
+	testRuntimeOnly "org.seleniumhq.selenium:selenium-firefox-driver:3.14.0"
+	implementation 'org.z3950.zing:cql-java:1.13'
+
+	/* ---- Custom non profile deps ---- */
+	implementation 'org.apache.kafka:kafka-clients:2.3.0'
+	implementation 'com.github.everit-org.json-schema:org.everit.json.schema:1.12.2'
+	// Better test reports.
+	testImplementation( 'com.athaydes:spock-reports:1.6.1' ) {
+		transitive = false // this avoids affecting your version of Groovy/Spock
+	}
+}
+
+bootRun {
+	ignoreExitValue true
+	jvmArgs(
+			'-Dspring.output.ansi.enabled=always',
+			'-noverify',
+			'-XX:TieredStopAtLevel=1',
+			'-Xmx1024m')
+	sourceResources sourceSets.main
+	String springProfilesActive = 'spring.profiles.active'
+	systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }
 
 tasks.withType(GroovyCompile) {
-    configure(groovyOptions) {
-        forkOptions.jvmArgs = ['-Xmx1024m']
-    }
+	configure(groovyOptions) {
+		forkOptions.jvmArgs = ['-Xmx1024m']
+	}
 }
 
 tasks.withType(Test) {
-    useJUnitPlatform()
+	useJUnitPlatform()
+}
+
+eclipse {
+	autoBuildTasks ([
+		':processResources'
+	])
+	synchronizationTasks ([
+		':processResources'
+	])
+
+	classpath {
+		defaultOutputDir = new File(project.buildDir.canonicalPath, 'main')
+		file {
+
+			whenMerged { classpath ->
+
+				Set<String> resources = sourceSets.main?.resources?.srcDirs?.collect { it.canonicalPath }
+
+				entries.collect().each {
+
+					if (it.path =='grails-app/conf' && it.output?.toLowerCase().endsWith('test')) {
+						classpath.entries.remove( it )
+						println "Removed ${it}"
+						return
+					}
+
+					if (it.hasProperty('output') && it.output.startsWith('bin/')) {
+						it.output = 'build/' + it.output.substring(4)
+					}
+
+					// Eclude the output of the resources added to the source sets for grails.
+					// Instead we add the results of the 'processResources' tasks to the classpath later.
+					if (it.hasProperty('dir') && resources.find { res -> it.dir?.canonicalPath?.startsWith(res) } ) {
+						it.exported = false
+						it.excludes << '**/*'
+					}
+				}
+				def lib = new org.gradle.plugins.ide.eclipse.model.Library(fileReference(file("${tasks.processResources.destinationDir}")))
+				println "Adding: ${lib}"
+				entries << lib
+			}
+		}
+	}
 }
