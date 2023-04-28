@@ -56,6 +56,11 @@ sourceSets {
 	}
 }
 
+// https://github.com/grails/grails-core/issues/12181
+bootJar {
+	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}
+
 repositories {
 	mavenLocal()
 	mavenCentral()
@@ -128,6 +133,7 @@ dependencies {
 
 	implementation 'com.opencsv:opencsv:5.7.1'
 	implementation 'commons-io:commons-io:2.6'
+	implementation 'io.github.virtualdogbert:logback-groovy-config:1.14.1' // Grails 5 and up no longer supports groovy files for logback config
 
 
 	/*  ---- Manually installed testing dependencies ---- */

@@ -41,5 +41,6 @@ okapi:
 
 #    register: true
 #    deploy: true
-        
+logging:
+  config: classpath:logback-development.xml
       

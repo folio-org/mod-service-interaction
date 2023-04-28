@@ -40,3 +40,6 @@ okapi:
   service:
     host: localhost
     port: 9130
+
+logging:
+  config: classpath:logback-development.xml
