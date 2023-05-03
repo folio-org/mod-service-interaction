@@ -15,6 +15,7 @@ buildscript {
 		classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
 		classpath "org.grails.plugins:hibernate5:7.3.0"
 		classpath "org.grails.plugins:views-gradle:2.3.2"
+		classpath 'com.bmuschko:gradle-docker-plugin:6.6.1'
 	}
 }
 
@@ -41,11 +42,7 @@ apply plugin: "idea"
 //apply plugin:"war"
 apply plugin: "org.grails.grails-web"
 apply plugin: "org.grails.plugins.views-json"
-
-configurations.all {
-	// Check for updates every build
-	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
+apply plugin: 'com.bmuschko.docker-remote-api'
 
 sourceSets {
 	main {
@@ -175,7 +172,57 @@ tasks.withType(GroovyCompile) {
 }
 
 tasks.withType(Test) {
-	useJUnitPlatform()
+	//useJUnitPlatform()
+
+	systemProperty "geb.env", System.getProperty('geb.env')
+  systemProperty "geb.build.reportsDir", reporting.file("geb/integrationTest")
+  systemProperty "webdriver.chrome.driver", System.getProperty('webdriver.chrome.driver')
+  systemProperty "webdriver.gecko.driver", System.getProperty('webdriver.gecko.driver')
+}
+
+/**
+ * Docker build config.
+ */
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
+ext {
+  dockerId = "${project.dockerRepo}/${project.name}:${project.version}${dockerTagSuffix}"
+  dockerBuildDir = mkdir("${buildDir}/docker")
+}
+
+task prepareDocker(type: Copy, dependsOn: assemble) {
+  description = 'Copy files to build directory'
+  group = 'Docker'
+
+  from project.jar
+
+  // from otherfileLoc
+
+  into dockerBuildDir
+}
+
+task createDockerfile(type: Dockerfile, dependsOn: prepareDocker) {
+  description = 'Create a Dockerfile file'
+  group = 'Docker'
+
+  destFile = project.file("${dockerBuildDir}/Dockerfile")
+
+  from 'folioci/alpine-jre-openjdk11:latest'
+  instruction 'LABEL maintainer="Knowledge Integration"'
+
+  exposePort 8078
+
+  // Copying straight into the default directory should be enough
+  copyFile jar.archiveName, '/usr/verticles/application.jar'
+}
+
+task buildImage(type: DockerBuildImage, dependsOn: createDockerfile) {
+  description = 'Create Docker image to run the Grails application'
+  group = 'Docker'
+
+  inputDir = file(dockerBuildDir)
+  images.add(dockerId)
 }
 
 eclipse {
