@@ -118,7 +118,7 @@
   </if>
 
 
-  <root level="error">
+  <root level="info">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>
