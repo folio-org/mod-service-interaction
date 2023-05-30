@@ -1,11 +1,11 @@
-configurations.all {
+/* configurations.all {
 	// Check for updates every build
 	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
+} */
 
 buildscript {
 	repositories {
-		mavenLocal()
+		//mavenLocal()
 		mavenCentral()
 		maven { url "https://plugins.gradle.org/m2/" }
 		maven { url "https://repo.grails.org/grails/core" }
@@ -59,12 +59,13 @@ bootJar {
 }
 
 repositories {
-	mavenLocal()
+	//mavenLocal()
 	mavenCentral()
 	maven { url "https://repo.grails.org/grails/core" }
 	maven { url "https://repo.grails.org/grails/plugins" }
 	maven { url "https://jitpack.io" }
 	maven { url 'https://maven.indexdata.com/' }
+	maven { url "https://maven.k-int.com/repository/releases" }
 }
 
 configurations {
@@ -117,8 +118,8 @@ dependencies {
 	/*  ---- Manually installed dependencies ---- */
 	implementation 'org.grails.plugins:spring-security-core:5.2.1'
 	
-	implementation 'com.k_int.grails:web-toolkit-ce:8.0.1-SNAPSHOT'
-	implementation 'com.k_int.okapi:grails-okapi:6.0.1-SNAPSHOT'
+	implementation 'com.k_int.grails:web-toolkit-ce:8.1.0-rc.1'
+	implementation 'com.k_int.okapi:grails-okapi:6.0.0-rc.1'
 	
 	implementation 'io.github.http-builder-ng:http-builder-ng-core:1.0.4'
 	implementation 'org.codehaus.janino:janino:3.1.9'
