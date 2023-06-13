@@ -118,7 +118,7 @@ databaseChangeLog = {
   }
 
   // Add uniqueness constraint to name+version of widget definitions and types
-  changeset(author: "efreestone (manual)", id: "2021-04-14-1228-001") {
+  changeSet(author: "efreestone (manual)", id: "2021-04-14-1228-001") {
     addUniqueConstraint(columnNames: "wdef_name, wdef_definition_version", constraintName: "widget_definition_name_version_unique", tableName: "widget_definition")
     addUniqueConstraint(columnNames: "wtype_name, wtype_type_version", constraintName: "widget_type_name_version_unique", tableName: "widget_type")
   }
