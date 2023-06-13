@@ -68,9 +68,11 @@ pipeline {
 
     stage('Build Docker') {
       steps {
-        dir(env.WORKSPACE) {
-          sh "docker build --pull=true --no-cache=true -t ${env.name}:${env.dockerTagVersion} ."
+        dir(env.BUILD_DIR) {
+          sh "./gradlew $env.GRADLEW_OPTS -PdockerRepo=${env.dockerRepo} buildImage"
         }
+        // debug
+        sh "cat $env.MD"
       } 
     }
 
