@@ -1,7 +1,7 @@
-/* configurations.all {
-	// Check for updates every build
-	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-} */
+//configurations.all {
+//	// Check for updates every build
+//	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+//}
 
 buildscript {
 	repositories {
@@ -59,7 +59,7 @@ bootJar {
 }
 
 repositories {
-	//mavenLocal()
+//	mavenLocal()
 	mavenCentral()
 	maven { url "https://repo.grails.org/grails/core" }
 	maven { url "https://repo.grails.org/grails/plugins" }
@@ -119,7 +119,7 @@ dependencies {
 	implementation 'org.grails.plugins:spring-security-core:5.2.1'
 	
 	implementation 'com.k_int.grails:web-toolkit-ce:8.1.0-rc.1'
-	implementation 'com.k_int.okapi:grails-okapi:6.0.0-rc.3'
+	implementation 'com.k_int.okapi:grails-okapi:6.0.0-rc.4'
 	
 	implementation 'io.github.http-builder-ng:http-builder-ng-core:1.0.4'
 	implementation 'org.codehaus.janino:janino:3.1.9'
@@ -127,12 +127,16 @@ dependencies {
 	implementation "org.hibernate:hibernate-java8:5.4.28.Final"
 	runtimeOnly "com.zaxxer:HikariCP:3.4.5"                             // Replaces Tomcat JDBC pool
 	runtimeOnly "org.postgresql:postgresql:42.5.3"
-	implementation ('org.grails.plugins:database-migration:4.2.0')
+
+	implementation ('org.grails.plugins:database-migration:4.2.0') {
+		exclude group: 'org.liquibase', module: 'liquibase-core'
+	}
+	implementation 'org.liquibase:liquibase-core:4.17.2'
 
 	implementation 'com.opencsv:opencsv:5.7.1'
 	implementation 'commons-io:commons-io:2.6'
 	implementation 'io.github.virtualdogbert:logback-groovy-config:1.14.1' // Grails 5 and up no longer supports groovy files for logback config
-	compileOnly 'ch.qos.logback:logback-classic:1.4.7'
+//	compileOnly 'ch.qos.logback:logback-classic:1.4.7'
 
 	/*  ---- Manually installed testing dependencies ---- */
 	implementation "org.grails:grails-gorm-testing-support:2.6.1"
