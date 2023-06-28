@@ -65,6 +65,8 @@ class Application extends GrailsAutoConfiguration {
         info "Runtime CPUs reported ${Runtime.getRuntime().availableProcessors()}"
         info "Allocated ${ioThreadCount} IO Threads"
         info "Allocated ${workerThreadCount} worker threads"
+				info "JDK version: ${System.getProperty('java.version')}"
+				info "JDK vendor: ${System.getProperty('java.vendor')}"
       }
     }
     factory
