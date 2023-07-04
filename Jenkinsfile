@@ -58,18 +58,18 @@ pipeline {
       }
     }
 
-    stage('Gradle Build') { 
-      steps {
-        dir(env.BUILD_DIR) {
-          sh "./gradlew $env.GRADLEW_OPTS -PappVersion=${env.version} assemble"
-        }
-      }
-    }
+//     stage('Gradle Build') {
+//       steps {
+//         dir(env.BUILD_DIR) {
+//           sh "./gradlew $env.GRADLEW_OPTS -PdockerRepo=${env.dockerRepo} -PappVersion=${env.version} assemble"
+//         }
+//       }
+//     }
 
     stage('Build Docker') {
       steps {
         dir(env.BUILD_DIR) {
-          sh "./gradlew $env.GRADLEW_OPTS -PdockerRepo=${env.dockerRepo} buildImage"
+          sh "./gradlew $env.GRADLEW_OPTS -PdockerRepo=${env.dockerRepo} -PappVersion=${env.version} buildImage"
         }
         // debug
         sh "cat $env.MD"
@@ -101,10 +101,10 @@ pipeline {
       steps {
         script {
           docker.withRegistry('https://index.docker.io/v1/', 'DockerHubIDJenkins') {
-            sh "docker tag ${env.name}:${env.dockerTagVersion} ${env.dockerRepo}/${env.name}:latest"
-            sh "docker tag ${env.name}:${env.dockerTagVersion} ${env.dockerRepo}/${env.name}:${env.dockerTagVersion}"
-            sh "docker push ${env.dockerRepo}/${env.name}:${env.dockerTagVersion}"
-            sh "docker push ${env.dockerRepo}/${env.name}:latest"
+            sh "docker tag ${env.dockerRepo}/${env.name}:${env.dockerTagVersion} ${env.dockerRepo}/${env.name}:latest"
+//             sh "docker tag ${env.dockerRepo}/${env.name}:${env.dockerTagVersion} ${env.dockerRepo}/${env.name}:${env.dockerTagVersion}"
+             sh "docker push ${env.dockerRepo}/${env.name}:${env.dockerTagVersion}"
+             sh "docker push ${env.dockerRepo}/${env.name}:latest"
           }
         }
       }
@@ -127,8 +127,8 @@ pipeline {
   post {
     always {
       echo "Cleaning up temporary docker artifacts"
-      sh "docker rmi ${env.name}:${env.dockerTagVersion} || exit 0"
-      sh "docker rmi ${env.name}:latest || exit 0"
+//       sh "docker rmi ${env.name}:${env.dockerTagVersion} || exit 0"
+//       sh "docker rmi ${env.name}:latest || exit 0"
       sh "docker rmi ${env.dockerRepo}/${env.name}:${env.dockerTagVersion} || exit 0"
       sh "docker rmi ${env.dockerRepo}/${env.name}:latest || exit 0"
       sendNotifications currentBuild.result 
