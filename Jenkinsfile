@@ -61,7 +61,7 @@ pipeline {
 //     stage('Gradle Build') {
 //       steps {
 //         dir(env.BUILD_DIR) {
-//           sh "./gradlew $env.GRADLEW_OPTS -PappVersion=${env.dockerRepo} -PappVersion=${env.version} assemble"
+//           sh "./gradlew $env.GRADLEW_OPTS -dockerRepo=${env.dockerRepo} -PappVersion=${env.version} assemble"
 //         }
 //       }
 //     }
@@ -69,7 +69,7 @@ pipeline {
     stage('Build Docker') {
       steps {
         dir(env.BUILD_DIR) {
-          sh "./gradlew $env.GRADLEW_OPTS -PappVersion=${env.dockerRepo} -PappVersion=${env.version} buildImage"
+          sh "./gradlew $env.GRADLEW_OPTS -dockerRepo=${env.dockerRepo} -PappVersion=${env.version} buildImage"
         }
         // debug
         sh "cat $env.MD"
