@@ -69,7 +69,7 @@ pipeline {
     stage('Build Docker') {
       steps {
         dir(env.BUILD_DIR) {
-          sh "./gradlew $env.GRADLEW_OPTS -PdockerRepo=${env.dockerRepo} buildImage"
+          sh "./gradlew $env.GRADLEW_OPTS -PappVersion=${env.version} buildImage"
         }
         // debug
         sh "cat $env.MD"
