@@ -103,8 +103,8 @@ pipeline {
           docker.withRegistry('https://index.docker.io/v1/', 'DockerHubIDJenkins') {
             sh "docker tag ${env.dockerRepo}/${env.name}:${env.dockerTagVersion} ${env.dockerRepo}/${env.name}:latest"
 //             sh "docker tag ${env.dockerRepo}/${env.name}:${env.dockerTagVersion} ${env.dockerRepo}/${env.name}:${env.dockerTagVersion}"
-//             sh "docker push ${env.dockerRepo}/${env.name}:${env.dockerTagVersion}"
-//             sh "docker push ${env.dockerRepo}/${env.name}:latest"
+             sh "docker push ${env.dockerRepo}/${env.name}:${env.dockerTagVersion}"
+             sh "docker push ${env.dockerRepo}/${env.name}:latest"
           }
         }
       }
