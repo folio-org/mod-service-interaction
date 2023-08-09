@@ -1,4 +1,6 @@
 ## 2.3.0 In progress
+  * ERM-2966 Error when match and filter contain the same path root
+    * update to 'com.k_int.grails:web-toolkit-ce:8.1.0'
 
 ## 2.2.1 2023-02-20
   * ERM-2433 Bumped dependencies of postgres, opencsv, web-toolkit and grails-okapi
