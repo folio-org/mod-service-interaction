@@ -135,7 +135,7 @@ public class HousekeepingService {
                 [
                   name: 'Publication pattern number',
                   code:'publicationPatternNumber',
-                  format:'0000000000',
+                  format:'000000000',
                   checkDigitAlgo:'None',
                   outputTemplate:'sm-${generated_number}-${checksum}'
                 ],
