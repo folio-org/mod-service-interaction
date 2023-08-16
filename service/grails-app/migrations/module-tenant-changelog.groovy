@@ -10,4 +10,5 @@ databaseChangeLog = {
   include file: 'wtk/multi-value-custprops.feat.groovy'
   include file: 'wtk/hidden-appsetting.feat.groovy'
   include file: 'service-interaction-2-2.groovy'
+  include file: 'service-interaction-3-0.groovy'
 }
