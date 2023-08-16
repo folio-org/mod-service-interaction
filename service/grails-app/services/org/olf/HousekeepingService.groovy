@@ -128,6 +128,19 @@ public class HousekeepingService {
                 ],
               ]
             ],
+            [
+              name:'Serials management: Publication pattern number',
+              code:'serialsManagement_publicationPatternNumber',
+              sequences: [
+                [
+                  name: 'Publication pattern number',
+                  code:'publicationPatternNumber',
+                  format:'000000000',
+                  checkDigitAlgo:'None',
+                  outputTemplate:'sm-${generated_number}-${checksum}'
+                ],
+              ]
+            ],
           ].each { ng_defn ->
             NumberGenerator ng = NumberGenerator.findByCode(ng_defn.code) ?: new NumberGenerator(code:ng_defn.code, name:ng_defn.name).save(flush:true, failOnError:true);
             ng_defn.sequences.each { seq_defn ->
