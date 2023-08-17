@@ -4,7 +4,6 @@ databaseChangeLog = {
       column(name: "dshb_display_data", type: "text")
     }
   }
-
   changeSet(author: "efreestone (manual)", id: "2023-08-17-1207-001") {
     createTable (tableName: "dashboard_display_data" ) {
       column(name: "ddd_id", type: "VARCHAR(36)") {
