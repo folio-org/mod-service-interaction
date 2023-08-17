@@ -129,12 +129,12 @@ public class HousekeepingService {
               ]
             ],
             [
-              name:'Serials management: Publication pattern number',
-              code:'serialsManagement_publicationPatternNumber',
+              name:'Serials management: Pattern number',
+              code:'serialsManagement_patternNumber',
               sequences: [
                 [
-                  name: 'Publication pattern number',
-                  code:'publicationPatternNumber',
+                  name: 'Pattern number',
+                  code:'patternNumber',
                   format:'000000000',
                   checkDigitAlgo:'None',
                   outputTemplate:'sm-${generated_number}-${checksum}'
