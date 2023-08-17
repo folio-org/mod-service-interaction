@@ -1,0 +1,8 @@
+import  org.olf.DashboardDisplayData
+
+import groovy.transform.*
+
+@Field
+DashboardDisplayData dashboardDisplayData
+
+json g.render (dashboardDisplayData)

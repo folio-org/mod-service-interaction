@@ -26,6 +26,10 @@ class UrlMappings {
         action = [GET: 'getDashboardUsers', POST: 'editDashboardUsers']
       }
 
+      "/displayData" ( controller: 'dashboard') {
+        action = [GET: 'getDisplayData', PUT: 'editDisplayData']
+      }
+
       "/widgets" (action: 'widgets', method: 'GET')
 
       "/my-access" (action: 'myAccess', method: 'GET')

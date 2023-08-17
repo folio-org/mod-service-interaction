@@ -30,6 +30,10 @@ class DashboardService {
       defaultUserDashboard: defaultUserDashboard
     ]).save(flush:true, failOnError: true);
 
+    DashboardDisplayData dashboardDisplayData = new DashboardDisplayData([
+      dashId: dashboard.id,
+    ]).save(flush:true, failOnError: true);
+
     return dashboard;
   }
 
@@ -76,6 +80,12 @@ class DashboardService {
   public void deleteAccessObjects(String dashboardId) {
     DashboardAccess.executeUpdate("""
       DELETE FROM DashboardAccess WHERE dashboard.id = :dashId
+    """.toString(), [dashId: dashboardId])
+  }
+
+  public void deleteDisplayDataObject(String dashboardId) {
+    DashboardDisplayData.executeUpdate("""
+      DELETE FROM DashboardDisplayData WHERE dashId = :dashId
     """.toString(), [dashId: dashboardId])
   }
 
