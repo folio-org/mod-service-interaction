@@ -4,6 +4,7 @@ import grails.rest.*
 import grails.converters.*
 
 import grails.gorm.multitenancy.CurrentTenant
+import grails.gorm.transactions.Transactional
 import groovy.util.logging.Slf4j
 
 import com.k_int.okapi.OkapiTenantAwareController
@@ -126,6 +127,29 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
     getUserSpecificDashboards()
   }
 
+  public def getDisplayData() {
+    if (!canView()) {
+      response.sendError(403)
+    } else {
+      DashboardDisplayData displayData = DashboardDisplayData.findByDashId(getDashboardId())
+
+      respond displayData
+    }
+  }
+
+  @Transactional
+  public def editDisplayData() {
+    if (!canEdit()) {
+      response.sendError(403)
+    } else {
+      DashboardDisplayData displayData = DashboardDisplayData.findByDashId(getDashboardId())
+      bindData(displayData, getObjectToBind())
+      updateResource displayData
+
+      respond displayData
+    }
+  }
+
   public def widgets() {
     if (!canView()) {
       response.sendError(403)
@@ -167,6 +191,7 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
     } else {
       // Ensure you delete all dashboard access objects before the dash itself
       dashboardService.deleteAccessObjects(getDashboardId())
+      dashboardService.deleteDisplayDataObject(getDashboardId())
       super.delete()
     }
   }
