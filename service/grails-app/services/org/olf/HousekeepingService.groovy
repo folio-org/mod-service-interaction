@@ -136,7 +136,7 @@ public class HousekeepingService {
                   name: 'Pattern number',
                   code:'patternNumber',
                   format:'000000000',
-                  checkDigitAlgo:'None',
+                  checkDigitAlgo:'EAN13',
                   outputTemplate:'sm-${generated_number}-${checksum}'
                 ],
               ]
