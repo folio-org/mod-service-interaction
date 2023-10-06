@@ -1,6 +1,19 @@
-## 2.3.0 In progress
+## 3.0.0 2023-10-06
   * ERM-2966 Error when match and filter contain the same path root
     * update to 'com.k_int.grails:web-toolkit-ce:8.1.0'
+  * ERM-2940 spring-webmvc 5.3.25 security bypass vulnerability
+  * ERM-2642 Hibernate JPA Criteria SQL Injection (CVE-2020-25638)
+  * ERM-2641 Upgrade to Grails 5 (including Hibernate 5.6.x) for Poppy
+  * ERM-1795 Dashboard: apply a common set of drag and drop styles and behaviours
+    * ERM-2971 Back end changes to support storing location/dimensions of widgets
+  * SI-11 Hibernate 5.6.x for Poppy
+  * Number generators
+    * Inventory
+      * Accession number
+      * Call number
+      * Item barcode
+    * Serials management
+      * Pattern number
 
 ## 2.2.1 2023-02-20
   * ERM-2433 Bumped dependencies of postgres, opencsv, web-toolkit and grails-okapi
