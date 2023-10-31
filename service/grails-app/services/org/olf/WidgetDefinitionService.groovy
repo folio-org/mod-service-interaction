@@ -14,6 +14,14 @@ class WidgetDefinitionService {
 
   static generic_definition_schema
 
+  void resetDefinitionCache() {
+    definitions = [];
+  }
+
+  void resetImplementorCache() {
+    dashboardImplementors = [];
+  }
+
   def getGenericDefinitionSchema() {
     if (!generic_definition_schema) {
       generic_definition_schema = utilityService.getJSONFileFromClassPath("sample_data/generic_widget_definition_schema.json")
@@ -111,12 +119,15 @@ class WidgetDefinitionService {
    * Else add to list
    */
   def resolveDefinitions (List definitionList, List incomingDefinitions) {
-    // Firstly we validate all the incoming definitions
-    def validDefinitions = incomingDefinitions.findAll { id -> validateDefinition(id)}
-    
-    // Then we weed out all those where the name already exists in our list
-    parseOutExistingDefinitionNames(definitionList, validDefinitions).each {und ->
-      definitionList << und
+    // Null safety
+    if (incomingDefinitions) {
+      // Firstly we validate all the incoming definitions
+      def validDefinitions = incomingDefinitions.findAll { id -> validateDefinition(id)}
+      
+      // Then we weed out all those where the name already exists in our list
+      parseOutExistingDefinitionNames(definitionList, validDefinitions).each {und ->
+        definitionList << und
+      }
     }
   }
 
@@ -174,7 +185,7 @@ class WidgetDefinitionService {
           if (jsonReturn instanceof Collection) {
             resolveDefinitions(fetchedDefinitions, jsonReturn)
           } else {
-            log.warn("WidgetDefinitionServie::fetchDefinitions expected an array, recieved an object instead, discarding")
+            log.warn("WidgetDefinitionService::fetchDefinitions expected an array, recieved an object instead, discarding")
           }
         }
 
