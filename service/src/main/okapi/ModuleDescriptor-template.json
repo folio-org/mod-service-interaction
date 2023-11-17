@@ -185,6 +185,11 @@
           "permissionsRequired": ["servint.numberGenerator.collection.get"]
         },
         {
+          "methods": ["GET"],
+          "pathPattern": "/servint/numberGenerators/{id}",
+          "permissionsRequired": ["servint.numberGenerator.item.get"]
+        },
+        {
           "methods": ["POST"],
           "pathPattern": "/servint/numberGenerators",
           "permissionsRequired": ["servint.numberGenerator.item.post"]
@@ -203,6 +208,31 @@
           "methods": ["GET"],
           "pathPattern": "/servint/numberGenerators/getNextNumber",
           "permissionsRequired": ["servint.numberGenerator.generate"]
+        },
+        {
+          "methods": ["GET"],
+          "pathPattern": "/servint/numberGeneratorSequences",
+          "permissionsRequired": ["servint.numberGeneratorSequence.collection.get"]
+        },
+        {
+          "methods": ["GET"],
+          "pathPattern": "/servint/numberGeneratorSequences/{id}",
+          "permissionsRequired": ["servint.numberGeneratorSequence.item.get"]
+        },
+        {
+          "methods": ["POST"],
+          "pathPattern": "/servint/numberGeneratorSequences",
+          "permissionsRequired": ["servint.numberGeneratorSequence.item.post"]
+        },
+        {
+          "methods": ["PUT"],
+          "pathPattern": "/servint/numberGeneratorSequences/{id}",
+          "permissionsRequired": ["servint.numberGeneratorSequence.item.put"]
+        },
+        {
+          "methods": ["DELETE"],
+          "pathPattern": "/servint/numberGeneratorSequences/{id}",
+          "permissionsRequired": ["servint.numberGeneratorSequence.item.delete"]
         }
       ]
     },
@@ -513,7 +543,7 @@
     },
     {
       "permissionName": "servint.numberGenerator.item.get",
-      "displayName": "NumberGenerator item post",
+      "displayName": "NumberGenerator item get",
       "description": "Get a NumberGenerator item"
     },
     {
@@ -532,8 +562,33 @@
       "description": "Delete a NumberGenerator item"
     },
     {
+      "permissionName": "servint.numberGeneratorSequence.collection.get",
+      "displayName": "NumberGeneratorSequence collection get ",
+      "description": "Get a collection of NumberGeneratorSequence items"
+    },
+    {
+      "permissionName": "servint.numberGeneratorSequence.item.get",
+      "displayName": "NumberGeneratorSequence item get",
+      "description": "Get a NumberGeneratorSequence item"
+    },
+    {
+      "permissionName": "servint.numberGeneratorSequence.item.post",
+      "displayName": "NumberGeneratorSequence item post",
+      "description": "Post a NumberGeneratorSequence item"
+    },
+    {
+      "permissionName": "servint.numberGeneratorSequence.item.put",
+      "displayName": "NumberGeneratorSequence item put",
+      "description": "Put a NumberGeneratorSequence item"
+    },
+    {
+      "permissionName": "servint.numberGeneratorSequence.item.delete",
+      "displayName": "NumberGeneratorSequence item delete",
+      "description": "Delete a NumberGeneratorSequence item"
+    },
+    {
       "permissionName": "servint.numberGenerator.generate",
-      "displayName": "NumberGenerator generate",
+      "displayName": "NumberGeneratorSequence generate",
       "description": "Generate the next item in a NumberGenerator sequence"
     },
     {
@@ -542,7 +597,9 @@
       "description": "Allow user to view number generators",
       "subPermissions": [
         "servint.numberGenerator.collection.get",
-        "servint.numberGenerator.item.get"
+        "servint.numberGenerator.item.get",
+        "servint.numberGeneratorSequence.collection.get",
+        "servint.numberGeneratorSequence.item.get"
       ]
     },
     {
@@ -561,7 +618,9 @@
       "subPermissions": [
         "servint.numberGenerator.use",
         "servint.numberGenerator.item.post",
-        "servint.numberGenerator.item.put"
+        "servint.numberGenerator.item.put",
+        "servint.numberGeneratorSequence.item.post",
+        "servint.numberGeneratorSequence.item.put"
       ]
     },
     {
@@ -570,7 +629,8 @@
       "description": "Allow user to configure and delete number generators",
       "subPermissions": [
         "servint.numberGenerator.config",
-        "servint.numberGenerator.item.delete"
+        "servint.numberGenerator.item.delete",
+        "servint.numberGeneratorSequence.item.delete"
       ]
     }
   ],
