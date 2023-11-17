@@ -185,6 +185,11 @@
           "permissionsRequired": ["servint.numberGenerator.collection.get"]
         },
         {
+          "methods": ["GET"],
+          "pathPattern": "/servint/numberGenerators/{id}",
+          "permissionsRequired": ["servint.numberGenerator.item.get"]
+        },
+        {
           "methods": ["POST"],
           "pathPattern": "/servint/numberGenerators",
           "permissionsRequired": ["servint.numberGenerator.item.post"]
@@ -208,6 +213,11 @@
           "methods": ["GET"],
           "pathPattern": "/servint/numberGeneratorSequences",
           "permissionsRequired": ["servint.numberGeneratorSequence.collection.get"]
+        },
+        {
+          "methods": ["GET"],
+          "pathPattern": "/servint/numberGeneratorSequences/{id}",
+          "permissionsRequired": ["servint.numberGeneratorSequence.item.get"]
         },
         {
           "methods": ["POST"],
@@ -533,7 +543,7 @@
     },
     {
       "permissionName": "servint.numberGenerator.item.get",
-      "displayName": "NumberGenerator item post",
+      "displayName": "NumberGenerator item get",
       "description": "Get a NumberGenerator item"
     },
     {
@@ -558,7 +568,7 @@
     },
     {
       "permissionName": "servint.numberGeneratorSequence.item.get",
-      "displayName": "NumberGeneratorSequence item post",
+      "displayName": "NumberGeneratorSequence item get",
       "description": "Get a NumberGeneratorSequence item"
     },
     {
