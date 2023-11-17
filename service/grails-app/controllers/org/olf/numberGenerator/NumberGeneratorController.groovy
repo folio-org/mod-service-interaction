@@ -1,4 +1,4 @@
-package org.olf
+package org.olf.numberGenerator
 
 import grails.rest.*
 import grails.converters.*
@@ -110,4 +110,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
                                          outputTemplate:null).save(flush:true, failOnError:true);
     return result;
   }
+
+
+  
 }
