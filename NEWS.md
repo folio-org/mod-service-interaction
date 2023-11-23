@@ -1,3 +1,6 @@
+## 3.0.2 2023-11-23
+  * ERM-3112 org.json:json:20201115 DoS/OOM
+
 ## 3.0.1 2023-11-01
   * ERM-3061: On setting document filter spaces are stripped from filter value
     * Bumped kint-web-toolkit version  to 8.1.4
