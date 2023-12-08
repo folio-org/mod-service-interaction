@@ -23,7 +23,11 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
 
   public getNextNumber(String generator, String sequence) {
     log.debug("NumberGeneratorController::getNextNumber(${generator},${sequence})");
-    Map result = [:]
+    Map result = [
+      generator: generator,
+      sequence: sequence
+    ]
+
     NumberGenerator.withTransaction { status ->
       NumberGeneratorSequence ngs = NumberGeneratorSequence.createCriteria().get { 
         owner {
@@ -37,7 +41,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
         ngs = initialiseDefaultSequence(generator,sequence);
       }
 
-      log.debug("Got seq : ${ngs}");
+      //log.debug("Got seq : ${ngs}");
 
       Long next_seqno = null;
 
@@ -55,10 +59,12 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
         switch (next_seqno) {
           case null:
             result.status = 'ERROR'
+            result.errorCode = 'NoNextValue'
             result.message = 'Unable to determine next value in the sequence'
             break;
           case { ngs.maximumNumber != null && it >= ngs.maximumNumber}:
             result.status = 'ERROR'
+            result.errorCode = 'MaxReached'
             result.message = 'Number generator sequence has reached its maximum number'
             break;
           case { ngs.maximumNumberThreshold != null && it > ngs.maximumNumberThreshold}:
@@ -89,6 +95,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
         }
       } else {
         result.status = 'ERROR'
+        result.errorCode = 'NoSequence'
         result.message = "unable to locate NumberGeneratorSequence for ${generator}.${sequence}".toString()
       }
     }
