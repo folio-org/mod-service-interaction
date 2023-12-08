@@ -25,7 +25,8 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
     log.debug("NumberGeneratorController::getNextNumber(${generator},${sequence})");
     Map result = [
       generator: generator,
-      sequence: sequence
+      sequence: sequence,
+      status: 'OK'
     ]
 
     NumberGenerator.withTransaction { status ->
@@ -67,9 +68,10 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
             result.errorCode = 'MaxReached'
             result.message = 'Number generator sequence has reached its maximum number'
             break;
-          case { ngs.maximumNumberThreshold != null && it > ngs.maximumNumberThreshold}:
+          case { ngs.maximumNumberThreshold != null && it >= ngs.maximumNumberThreshold}:
             result.warningCode = 'OverThreshold'
             result.warning = 'Number generator sequence is approaching its maximum number'
+            result.status = 'WARNING'
             // Don't break out, because we still want to generate the number, just with a warning
           default:
             // Run the generator
@@ -89,14 +91,13 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
             // If the seq specifies a template, use it here, otherwise just use the default
             def number_template = engine.createTemplate(ngs.outputTemplate?:default_template).make(template_parameters)
             result.nextValue = number_template.toString();
-            result.status = 'OK'
             ngs.save(flush:true, failOnError:true);
             break;
         }
       } else {
         result.status = 'ERROR'
         result.errorCode = 'NoSequence'
-        result.message = "unable to locate NumberGeneratorSequence for ${generator}.${sequence}".toString()
+        result.message = "Unable to locate or create NumberGeneratorSequence for ${generator}.${sequence}".toString()
       }
     }
 
