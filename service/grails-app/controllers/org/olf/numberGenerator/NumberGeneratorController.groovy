@@ -76,7 +76,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
             ngs.maximumNumberThreshold != null &&
             it >= ngs.maximumNumberThreshold
           }:
-            if (ngs.maximumNumber != null && it == ngs.maximumNumber) {
+            if (ngs.maximumNumber != null && next_seqno == ngs.maximumNumber) {
               // Special case for if this is the generation which will hit the maximum
               result.warningCode = 'HitMaximum'
               result.warning = 'Number generator sequence has hit its maximum number'
