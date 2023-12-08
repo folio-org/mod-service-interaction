@@ -51,26 +51,36 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
     handleMaximumCheck();
   }
 
-  public void handleMaximumCheck() {
+  private void handleMaximumCheck() {
     if (
-      this.maximumNumber != null &&
-      this.nextValue > maximumNumber
+      maximumNumber != null &&
+      nextValue > maximumNumber
     ) {
-      this.maximumCheck = RefdataValue.lookupOrCreate('NumberGeneratorSequence.MaximumCheck', 'At maximum')
+      maximumCheck = RefdataValue.get(lookup_max_check_id('at_maximum'))
     } else if (
-      this.maximumNumber != null &&
-      this.maximumNumberThreshold != null &&
-      this.nextValue > maximumNumberThreshold
+      maximumNumber != null &&
+      maximumNumberThreshold != null &&
+      nextValue > maximumNumberThreshold
     ) {
-      this.maximumCheck = RefdataValue.lookupOrCreate('NumberGeneratorSequence.MaximumCheck', 'Over threshold')
+      maximumCheck = RefdataValue.get(lookup_max_check_id('over_threshold'))
     } else if (
-      this.maximumNumber != null &&
-      this.maximumNumberThreshold != null
+      maximumNumber != null &&
+      maximumNumberThreshold != null
     ) {
-      this.maximumCheck = RefdataValue.lookupOrCreate('NumberGeneratorSequence.MaximumCheck', 'Below threshold')
+      maximumCheck = RefdataValue.get(lookup_max_check_id('below_threshold'))
     } else {
-      this.maximumCheck = null
+      maximumCheck = null
     }
+  }
+
+  // This might not be ideal but it's the minimal impact way to do this
+  private String lookup_max_check_id(String value) {
+    RefdataValue.executeQuery("""
+      SELECT id FROM RefdataValue AS rdv
+      WHERE
+        rdv.owner.desc = 'NumberGeneratorSequence.MaximumCheck' AND
+        rdv.value = :value
+    """.toString(), [value: value])[0]
   }
 
 
@@ -95,6 +105,6 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
 
 
   public String toString() {
-    return "NumberGeneratorSequence(${owner?.code}.${code} ${prefix} ${nextValue} ${postfix} ${format} ${checkDigitAlgo?.value},${outputTemplate})".toString();
+    return "NumberGeneratorSequence(${owner?.code}.${code} ${prefix} ${nextValue} (Max:${maximumNumber}, Threshold:${maximumNumberThreshold}, Check:${maximumCheck?.value}) ${postfix} ${format} ${checkDigitAlgo?.value},${outputTemplate})".toString();
   }
 }
