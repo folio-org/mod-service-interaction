@@ -84,7 +84,7 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
                    postfix column: 'ngs_postfix'
                  nextValue column: 'ngs_next_value'
                     format column: 'ngs_format'
-            checkDigitAlgo column: 'ngs_check_digit_algorithm'
+            checkDigitAlgo column: 'ngs_check_digit_algorithm_fk'
             outputTemplate column: 'ngs_output_template'
                description column: 'ngs_description'
                    enabled column: 'ngs_enabled'
