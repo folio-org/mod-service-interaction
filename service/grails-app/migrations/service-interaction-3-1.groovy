@@ -50,7 +50,6 @@ databaseChangeLog = {
             WHERE rdv_id = ngs_check_digit_algorithm
 					)""".toString()
 				) { def row ->
-          println("LOGDEBUG ROW: ${row}")
 					sql.execute("""
 						INSERT INTO ${database.defaultSchemaName}.refdata_value
 						(rdv_id, rdv_version, rdv_value, rdv_owner, rdv_label) VALUES
