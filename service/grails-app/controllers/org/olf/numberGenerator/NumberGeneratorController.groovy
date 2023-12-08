@@ -62,6 +62,8 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
             result.status = 'ERROR'
             result.errorCode = 'NoNextValue'
             result.message = 'Unable to determine next value in the sequence'
+            // Undo any changes made to ngs
+            status.setRollbackOnly()
             break;
           case {
             ngs.maximumNumber != null &&
@@ -70,6 +72,8 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
             result.status = 'ERROR'
             result.errorCode = 'MaxReached'
             result.message = 'Number generator sequence has reached its maximum number'
+            // Undo any changes made to ngs
+            status.setRollbackOnly()
             break;
           case {
             ngs.maximumNumber != null &&
@@ -111,6 +115,8 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
         result.status = 'ERROR'
         result.errorCode = 'NoSequence'
         result.message = "Unable to locate or create NumberGeneratorSequence for ${generator}.${sequence}".toString()
+        // Undo any changes made to ngs
+        status.setRollbackOnly()
       }
     }
 
