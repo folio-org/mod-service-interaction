@@ -5,6 +5,6 @@ import groovy.transform.*
 @Field
 NumberGeneratorSequence numberGeneratorSequence
 
-json g.render (numberGeneratorSequence, [expand:['checkDigitAlgo'], excludes: []]) {
+json g.render (numberGeneratorSequence, [expand:['checkDigitAlgo', 'maximumCheck'], excludes: []]) {
 }
 
