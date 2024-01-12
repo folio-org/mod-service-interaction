@@ -113,10 +113,14 @@ dependencies {
   //runtimeOnly("org.apache.tomcat:tomcat-jdbc")
   //runtimeOnly("org.glassfish.web:el-impl:2.2.1-b05")
   testImplementation("io.micronaut:micronaut-inject-groovy")
-  
-  implementation("org.grails:grails-gorm-testing-support")
+	
+	// These for whatever reason don't work purely with testImplementation anymore
+	compileOnly("org.grails:grails-gorm-testing-support")
+  compileOnly("org.spockframework:spock-core")
+
+  testImplementation("org.grails:grails-gorm-testing-support")
   //testImplementation("org.grails:views-json-testing-support")
-  implementation("org.spockframework:spock-core")
+  testImplementation("org.spockframework:spock-core")
   //testImplementation("io.micronaut:micronaut-http-client")
 
   /*  ---- Manually installed dependencies ---- */
@@ -135,10 +139,10 @@ dependencies {
 	runtimeOnly "com.zaxxer:HikariCP:3.4.5"                             // Replaces Tomcat JDBC pool
 	runtimeOnly "org.postgresql:postgresql:42.5.3"
 
-	implementation ('org.grails.plugins:database-migration:4.2.0') {
+	implementation ('org.grails.plugins:database-migration:5.0.0-SNAPSHOT') {
 		exclude group: 'org.liquibase', module: 'liquibase-core'
 	}
-	implementation 'org.liquibase:liquibase-core:4.25.1' // Prev 4.17.2
+	implementation 'org.liquibase:liquibase-core:4.19.0' // Prev 4.17.2 -- taken from master of plugin database migration
 
 	implementation 'com.opencsv:opencsv:5.7.1'
 	implementation 'commons-io:commons-io:2.6'
