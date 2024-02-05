@@ -29,5 +29,14 @@ class AdminController {
     result.status = 'OK'
     render result as JSON
   }
+
+  public ensureDisplayData() {
+    def result = [:]
+    log.debug("AdminController::ensureDisplayData");
+    utilityService.ensureDisplayData()
+
+    result.status = 'OK'
+    render result as JSON
+  }
 }
 

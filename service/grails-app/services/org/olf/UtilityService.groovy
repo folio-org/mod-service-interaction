@@ -128,4 +128,18 @@ class UtilityService {
     }
   }
 
+  public void ensureDisplayData() {
+    log.info("UtilityService::EnsureDisplayData")
+    Dashboard.executeQuery("""
+    SELECT d.id FROM Dashboard AS d
+    LEFT JOIN DashboardDisplayData AS ddd
+    ON d.id = ddd.dashId
+    WHERE ddd.id IS NULL
+    """.toString()).each{ dashId ->
+      log.debug("Found dashboard without display data (${dashId}), creating.")
+      DashboardDisplayData ddd = new DashboardDisplayData([
+        dashId: dashId
+      ]).save(flush: true, failOnError: true);
+    }
+  }
 }
