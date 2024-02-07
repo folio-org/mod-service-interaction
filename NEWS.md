@@ -1,3 +1,7 @@
+## 3.0.3 2024-02-07
+  * SI-45 Dashboards not displaying after upgrade to Poppy
+    * New endpoint: `/servint/admin/ensureDisplayData` to add (empty) display data for all dashboards which are missing it.
+
 ## 3.0.2 2023-11-23
   * ERM-3112 org.json:json:20201115 DoS/OOM
 
