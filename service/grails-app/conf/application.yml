@@ -158,7 +158,7 @@ dataSource:
 environments:
   test:
     dataSource:
-      url: "jdbc:postgresql://${db.host:localhost}:${db.port:5432}/${db.database:okapi_modules_test}"
+      url: "jdbc:postgresql://${db.host:localhost}:${db.port:54321}/${db.database:okapi_modules_test}"
       properties:
         initialSize: 7
         minIdle: 2

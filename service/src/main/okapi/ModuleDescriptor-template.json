@@ -599,7 +599,8 @@
         "servint.numberGenerator.collection.get",
         "servint.numberGenerator.item.get",
         "servint.numberGeneratorSequence.collection.get",
-        "servint.numberGeneratorSequence.item.get"
+        "servint.numberGeneratorSequence.item.get",
+        "servint.refdata.read"
       ]
     },
     {
