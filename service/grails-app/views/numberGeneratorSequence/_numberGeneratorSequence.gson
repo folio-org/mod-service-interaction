@@ -5,6 +5,15 @@ import groovy.transform.*
 @Field
 NumberGeneratorSequence numberGeneratorSequence
 
-json g.render (numberGeneratorSequence, [expand:['checkDigitAlgo', 'maximumCheck'], excludes: []]) {
+def expand = ['checkDigitAlgo', 'maximumCheck']
+
+boolean renderOwnerSnippet = false
+if ( controllerName != 'numberGenerator' ) {
+  renderOwnerSnippet = true
 }
 
+json g.render (numberGeneratorSequence, [expand: expand, excludes: ['owner']]) {
+  if (renderOwnerSnippet) {
+    'owner' g.render(numberGeneratorSequence.owner, [includes: ['id', 'name', 'code']])
+  }
+}
