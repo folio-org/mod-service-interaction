@@ -139,7 +139,7 @@ dependencies {
 	runtimeOnly "com.zaxxer:HikariCP:3.4.5"                             // Replaces Tomcat JDBC pool
 	runtimeOnly "org.postgresql:postgresql:42.5.3"
 
-	implementation ('org.grails.plugins:database-migration:5.0.0-SNAPSHOT') {
+  implementation ('org.grails.plugins:database-migration:4.2.1') {
 		exclude group: 'org.liquibase', module: 'liquibase-core'
 	}
 	implementation 'org.liquibase:liquibase-core:4.19.0' // Prev 4.17.2 -- taken from master of plugin database migration
@@ -198,21 +198,55 @@ tasks.withType(Test) {
     useJUnitPlatform()
 }
 
+project.gradle.projectsEvaluated {
 
-/* task generateDescriptors(type: Copy) {
-  dependsOn buildProperties
+  task generateDescriptors(type: Copy) {
+    dependsOn buildProperties
 
-  File grailsBuildInfoFile = buildProperties.outputs.files.files.find { it.name == 'grails.build.info' }
+    File grailsBuildInfoFile = buildProperties.outputs.files.files.find { it.name == 'grails.build.info' }
 
-  final def props = [:]
+    final def props = [:]
 
-  if(!(grailsBuildInfoFile)) return // No need to continue if the file is not there
+    if(!(grailsBuildInfoFile)) return // No need to continue if the file is not there
 
-  doFirst {
+    doFirst {
 
-    // Place the loading within a do first as the info file from the buildProperties
-    // task will not be present until it is executed. This owuld cause a file not found
-    // during task configureation otherwise.
+      // Place the loading within a do first as the info file from the buildProperties
+      // task will not be present until it is executed. This owuld cause a file not found
+      // during task configureation otherwise.
+      Properties properties = new Properties()
+
+      // Read properties from the file
+      grailsBuildInfoFile.withInputStream {
+        properties.load(it)
+      }
+
+      // Need to parse multi-dimensional keys.
+      ConfigSlurper cs = new ConfigSlurper()
+      props.putAll(cs.parse(properties))
+    }
+
+    from ('./src/main/okapi') {
+      include '*-template.json'
+    }
+    into './build/resources/main/okapi'
+    filteringCharset = 'UTF-8'
+    expand(props)
+    rename { String fileName ->
+      fileName.replace('-template', '')
+    }
+  }
+
+  buildProperties.doLast {
+
+    // Find the right file
+    File grailsBuildInfoFile = it.outputs.files.files.find { it.name == 'grails.build.info' }
+
+    if(!grailsBuildInfoFile) {
+      System.err.println("Unable to locate grails.build.info");
+      return // No need to continue if the file is not there
+    }
+
     Properties properties = new Properties()
 
     // Read properties from the file
@@ -220,89 +254,57 @@ tasks.withType(Test) {
       properties.load(it)
     }
 
-    // Need to parse multi-dimensional keys.
-    ConfigSlurper cs = new ConfigSlurper()
-    props.putAll(cs.parse(properties))
-  }
+    // Load the app version
+    String version = properties.getProperty('info.app.version')
+    def versionParts
+    if (version && (versionParts = version =~ version_regex)) {
+      println("Version parts : ${versionParts[0]}");
+      versionParts[0].with {
+        properties.setProperty('info.app.majorVersion', it[3])
+        properties.setProperty('info.app.minorVersion', it[2])
+        properties.setProperty('info.app.patchVersion', it[1])
 
-  from ('./src/main/okapi') {
-    include '*-template.json'
-  }
-  into './build/resources/main/okapi'
-  filteringCharset = 'UTF-8'
-  expand(props)
-  rename { String fileName ->
-    fileName.replace('-template', '')
-  }
-}
+        if (it[5]) {
+          properties.setProperty('info.app.testVersion', it[5])
+        }
 
-buildProperties.doLast {
-
-  // Find the right file
-  File grailsBuildInfoFile = it.outputs.files.files.find { it.name == 'grails.build.info' }
-
-  if(!grailsBuildInfoFile) {
-    System.err.println("Unable to locate grails.build.info");
-    return // No need to continue if the file is not there
-  }
-
-  Properties properties = new Properties()
-
-  // Read properties from the file
-  grailsBuildInfoFile.withInputStream {
-    properties.load(it)
-  }
-
-  // Load the app version
-  String version = properties.getProperty('info.app.version')
-  def versionParts
-  if (version && (versionParts = version =~ version_regex)) {
-    println("Version parts : ${versionParts[0]}");
-    versionParts[0].with {
-      properties.setProperty('info.app.majorVersion', it[3])
-      properties.setProperty('info.app.minorVersion', it[2])
-      properties.setProperty('info.app.patchVersion', it[1])
-
-      if (it[5]) {
-        properties.setProperty('info.app.testVersion', it[5])
+        println("version properties: ${properties}");
       }
 
-      println("version properties: ${properties}");
+      version.replaceAll(/^(((\d+)\.\d+)\.\d+)(-([\w]+))?$/ , '$1')
+    }
+    else {
+      println("WARNING: Version regex parse failed");
     }
 
-    version.replaceAll(/^(((\d+)\.\d+)\.\d+)(-([\w]+))?$/ , '$1')
+    if(env.BUILD_NUMBER)
+      properties.setProperty('build.number', env.BUILD_NUMBER)
+
+    if ( env.GIT_REVISION )
+      properties.setProperty('build.git.revision', env.GIT_REVISION)
+
+    if ( env.GIT_BRANCH )
+      properties.setProperty('build.git.branch', env.GIT_BRANCH)
+
+    if (env.GIT_COMMIT)
+      properties.setProperty('build.git.commit', env.GIT_COMMIT)
+
+    // Add new properties from various sources
+    properties.setProperty('build.time', new Date().format("yyyy-MM-dd HH:mm:ss"))
+
+    properties.setProperty('build.host', InetAddress.localHost.hostName)
+
+    // Get a System property
+    properties.setProperty('build.java.version', System.getProperty('java.version'))
+
+    // Write the properties back to the file
+    grailsBuildInfoFile.withOutputStream {
+      properties.store(it,null)
+    }
   }
-  else {
-    println("WARNING: Version regex parse failed");
-  }
 
-  if(env.BUILD_NUMBER)
-    properties.setProperty('build.number', env.BUILD_NUMBER)
-
-  if ( env.GIT_REVISION )
-    properties.setProperty('build.git.revision', env.GIT_REVISION)
-
-  if ( env.GIT_BRANCH )
-    properties.setProperty('build.git.branch', env.GIT_BRANCH)
-
-  if (env.GIT_COMMIT)
-    properties.setProperty('build.git.commit', env.GIT_COMMIT)
-
-  // Add new properties from various sources
-  properties.setProperty('build.time', new Date().format("yyyy-MM-dd HH:mm:ss"))
-
-  properties.setProperty('build.host', InetAddress.localHost.hostName)
-
-  // Get a System property
-  properties.setProperty('build.java.version', System.getProperty('java.version'))
-
-  // Write the properties back to the file
-  grailsBuildInfoFile.withOutputStream {
-    properties.store(it,null)
-  }
+  processResources.dependsOn generateDescriptors
 }
-
-processResources.dependsOn generateDescriptors */
 
 
 tasks.withType(GroovyCompile) {
