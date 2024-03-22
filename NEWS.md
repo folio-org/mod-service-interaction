@@ -1,4 +1,6 @@
-## 3.1.0 In progress
+## 4.0.0 2024-03-22
+  * ERM-3111 Upgrade Grails from 5 to 6
+  * SI-22 Expanded owner on sequences
 
 ## 3.0.0 2023-10-06
   * ERM-2966 Error when match and filter contain the same path root
