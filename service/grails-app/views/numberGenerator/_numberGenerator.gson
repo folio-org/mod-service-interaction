@@ -5,6 +5,5 @@ import groovy.transform.*
 @Field
 NumberGenerator numberGenerator
 
-json g.render (numberGenerator, [expand:[ 'sequences' ], excludes: []]) {
-}
+json g.render (numberGenerator, [expand:[ 'sequences' ], excludes: []])
 
