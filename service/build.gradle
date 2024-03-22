@@ -1,13 +1,11 @@
-// FIXME Comment this
-configurations.all {
+/* configurations.all {
 	// Check for updates every build
 	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
+} */
 
 buildscript {
 	repositories {
-		// FIXME Comment this
-		mavenLocal()
+		//mavenLocal()
 		mavenCentral()
 		maven { url "https://plugins.gradle.org/m2/" }
 		maven { url "https://repo.grails.org/grails/core" }
@@ -15,7 +13,7 @@ buildscript {
 	}
 	dependencies {
 		classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
-		classpath "org.grails.plugins:hibernate5:8.0.2" // Prev 7.3.0 // FIXME include in upgrade docs
+		classpath "org.grails.plugins:hibernate5:8.0.2" // Prev 7.3.0 
 		classpath "org.grails.plugins:views-gradle:3.1.1" // Prev 2.3.2
 		classpath 'com.bmuschko:gradle-docker-plugin:6.6.1'
 	}
@@ -61,8 +59,7 @@ bootJar {
 }
 
 repositories {
-	// FIXME Comment this
-	mavenLocal()
+	//mavenLocal()
 	mavenCentral()
 	maven { url "https://repo.grails.org/grails/core" }
 	maven { url "https://repo.grails.org/grails/plugins" }
@@ -99,6 +96,8 @@ dependencies {
   implementation "org.hibernate:hibernate-core:5.6.15.Final"
 	implementation "org.grails.plugins:events"
 
+	implementation 'org.grails.plugins:spring-security-core:6.1.1' // Prev 5.2.1
+
   implementation "org.grails.plugins:views-json"
   implementation "org.grails.plugins:views-json-templates"
 
@@ -124,18 +123,15 @@ dependencies {
   //testImplementation("io.micronaut:micronaut-http-client")
 
   /*  ---- Manually installed dependencies ---- */
-	implementation 'org.grails.plugins:spring-security-core:6.1.1' // FIXME Prev 5.2.1
-
-  // FIXME use released version
-	implementation 'com.k_int.grails:web-toolkit-ce:8.1.5-SNAPSHOT'
-	//implementation 'com.k_int.okapi:grails-okapi:6.0.0-rc.4'
-	// FIXME Use released version
-	implementation 'com.k_int.okapi:grails-okapi:6.0.0-SNAPSHOT'
+	implementation 'com.k_int.grails:web-toolkit-ce:9.0.0'
+	implementation('com.k_int.okapi:grails-okapi:7.0.0') {
+    exclude group: 'com.vaadin.external.google', module: 'android-json'
+  }
 
 	implementation 'io.github.http-builder-ng:http-builder-ng-core:1.0.4'
 	implementation 'org.codehaus.janino:janino:3.1.9'
 	implementation "org.springframework.boot:spring-boot-starter-undertow" // Replaces spring-boot-starter-tomcat
-	implementation "org.hibernate:hibernate-java8:5.6.15.Final" // FIXME remember to ensure this is in line on grails 6 upgrade docs
+	implementation "org.hibernate:hibernate-java8"
 	runtimeOnly "com.zaxxer:HikariCP:5.1.0"                             // Replaces Tomcat JDBC pool
 	runtimeOnly "org.postgresql:postgresql:42.5.3"
 
@@ -168,10 +164,6 @@ dependencies {
 	testImplementation( 'com.athaydes:spock-reports:2.3.2-groovy-3.0' ) {
 		transitive = false // this avoids affecting your version of Groovy/Spock
 	}
-
-	// Bumping this manually to avoid potential security issue with spring-webmvc-5.3.25
-  // FIXME CHECK SPRING WEBMVC
-	//implementation 'org.springframework:spring-webmvc:5.3.28'
 }
 
 bootRun {
