@@ -1,5 +1,8 @@
 ## 4.1.0 In progress
 
+## 4.0.1 2024-03-25
+  * Fix missing spring dependencies from built jar
+
 ## 4.0.0 2024-03-22
   * ERM-3111 Upgrade Grails from 5 to 6
   * SI-22 Expanded owner on sequences
