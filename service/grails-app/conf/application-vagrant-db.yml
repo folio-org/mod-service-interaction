@@ -14,7 +14,7 @@ dataSource:
   properties:
     jmxEnabled: false
     maximumPoolSize: ${db.maxpoolsize:10}
-    transactionIsolation: TRANSACTION_READ_COMMITTEDD_COMMITTED
+    transactionIsolation: TRANSACTION_READ_COMMITTED
 ---
 server:
   host: localhost
