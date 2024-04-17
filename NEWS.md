@@ -1,5 +1,10 @@
 ## 4.1.0 In progress
 
+## 4.0.2 2024-04-17
+  * ERM-3190 DB Connections are not being released
+  * SI-52 Review outdated/vulnerable dependencies in mod-service-interaction
+  * Fixed typo in application-vagrant-db
+
 ## 4.0.1 2024-03-25
   * Fix missing spring dependencies from built jar
 
