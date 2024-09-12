@@ -1,15 +1,20 @@
 package org.olf.numberGenerator
 
+import org.olf.numberGenerator.NumberGenerator
+import org.olf.numberGenerator.NumberGeneratorSequence
+
+//import org.olf.numberGenerator.checkdigit.ModulusElevenCheckDigit;
+
 import grails.rest.*
 import grails.converters.*
 import grails.gorm.multitenancy.CurrentTenant
 import groovy.util.logging.Slf4j
 import com.k_int.okapi.OkapiTenantAwareController
-import org.olf.numgen.NumberGenerator
-import org.olf.numgen.NumberGeneratorSequence
-import java.text.DecimalFormat 
 
-import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
+import java.text.DecimalFormat
+
+import org.apache.commons.validator.routines.checkdigit.*;
+
 
 @Slf4j
 @CurrentTenant
@@ -22,7 +27,19 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
   }
 
   public getNextNumber(String generator, String sequence) {
-    log.debug("NumberGeneratorController::getNextNumber(${generator},${sequence})");
+    // FIXME testing
+    Map result = [
+      status: 'OK'
+    ];
+
+    def checkdigit = new ModulusTenCheckDigit(new int[] { 1, 2 }, false, true);
+    //def checkdigit = new ModulusCheckDigit(11);
+    //def checkdigit = new ModulusElevenCheckDigit(new int[] { 2, 3, 4, 5, 6, 7, 8, 9 });
+
+    result.calc = checkdigit.calculate("05000729801"); // Use case 3
+    //result.calc = checkdigit.calculate("01013591"); // Use case 6
+    render result as JSON;
+    /* log.debug("NumberGeneratorController::getNextNumber(${generator},${sequence})");
     Map result = [
       generator: generator,
       sequence: sequence,
@@ -120,7 +137,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
       }
     }
 
-    render result as JSON;
+    render result as JSON; */
   }
 
   // See https://www.activebarcode.com/codes/checkdigit/modulo47.html
