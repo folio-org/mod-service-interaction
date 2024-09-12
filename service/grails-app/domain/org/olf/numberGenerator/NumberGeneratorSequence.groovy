@@ -1,4 +1,4 @@
-package org.olf.numgen;
+package org.olf.numberGenerator;
 
 import grails.gorm.MultiTenant
 

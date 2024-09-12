@@ -1,4 +1,4 @@
-import org.olf.numgen.NumberGenerator
+import org.olf.numberGenerator.NumberGenerator
 
 import groovy.transform.*
 

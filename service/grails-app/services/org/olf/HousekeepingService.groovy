@@ -10,7 +10,7 @@ import grails.events.annotation.Subscriber
 import grails.gorm.multitenancy.Tenants
 import grails.gorm.transactions.Transactional
 import groovy.util.logging.Slf4j
-import org.olf.numgen.*;
+import org.olf.numberGenerator.*;
 
 
 /**
