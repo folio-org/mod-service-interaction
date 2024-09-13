@@ -27,7 +27,7 @@ public class ModulusElevenCheckDigit extends ModulusCheckDigit {
   }
 
   public ModulusElevenCheckDigit(final int[] postitionWeight, final boolean useRightPos, final boolean sumWeightedDigits) {
-    super(MODULUS_11);
+    super(11);
     this.postitionWeight = Arrays.copyOf(postitionWeight, postitionWeight.length);
     this.useRightPos = useRightPos;
     this.sumWeightedDigits = sumWeightedDigits;
@@ -42,16 +42,17 @@ public class ModulusElevenCheckDigit extends ModulusCheckDigit {
   }
 
   @Override
-  protected int toInt(final char character, final int leftPos, final int rightPos) throws CheckDigitException {
-    if (useRightPos && rightPos == 1 && character == '0') {
-      return 10;
+    public String calculate(final String code) throws CheckDigitException {
+        if (code == null || code.isEmpty()) {
+            throw new CheckDigitException("Code is missing");
+        }
+        final int modulusResult = calculateModulus(code, false);
+        println("LOGDEBUG MR: ${modulusResult}")
+        final int charValue = (modulus - modulusResult) % modulus; // This inverting step would need to be undone
+        println("LOGDEBUG CV: ${charValue}")
+
+        return toCheckDigit(charValue);
     }
-    
-    if (!useRightPos && leftPos == 1 && character == '0') {
-      return 10;
-    }
-    return super.toInt(character, leftPos, rightPos);
-  }
 
   @Override
   public boolean isValid(final String code) {

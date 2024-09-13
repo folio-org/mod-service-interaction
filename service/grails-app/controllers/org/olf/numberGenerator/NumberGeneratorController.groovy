@@ -3,7 +3,7 @@ package org.olf.numberGenerator
 import org.olf.numberGenerator.NumberGenerator
 import org.olf.numberGenerator.NumberGeneratorSequence
 
-//import org.olf.numberGenerator.checkdigit.ModulusElevenCheckDigit;
+import org.olf.numberGenerator.checkdigit.ModulusElevenCheckDigit;
 
 import grails.rest.*
 import grails.converters.*
@@ -32,11 +32,11 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
       status: 'OK'
     ];
 
-    def checkdigit = new ModulusTenCheckDigit(new int[] { 1, 2 }, false, true);
-    //def checkdigit = new ModulusCheckDigit(11);
+    def checkdigit = new ModulusTenCheckDigit(new int[] { 2, 1 }, true, true);
     //def checkdigit = new ModulusElevenCheckDigit(new int[] { 2, 3, 4, 5, 6, 7, 8, 9 });
-
-    result.calc = checkdigit.calculate("05000729801"); // Use case 3
+    //def checkdigit = new LuhnCheckDigit()
+    result.calc = checkdigit.calculate("2235600117707"); // Use case 2
+    //result.calc = checkdigit.calculate("05000729801"); // Use case 3
     //result.calc = checkdigit.calculate("01013591"); // Use case 6
     render result as JSON;
     /* log.debug("NumberGeneratorController::getNextNumber(${generator},${sequence})");
