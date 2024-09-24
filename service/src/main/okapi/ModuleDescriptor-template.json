@@ -73,13 +73,13 @@
         {
           "methods": [ "GET" ],
           "pathPattern": "/servint/dashboard/{id}/users",
-          "permissionsRequired": ["servint.dashboards.item.get"],
+          "permissionsRequired": ["servint.dashboards.access.get"],
           "permissionsDesired":["servint.dashboards.admin"]
         },
         {
           "methods": [ "POST" ],
           "pathPattern": "/servint/dashboard/{id}/users",
-          "permissionsRequired": ["servint.dashboards.item.put"],
+          "permissionsRequired": ["servint.dashboards.access.post"],
           "permissionsDesired":["servint.dashboards.admin"]
         },
         {
@@ -380,10 +380,16 @@
       "description": "Edit display data for a dashboard"
     },
     {
+      "permissionName": "servint.dashboards.access.get",
+      "displayName": "Dashboard access get",
+      "description": "Get dashboard access informaton for a dashboard"
+    },
+    {
       "permissionName": "servint.dashboards.view",
       "subPermissions": [
         "servint.dashboards.user.get",
         "servint.dashboards.item.get",
+        "servint.dashboards.access.get",
         "servint.dashboards.displayData.get"
       ]
     },
@@ -396,6 +402,11 @@
       "permissionName": "servint.dashboards.item.put",
       "displayName": "Dashboard user item put",
       "description": "Put a dashboard item for a user"
+    },
+    {
+      "permissionName": "servint.dashboards.access.post",
+      "displayName": "Dashboard access post",
+      "description": "Control dashboard access for dashboards"
     },
     {
       "permissionName": "servint.widgetTypes.collection.get",
@@ -486,6 +497,7 @@
         "servint.dashboards.user.put",
         "servint.dashboards.item.post",
         "servint.dashboards.item.put",
+        "servint.dashboards.access.post",
         "servint.dashboards.displayData.put",
         "servint.widget.create",
         "servint.widget.edit"
