@@ -207,7 +207,7 @@
         {
           "methods": ["GET"],
           "pathPattern": "/servint/numberGenerators/getNextNumber",
-          "permissionsRequired": ["servint.numberGenerator.generate"]
+          "permissionsRequired": ["servint.numberGenerator.generate.execute"]
         },
         {
           "methods": ["GET"],
@@ -611,7 +611,7 @@
       "description": "Delete a NumberGeneratorSequence item"
     },
     {
-      "permissionName": "servint.numberGenerator.generate",
+      "permissionName": "servint.numberGenerator.generate.execute",
       "displayName": "NumberGeneratorSequence generate",
       "description": "Generate the next item in a NumberGenerator sequence"
     },
@@ -633,7 +633,7 @@
       "description": "Allow user to use number generators to generate the next number in a sequence",
       "subPermissions": [
         "servint.numberGenerator.view",
-        "servint.numberGenerator.generate"
+        "servint.numberGenerator.generate.execute"
       ]
     },
     {
