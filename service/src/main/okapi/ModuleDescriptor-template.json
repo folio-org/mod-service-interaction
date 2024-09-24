@@ -628,8 +628,8 @@
       ]
     },
     {
-      "permissionName": "servint.numberGenerator.use",
-      "displayName": "NumberGenerator use",
+      "permissionName": "servint.numberGenerator.generate",
+      "displayName": "NumberGenerator generate",
       "description": "Allow user to use number generators to generate the next number in a sequence",
       "subPermissions": [
         "servint.numberGenerator.view",
@@ -637,14 +637,22 @@
       ]
     },
     {
-      "permissionName": "servint.numberGenerator.config",
-      "displayName": "NumberGenerator configure",
+      "permissionName": "servint.numberGenerator.create",
+      "displayName": "NumberGenerator create",
       "description": "Allow user to set up number generators and sequences",
       "subPermissions": [
-        "servint.numberGenerator.use",
+        "servint.numberGenerator.generate",
         "servint.numberGenerator.item.post",
+        "servint.numberGeneratorSequence.item.post"
+      ]
+    },
+    {
+      "permissionName": "servint.numberGenerator.edit",
+      "displayName": "NumberGenerator edit",
+      "description": "Allow user to set up and edit number generators and sequences",
+      "subPermissions": [
+        "servint.numberGenerator.create",
         "servint.numberGenerator.item.put",
-        "servint.numberGeneratorSequence.item.post",
         "servint.numberGeneratorSequence.item.put"
       ]
     },
@@ -653,7 +661,7 @@
       "displayName": "NumberGenerator manage",
       "description": "Allow user to configure and delete number generators",
       "subPermissions": [
-        "servint.numberGenerator.config",
+        "servint.numberGenerator.edit",
         "servint.numberGenerator.item.delete",
         "servint.numberGeneratorSequence.item.delete"
       ]
