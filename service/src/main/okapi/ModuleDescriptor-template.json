@@ -177,7 +177,7 @@
         {
           "methods": ["GET"],
           "pathPattern": "/servint/admin/*",
-          "permissionsRequired": ["servint.admin.action"]
+          "permissionsRequired": ["servint.admin.action.execute"]
         },
         {
           "methods": ["GET"],
@@ -544,7 +544,7 @@
       ]
     },
     {
-      "permissionName": "servint.admin.action",
+      "permissionName": "servint.admin.action.execute",
       "displayName": "Administrator actions",
       "description": "Allow administrator to perform actions"
     },
@@ -556,7 +556,7 @@
         "servint.widgetInstances.collection.get",
         "servint.dashboards.collection.get",
         "servint.dashboards.manage",
-        "servint.admin.action",
+        "servint.admin.action.execute",
         "servint.widgetDefinitions.manage"
       ]
     },
