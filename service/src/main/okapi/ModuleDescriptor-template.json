@@ -50,79 +50,79 @@
           "methods": [ "GET" ],
           "pathPattern": "/servint/dashboard",
           "permissionsRequired": ["servint.dashboards.collection.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "GET" ],
           "pathPattern": "/servint/dashboard/my-dashboards",
           "permissionsRequired": ["servint.dashboards.user.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "PUT" ],
           "pathPattern": "/servint/dashboard/my-dashboards",
           "permissionsRequired": ["servint.dashboards.user.put"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "GET" ],
           "pathPattern": "/servint/dashboard/{id}",
           "permissionsRequired": ["servint.dashboards.item.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "GET" ],
           "pathPattern": "/servint/dashboard/{id}/users",
           "permissionsRequired": ["servint.dashboards.access.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "POST" ],
           "pathPattern": "/servint/dashboard/{id}/users",
           "permissionsRequired": ["servint.dashboards.access.post"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "GET" ],
           "pathPattern": "/servint/dashboard/{id}/widgets",
           "permissionsRequired": ["servint.dashboards.widgets.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "GET" ],
           "pathPattern": "/servint/dashboard/{id}/my-access",
           "permissionsRequired": ["servint.dashboards.myAccess.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "GET" ],
           "pathPattern": "/servint/dashboard/{id}/displayData",
           "permissionsRequired": ["servint.dashboards.displayData.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "PUT" ],
           "pathPattern": "/servint/dashboard/{id}/displayData",
           "permissionsRequired": ["servint.dashboards.displayData.put"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "POST" ],
           "pathPattern": "/servint/dashboard",
           "permissionsRequired": ["servint.dashboards.item.post"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "PUT" ],
           "pathPattern": "/servint/dashboard/{id}",
           "permissionsRequired": ["servint.dashboards.item.put"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "DELETE" ],
           "pathPattern": "/servint/dashboard/{id}",
           "permissionsRequired": ["servint.dashboards.item.delete"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "GET" ],
@@ -143,31 +143,31 @@
           "methods": [ "GET" ],
           "pathPattern": "/servint/widgets/instances",
           "permissionsRequired": ["servint.widgetInstances.collection.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "GET" ],
           "pathPattern": "/servint/widgets/instances/{id}",
           "permissionsRequired": ["servint.widgetInstances.item.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "PUT" ],
           "pathPattern": "/servint/widgets/instances/{id}",
           "permissionsRequired": ["servint.widgetInstances.item.put"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "POST" ],
           "pathPattern": "/servint/widgets/instances",
           "permissionsRequired": ["servint.widgetInstances.item.post"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "DELETE" ],
           "pathPattern": "/servint/widgets/instances/{id}",
           "permissionsRequired": ["servint.widgetInstances.item.delete"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsDesired":["servint.dashboards.admin.allops"]
         },
         {
           "methods": [ "GET" ],
@@ -549,10 +549,16 @@
       "description": "Allow administrator to perform actions"
     },
     {
-      "permissionName": "servint.dashboards.admin",
+      "permissionName": "servint.dashboards.admin.allops",
+      "displayName": "Dashboard admin override",
+      "description": "Permission allowing user to perform any action regardless of ownership of dashboard resources"
+    },
+    {
+      "permissionName": "servint.dashboards.admin.manage",
       "displayName": "Dashboard admin",
       "description": "Allow admin access to dashboards",
       "subPermissions": [
+        "servint.dashboards.admin.allops",
         "servint.widgetInstances.collection.get",
         "servint.dashboards.collection.get",
         "servint.dashboards.manage",
