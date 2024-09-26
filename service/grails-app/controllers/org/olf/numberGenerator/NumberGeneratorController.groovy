@@ -9,7 +9,7 @@ import org.olf.numgen.NumberGenerator
 import org.olf.numgen.NumberGeneratorSequence
 import java.text.DecimalFormat 
 
-import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
+import org.apache.commons.validator.routines.checkdigit.*;
 
 @Slf4j
 @CurrentTenant
@@ -93,7 +93,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
           default:
             // Run the generator
             DecimalFormat df = ngs.format ? new DecimalFormat(ngs.format) : null;
-            String generated_number = applyPreChecksumTemplate ( df ? df.format(next_seqno) : next_seqno.toString() );
+            String generated_number = applyPreChecksumTemplate ( ngs, ( df ? df.format(next_seqno) : next_seqno.toString() ) );
             String checksum = ngs.checkDigitAlgo ? generateCheckSum(ngs.checkDigitAlgo.value, generated_number) : null;
 
             // If we don't override the template generate strings of the format
@@ -137,6 +137,8 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
 	}
 
   // See https://www.activebarcode.com/codes/checkdigit/modulo47.html
+  // See also: https://commons.apache.org/proper/commons-validator/apidocs/org/apache/commons/validator/routines/checkdigit/package-summary.html
+  // and N.B. commons already has implementations for all the ones we need
   // Remember - RefdataValue normalizes values - so EAN13 becomes ean13 here
   private String generateCheckSum(String algorithm, String value_to_check) {
     log.debug("generateCheckSum(${algorithm},${value_to_check})");
@@ -145,11 +147,29 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
       case 'ean13':
         result=new EAN13CheckDigit().calculate(value_to_check)
         break;
+      case 'modulustencheckdigit':
+        result=new ModulusTenCheckDigit().calculate(toIntArray(value_to_check))
+        break;
+      case 'isbn10checkdigit':
+        result=new ISBN10CheckDigit().calculate(value_to_check)
+        break;
+      case 'ean13checkdigit':
+        result=new EAN13CheckDigit().calculate(toIntArray(value_to_check))
+        break;
       default:
+				throw new RuntimeException("Unknown check digit algorithm ${algorithm}");
         break;
     }
     return result;
   }
+
+	private int[] toIntArray(String value) {
+    // Loop through each character in the ISBN string
+		int[] result = new int[value.length()];
+    for (int i = 0; i < value.length(); i++) {
+      result[i] = Character.getNumericValue(value.charAt(i));
+    }
+	}
 
   private NumberGeneratorSequence initialiseDefaultSequence(String generator, String sequence) {
     NumberGeneratorSequence result = null;

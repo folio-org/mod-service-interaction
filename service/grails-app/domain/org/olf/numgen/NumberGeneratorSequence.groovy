@@ -27,7 +27,7 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
   Long maximumNumberThreshold
 
   @CategoryId(defaultInternal=true)
-  @Defaults(['None', 'EAN13', 'Modulo10', 'Modulo11', 'Modulo16', 'Modulo43', 'Modulo47'])
+  @Defaults(['None', 'EAN13', 'Modulo10', 'Modulo11', 'Modulo16', 'Modulo43', 'Modulo47', 'ModulusTenCheckDigit', 'ISBN10CheckDigit'])
   RefdataValue checkDigitAlgo
 
   @CategoryId(defaultInternal=true)
@@ -98,6 +98,7 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
                     format column: 'ngs_format'
             checkDigitAlgo column: 'ngs_check_digit_algorithm_fk'
             outputTemplate column: 'ngs_output_template'
+       preChecksumTemplate column: 'ngs_pre_checksum_template'
                description column: 'ngs_description'
                    enabled column: 'ngs_enabled'
              maximumNumber column: 'ngs_maximum_number'
