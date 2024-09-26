@@ -124,6 +124,15 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
   }
 
 	private String applyPreChecksumTemplate(NumberGeneratorSequence ngs, String generated_number) {
+		String result = generated_number;
+    if ( ngs.preChecksumTemplate != null ) {
+      def engine = new groovy.text.SimpleTemplateEngine()
+      Map template_parameters = [
+				'generated_number':generated_number
+      ]
+      def pre_checksum_template = engine.createTemplate(ngs.preChecksumTemplate).make(template_parameters)
+      generated_number = pre_checksum_template.toString();
+		}
 		return generated_number;
 	}
 
