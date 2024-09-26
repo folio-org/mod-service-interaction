@@ -93,7 +93,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
           default:
             // Run the generator
             DecimalFormat df = ngs.format ? new DecimalFormat(ngs.format) : null;
-            String generated_number = df ? df.format(next_seqno) : next_seqno.toString()
+            String generated_number = applyPreChecksumTemplate ( df ? df.format(next_seqno) : next_seqno.toString() );
             String checksum = ngs.checkDigitAlgo ? generateCheckSum(ngs.checkDigitAlgo.value, generated_number) : null;
 
             // If we don't override the template generate strings of the format
@@ -122,6 +122,10 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
 
     render result as JSON;
   }
+
+	private String applyPreChecksumTemplate(NumberGeneratorSequence ngs, String generated_number) {
+		return generated_number;
+	}
 
   // See https://www.activebarcode.com/codes/checkdigit/modulo47.html
   // Remember - RefdataValue normalizes values - so EAN13 becomes ean13 here

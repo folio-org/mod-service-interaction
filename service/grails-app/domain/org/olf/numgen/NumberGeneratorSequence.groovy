@@ -16,6 +16,7 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
   String postfix
   String format
   Long nextValue
+  String preChecksumTemplate
   String outputTemplate
   String description
   Boolean enabled = Boolean.TRUE
@@ -40,6 +41,7 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
                     format(nullable: true)
             checkDigitAlgo(nullable: true)
             outputTemplate(nullable: true)
+       preChecksumTemplate(nullable: true)
                description(nullable: true)
                    enabled(nullable: true)
              maximumNumber(nullable: true)
