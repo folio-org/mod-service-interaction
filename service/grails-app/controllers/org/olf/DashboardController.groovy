@@ -42,7 +42,7 @@ class DashboardController extends OkapiTenantAwareController<DashboardController
   }
 
   public boolean hasAdminPerm() {
-    return hasAuthority('okapi.servint.dashboards.admin')
+    return hasAuthority('okapi.servint.dashboards.admin.allops')
   }
 
   public boolean matchesCurrentUser(String id) {

@@ -5,234 +5,438 @@
     {
       "id": "servint",
       "version": "${info.app.minorVersion}",
-      "handlers" : [
+      "handlers": [
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/settings*",
-          "permissionsRequired": [ "servint.settings.get" ]
+          "permissionsRequired": [
+            "servint.settings.get"
+          ]
         },
         {
-          "methods": [ "POST" ],
+          "methods": [
+            "POST"
+          ],
           "pathPattern": "/servint/settings*",
-          "permissionsRequired": [ "servint.settings.post" ]
+          "permissionsRequired": [
+            "servint.settings.post"
+          ]
         },
         {
-          "methods": [ "PUT" ],
+          "methods": [
+            "PUT"
+          ],
           "pathPattern": "/servint/settings*",
-          "permissionsRequired": [ "servint.settings.put" ]
+          "permissionsRequired": [
+            "servint.settings.put"
+          ]
         },
         {
-          "methods": [ "DELETE" ],
+          "methods": [
+            "DELETE"
+          ],
           "pathPattern": "/servint/settings*",
-          "permissionsRequired": [ "servint.settings.delete" ]
+          "permissionsRequired": [
+            "servint.settings.delete"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/refdata*",
-          "permissionsRequired": [ "servint.refdata.get" ]
+          "permissionsRequired": [
+            "servint.refdata.get"
+          ]
         },
         {
-          "methods": [ "POST" ],
+          "methods": [
+            "POST"
+          ],
           "pathPattern": "/servint/refdata*",
-          "permissionsRequired": [ "servint.refdata.post" ]
+          "permissionsRequired": [
+            "servint.refdata.post"
+          ]
         },
         {
-          "methods": [ "PUT" ],
+          "methods": [
+            "PUT"
+          ],
           "pathPattern": "/servint/refdata*",
-          "permissionsRequired": [ "servint.refdata.put" ]
+          "permissionsRequired": [
+            "servint.refdata.put"
+          ]
         },
         {
-          "methods": [ "DELETE" ],
+          "methods": [
+            "DELETE"
+          ],
           "pathPattern": "/servint/refdata*",
-          "permissionsRequired": [ "servint.refdata.delete" ]
+          "permissionsRequired": [
+            "servint.refdata.delete"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/dashboard",
-          "permissionsRequired": ["servint.dashboards.collection.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.dashboards.collection.get"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/dashboard/my-dashboards",
-          "permissionsRequired": ["servint.dashboards.user.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.dashboards.user.get"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "PUT" ],
+          "methods": [
+            "PUT"
+          ],
           "pathPattern": "/servint/dashboard/my-dashboards",
-          "permissionsRequired": ["servint.dashboards.user.put"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.dashboards.user.put"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/dashboard/{id}",
-          "permissionsRequired": ["servint.dashboards.item.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.dashboards.item.get"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/dashboard/{id}/users",
-          "permissionsRequired": ["servint.dashboards.item.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.dashboards.access.item.get"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "POST" ],
+          "methods": [
+            "POST"
+          ],
           "pathPattern": "/servint/dashboard/{id}/users",
-          "permissionsRequired": ["servint.dashboards.item.put"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.dashboards.access.item.post"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/dashboard/{id}/widgets",
-          "permissionsRequired": ["servint.dashboards.item.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.dashboards.widgets.collection.get"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/dashboard/{id}/my-access",
-          "permissionsRequired": ["servint.dashboards.item.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.dashboards.myAccess.item.get"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/dashboard/{id}/displayData",
-          "permissionsRequired": ["servint.dashboards.displayData.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.dashboards.displayData.get"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "PUT" ],
+          "methods": [
+            "PUT"
+          ],
           "pathPattern": "/servint/dashboard/{id}/displayData",
-          "permissionsRequired": ["servint.dashboards.displayData.put"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.dashboards.displayData.put"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "POST" ],
+          "methods": [
+            "POST"
+          ],
           "pathPattern": "/servint/dashboard",
-          "permissionsRequired": ["servint.dashboards.item.post"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.dashboards.item.post"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "PUT" ],
+          "methods": [
+            "PUT"
+          ],
           "pathPattern": "/servint/dashboard/{id}",
-          "permissionsRequired": ["servint.dashboards.item.put"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.dashboards.item.put"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "DELETE" ],
+          "methods": [
+            "DELETE"
+          ],
           "pathPattern": "/servint/dashboard/{id}",
-          "permissionsRequired": ["servint.dashboards.item.delete"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.dashboards.item.delete"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/widgets/definitions/global",
-          "permissionsRequired": ["servint.widgetDefinitions.collection.global.get"]
+          "permissionsRequired": [
+            "servint.widgetDefinitions.collection.global.get"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/widgets/definitions",
-          "permissionsRequired": ["servint.widgetDefinitions.collection.get"]
+          "permissionsRequired": [
+            "servint.widgetDefinitions.collection.get"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/widgets/definitions/{id}",
-          "permissionsRequired": ["servint.widgetDefinitions.item.get"]
+          "permissionsRequired": [
+            "servint.widgetDefinitions.item.get"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/widgets/instances",
-          "permissionsRequired": ["servint.widgetInstances.collection.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.widgetInstances.collection.get"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/widgets/instances/{id}",
-          "permissionsRequired": ["servint.widgetInstances.item.get"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.widgetInstances.item.get"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "PUT" ],
+          "methods": [
+            "PUT"
+          ],
           "pathPattern": "/servint/widgets/instances/{id}",
-          "permissionsRequired": ["servint.widgetInstances.item.put"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.widgetInstances.item.put"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "POST" ],
+          "methods": [
+            "POST"
+          ],
           "pathPattern": "/servint/widgets/instances",
-          "permissionsRequired": ["servint.widgetInstances.item.post"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.widgetInstances.item.post"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "DELETE" ],
+          "methods": [
+            "DELETE"
+          ],
           "pathPattern": "/servint/widgets/instances/{id}",
-          "permissionsRequired": ["servint.widgetInstances.item.delete"],
-          "permissionsDesired":["servint.dashboards.admin"]
+          "permissionsRequired": [
+            "servint.widgetInstances.item.delete"
+          ],
+          "permissionsDesired": [
+            "servint.dashboards.admin.allops"
+          ]
         },
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/widgets/types",
-          "permissionsRequired": ["servint.widgetTypes.collection.get"]
+          "permissionsRequired": [
+            "servint.widgetTypes.collection.get"
+          ]
         },
         {
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/admin/*",
-          "permissionsRequired": ["servint.admin.action"]
+          "permissionsRequired": [
+            "servint.admin.action.execute"
+          ]
         },
         {
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/numberGenerators",
-          "permissionsRequired": ["servint.numberGenerator.collection.get"]
+          "permissionsRequired": [
+            "servint.numberGenerator.collection.get"
+          ]
         },
         {
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/numberGenerators/{id}",
-          "permissionsRequired": ["servint.numberGenerator.item.get"]
+          "permissionsRequired": [
+            "servint.numberGenerator.item.get"
+          ]
         },
         {
-          "methods": ["POST"],
+          "methods": [
+            "POST"
+          ],
           "pathPattern": "/servint/numberGenerators",
-          "permissionsRequired": ["servint.numberGenerator.item.post"]
+          "permissionsRequired": [
+            "servint.numberGenerator.item.post"
+          ]
         },
         {
-          "methods": ["PUT"],
+          "methods": [
+            "PUT"
+          ],
           "pathPattern": "/servint/numberGenerators/{id}",
-          "permissionsRequired": ["servint.numberGenerator.item.put"]
+          "permissionsRequired": [
+            "servint.numberGenerator.item.put"
+          ]
         },
         {
-          "methods": ["DELETE"],
+          "methods": [
+            "DELETE"
+          ],
           "pathPattern": "/servint/numberGenerators/{id}",
-          "permissionsRequired": ["servint.numberGenerator.item.delete"]
+          "permissionsRequired": [
+            "servint.numberGenerator.item.delete"
+          ]
         },
         {
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/numberGenerators/getNextNumber",
-          "permissionsRequired": ["servint.numberGenerator.generate"]
+          "permissionsRequired": [
+            "servint.numberGenerator.generate.execute"
+          ]
         },
         {
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/numberGeneratorSequences",
-          "permissionsRequired": ["servint.numberGeneratorSequence.collection.get"]
+          "permissionsRequired": [
+            "servint.numberGeneratorSequence.collection.get"
+          ]
         },
         {
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/servint/numberGeneratorSequences/{id}",
-          "permissionsRequired": ["servint.numberGeneratorSequence.item.get"]
+          "permissionsRequired": [
+            "servint.numberGeneratorSequence.item.get"
+          ]
         },
         {
-          "methods": ["POST"],
+          "methods": [
+            "POST"
+          ],
           "pathPattern": "/servint/numberGeneratorSequences",
-          "permissionsRequired": ["servint.numberGeneratorSequence.item.post"]
+          "permissionsRequired": [
+            "servint.numberGeneratorSequence.item.post"
+          ]
         },
         {
-          "methods": ["PUT"],
+          "methods": [
+            "PUT"
+          ],
           "pathPattern": "/servint/numberGeneratorSequences/{id}",
-          "permissionsRequired": ["servint.numberGeneratorSequence.item.put"]
+          "permissionsRequired": [
+            "servint.numberGeneratorSequence.item.put"
+          ]
         },
         {
-          "methods": ["DELETE"],
+          "methods": [
+            "DELETE"
+          ],
           "pathPattern": "/servint/numberGeneratorSequences/{id}",
-          "permissionsRequired": ["servint.numberGeneratorSequence.item.delete"]
+          "permissionsRequired": [
+            "servint.numberGeneratorSequence.item.delete"
+          ]
         }
       ]
     },
@@ -242,7 +446,9 @@
       "version": "1.0",
       "handlers": [
         {
-          "methods": [ "GET" ],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/dashboard/definitions",
           "permissionsRequired": []
         }
@@ -251,16 +457,22 @@
     {
       "id": "_tenant",
       "version": "1.2",
-      "interfaceType" : "system",
+      "interfaceType": "system",
       "handlers": [
         {
-          "permissionsRequired" : [],
-          "methods": ["POST", "DELETE"],
+          "permissionsRequired": [],
+          "methods": [
+            "POST",
+            "DELETE"
+          ],
           "pathPattern": "/_/tenant"
-        }, {
-         "permissionsRequired" : [],
-         "methods" : [ "POST" ],
-         "pathPattern" : "/_/tenant/disable"
+        },
+        {
+          "permissionsRequired": [],
+          "methods": [
+            "POST"
+          ],
+          "pathPattern": "/_/tenant/disable"
         }
       ]
     }
@@ -271,19 +483,20 @@
       "displayName": "settings get",
       "description": "get settings",
       "visible": false
-    }, 
+    },
     {
       "permissionName": "servint.settings.post",
       "displayName": "settings post",
       "description": "post settings",
       "visible": false
-    }, 
+    },
     {
       "permissionName": "servint.settings.put",
       "displayName": "settings put",
       "description": "put settings",
       "visible": false
-    }, {
+    },
+    {
       "permissionName": "servint.settings.delete",
       "displayName": "settings delete",
       "description": "delete settings",
@@ -295,7 +508,7 @@
       "description": "read settings",
       "visible": false,
       "subPermissions": [
-          "servint.settings.get"
+        "servint.settings.get"
       ]
     },
     {
@@ -304,10 +517,10 @@
       "description": "write settings",
       "visible": false,
       "subPermissions": [
-          "servint.settings.read",
-          "servint.settings.post",
-          "servint.settings.put",
-          "servint.settings.delete"
+        "servint.settings.read",
+        "servint.settings.post",
+        "servint.settings.put",
+        "servint.settings.delete"
       ]
     },
     {
@@ -315,19 +528,20 @@
       "displayName": "refdata get",
       "description": "get refdata",
       "visible": false
-    }, 
+    },
     {
       "permissionName": "servint.refdata.post",
       "displayName": "refdata post",
       "description": "post refdata",
       "visible": false
-    }, 
+    },
     {
       "permissionName": "servint.refdata.put",
       "displayName": "refdata put",
       "description": "put refdata",
       "visible": false
-    }, {
+    },
+    {
       "permissionName": "servint.refdata.delete",
       "displayName": "refdata delete",
       "description": "delete refdata",
@@ -339,7 +553,7 @@
       "description": "read refdata",
       "visible": false,
       "subPermissions": [
-          "servint.refdata.get"
+        "servint.refdata.get"
       ]
     },
     {
@@ -348,10 +562,10 @@
       "description": "write refdata",
       "visible": false,
       "subPermissions": [
-          "servint.refdata.read",
-          "servint.refdata.post",
-          "servint.refdata.put",
-          "servint.refdata.delete"
+        "servint.refdata.read",
+        "servint.refdata.post",
+        "servint.refdata.put",
+        "servint.refdata.delete"
       ]
     },
     {
@@ -375,15 +589,32 @@
       "description": "Get display data for a dashboard"
     },
     {
+      "permissionName": "servint.dashboards.myAccess.item.get",
+      "displayName": "'My access' dashboard get",
+      "description": "Get my user access level for a dashboard"
+    },
+    {
       "permissionName": "servint.dashboards.displayData.put",
       "displayName": "Dashboard display data put",
       "description": "Edit display data for a dashboard"
+    },
+    {
+      "permissionName": "servint.dashboards.access.item.get",
+      "displayName": "Dashboard access get",
+      "description": "Get dashboard access informaton for a dashboard"
+    },
+    {
+      "permissionName": "servint.dashboards.widgets.collection.get",
+      "displayName": "Dashboard widget collection get",
+      "description": "Get collection of widgets for a dashboard"
     },
     {
       "permissionName": "servint.dashboards.view",
       "subPermissions": [
         "servint.dashboards.user.get",
         "servint.dashboards.item.get",
+        "servint.dashboards.access.item.get",
+        "servint.dashboards.myAccess.item.get",
         "servint.dashboards.displayData.get"
       ]
     },
@@ -398,6 +629,11 @@
       "description": "Put a dashboard item for a user"
     },
     {
+      "permissionName": "servint.dashboards.access.item.post",
+      "displayName": "Dashboard access post",
+      "description": "Control dashboard access for dashboards"
+    },
+    {
       "permissionName": "servint.widgetTypes.collection.get",
       "displayName": "WidgetTypes collection get",
       "description": "Get a collection of all WidgetTypes"
@@ -407,7 +643,6 @@
       "displayName": "WidgetDefinition collection global get",
       "description": "Get list of all WidgetDefinitions from all implementing modules"
     },
-    
     {
       "permissionName": "servint.widgetDefinitions.collection.get",
       "displayName": "WidgetDefinition collection get",
@@ -453,6 +688,7 @@
       "displayName": "Widget view",
       "description": "Allow user to view their own widgets",
       "subPermissions": [
+        "servint.dashboards.widgets.collection.get",
         "servint.widgetTypes.collection.get",
         "servint.widgetDefinitions.collection.global.get",
         "servint.widgetInstances.item.get",
@@ -486,6 +722,7 @@
         "servint.dashboards.user.put",
         "servint.dashboards.item.post",
         "servint.dashboards.item.put",
+        "servint.dashboards.access.item.post",
         "servint.dashboards.displayData.put",
         "servint.widget.create",
         "servint.widget.edit"
@@ -520,19 +757,31 @@
       ]
     },
     {
-      "permissionName": "servint.admin.action",
+      "permissionName": "servint.admin.action.execute",
       "displayName": "Administrator actions",
-      "description": "Allow administrator to perform actions"
+      "description": "Allow administrator to perform actions",
+      "replaces": [
+        "servint.admin.action"
+      ]
     },
     {
-      "permissionName": "servint.dashboards.admin",
+      "permissionName": "servint.dashboards.admin.allops",
+      "displayName": "Dashboard admin override",
+      "description": "Permission allowing user to perform any action regardless of ownership of dashboard resources",
+      "replaces": [
+        "servint.dashboards.admin"
+      ]
+    },
+    {
+      "permissionName": "servint.dashboards.admin.manage",
       "displayName": "Dashboard admin",
       "description": "Allow admin access to dashboards",
       "subPermissions": [
+        "servint.dashboards.admin.allops",
         "servint.widgetInstances.collection.get",
         "servint.dashboards.collection.get",
         "servint.dashboards.manage",
-        "servint.admin.action",
+        "servint.admin.action.execute",
         "servint.widgetDefinitions.manage"
       ]
     },
@@ -587,9 +836,12 @@
       "description": "Delete a NumberGeneratorSequence item"
     },
     {
-      "permissionName": "servint.numberGenerator.generate",
+      "permissionName": "servint.numberGenerator.generate.execute",
       "displayName": "NumberGeneratorSequence generate",
-      "description": "Generate the next item in a NumberGenerator sequence"
+      "description": "Generate the next item in a NumberGenerator sequence",
+      "replaces": [
+        "servint.numberGenerator.generate"
+      ]
     },
     {
       "permissionName": "servint.numberGenerator.view",
@@ -604,24 +856,38 @@
       ]
     },
     {
-      "permissionName": "servint.numberGenerator.use",
-      "displayName": "NumberGenerator use",
+      "permissionName": "servint.numberGenerator.number.generate",
+      "displayName": "NumberGenerator generate",
       "description": "Allow user to use number generators to generate the next number in a sequence",
       "subPermissions": [
         "servint.numberGenerator.view",
-        "servint.numberGenerator.generate"
+        "servint.numberGenerator.generate.execute"
+      ],
+      "replaces": [
+        "servint.numberGenerator.use"
       ]
     },
     {
-      "permissionName": "servint.numberGenerator.config",
-      "displayName": "NumberGenerator configure",
+      "permissionName": "servint.numberGenerator.create",
+      "displayName": "NumberGenerator create",
       "description": "Allow user to set up number generators and sequences",
       "subPermissions": [
-        "servint.numberGenerator.use",
+        "servint.numberGenerator.number.generate",
         "servint.numberGenerator.item.post",
+        "servint.numberGeneratorSequence.item.post"
+      ]
+    },
+    {
+      "permissionName": "servint.numberGenerator.edit",
+      "displayName": "NumberGenerator edit",
+      "description": "Allow user to set up and edit number generators and sequences",
+      "subPermissions": [
+        "servint.numberGenerator.create",
         "servint.numberGenerator.item.put",
-        "servint.numberGeneratorSequence.item.post",
         "servint.numberGeneratorSequence.item.put"
+      ],
+      "replaces": [
+        "servint.numberGenerator.config"
       ]
     },
     {
@@ -629,7 +895,7 @@
       "displayName": "NumberGenerator manage",
       "description": "Allow user to configure and delete number generators",
       "subPermissions": [
-        "servint.numberGenerator.config",
+        "servint.numberGenerator.edit",
         "servint.numberGenerator.item.delete",
         "servint.numberGeneratorSequence.item.delete"
       ]
@@ -640,12 +906,21 @@
     "dockerArgs": {
       "HostConfig": {
         "Memory": 1073741824,
-        "PortBindings": { "8080/tcp":  [{ "HostPort": "%p" }] }
+        "PortBindings": {
+          "8080/tcp": [
+            {
+              "HostPort": "%p"
+            }
+          ]
+        }
       }
     },
     "env": [
-      { "name": "JAVA_OPTIONS", "value": "-server -XX:+UseContainerSupport -XX:MaxRAMPercentage=55.0 -XX:+PrintFlagsFinal" }
+      {
+        "name": "JAVA_OPTIONS",
+        "value": "-server -XX:+UseContainerSupport -XX:MaxRAMPercentage=55.0 -XX:+PrintFlagsFinal"
+      }
     ],
-    "dockerPull" : false
+    "dockerPull": false
   }
 }
