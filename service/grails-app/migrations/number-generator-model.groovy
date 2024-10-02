@@ -70,4 +70,10 @@ databaseChangeLog = {
       column(name: 'ngs_name', type: "VARCHAR(100)")
     }
   }
+
+  changeSet(author: "efreestone (manual)", id: "2024-09-26-1816-001") {
+    addColumn(tableName: "number_generator_sequence") {
+      column(name: 'ngs_pre_checksum_template', type: "VARCHAR(256)")
+    }
+	}
 }
