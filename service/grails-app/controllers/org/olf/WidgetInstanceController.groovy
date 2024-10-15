@@ -45,7 +45,7 @@ class WidgetInstanceController extends OkapiTenantAwareController<WidgetInstance
   }
 
   public boolean hasAdminPerm() {
-    hasAuthority('okapi.servint.dashboards.admin')
+    hasAuthority('okapi.servint.dashboards.admin.allops')
   }
 
   public boolean matchesCurrentUser(String id) {
