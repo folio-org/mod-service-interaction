@@ -95,7 +95,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
             DecimalFormat df = ngs.format ? new DecimalFormat(ngs.format) : null;
             String generated_number = df ? df.format(next_seqno) : next_seqno.toString();
             String checksum_calculation = applyPreChecksumTemplate ( ngs, generated_number );
-            String checksum = ngs.checkDigitAlgo ? generateCheckSum(ngs.checkDigitAlgo.value, generated_number) : null;
+            String checksum = ngs.checkDigitAlgo ? generateCheckSum(ngs.checkDigitAlgo.value, checksum_calculation) : null;
 
             // If we don't override the template generate strings of the format
             // prefix-number-postfix-checksum
@@ -147,16 +147,22 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
     String result = null;
     switch(algorithm) {
       case 'ean13':
-        result=new EAN13CheckDigit().calculate(toIntArray(value_to_check))
+        result=new EAN13CheckDigit().calculate(value_to_check)
         break;
       case 'modulustencheckdigit':
         result=new ModulusTenCheckDigit().calculate(toIntArray(value_to_check))
         break;
       case 'isbn10checkdigit':
-        result=new ISBN10CheckDigit().calculate(toIntArray(value_to_check))
+        result=new ISBN10CheckDigit().calculate(value_to_check)
+        break;
+      case 'issncheckdigit':
+        result=new ISSNCheckDigit().calculate(value_to_check)
         break;
       case 'luhncheckdigit':
-        result=new LuhnCheckDigit().calculate(toIntArray(value_to_check))
+        result=new LuhnCheckDigit().calculate(value_to_check)
+        break;
+      case '1793ltrmod10':
+        result=new ModulusTenCheckDigit(new int[] { 1, 7, 9, 3 }, true).calculate(toIntArray(value_to_check))
         break;
       /* case 'ean13checkdigit': //Pretty sure this one is captured above
         result=new EAN13CheckDigit().calculate(toIntArray(value_to_check))
