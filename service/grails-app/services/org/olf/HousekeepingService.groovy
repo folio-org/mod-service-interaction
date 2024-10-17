@@ -26,41 +26,41 @@ public class HousekeepingService {
     try {
       Tenants.withId(tenant_schema_id) {
 
-        // Setup checksum refdata
+        // Setup refdata (more granular control than @Default)
         RefdataValue.withTransaction {
           [
             [
-              cat: 'NumberGeneratorSequence.CheckDigitAlgo'
-              value: 'none'
-              label: 'None'
+              cat: 'NumberGeneratorSequence.CheckDigitAlgo',
+              value: 'none',
+              label: 'None',
               defaultInternal: true
             ],
             [
-              cat: 'NumberGeneratorSequence.CheckDigitAlgo'
-              value: 'ean13'
-              label: '31RTLmod10EAN'
+              cat: 'NumberGeneratorSequence.CheckDigitAlgo',
+              value: 'ean13',
+              label: '31RTLmod10EAN',
               defaultInternal: true
             ],
             [
-              cat: 'NumberGeneratorSequence.CheckDigitAlgo'
-              value: 'modulustencheckdigit'
-              label: '173RTLmod10'
+              cat: 'NumberGeneratorSequence.CheckDigitAlgo',
+              value: 'modulustencheckdigit',
+              label: '173RTLmod10',
               defaultInternal: true
             ],
             [
-              cat: 'NumberGeneratorSequence.CheckDigitAlgo'
-              value: 'isbn10checkdigit'
-              label: '12RTLmod11ISBN10'
+              cat: 'NumberGeneratorSequence.CheckDigitAlgo',
+              value: 'isbn10checkdigit',
+              label: '12RTLmod11ISBN10',
               defaultInternal: true
-            ]
+            ],
             [
-              cat: 'NumberGeneratorSequence.CheckDigitAlgo'
-              value: 'luhncheckdigit'
-              label: '21RTLmod10Luhn'
+              cat: 'NumberGeneratorSequence.CheckDigitAlgo',
+              value: 'luhncheckdigit',
+              label: '21RTLmod10Luhn',
               defaultInternal: true
             ]
           ].each { rdv ->
-            RefdataValue.lookupOrCreate(rdv.cat, rdv.label, rdv.value, rdv.defaultInternal)
+            RefdataValue.lookupOrCreate(rdv.cat, rdv.label, rdv.value, rdv.defaultInternal);
           }
         }
 
