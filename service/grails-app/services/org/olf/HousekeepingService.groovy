@@ -237,8 +237,18 @@ public class HousekeepingService {
                   nextValue: 771962,
                   checkDigitAlgo:'1793ltrmod10',
                   preChecksumTemplate: null, // Not required for this use case
-                  outputTemplate:'${generated_number}${checksum}077',
+                  outputTemplate:'${generated_number}${inverted_checksum}077',
                   note: 'Starting value for use case example is 771962'
+                ],
+                [
+                  name: 'mod10 test',
+                  code:'mod10Test',
+                  format:'00000000',
+                  nextValue: 21378636,
+                  checkDigitAlgo:'modulustencheckdigit',
+                  preChecksumTemplate: '123${generated_number}', // Not required for this use case
+                  outputTemplate:'${checksum_calculation}${checksum}',
+                  note: 'Starting value for use case example is 21378636'
                 ]
               ]
             ],
@@ -252,8 +262,10 @@ public class HousekeepingService {
                         code: seq_defn.code,
                         format: seq_defn.format,
                         name: seq_defn.name,
-                        nextValue: 1,
+                        nextValue: seq_defn.nextValue ?: 1,
+                        note: seq_defn.note,
                         checkDigitAlgo: seq_defn.checkDigitAlgo ? RefdataValue.lookupOrCreate('NumberGeneratorSequence.CheckDigitAlgo',seq_defn.checkDigitAlgo) : null,
+                        preChecksumTemplate: seq_defn.preChecksumTemplate,
                         outputTemplate:seq_defn.outputTemplate
                       ).save(flush:true, failOnError:true)
               }
