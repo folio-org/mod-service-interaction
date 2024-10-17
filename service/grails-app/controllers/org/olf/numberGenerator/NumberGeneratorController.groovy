@@ -93,15 +93,17 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
           default:
             // Run the generator
             DecimalFormat df = ngs.format ? new DecimalFormat(ngs.format) : null;
-            String generated_number = applyPreChecksumTemplate ( ngs, ( df ? df.format(next_seqno) : next_seqno.toString() ) );
+            String generated_number = df ? df.format(next_seqno) : next_seqno.toString();
+            String checksum_calculation = applyPreChecksumTemplate ( ngs, generated_number );
             String checksum = ngs.checkDigitAlgo ? generateCheckSum(ngs.checkDigitAlgo.value, generated_number) : null;
 
             // If we don't override the template generate strings of the format
             // prefix-number-postfix-checksum
             Map template_parameters = [
-                        'prefix': ngs.prefix,
+                        'prefix': ngs.prefix, // Deprecated
               'generated_number': generated_number,
-                      'postfix': ngs.postfix,
+              'checksum_calculation': checksum_calculation, // Not sure about this naming rn
+                      'postfix': ngs.postfix, // Deprecated
                       'checksum': checksum
             ]
             def engine = new groovy.text.SimpleTemplateEngine()
@@ -145,17 +147,20 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
     String result = null;
     switch(algorithm) {
       case 'ean13':
-        result=new EAN13CheckDigit().calculate(value_to_check)
+        result=new EAN13CheckDigit().calculate(toIntArray(value_to_check))
         break;
       case 'modulustencheckdigit':
         result=new ModulusTenCheckDigit().calculate(toIntArray(value_to_check))
         break;
       case 'isbn10checkdigit':
-        result=new ISBN10CheckDigit().calculate(value_to_check)
+        result=new ISBN10CheckDigit().calculate(toIntArray(value_to_check))
         break;
-      case 'ean13checkdigit':
+      case 'luhncheckdigit':
+        result=new LuhnCheckDigit().calculate(toIntArray(value_to_check))
+        break;
+      /* case 'ean13checkdigit': //Pretty sure this one is captured above
         result=new EAN13CheckDigit().calculate(toIntArray(value_to_check))
-        break;
+        break; */
       default:
 				throw new RuntimeException("Unknown check digit algorithm ${algorithm}");
         break;
@@ -164,7 +169,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
   }
 
 	private int[] toIntArray(String value) {
-    // Loop through each character in the ISBN string
+    // Loop through each character in the string
 		int[] result = new int[value.length()];
     for (int i = 0; i < value.length(); i++) {
       result[i] = Character.getNumericValue(value.charAt(i));
