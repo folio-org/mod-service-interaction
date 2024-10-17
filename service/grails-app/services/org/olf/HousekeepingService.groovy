@@ -55,6 +55,12 @@ public class HousekeepingService {
             ],
             [
               cat: 'NumberGeneratorSequence.CheckDigitAlgo',
+              value: '12ltrmod10',
+              label: '12LTRmod10',
+              defaultInternal: true
+            ],
+            [
+              cat: 'NumberGeneratorSequence.CheckDigitAlgo',
               value: 'isbn10checkdigit',
               label: '12RTLmod11ISBN10',
               defaultInternal: true
@@ -237,7 +243,7 @@ public class HousekeepingService {
                   nextValue: 771962,
                   checkDigitAlgo:'1793ltrmod10',
                   preChecksumTemplate: null, // Not required for this use case
-                  outputTemplate:'${generated_number}${inverted_checksum}077',
+                  outputTemplate:'${generated_number}${inverted_checksum}077', // inverse_checksum required for use case
                   note: 'Starting value for use case example is 771962'
                 ],
                 [
@@ -246,9 +252,19 @@ public class HousekeepingService {
                   format:'00000000',
                   nextValue: 21378636,
                   checkDigitAlgo:'modulustencheckdigit',
-                  preChecksumTemplate: '123${generated_number}', // Not required for this use case
+                  preChecksumTemplate: '123${generated_number}',
                   outputTemplate:'${checksum_calculation}${checksum}',
                   note: 'Starting value for use case example is 21378636'
+                ],
+                [
+                  name: '12 LTR mod10 test',
+                  code:'12ltrmod10test',
+                  format:'0000000',
+                  nextValue: 7298,
+                  checkDigitAlgo:'12ltrmod10',
+                  preChecksumTemplate: '05${generated_number}01',
+                  outputTemplate:'${checksum_calculation}${inverted_checksum}', // inverse_checksum required for use case
+                  note: 'Starting value for use case example is 7298'
                 ]
               ]
             ],

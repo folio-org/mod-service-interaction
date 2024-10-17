@@ -178,6 +178,10 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
         cs = new ModulusTenCheckDigit(new int[] { 1, 7, 9, 3 }, false).calculate(value_to_check);
         invertedCs = invertChecksum(cs);
         break;
+      case '12ltrmod10':
+        cs = new ModulusTenCheckDigit(new int[] { 1, 2 }, false).calculate(value_to_check);
+        invertedCs = invertChecksum(cs);
+        break;
       /* case 'ean13checkdigit': //Pretty sure this one is captured above
         result=new EAN13CheckDigit().calculate(toIntArray(value_to_check))
         break; */
