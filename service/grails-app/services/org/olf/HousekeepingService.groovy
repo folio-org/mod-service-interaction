@@ -40,7 +40,13 @@ public class HousekeepingService {
               code:'openAccess',
               name:'Open access: Publication request number',
               sequences: [
-                [ name: 'Request sequence', code:'requestSequence',     'format':'000000000',         'checkDigitAlgo':'EAN13',    'outputTemplate':'oa-${generated_number}-${checksum}' ]
+                [
+                  name: 'Request sequence',
+                  code:'requestSequence',
+                  'format':'000000000',
+                  'checkDigitAlgo':'None',
+                  'outputTemplate':'oa-${generated_number}'
+                ]
               ]
             ],
             [
@@ -53,7 +59,13 @@ public class HousekeepingService {
               code:'patronRequest',
               name:'ILL: Patron request number',
               sequences: [
-                [ name: 'Request sequence', code:'requestSequence',     'format':'000000000',         'checkDigitAlgo':'EAN13',    'outputTemplate':'ill-${generated_number}-${checksum}' ]
+                [
+                  name: 'Request sequence',
+                  code:'requestSequence',
+                  'format':'000000000',
+                  'checkDigitAlgo':'EAN13',
+                  'outputTemplate':'ill-${generated_number}-${checksum}'
+                ]
               ]
             ],
             [
@@ -136,8 +148,8 @@ public class HousekeepingService {
                   name: 'Pattern number',
                   code:'patternNumber',
                   format:'000000000',
-                  checkDigitAlgo:'EAN13',
-                  outputTemplate:'sm-${generated_number}-${checksum}'
+                  checkDigitAlgo:'None',
+                  outputTemplate:'pattern-${generated_number}'
                 ],
               ]
             ],
