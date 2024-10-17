@@ -4,7 +4,6 @@ import com.k_int.okapi.OkapiTenantResolver
 import com.k_int.web.toolkit.custprops.CustomPropertyDefinition
 import com.k_int.web.toolkit.refdata.RefdataCategory
 import com.k_int.web.toolkit.refdata.RefdataValue;
-import com.k_int.web.toolkit.settings.AppSetting
 
 import grails.events.annotation.Subscriber
 import grails.gorm.multitenancy.Tenants
@@ -27,8 +26,46 @@ public class HousekeepingService {
     try {
       Tenants.withId(tenant_schema_id) {
 
+        // Setup checksum refdata
+        RefdataValue.withTransaction {
+          [
+            [
+              cat: 'NumberGeneratorSequence.CheckDigitAlgo'
+              value: 'none'
+              label: 'None'
+              defaultInternal: true
+            ],
+            [
+              cat: 'NumberGeneratorSequence.CheckDigitAlgo'
+              value: 'ean13'
+              label: '31RTLmod10EAN'
+              defaultInternal: true
+            ],
+            [
+              cat: 'NumberGeneratorSequence.CheckDigitAlgo'
+              value: 'modulustencheckdigit'
+              label: '173RTLmod10'
+              defaultInternal: true
+            ],
+            [
+              cat: 'NumberGeneratorSequence.CheckDigitAlgo'
+              value: 'isbn10checkdigit'
+              label: '12RTLmod11ISBN10'
+              defaultInternal: true
+            ]
+            [
+              cat: 'NumberGeneratorSequence.CheckDigitAlgo'
+              value: 'luhncheckdigit'
+              label: '21RTLmod10Luhn'
+              defaultInternal: true
+            ]
+          ].each { rdv ->
+            RefdataValue.lookupOrCreate(rdv.cat, rdv.label, rdv.value, rdv.defaultInternal)
+          }
+        }
+
         // Load default sequences available for all installations
-        AppSetting.withTransaction {
+        NumberGeneratorSequence.withTransaction {
           [
             [
               /*
@@ -43,9 +80,9 @@ public class HousekeepingService {
                 [
                   name: 'Request sequence',
                   code:'requestSequence',
-                  'format':'000000000',
-                  'checkDigitAlgo':'None',
-                  'outputTemplate':'oa-${generated_number}'
+                  format:'000000000',
+                  checkDigitAlgo:'None',
+                  outputTemplate:'oa-${generated_number}'
                 ]
               ]
             ],
@@ -62,9 +99,9 @@ public class HousekeepingService {
                 [
                   name: 'Request sequence',
                   code:'requestSequence',
-                  'format':'000000000',
-                  'checkDigitAlgo':'EAN13',
-                  'outputTemplate':'ill-${generated_number}-${checksum}'
+                  format:'000000000',
+                  checkDigitAlgo:'EAN13',
+                  outputTemplate:'ill-${generated_number}-${checksum}'
                 ]
               ]
             ],
