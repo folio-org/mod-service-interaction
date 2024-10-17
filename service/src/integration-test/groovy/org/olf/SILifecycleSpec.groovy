@@ -45,17 +45,24 @@ class SILifecycleSpec extends BaseSpec {
           [ 'name': 'staff',     'code': 'staff',     'prefix':'staff',     'postfix':'test',     'format':'000,000,000',       'enabled':true ],
           [ 'name': 'noformat',  'code': 'noformat',  'prefix':'nf',        'enabled':true ],
           [ 'name': 'highinit',  'code': 'highinit',  'prefix':'hi',        'format':'000000000', 'nextValue':100000,           'enabled':true ],
-          [ 'name': 'mod10test', 'code': 'mod10test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'Modulo10', 'enabled':true ],
-          [ 'name': 'mod11test', 'code': 'mod11test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'Modulo11', 'enabled':true ],
-          [ 'name': 'mod16test', 'code': 'mod16test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'Modulo16', 'enabled':true ],
-          [ 'name': 'mod43test', 'code': 'mod43test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'Modulo43' ],
-          [ 'name': 'mod47test', 'code': 'mod47test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'Modulo47' ],
+          [ 'name': 'mod10test', 'code': 'mod10test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'ModulusTenCheckDigit', 'enabled':true ],
+          [ 'name': 'mod11test', 'code': 'mod11test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'ISBN10CheckDigit', 'enabled':true ],
           [ 'name': '069',       'code': '069',       'prefix':'069',       'postfix':'1',        'format':'000000000',         'enabled':true,  'nextValue':1,   'checkDigitAlgo':'EAN13' ],
           [ 'name': '0698',      'code': '0698',      'format':'000000000', 'nextValue':1,        'checkDigitAlgo': 'EAN13',    'enabled':true,  'outputTemplate':'0698${generated_number}${checksum}',  ],
           [ 'name': '0699',      'code': '0699',      'format':'000000000', 'nextValue':1,        'checkDigitAlgo': 'EAN13',    'enabled':true,  'outputTemplate':'0699-${generated_number}-${checksum}-post'],
           [ 'name': '0700',      'code': '0700',      'format':'000000000', 'nextValue':1,        'checkDigitAlgo': 'EAN13',    'enabled':true,  'outputTemplate':'0700-${generated_number.substring(0,4)}-${checksum}-${generated_number.substring(4,9)}-post'],
           [ 'name': 'DD',        'code': 'DD',        'prefix':'DD',        'format':'000000000', 'nextValue':1,                'enabled':true ],
-          [ 'name': 'distest',   'code': 'distest',   'prefix':'DD',        'format':'000000000', 'nextValue':1,                'enabled':false, 'description': 'THis one is disabled' ]
+          [ 'name': 'distest',   'code': 'distest',   'prefix':'DD',        'format':'000000000', 'nextValue':1,                'enabled':false, 'description': 'THis one is disabled' ],
+					// All the things
+          [ 'name': '0800',      
+            'code': '0800',      
+            'format':'000000000', 
+            'nextValue':1,        
+            'checkDigitAlgo': 'EAN13',    
+            'enabled':true,  
+            'outputTemplate':'0700-${generated_number}-${checksum}-post',
+            'preChecksumTemplate':'100${generated_number}001'
+          ],
         ]
       ]
 
@@ -80,12 +87,14 @@ class SILifecycleSpec extends BaseSpec {
       'TSTUserBarcode' | 'staff'     | 200 | 'staff-000,000,001-test'  | DEFAULT_TEMPLATE
       'TSTUserBarcode' | 'noformat'  | 200 | 'nf-1'                    | DEFAULT_TEMPLATE
       'TSTUserBarcode' | 'highinit'  | 200 | 'hi-000100000'            | DEFAULT_TEMPLATE
-      'TSTUserBarcode' | 'mod10test' | 200 | '000100000'               | DEFAULT_TEMPLATE
+			// ISBN==mod11
+      'TSTUserBarcode' | 'mod11test' | 200 | '000100000-4'             | DEFAULT_TEMPLATE
       'TSTUserBarcode' | '069'       | 200 | '069-000000001-1-7'       | DEFAULT_TEMPLATE
       'TSTUserBarcode' | '0698'      | 200 | '06980000000017'          | '0698${generated_number}${checksum}'
       'TSTUserBarcode' | '0699'      | 200 | '0699-000000001-7-post'   | '0699-${generated_number}-${checksum}-post'
       'TSTUserBarcode' | '0700'      | 200 | '0700-0000-7-00001-post'  | '0700-${generated_number.substring(0,4)}-${checksum}-${generated_number.substring(5,9)}-post'
       'TSTUserBarcode' | 'DD'        | 200 | 'DD-000000001'            | DEFAULT_TEMPLATE
+      'TSTUserBarcode' | '0800'      | 200 | '0700-100000000001001-3-post' | '0700-${generated_number}-${checksum}-post'
   }
 
   void "Get Number Generator Record"() {
