@@ -43,12 +43,6 @@ public class HousekeepingService {
             ],
             [
               cat: 'NumberGeneratorSequence.CheckDigitAlgo',
-              value: 'modulustencheckdigit',
-              label: '173RTLmod10',
-              defaultInternal: true
-            ],
-            [
-              cat: 'NumberGeneratorSequence.CheckDigitAlgo',
               value: '1793ltrmod10',
               label: '1793LTRmod10',
               defaultInternal: true
@@ -245,16 +239,6 @@ public class HousekeepingService {
                   preChecksumTemplate: null, // Not required for this use case
                   outputTemplate:'${generated_number}${inverted_checksum}077', // inverse_checksum required for use case
                   note: 'Starting value for use case example is 771962'
-                ],
-                [
-                  name: 'mod10 test',
-                  code:'mod10Test',
-                  format:'00000000',
-                  nextValue: 21378636,
-                  checkDigitAlgo:'modulustencheckdigit',
-                  preChecksumTemplate: '123${generated_number}',
-                  outputTemplate:'${checksum_calculation}${checksum}',
-                  note: 'Starting value for use case example is 21378636'
                 ],
                 [
                   name: '12 LTR mod10 test',
