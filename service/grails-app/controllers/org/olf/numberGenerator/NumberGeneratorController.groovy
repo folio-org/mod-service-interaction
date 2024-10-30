@@ -9,7 +9,7 @@ import org.olf.numgen.NumberGenerator
 import org.olf.numgen.NumberGeneratorSequence
 import java.text.DecimalFormat 
 
-import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
+import org.apache.commons.validator.routines.checkdigit.*;
 
 @Slf4j
 @CurrentTenant
@@ -93,16 +93,19 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
           default:
             // Run the generator
             DecimalFormat df = ngs.format ? new DecimalFormat(ngs.format) : null;
-            String generated_number = df ? df.format(next_seqno) : next_seqno.toString()
-            String checksum = ngs.checkDigitAlgo ? generateCheckSum(ngs.checkDigitAlgo.value, generated_number) : null;
+            String generated_number = df ? df.format(next_seqno) : next_seqno.toString();
+            String checksum_calculation = applyPreChecksumTemplate ( ngs, generated_number );
+            List<String> checksum = ngs.checkDigitAlgo ? generateCheckSum(ngs.checkDigitAlgo.value, checksum_calculation) : [null, null];
 
             // If we don't override the template generate strings of the format
             // prefix-number-postfix-checksum
             Map template_parameters = [
-                        'prefix': ngs.prefix,
-              'generated_number': generated_number,
-                      'postfix': ngs.postfix,
-                      'checksum': checksum
+                            prefix: ngs.prefix, // Deprecated
+                  generated_number: generated_number,
+              checksum_calculation: checksum_calculation, // Not sure about this naming rn
+                           postfix: ngs.postfix, // Deprecated
+                          checksum: checksum[0],
+                 inverted_checksum: checksum[1]
             ]
             def engine = new groovy.text.SimpleTemplateEngine()
             // If the seq specifies a template, use it here, otherwise just use the default
@@ -123,20 +126,76 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
     render result as JSON;
   }
 
+	private String applyPreChecksumTemplate(NumberGeneratorSequence ngs, String generated_number) {
+		String result = generated_number;
+    if ( ngs.preChecksumTemplate != null ) {
+      def engine = new groovy.text.SimpleTemplateEngine()
+      Map template_parameters = [
+				'generated_number':generated_number
+      ]
+      def pre_checksum_template = engine.createTemplate(ngs.preChecksumTemplate).make(template_parameters)
+      generated_number = pre_checksum_template.toString();
+		}
+		return generated_number;
+	}
+
+  private String invertChecksum(String checksum, int base = 10) {
+    return (base - Integer.parseInt(checksum)).toString();
+  }
+
   // See https://www.activebarcode.com/codes/checkdigit/modulo47.html
+  // See also: https://commons.apache.org/proper/commons-validator/apidocs/org/apache/commons/validator/routines/checkdigit/package-summary.html
+  // and N.B. commons already has implementations for all the ones we need
   // Remember - RefdataValue normalizes values - so EAN13 becomes ean13 here
-  private String generateCheckSum(String algorithm, String value_to_check) {
+
+  // Returns List<String>, with checksum first and "inverse" checksum second
+  private List<String> generateCheckSum(String algorithm, String value_to_check) {
     log.debug("generateCheckSum(${algorithm},${value_to_check})");
-    String result = null;
+    String cs = null;
+    String invertedCs = null;
     switch(algorithm) {
       case 'ean13':
-        result=new EAN13CheckDigit().calculate(value_to_check)
+        cs = new EAN13CheckDigit().calculate(value_to_check);
+        invertedCs = invertChecksum(cs);
         break;
+      case 'isbn10checkdigit':
+        cs = new ISBN10CheckDigit().calculate(value_to_check);
+        invertedCs = invertChecksum(cs, 11);
+        break;
+      case 'issncheckdigit':
+        cs = new ISSNCheckDigit().calculate(value_to_check);
+        invertedCs = invertChecksum(cs);
+        break;
+      case 'luhncheckdigit':
+        cs = new LuhnCheckDigit().calculate(value_to_check);
+        invertedCs = invertChecksum(cs);
+        break;
+      case '1793ltrmod10':
+        cs = new ModulusTenCheckDigit(new int[] { 1, 7, 9, 3 }, false).calculate(value_to_check);
+        invertedCs = invertChecksum(cs);
+        break;
+      case '12ltrmod10':
+        cs = new ModulusTenCheckDigit(new int[] { 1, 2 }, false).calculate(value_to_check);
+        invertedCs = invertChecksum(cs);
+        break;
+      /* case 'ean13checkdigit': //Pretty sure this one is captured above
+        result=new EAN13CheckDigit().calculate(toIntArray(value_to_check))
+        break; */
       default:
+				throw new RuntimeException("Unknown check digit algorithm ${algorithm}");
         break;
     }
-    return result;
+
+    return [cs, invertedCs];
   }
+
+	private int[] toIntArray(String value) {
+    // Loop through each character in the string
+		int[] result = new int[value.length()];
+    for (int i = 0; i < value.length(); i++) {
+      result[i] = Character.getNumericValue(value.charAt(i));
+    }
+	}
 
   private NumberGeneratorSequence initialiseDefaultSequence(String generator, String sequence) {
     NumberGeneratorSequence result = null;

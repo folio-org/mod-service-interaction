@@ -16,6 +16,7 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
   String postfix
   String format
   Long nextValue
+  String preChecksumTemplate
   String outputTemplate
   String description
   Boolean enabled = Boolean.TRUE
@@ -25,8 +26,9 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
   Long maximumNumber
   Long maximumNumberThreshold
 
+  //@Defaults(['None', 'EAN13', 'ModulusTenCheckDigit', 'ISBN10CheckDigit'])
+  // Defaults are now configured in the housekeeping service
   @CategoryId(defaultInternal=true)
-  @Defaults(['None', 'EAN13', 'Modulo10', 'Modulo11', 'Modulo16', 'Modulo43', 'Modulo47'])
   RefdataValue checkDigitAlgo
 
   @CategoryId(defaultInternal=true)
@@ -40,6 +42,7 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
                     format(nullable: true)
             checkDigitAlgo(nullable: true)
             outputTemplate(nullable: true)
+       preChecksumTemplate(nullable: true)
                description(nullable: true)
                    enabled(nullable: true)
              maximumNumber(nullable: true)
@@ -96,6 +99,7 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
                     format column: 'ngs_format'
             checkDigitAlgo column: 'ngs_check_digit_algorithm_fk'
             outputTemplate column: 'ngs_output_template'
+       preChecksumTemplate column: 'ngs_pre_checksum_template'
                description column: 'ngs_description'
                    enabled column: 'ngs_enabled'
              maximumNumber column: 'ngs_maximum_number'
