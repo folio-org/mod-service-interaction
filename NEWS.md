@@ -1,4 +1,12 @@
-## 4.1.0 In progress
+## 4.1.0 2024-10-30
+  * ERM-3176 Review outdated/vulnerable dependencies in mod-service-interaction
+  * SI-71 Update module license, guidance and dependencies for mod-service-interaction
+  * SI-68 Default Publication pattern numbering
+  * SI-38 NPE in RemoteOkapiLinkListener.groovy
+  * SI-34 Dashboard fails if any module fails to respond to /servint/widgets/definitions/global
+  * SI-7 Decide how to manage a checksum prefix/suffix
+    * Added ability to pre-checksum template to include prefix in checksum calculation
+  * Fix and automatically validate module descriptor (Eureka)
 
 ## 4.0.2 2024-04-17
   * ERM-3190 DB Connections are not being released
