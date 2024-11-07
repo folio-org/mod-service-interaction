@@ -26,12 +26,10 @@ import groovy.util.logging.Slf4j
 @Slf4j
 @Integration
 @Stepwise
-class SILifecycleSpec extends BaseSpec {
-
+class NumberGeneratorSpec extends BaseSpec {
   private static String DEFAULT_TEMPLATE = '''${prefix?prefix+'-':''}${generated_number}${postfix?'-'+postfix:''}${checksum?'-'+checksum:''}'''
 
   void "Configure Number Generator" () {
-
     when: 'We post the user barcode number generator'
       log.debug("Create new number generator for user barcode")
 
@@ -54,12 +52,12 @@ class SILifecycleSpec extends BaseSpec {
           [ 'name': 'DD',        'code': 'DD',        'prefix':'DD',        'format':'000000000', 'nextValue':1,                'enabled':true ],
           [ 'name': 'distest',   'code': 'distest',   'prefix':'DD',        'format':'000000000', 'nextValue':1,                'enabled':false, 'description': 'THis one is disabled' ],
 					// All the things
-          [ 'name': '0800',      
-            'code': '0800',      
-            'format':'000000000', 
-            'nextValue':1,        
-            'checkDigitAlgo': 'EAN13',    
-            'enabled':true,  
+          [ 'name': '0800',
+            'code': '0800',
+            'format':'000000000',
+            'nextValue':1,
+            'checkDigitAlgo': 'EAN13',
+            'enabled':true,
             'outputTemplate':'0700-${generated_number}-${checksum}-post',
             'preChecksumTemplate':'100${generated_number}001'
           ],
@@ -67,9 +65,64 @@ class SILifecycleSpec extends BaseSpec {
       ]
 
       Map respMap = doPost("/servint/numberGenerators", user_barcode_numgen)
+    then: "Response is good and we have a new ID"
+      respMap.id != null
+
+    when: 'We post the checksum testing number generator'
+      log.debug("Create new number generator for checksum testing")
+
+      Map checksum_test_numgen = [
+        code:'checksumTest',
+        name:'Checksum testing',
+        sequences: [
+          [
+            name: 'Luhn test',
+            code:'luhnTest',
+            format:'00000000',
+            nextValue: 117707,
+            checkDigitAlgo:'luhncheckdigit',
+            preChecksumTemplate: '22356${generated_number}',
+            outputTemplate:'${checksum_calculation}${checksum}',
+            note: 'Starting value for use case example is 117707'
+          ],
+          [
+            name: 'EAN test',
+            code:'eanTest',
+            format:'0000000',
+            nextValue: 254,
+            checkDigitAlgo:'ean13',
+            preChecksumTemplate: '0017${generated_number}',
+            outputTemplate:'${checksum_calculation}${checksum}',
+            note: 'Starting value for use case example is 254'
+          ],
+          [
+            name: '1793 mod10 test',
+            code:'1793Mod10Test',
+            format:'00000000',
+            nextValue: 771962,
+            checkDigitAlgo:'1793_ltr_mod10_r',
+            preChecksumTemplate: null, // Not required for this use case
+            outputTemplate:'${generated_number}${inverted_checksum}077', // inverse_checksum required for use case
+            note: 'Starting value for use case example is 771962'
+          ],
+          [
+            name: '12 LTR mod10 test',
+            code:'12ltrmod10test',
+            format:'0000000',
+            nextValue: 7298,
+            checkDigitAlgo:'12_ltr_mod10_r',
+            preChecksumTemplate: '05${generated_number}01',
+            outputTemplate:'${checksum_calculation}${inverted_checksum}', // inverse_checksum required for use case
+            note: 'Starting value for use case example is 7298'
+          ]
+        ]
+      ];
+
+      respMap = doPost("/servint/numberGenerators", checksum_test_numgen)
 
     then: "Response is good and we have a new ID"
       respMap.id != null
+      respMap.sequences.size() == 4;
   }
 
   void "Get next number in user patron sequence"(gen, seq, expected_response_code, expected_result, tmpl) {
