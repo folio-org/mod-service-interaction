@@ -26,12 +26,11 @@ import groovy.util.logging.Slf4j
 @Slf4j
 @Integration
 @Stepwise
-class SILifecycleSpec extends BaseSpec {
-
+class NumberGeneratorSpec extends BaseSpec {
+  // TODO at some point we should officially remove prefix/postfix from default template
   private static String DEFAULT_TEMPLATE = '''${prefix?prefix+'-':''}${generated_number}${postfix?'-'+postfix:''}${checksum?'-'+checksum:''}'''
 
-  void "Configure Number Generator" () {
-
+  void "Configure user barcode Number Generator" () {
     when: 'We post the user barcode number generator'
       log.debug("Create new number generator for user barcode")
 
@@ -54,22 +53,107 @@ class SILifecycleSpec extends BaseSpec {
           [ 'name': 'DD',        'code': 'DD',        'prefix':'DD',        'format':'000000000', 'nextValue':1,                'enabled':true ],
           [ 'name': 'distest',   'code': 'distest',   'prefix':'DD',        'format':'000000000', 'nextValue':1,                'enabled':false, 'description': 'THis one is disabled' ],
 					// All the things
-          [ 'name': '0800',      
-            'code': '0800',      
-            'format':'000000000', 
-            'nextValue':1,        
-            'checkDigitAlgo': 'EAN13',    
-            'enabled':true,  
-            'outputTemplate':'0700-${generated_number}-${checksum}-post',
+          [ 'name': '0800',
+            'code': '0800',
+            'format':'000000000',
+            'nextValue':1,
+            'checkDigitAlgo': 'EAN13',
+            'enabled':true,
+            'outputTemplate':'0700-${checksum_input_template}-${checksum}-post',
             'preChecksumTemplate':'100${generated_number}001'
           ],
         ]
       ]
 
-      Map respMap = doPost("/servint/numberGenerators", user_barcode_numgen)
+    Map respMap = doPost("/servint/numberGenerators", user_barcode_numgen)
+    then: "Response is good and we have a new ID"
+      respMap.id != null
+      respMap.sequences.size() == 13;
+  }
+
+  void "Configure checksum testing Number Generator" () {
+    when: 'We post the checksum testing number generator'
+      log.debug("Create new number generator for checksum testing")
+
+      Map checksum_test_numgen = [
+        code:'checksumTest',
+        name:'Checksum testing',
+        sequences: [
+          [
+            name: 'Luhn test',
+            code:'luhnTest',
+            format:'00000000',
+            nextValue: 117707,
+            checkDigitAlgo:'luhncheckdigit',
+            preChecksumTemplate: '22356${generated_number}',
+            outputTemplate:'${checksum_input_template}${checksum}',
+            note: 'Starting value for use case example is 117707'
+          ],
+          [
+            name: 'EAN test',
+            code:'eanTest',
+            format:'0000000',
+            nextValue: 254,
+            checkDigitAlgo:'ean13',
+            preChecksumTemplate: '0017${generated_number}',
+            outputTemplate:'${checksum_input_template}${checksum}',
+            note: 'Starting value for use case example is 254'
+          ],
+          [
+            name: '1793 LTR mod10 test',
+            code:'1793ltrmod10Test',
+            format:'00000000',
+            nextValue: 771962,
+            checkDigitAlgo:'1793_ltr_mod10_r',
+            preChecksumTemplate: null, // Not required for this use case
+            outputTemplate:'${generated_number}${checksum}077',
+            note: 'Starting value for use case example is 771962'
+          ],
+          [
+            name: '12 LTR mod10 test',
+            code:'12ltrmod10test',
+            format:'0000000',
+            nextValue: 7298,
+            checkDigitAlgo:'12_ltr_mod10_r',
+            preChecksumTemplate: '05${generated_number}01',
+            outputTemplate:'${checksum_input_template}${checksum}',
+            note: 'Starting value for use case example is 7298'
+          ],
+          [
+            name: 'ISBN10 test',
+            code:'isbn10test',
+            format:'000000000',
+            nextValue: 30640615,
+            checkDigitAlgo:'isbn10checkdigit',
+            preChecksumTemplate: null,
+            outputTemplate:'${generated_number.substring(0,1)}-${generated_number.substring(1,4)}-${generated_number.substring(4,9)}-${checksum}'
+          ],
+          [
+            name: 'ISSN test',
+            code:'issntest',
+            format:'0000000',
+            nextValue: 317847,
+            checkDigitAlgo:'issncheckdigit',
+            preChecksumTemplate: null,
+            outputTemplate:'${generated_number.substring(0,4)}-${generated_number.substring(4,7)}${checksum}'
+          ],
+          [
+            name: 'ISSN test X',
+            code:'issntestx',
+            format:'0000000',
+            nextValue: 1050124,
+            checkDigitAlgo:'issncheckdigit',
+            preChecksumTemplate: null,
+            outputTemplate:'${generated_number.substring(0,4)}-${generated_number.substring(4,7)}${checksum}'
+          ]
+        ]
+      ];
+
+    Map respMap = doPost("/servint/numberGenerators", checksum_test_numgen)
 
     then: "Response is good and we have a new ID"
       respMap.id != null
+      respMap.sequences.size() == 7;
   }
 
   void "Get next number in user patron sequence"(gen, seq, expected_response_code, expected_result, tmpl) {
@@ -94,7 +178,7 @@ class SILifecycleSpec extends BaseSpec {
       'TSTUserBarcode' | '0699'      | 200 | '0699-000000001-7-post'   | '0699-${generated_number}-${checksum}-post'
       'TSTUserBarcode' | '0700'      | 200 | '0700-0000-7-00001-post'  | '0700-${generated_number.substring(0,4)}-${checksum}-${generated_number.substring(5,9)}-post'
       'TSTUserBarcode' | 'DD'        | 200 | 'DD-000000001'            | DEFAULT_TEMPLATE
-      'TSTUserBarcode' | '0800'      | 200 | '0700-100000000001001-3-post' | '0700-${generated_number}-${checksum}-post'
+      'TSTUserBarcode' | '0800'      | 200 | '0700-100000000001001-3-post' | '0700-${checksum_input_template}-${checksum}-post'
   }
 
   void "Get Number Generator Record"() {
@@ -121,6 +205,27 @@ class SILifecycleSpec extends BaseSpec {
       'OA'     | 'default'  | 200                    | '000000002'
       'OA'     | 'notdef'   | 200                    | '000000001'
       'Wibble' | 'dibble'   | 200                    | '000000001'
+  }
+
+  void "Test checksum use cases"(seq, expected_result) {
+    when: 'We post to the getNextNumber action'
+      Map resp = doGet(
+        "/servint/numberGenerators/getNextNumber",
+        ['generator': 'checksumTest', 'sequence':seq]
+      )
+    then: 'We get the next number'
+      log.debug("NumberGenerator Test Got result ${resp}");
+      resp != null;
+      resp.nextValue == expected_result
+    where:
+      seq                 | expected_result
+      'luhnTest'          | '22356001177070' // Use case 2
+      'eanTest'           | '001700002547' // Use case 1
+      '1793ltrmod10Test'  | '007719628077' // Use case 4
+      '12ltrmod10test'    | '050007298013' // Use case 3
+      'isbn10test'        | '0-306-40615-2' // Testing ISBN10 algo
+      'issntest'          | '0317-8471' // Testing ISSN Algo
+      'issntestx'         | '1050-124X' // Testing ISSN Algo with X checksum
   }
 }
 

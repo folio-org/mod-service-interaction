@@ -94,18 +94,17 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
             // Run the generator
             DecimalFormat df = ngs.format ? new DecimalFormat(ngs.format) : null;
             String generated_number = df ? df.format(next_seqno) : next_seqno.toString();
-            String checksum_calculation = applyPreChecksumTemplate ( ngs, generated_number );
-            List<String> checksum = ngs.checkDigitAlgo ? generateCheckSum(ngs.checkDigitAlgo.value, checksum_calculation) : [null, null];
+            String checksum_input_template = applyPreChecksumTemplate ( ngs, generated_number );
+            String checksum = ngs.checkDigitAlgo ? generateCheckSum(ngs.checkDigitAlgo.value, checksum_input_template) : null;
 
             // If we don't override the template generate strings of the format
             // prefix-number-postfix-checksum
             Map template_parameters = [
                             prefix: ngs.prefix, // Deprecated
                   generated_number: generated_number,
-              checksum_calculation: checksum_calculation, // Not sure about this naming rn
+              checksum_input_template: checksum_input_template,
                            postfix: ngs.postfix, // Deprecated
-                          checksum: checksum[0],
-                 inverted_checksum: checksum[1]
+                          checksum: checksum
             ]
             def engine = new groovy.text.SimpleTemplateEngine()
             // If the seq specifies a template, use it here, otherwise just use the default
@@ -149,44 +148,36 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
   // Remember - RefdataValue normalizes values - so EAN13 becomes ean13 here
 
   // Returns List<String>, with checksum first and "inverse" checksum second
-  private List<String> generateCheckSum(String algorithm, String value_to_check) {
+  private String generateCheckSum(String algorithm, String value_to_check) {
     log.debug("generateCheckSum(${algorithm},${value_to_check})");
     String cs = null;
-    String invertedCs = null;
     switch(algorithm) {
       case 'ean13':
         cs = new EAN13CheckDigit().calculate(value_to_check);
-        invertedCs = invertChecksum(cs);
         break;
       case 'isbn10checkdigit':
         cs = new ISBN10CheckDigit().calculate(value_to_check);
-        invertedCs = invertChecksum(cs, 11);
         break;
       case 'issncheckdigit':
         cs = new ISSNCheckDigit().calculate(value_to_check);
-        invertedCs = invertChecksum(cs);
         break;
       case 'luhncheckdigit':
         cs = new LuhnCheckDigit().calculate(value_to_check);
-        invertedCs = invertChecksum(cs);
         break;
-      case '1793ltrmod10':
-        cs = new ModulusTenCheckDigit(new int[] { 1, 7, 9, 3 }, false).calculate(value_to_check);
-        invertedCs = invertChecksum(cs);
+      case '1793_ltr_mod10_r':
+        // We need to invert again here for type "R" because the default for ModulusTen is the inversion
+        cs = invertChecksum(new ModulusTenCheckDigit(new int[] { 1, 7, 9, 3 }, false).calculate(value_to_check));
         break;
-      case '12ltrmod10':
-        cs = new ModulusTenCheckDigit(new int[] { 1, 2 }, false).calculate(value_to_check);
-        invertedCs = invertChecksum(cs);
+      case '12_ltr_mod10_r':
+        // We need to invert again here for type "R" because the default for ModulusTen is the inversion
+        cs = invertChecksum(new ModulusTenCheckDigit(new int[] { 1, 2 }, false).calculate(value_to_check));
         break;
-      /* case 'ean13checkdigit': //Pretty sure this one is captured above
-        result=new EAN13CheckDigit().calculate(toIntArray(value_to_check))
-        break; */
       default:
 				throw new RuntimeException("Unknown check digit algorithm ${algorithm}");
         break;
     }
 
-    return [cs, invertedCs];
+    return cs;
   }
 
 	private int[] toIntArray(String value) {
