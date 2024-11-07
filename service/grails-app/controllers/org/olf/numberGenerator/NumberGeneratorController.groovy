@@ -94,15 +94,15 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
             // Run the generator
             DecimalFormat df = ngs.format ? new DecimalFormat(ngs.format) : null;
             String generated_number = df ? df.format(next_seqno) : next_seqno.toString();
-            String checksum_calculation = applyPreChecksumTemplate ( ngs, generated_number );
-            String checksum = ngs.checkDigitAlgo ? generateCheckSum(ngs.checkDigitAlgo.value, checksum_calculation) : null;
+            String checksum_input_template = applyPreChecksumTemplate ( ngs, generated_number );
+            String checksum = ngs.checkDigitAlgo ? generateCheckSum(ngs.checkDigitAlgo.value, checksum_input_template) : null;
 
             // If we don't override the template generate strings of the format
             // prefix-number-postfix-checksum
             Map template_parameters = [
                             prefix: ngs.prefix, // Deprecated
                   generated_number: generated_number,
-              checksum_calculation: checksum_calculation, // Not sure about this naming rn
+              checksum_input_template: checksum_input_template,
                            postfix: ngs.postfix, // Deprecated
                           checksum: checksum
             ]

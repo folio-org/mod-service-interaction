@@ -58,7 +58,7 @@ class NumberGeneratorSpec extends BaseSpec {
             'nextValue':1,
             'checkDigitAlgo': 'EAN13',
             'enabled':true,
-            'outputTemplate':'0700-${generated_number}-${checksum}-post',
+            'outputTemplate':'0700-${checksum_input_template}-${checksum}-post',
             'preChecksumTemplate':'100${generated_number}001'
           ],
         ]
@@ -147,7 +147,7 @@ class NumberGeneratorSpec extends BaseSpec {
       'TSTUserBarcode' | '0699'      | 200 | '0699-000000001-7-post'   | '0699-${generated_number}-${checksum}-post'
       'TSTUserBarcode' | '0700'      | 200 | '0700-0000-7-00001-post'  | '0700-${generated_number.substring(0,4)}-${checksum}-${generated_number.substring(5,9)}-post'
       'TSTUserBarcode' | 'DD'        | 200 | 'DD-000000001'            | DEFAULT_TEMPLATE
-      'TSTUserBarcode' | '0800'      | 200 | '0700-100000000001001-3-post' | '0700-${generated_number}-${checksum}-post'
+      'TSTUserBarcode' | '0800'      | 200 | '0700-100000000001001-3-post' | '0700-${checksum_input_template}-${checksum}-post'
   }
 
   void "Get Number Generator Record"() {
