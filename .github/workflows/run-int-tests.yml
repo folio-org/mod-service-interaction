@@ -50,10 +50,7 @@ jobs:
         run: |
           cd tools/testing
           docker ps -a > ps.log
-          docker logs minio_tests > minio.log
-          docker logs testing_kafka > kafka.log
           docker logs testing_pg > postgres.log
-          docker logs testing_zookeeper > zookeeper.log
       - name: Stop containers
         if: always()
         run: |
