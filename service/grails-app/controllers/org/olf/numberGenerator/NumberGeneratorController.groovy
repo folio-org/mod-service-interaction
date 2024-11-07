@@ -165,14 +165,13 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
         cs = new LuhnCheckDigit().calculate(value_to_check);
         break;
       case '1793_ltr_mod10_r':
+        // We need to invert again here for type "R" because the default for ModulusTen is the inversion
         cs = invertChecksum(new ModulusTenCheckDigit(new int[] { 1, 7, 9, 3 }, false).calculate(value_to_check));
         break;
       case '12_ltr_mod10_r':
+        // We need to invert again here for type "R" because the default for ModulusTen is the inversion
         cs = invertChecksum(new ModulusTenCheckDigit(new int[] { 1, 2 }, false).calculate(value_to_check));
         break;
-      /* case 'ean13checkdigit': //Pretty sure this one is captured above
-        result=new EAN13CheckDigit().calculate(toIntArray(value_to_check))
-        break; */
       default:
 				throw new RuntimeException("Unknown check digit algorithm ${algorithm}");
         break;
