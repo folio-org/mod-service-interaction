@@ -197,11 +197,11 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
     result = new NumberGeneratorSequence(owner: ng,
                                          name: sequence, // Set up default name
                                          code: sequence,
-                                         prefix: null,
-                                         postfix: null,
+                                         checkDigitAlgo: 'none',
                                          format: '000000000',  // Default to a 9 digit 0 padded number
                                          nextValue: 1,
-                                         outputTemplate:null).save(flush:true, failOnError:true);
+                                         outputTemplate:null
+                                        ).save(flush:true, failOnError:true);
     return result;
   }
 

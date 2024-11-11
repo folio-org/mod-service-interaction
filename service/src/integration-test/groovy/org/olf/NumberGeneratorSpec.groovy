@@ -42,7 +42,7 @@ class NumberGeneratorSpec extends BaseSpec {
         'sequences':[
           [ 'name': 'patron',    'code': 'patron',    'prefix':'user',      'postfix':null,       'format':'000000000',         'enabled':true ],
           [ 'name': 'staff',     'code': 'staff',     'prefix':'staff',     'postfix':'test',     'format':'000,000,000',       'enabled':true ],
-          [ 'name': 'noformat',  'code': 'noformat',  'prefix':'nf',        'checkDigitAlgo': 'None'            'enabled':true ],
+          [ 'name': 'noformat',  'code': 'noformat',  'prefix':'nf',        'checkDigitAlgo': 'None',            'enabled':true ],
           [ 'name': 'highinit',  'code': 'highinit',  'prefix':'hi',        'format':'000000000', 'nextValue':100000,           'enabled':true ],
           [ 'name': 'mod10test', 'code': 'mod10test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'ModulusTenCheckDigit', 'enabled':true ],
           [ 'name': 'mod11test', 'code': 'mod11test', 'format':'000000000', 'nextValue':100000,   'checkDigitAlgo': 'ISBN10CheckDigit', 'enabled':true ],
