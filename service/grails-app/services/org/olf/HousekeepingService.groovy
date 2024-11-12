@@ -56,13 +56,13 @@ public class HousekeepingService {
             [
               cat: 'NumberGeneratorSequence.CheckDigitAlgo',
               value: 'isbn10checkdigit',
-              label: '123456789-RTL-mod11-R (ISBN10)',
+              label: '2345678910-RTL-mod11-I-X (ISBN10)',
               defaultInternal: true
             ],
             [
               cat: 'NumberGeneratorSequence.CheckDigitAlgo',
               value: 'issncheckdigit',
-              label: '2345678-RTL-mod11-R (ISSN)',
+              label: '2345678-RTL-mod11-I-X (ISSN)',
               defaultInternal: true
             ],
             [

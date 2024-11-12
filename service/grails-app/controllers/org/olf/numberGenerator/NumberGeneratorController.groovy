@@ -200,7 +200,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
                                          checkDigitAlgo: 'none',
                                          format: '000000000',  // Default to a 9 digit 0 padded number
                                          nextValue: 1,
-                                         outputTemplate:null
+                                         outputTemplate:'${generated_number}'
                                         ).save(flush:true, failOnError:true);
     return result;
   }
