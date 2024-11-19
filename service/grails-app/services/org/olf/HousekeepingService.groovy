@@ -62,7 +62,7 @@ public class HousekeepingService {
             [
               cat: 'NumberGeneratorSequence.CheckDigitAlgo',
               value: 'issncheckdigit',
-              label: '2345678-RTL-mod11-I-X (ISSN)',
+              label: '8765432-LTR-mod11-I-X (ISSN)',
               defaultInternal: true
             ],
             [
