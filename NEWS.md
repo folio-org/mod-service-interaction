@@ -1,3 +1,7 @@
+## 4.1.1 2024-11-28
+  * SI-76 Checksum method display enhancements
+  * SI-72 Auto-populated fields input and output template and mandatory fields
+
 ## 4.1.0 2024-10-30
   * ERM-3176 Review outdated/vulnerable dependencies in mod-service-interaction
   * SI-71 Update module license, guidance and dependencies for mod-service-interaction
