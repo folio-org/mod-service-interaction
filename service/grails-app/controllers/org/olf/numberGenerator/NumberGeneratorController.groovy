@@ -142,7 +142,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
 	}
 
   private String invertChecksum(String checksum, int base = 10) {
-    return (base - Integer.parseInt(checksum)).toString();
+    return ((base - Integer.parseInt(checksum)) % base).toString();
   }
 
   // See https://www.activebarcode.com/codes/checkdigit/modulo47.html
