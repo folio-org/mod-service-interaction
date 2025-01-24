@@ -1,3 +1,6 @@
+## 4.1.2 2024-01-24
+  * SI-96 Add missing required interfaces to Module Descriptor
+
 ## 4.1.1 2024-11-28
   * SI-76 Checksum method display enhancements
   * SI-72 Auto-populated fields input and output template and mandatory fields
