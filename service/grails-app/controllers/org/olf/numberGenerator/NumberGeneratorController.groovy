@@ -8,6 +8,9 @@ import com.k_int.okapi.OkapiTenantAwareController
 import org.olf.numgen.NumberGenerator
 import org.olf.numgen.NumberGeneratorSequence
 import java.text.DecimalFormat 
+import groovy.text.SimpleTemplateEngine
+import org.codehaus.groovy.control.CompilerConfiguration
+import org.codehaus.groovy.control.customizers.SecureASTCustomizer
 
 import org.apache.commons.validator.routines.checkdigit.*;
 
@@ -131,7 +134,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
 	private String applyPreChecksumTemplate(NumberGeneratorSequence ngs, String generated_number) {
 		String result = generated_number;
     if ( ngs.preChecksumTemplate != null ) {
-      def engine = new groovy.text.SimpleTemplateEngine()
+      def engine = getEngine()
       Map template_parameters = [
 				'generated_number':generated_number
       ]
@@ -206,5 +209,32 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
   }
 
 
+	private groovy.text.SimpleTemplateEngine getEngine() {
+		def customizer = new SecureASTCustomizer()
+    customizer.disallowImports()
+    customizer.disallowStaticImports()
+    customizer.disallowMethodCalls()
+    customizer.disallowFieldAccess()
+    customizer.disallowPropertyAccess()
+    customizer.disallowClosures()
+    customizer.setAllowedReceivers([
+        Math,      // Allows Math functions like pow, sqrt, abs
+        Integer,   // Allows Integer operations
+        Double,    // Allows Double operations
+        String     // Allows string manipulation functions
+    ] as Set)
+    customizer.setAllowedBinaryOperators([
+        "+", "-", "*", "/", "%", "**" // Power operator
+    ] as Set)
+    customizer.setAllowedUnaryOperators(["+", "-"] as Set)
+
+    def config = new CompilerConfiguration()
+    config.addCompilationCustomizers(customizer)
+    
+    groovy.lang.GroovyShell gs = new GroovyShell(config)
+
+    def engine = new SimpleTemplateEngine(gs)
+    return engine;
+	}
   
 }
