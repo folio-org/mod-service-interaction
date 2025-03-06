@@ -218,7 +218,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
         Math,      // Allows Math functions like pow, sqrt, abs
         Integer,   // Allows Integer operations
         Double,    // Allows Double operations
-        String     // Allows string manipulation functions
+        String,     // Allows string manipulation functions
         groovy.lang.GString     // Allows string manipulation functions
     ])
 
