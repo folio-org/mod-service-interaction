@@ -213,17 +213,17 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
 	private groovy.text.SimpleTemplateEngine getEngine() {
 		def customizer = new SecureASTCustomizer()
     customizer.setClosuresAllowed(false);
-    customizer.setAllowedImports([] as List<String>);
+    customizer.setAllowedImports([])
     customizer.setAllowedReceivers([
         Math,      // Allows Math functions like pow, sqrt, abs
         Integer,   // Allows Integer operations
         Double,    // Allows Double operations
         String     // Allows string manipulation functions
-    ] as List<String>)
+    ])
     customizer.setAllowedBinaryOperators([
         '+', '-', '*', '/', '%', '**' // Power operator
-    ] as List<String>)
-    customizer.setAllowedUnaryOperators(['+', '-'] as List<String>)
+    ])
+    customizer.setAllowedUnaryOperators(['+', '-']);
 
     def config = new CompilerConfiguration()
     config.addCompilationCustomizers(customizer)
