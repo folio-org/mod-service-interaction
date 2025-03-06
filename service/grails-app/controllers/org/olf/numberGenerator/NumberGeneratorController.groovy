@@ -11,6 +11,7 @@ import java.text.DecimalFormat
 import groovy.text.SimpleTemplateEngine
 import org.codehaus.groovy.control.CompilerConfiguration
 import org.codehaus.groovy.control.customizers.SecureASTCustomizer
+import java.util.List;
 
 import org.apache.commons.validator.routines.checkdigit.*;
 
@@ -218,11 +219,11 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
         Integer,   // Allows Integer operations
         Double,    // Allows Double operations
         String     // Allows string manipulation functions
-    ] as Set)
+    ] as List)
     customizer.setAllowedBinaryOperators([
         "+", "-", "*", "/", "%", "**" // Power operator
-    ] as Set)
-    customizer.setAllowedUnaryOperators(["+", "-"] as Set)
+    ] as List)
+    customizer.setAllowedUnaryOperators(["+", "-"] as List)
 
     def config = new CompilerConfiguration()
     config.addCompilationCustomizers(customizer)
