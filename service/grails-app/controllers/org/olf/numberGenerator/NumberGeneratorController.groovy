@@ -211,12 +211,8 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
 
 	private groovy.text.SimpleTemplateEngine getEngine() {
 		def customizer = new SecureASTCustomizer()
-    customizer.disallowImports()
-    customizer.disallowStaticImports()
-    customizer.disallowMethodCalls()
-    customizer.disallowFieldAccess()
-    customizer.disallowPropertyAccess()
-    customizer.disallowClosures()
+    customizer.setClosuresAllowed(false);
+    customizer.setAlllowedImports([]);
     customizer.setAllowedReceivers([
         Math,      // Allows Math functions like pow, sqrt, abs
         Integer,   // Allows Integer operations
