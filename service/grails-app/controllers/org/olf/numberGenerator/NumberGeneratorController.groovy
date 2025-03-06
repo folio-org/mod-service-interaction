@@ -220,10 +220,6 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
         Double,    // Allows Double operations
         String     // Allows string manipulation functions
     ])
-    customizer.setAllowedBinaryOperators([
-        '+', '-', '*', '/', '%', '**' // Power operator
-    ])
-    customizer.setAllowedUnaryOperators(['+', '-']);
 
     def config = new CompilerConfiguration()
     config.addCompilationCustomizers(customizer)
