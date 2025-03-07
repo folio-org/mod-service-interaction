@@ -113,7 +113,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
                            postfix: ngs.postfix, // Deprecated
                           checksum: checksum
             ]
-            def engine = new groovy.text.SimpleTemplateEngine()
+            def engine = getEngine()
             // If the seq specifies a template, use it here, otherwise just use the default
             def number_template = engine.createTemplate(ngs.outputTemplate?:default_template).make(template_parameters)
             result.nextValue = number_template.toString();
@@ -212,7 +212,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
 
 	private groovy.text.SimpleTemplateEngine getEngine() {
 		def customizer = new SecureASTCustomizer()
-    customizer.setClosuresAllowed(false);
+    customizer.setClosuresAllowed(true);
     customizer.setAllowedImports(['org.springframework.beans.factory.annotation.Autowired', 'java.lang.Object'])
     customizer.setAllowedReceivers([
         Math,      // Allows Math functions like pow, sqrt, abs
@@ -220,6 +220,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
         Double,    // Allows Double operations
         String,     // Allows string manipulation functions
         groovy.lang.GString,     // Allows string manipulation functions
+        java.lang.Object,     // Allows string manipulation functions
         java.lang.String     // Allows string manipulation functions
     ])
 
