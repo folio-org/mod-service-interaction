@@ -220,7 +220,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
         Double,    // Allows Double operations
         String,     // Allows string manipulation functions
         groovy.lang.GString,     // Allows string manipulation functions
-        java.lang.Object
+        java.lang.String     // Allows string manipulation functions
     ])
 
     def config = new CompilerConfiguration()
