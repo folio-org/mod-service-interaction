@@ -214,7 +214,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
 		def customizer = new SecureASTCustomizer()
     customizer.setClosuresAllowed(true);
     customizer.setAllowedImports(['org.springframework.beans.factory.annotation.Autowired', 'java.lang.Object'])
-    customizer.setAllowedReceivers([
+    customizer.setAllowedReceiversClasses([
         Math,      // Allows Math functions like pow, sqrt, abs
         Integer,   // Allows Integer operations
         Double,    // Allows Double operations
