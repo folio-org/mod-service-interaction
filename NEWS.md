@@ -1,3 +1,5 @@
+## 4.3.0 IN PROGRESS
+
 ## 4.2.0 2025-03-13
   * Surface AST rules for template engine more explicitly
 
