@@ -1,4 +1,5 @@
-## 4.2.0 IN PROGRESS
+## 4.2.0 2025-03-13
+  * Surface AST rules for template engine more explicitly
 
 ## 4.1.2 2024-01-24
   * SI-96 Add missing required interfaces to Module Descriptor
