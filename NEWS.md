@@ -1,5 +1,8 @@
 ## 4.3.0 IN PROGRESS
 
+## 4.2.1 2025-03-27
+  * ERM-3662 Patch mod-agreements/licenses/serials/service-interaction/oa for instability during update 
+
 ## 4.2.0 2025-03-13
   * Surface AST rules for template engine more explicitly
 
