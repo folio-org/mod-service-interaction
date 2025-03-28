@@ -1,3 +1,6 @@
+## 4.1.3 2025-03-28
+  * Security Patch
+
 ## 4.1.2 2024-01-24
   * SI-96 Add missing required interfaces to Module Descriptor
 
