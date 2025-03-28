@@ -7,7 +7,12 @@ import groovy.util.logging.Slf4j
 import com.k_int.okapi.OkapiTenantAwareController
 import org.olf.numgen.NumberGenerator
 import org.olf.numgen.NumberGeneratorSequence
-import java.text.DecimalFormat 
+import java.text.DecimalFormat
+
+import groovy.text.SimpleTemplateEngine
+import org.codehaus.groovy.control.CompilerConfiguration
+import org.codehaus.groovy.control.customizers.SecureASTCustomizer
+import java.util.List;
 
 import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
 
@@ -65,7 +70,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
                      'postfix': ngs.postfix,
                     'checksum': checksum
           ]
-          def engine = new groovy.text.SimpleTemplateEngine()
+          def engine = getEngine()
           // If the seq specifies a template, use it here, otherwise just use the default
           def number_template = engine.createTemplate(ngs.outputTemplate?:default_template).make(template_parameters)
           result.nextValue = number_template.toString();
@@ -109,5 +114,28 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
                                          nextValue: 1,
                                          outputTemplate:null).save(flush:true, failOnError:true);
     return result;
+  }
+
+  private groovy.text.SimpleTemplateEngine getEngine() {
+    def customizer = new SecureASTCustomizer()
+    customizer.setClosuresAllowed(true);
+    customizer.setImportsWhitelist(['org.springframework.beans.factory.annotation.Autowired', 'java.lang.Object'])
+    customizer.setReceiversClassesWhiteList([
+        Math,      // Allows Math functions like pow, sqrt, abs
+        Integer,   // Allows Integer operations
+        Double,    // Allows Double operations
+        String,     // Allows string manipulation functions
+        groovy.lang.GString,     // Allows string manipulation functions
+        java.lang.Object,     // Allows string manipulation functions
+        java.lang.String     // Allows string manipulation functions
+    ])
+
+    def config = new CompilerConfiguration()
+    config.addCompilationCustomizers(customizer)
+
+    groovy.lang.GroovyShell gs = new GroovyShell(config)
+
+    def engine = new SimpleTemplateEngine(gs)
+    return engine;
   }
 }

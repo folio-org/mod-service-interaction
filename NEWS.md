@@ -1,3 +1,6 @@
+## 2.2.3 2025-03-28
+  * Security patch
+
 ## 2.2.2 2023-03-14
   * ERM-2642 Hibernate JPA Criteria SQL Injection (CVE-2020-25638)
 
