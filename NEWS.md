@@ -1,3 +1,6 @@
+## 4.0.3 2025-03-28
+  * Security patch
+
 ## 4.0.2 2024-04-17
   * ERM-3190 DB Connections are not being released
   * SI-52 Review outdated/vulnerable dependencies in mod-service-interaction
