@@ -1,3 +1,6 @@
+## 3.0.5 2025-03-28
+  * Security patch
+
 ## 3.0.4 2024-05-03
   * ERM-3138 Poppy: grails 5.3.6 fixing databinding DoS (CVE-2023-46131)
 
