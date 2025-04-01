@@ -153,8 +153,18 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
       case 'isbn10checkdigit':
         result=new ISBN10CheckDigit().calculate(value_to_check)
         break;
+      case '31rtlmod10ean':
       case 'ean13checkdigit':
         result=new EAN13CheckDigit().calculate(toIntArray(value_to_check))
+        break;
+      case '21rtlmod10luhn':
+        result=new LhunCheckDigit().calculate(toIntArray(value_to_check))
+        break;
+      case '12ltrmod10':
+				result=new ModulusTenCheckDigit(new int[] { 1, 2 }, false, true).calculate(toIntArray(value_to_check));
+        break;
+      case '1793ltrmod10':
+				result=new ModulusTenCheckDigit(new int[] { 1, 7, 9, 3 }, false, true).calculate(toIntArray(value_to_check));
         break;
       default:
 				throw new RuntimeException("Unknown check digit algorithm ${algorithm}");
