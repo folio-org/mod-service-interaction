@@ -1,3 +1,6 @@
+## 4.0.4 2025-04-01
+  * ERM-3667 Prevent instability of grails modules during updates: Quesnelia
+
 ## 4.0.3 2025-03-28
   * Security patch
 
