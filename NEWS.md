@@ -1,3 +1,6 @@
+## 4.1.4 2025-04-03
+  * ERM-3666 Prevent instability of grails modules during updates: Ramsons
+
 ## 4.1.3 2025-03-28
   * Security Patch
 
