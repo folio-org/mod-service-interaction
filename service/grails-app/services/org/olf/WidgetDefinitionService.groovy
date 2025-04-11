@@ -2,6 +2,8 @@ package org.olf
 
 import org.olf.WidgetType
 
+import groovy.json.JsonOutput
+
 import com.k_int.okapi.OkapiClient
 
 class WidgetDefinitionService {
@@ -170,8 +172,12 @@ class WidgetDefinitionService {
         '/dashboard/definitions',
         [:]
       ) { jsonReturn ->
-          // Protect against single, non-list items being returned here.
-          if (jsonReturn instanceof Collection) {
+          // This is going to be potentially very noisy, here for debugging reasons but should _normally_ be
+          // trace or debug, or plain commented out.
+          log.info("Json return: ${JsonOutput.prettyPrint(JsonOutput.toJson(jsonReturn))}")
+
+        // Protect against single, non-list items being returned here.
+        if (jsonReturn instanceof Collection) {
             resolveDefinitions(fetchedDefinitions, jsonReturn)
           } else {
             log.warn("WidgetDefinitionServie::fetchDefinitions expected an array, recieved an object instead, discarding")
