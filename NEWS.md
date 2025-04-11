@@ -1,5 +1,9 @@
 ## 4.3.0 IN PROGRESS
 
+## 4.2.2 2025-03-11
+  * SI-121 minio 8.5.17, kafka-clients 3.7.2, jackson 2.18.3 fixing vulns
+  * SI-120 Upgrade undertow from 2.2.28.Final to 2.2.37.Final fixing vulns
+
 ## 4.2.1 2025-03-27
   * ERM-3662 Patch mod-agreements/licenses/serials/service-interaction/oa for instability during update 
 
