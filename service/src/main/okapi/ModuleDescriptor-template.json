@@ -477,12 +477,6 @@
       ]
     }
   ],
-  "requires": [
-    {
-      "id": "okapi",
-      "version": "1.9"
-    }
-  ],
   "permissionSets": [
     {
       "permissionName": "servint.settings.get",
