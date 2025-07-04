@@ -30,6 +30,16 @@ Most importantly, the module requires a number of ENV settings which are differe
 - OKAPI_SERVICE_PORT - port number for okapi
 - OKAPI_SERVICE_HOST - host for okapi - in K8S [namespace.]hostname or just hostname if you are running the pod in the same namespace as okapi
 
+### Environment Variables
+
+### Environment variables
+This is a NON-EXHAUSTIVE list of environment variables which tweak behaviour in this module
+
+| Variable                   | Description                                                                                                                                                                                                                                                          | Options                                                    | Default                       |
+|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------|-------------------------------|                               |
+| `ENDPOINTS_INCLUDE_STACK_TRACE` | Allows the HTTP response 500 to contain stacktrace from the exception thrown. Default return will be a generic message and a timestamp.                                                                                                                             | <ul><li>`true`</li><li>`false`</li></ul>                                                     | `false`                       |
+
+
 ## Additional information
 
 ### Issue tracker
