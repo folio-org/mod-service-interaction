@@ -110,6 +110,9 @@ grails:
     converters:
         encoding: UTF-8
 
+endpoints:
+  include-stack-trace: false
+
 ---
 hibernate:
   cache:
