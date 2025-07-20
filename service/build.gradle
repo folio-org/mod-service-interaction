@@ -98,10 +98,12 @@ dependencies {
   implementation "org.hibernate:hibernate-core:5.6.15.Final"
   implementation "org.grails.plugins:events"
 
-  implementation 'org.grails.plugins:spring-security-core:6.1.1' // NOT IN LINE WITH GRAILS PATCH VERSION
+  implementation 'org.grails.plugins:spring-security-core:6.1.2' // NOT IN LINE WITH GRAILS PATCH VERSION
   // 5.8.9 affected by https://security.snyk.io/vuln/SNYK-JAVA-ORGSPRINGFRAMEWORKSECURITY-6457293
-  implementation("org.springframework.security:spring-security-core:5.8.11")
+  implementation("org.springframework.security:spring-security-core:5.8.16")
+  implementation("org.springframework.security:spring-security-web:5.8.16")
 
+  implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 
   implementation "org.grails.plugins:views-json"
   implementation "org.grails.plugins:views-json-templates"
@@ -160,7 +162,7 @@ dependencies {
 	implementation 'org.liquibase:liquibase-core:4.19.0' // Prev 4.17.2 -- taken from master of plugin database migration
 
 	implementation 'com.opencsv:opencsv:5.7.1'
-  implementation 'commons-io:commons-io:2.7'
+  implementation 'commons-io:commons-io:2.14.0'
   implementation('io.github.virtualdogbert:logback-groovy-config:1.14.1')
   compileOnly 'ch.qos.logback:logback-classic:1.4.7'
   // Is on runtime classpath via spring-boot-starter
