@@ -1,8 +1,9 @@
 package org.olf.rfc8693;
 
 import grails.gorm.MultiTenant
+import java.time.Instant
 
-class DBKeyPair implements MultiTenant<KeyPair> {
+class DBKeyPair implements MultiTenant<DBKeyPair> {
 
   String id
   Instant createdAt
