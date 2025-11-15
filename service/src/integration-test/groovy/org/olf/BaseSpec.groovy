@@ -3,7 +3,6 @@ package org.olf
 import com.k_int.okapi.OkapiHeaders
 import com.k_int.web.toolkit.testing.HttpSpec
 
-import groovyx.net.http.HttpException
 import spock.lang.Stepwise
 import spock.util.concurrent.PollingConditions
 
@@ -36,7 +35,7 @@ abstract class BaseSpec extends HttpSpec {
       try {
         resp = doDelete('/_/tenant', null)
         resp = true
-      } catch (HttpException ex) { resp = true }
+      } catch (Exception ex) { resp = true }
       
     then: 'Response obtained'
       resp == true
