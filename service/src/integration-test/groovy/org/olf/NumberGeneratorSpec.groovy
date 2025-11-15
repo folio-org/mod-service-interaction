@@ -1,7 +1,5 @@
 package org.olf
 
-import static groovyx.net.http.ContentTypes.*
-import static groovyx.net.http.HttpBuilder.configure
 import static org.springframework.http.HttpStatus.*
 
 import com.k_int.okapi.OkapiHeaders
@@ -10,10 +8,6 @@ import geb.spock.GebSpec
 import grails.gorm.multitenancy.Tenants
 import grails.testing.mixin.integration.Integration
 import groovy.json.JsonSlurper
-import groovyx.net.http.ChainedHttpConfig
-import groovyx.net.http.FromServer
-import groovyx.net.http.HttpBuilder
-import groovyx.net.http.HttpVerb
 import java.time.LocalDate
 import spock.lang.Stepwise
 import spock.lang.Unroll
