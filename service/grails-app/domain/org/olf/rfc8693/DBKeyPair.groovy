@@ -6,7 +6,7 @@ import java.time.Instant
 class DBKeyPair implements MultiTenant<DBKeyPair> {
 
   String id
-  Instant createdAt
+  Instant availableFrom
   Instant expiresAt
   String usage
   String alg
@@ -17,10 +17,10 @@ class DBKeyPair implements MultiTenant<DBKeyPair> {
   }
 
   static mapping = {
-		table 'key_pair'
+		table 'db_key_pair'
                    id column: 'kp_id', generator: 'uuid2', length:36
               version column: 'kp_version'
-            createdAt column: 'kp_created_at'
+        availableFrom column: 'kp_available_from'
             expiresAt column: 'kp_expires_at'
                 usage column: 'kp_usage'
                   alg column: 'kp_alg'

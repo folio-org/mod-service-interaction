@@ -1,10 +1,13 @@
 package org.olf
 
 import com.k_int.okapi.OkapiHeaders
+import com.k_int.okapi.OkapiTenantResolver
 import com.k_int.web.toolkit.testing.HttpSpec
-
+import grails.gorm.multitenancy.Tenants
 import spock.lang.Stepwise
 import spock.util.concurrent.PollingConditions
+import spock.lang.Ignore
+import com.k_int.web.toolkit.utils.GormUtils
 
 @Stepwise
 abstract class BaseSpec extends HttpSpec {
@@ -28,7 +31,11 @@ abstract class BaseSpec extends HttpSpec {
   String getCurrentTenant() {
     allHeaders?.get(OkapiHeaders.TENANT)
   }
-  
+
+  final String getTenantId() {
+    currentTenant.toLowerCase()
+  }
+
   void 'Pre purge tenant' () {
     boolean resp = false
     when: 'Purge the tenant'
@@ -60,5 +67,23 @@ abstract class BaseSpec extends HttpSpec {
         (list = doGet('/servint/refdata')).size() > 0
       }
   }
+
+
+  @Ignore
+  def withTenant(Closure c) {
+    Tenants.withId(OkapiTenantResolver.getTenantSchemaName( tenantId )) {
+      c.call()
+    }
+  }
+
+  @Ignore
+  def withTenantNewTransaction(Closure c) {
+    withTenant {
+      GormUtils.withNewTransaction {
+        c.call()
+      }
+    }
+  }
+
 
 }
