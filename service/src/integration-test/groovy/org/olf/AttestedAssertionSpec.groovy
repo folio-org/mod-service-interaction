@@ -41,5 +41,15 @@ class AttestedAssertionSpec extends BaseSpec {
       log.debug("KP: ${kp}");
       kp != null;
   }
+
+  void "Test the generation of our Attestation JWT"() {
+		Map resp = null;
+    when: 'We GET the attestation token for'
+      resp = doGet("/servint/attestation/token", [for:'extSvc'])
+    then: 'We got a response'
+      log.debug("Got result ${resp}");
+      resp != null;
+  }
+
 }
 

@@ -3,6 +3,8 @@ package org.olf
 import grails.gorm.multitenancy.CurrentTenant
 import groovy.util.logging.Slf4j
 import grails.converters.JSON
+import org.olf.rfc8693.AttestedAssertionGenerator;
+
 
 
 /**
@@ -15,12 +17,19 @@ import grails.converters.JSON
 @CurrentTenant
 class AttestedAssertionController {
 
+  AttestedAssertionGenerator attestedAssertionGenerator;
+
   public AttestedAssertionController() {
   }
 
   public token() {
-    def result = [:]
     log.debug("AttestedAssertionController::token");
+		String attestation = attestedAssertionGenerator.generateAssertion("subject","tenantId","audience","keyId")
+
+		log.info("Attestation: ${attestation}");
+
+    def result = [:]
+		result.token=attestation;
     result.status = 'OK'
     render result as JSON
   }

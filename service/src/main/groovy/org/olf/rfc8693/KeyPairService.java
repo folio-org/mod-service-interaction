@@ -3,7 +3,6 @@ package org.olf.rfc8693;
 import org.springframework.stereotype.Service;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Service;
 // Not until grails 7!
 // import jakarta.annotation.Resource;
 import javax.annotation.Resource;
