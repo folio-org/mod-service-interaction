@@ -437,6 +437,15 @@
           "permissionsRequired": [
             "servint.numberGeneratorSequence.item.delete"
           ]
+        },
+        {   
+          "methods": [
+            "GET"
+          ],
+          "pathPattern": "/servint/attestation/token",
+          "permissionsRequired": [
+            "servint.extsvc.allow"
+          ] 
         }
       ]
     },
@@ -484,6 +493,11 @@
     }
   ],
   "permissionSets": [
+    { 
+      "permissionName": "servint.extsvc.allow",
+      "displayName": "External Services Integration",
+      "description": "Permission to use external service integration features"
+		},
     {
       "permissionName": "servint.settings.get",
       "displayName": "settings get",
