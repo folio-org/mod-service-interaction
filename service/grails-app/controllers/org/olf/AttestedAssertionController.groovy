@@ -37,6 +37,9 @@ class AttestedAssertionController {
 
 		Tenants.withCurrent {
 			DBKeyPair.withNewTransaction {
+
+				log.info("Existing keys: ${DBKeyPair.list()}")l
+				log.info("Test cert flow");
 				String attestation = attestedAssertionGeneratorService.generateAssertion("subject","tenantId","audience","keyId")
 				log.info("Attestation: ${attestation}");
 				result.token=attestation;
