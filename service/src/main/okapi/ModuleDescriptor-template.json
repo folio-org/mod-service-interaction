@@ -921,7 +921,7 @@
       ]
     },
     { 
-      "permissionName": "servint.extsvc.allow",
+      "permissionName": "servint.extsvc.execute",
       "displayName": "External Services Integration",
       "description": "Allow user to invoke extsvc integration features",
       "subPermissions": [
