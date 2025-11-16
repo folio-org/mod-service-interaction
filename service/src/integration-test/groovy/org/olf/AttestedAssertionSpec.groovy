@@ -15,6 +15,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile
 import groovy.util.logging.Slf4j
 import org.olf.rfc8693.KeyPairService;
+import org.olf.rfc8693.AttestedAssertionGeneratorService;
 import org.olf.rfc8693.DBKeyPair;
 import java.security.KeyPair;
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,6 +29,9 @@ class AttestedAssertionSpec extends BaseSpec {
 	@Autowired
 	KeyPairService keyPairService
 
+	@Autowired
+	AttestedAssertionGeneratorService attestedAssertionGeneratorService
+
   void "Key pair service test"() {
 		KeyPair kp = null;
     when: 'We request a new private key'
@@ -40,6 +44,19 @@ class AttestedAssertionSpec extends BaseSpec {
     then: 'We got a key pair'
       log.debug("KP: ${kp}");
       kp != null;
+  }
+
+  void "AttestedAssertionGeneratorService service test"() {
+		String key = null;
+    when: 'We request an attestation jwt'
+      withTenantNewTransaction {
+        DBKeyPair.withTransaction { status ->
+					key = attestedAssertionGeneratorService.generateAssertion('one','two','three','four');
+        }
+      }
+    then: 'We got a key'
+      log.debug("Key: ${key}");
+      key != null;
   }
 
   void "Test the generation of our Attestation JWT"() {
