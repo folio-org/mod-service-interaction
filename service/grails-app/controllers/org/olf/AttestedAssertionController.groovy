@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import grails.gorm.multitenancy.Tenants
 import org.springframework.security.core.userdetails.UserDetails
 import grails.plugin.springsecurity.SpringSecurityService
-
+import org.springframework.security.core.context.SecurityContextHolder
 
 /**
  * SecurityTokenService is a feature flag enabled function for mod-service-interaction 
@@ -33,6 +33,9 @@ class AttestedAssertionController {
 
   public token() {
     log.info("AttestedAssertionController::token");
+
+		log.info("Sec ctx: ${SecurityContextHolder.getContext().getAuthentication()}");
+
     def result = [:]
 		UserDetails ud = springSecurityService.principal;
 		String folioTenantId = Tenants.currentId()
