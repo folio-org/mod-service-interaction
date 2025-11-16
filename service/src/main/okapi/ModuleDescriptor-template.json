@@ -444,7 +444,7 @@
           ],
           "pathPattern": "/servint/attestation/token",
           "permissionsRequired": [
-            "servint.extsvc.allow"
+            "servint.extsvc.get"
           ] 
         }
       ]
@@ -494,9 +494,10 @@
   ],
   "permissionSets": [
     { 
-      "permissionName": "servint.extsvc.allow",
+      "permissionName": "servint.extsvc.get",
       "displayName": "External Services Integration",
-      "description": "Permission to use external service integration features"
+      "description": "Permission to use external service integration features",
+      "visible": false
 		},
     {
       "permissionName": "servint.settings.get",
@@ -919,7 +920,15 @@
         "servint.numberGenerator.item.delete",
         "servint.numberGeneratorSequence.item.delete"
       ]
-    }
+    },
+    { 
+      "permissionName": "servint.extsvc.allow",
+      "displayName": "External Services Integration",
+      "description": "Permission to use external service integration features",
+      "subPermissions": [
+        "servint.extsvc.get"
+      ]
+		}
   ],
   "launchDescriptor": {
     "dockerImage": "${info.app.name}:${info.app.version}",
