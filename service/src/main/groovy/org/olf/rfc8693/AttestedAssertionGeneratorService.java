@@ -30,12 +30,12 @@ import grails.gorm.transactions.Transactional;
 @Transactional
 @CurrentTenant
 @Service
-public class AttestedAssertionGenerator {
+public class AttestedAssertionGeneratorService {
 
   @Resource
   private KeyPairService keyPairService;
 
-	public AttestedAssertionGenerator() {
+	public AttestedAssertionGeneratorService() {
 	}
 
 	@Transactional

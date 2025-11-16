@@ -2,7 +2,7 @@ package org.olf
 
 import grails.gorm.multitenancy.CurrentTenant
 import grails.converters.JSON
-import org.olf.rfc8693.AttestedAssertionGenerator;
+import org.olf.rfc8693.AttestedAssertionGeneratorService;
 import org.olf.rfc8693.DBKeyPair;
 import groovy.util.logging.Slf4j
 import com.k_int.okapi.OkapiTenantAwareController
@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired
 class AttestedAssertionController {
 
 	@Autowired
-  AttestedAssertionGenerator attestedAssertionGenerator;
+  AttestedAssertionGeneratorService attestedAssertionGeneratorService;
 
   public AttestedAssertionController() {
   }
@@ -34,7 +34,7 @@ class AttestedAssertionController {
 
 			log.info("Generating attestation assertion....");
 
-			String attestation = attestedAssertionGenerator.generateAssertion("subject","tenantId","audience","keyId")
+			String attestation = attestedAssertionGeneratorService.generateAssertion("subject","tenantId","audience","keyId")
 			log.info("Attestation: ${attestation}");
 			result.token=attestation;
 			result.status = 'OK'
