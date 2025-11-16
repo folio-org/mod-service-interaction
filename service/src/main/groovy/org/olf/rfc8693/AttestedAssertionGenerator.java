@@ -42,9 +42,12 @@ public class AttestedAssertionGenerator {
 	public String generateAssertion( String subject, String tenantId, String audience, String keyId) {
 
 		String issuer = "issuer";
-		KeyPair keyPair = keyPairService.getCurrentKeyForUsage("extApp");
+		String result = null;
 
 		try {
+
+			KeyPair keyPair = keyPairService.getCurrentKeyForUsage("extApp");
+
 			Instant now = Instant.now();
 			Instant exp = now.plusSeconds(300); // 5 minutes
 
@@ -68,10 +71,12 @@ public class AttestedAssertionGenerator {
 			JWSSigner signer = new RSASSASigner(keyPair.getPrivate());
 			signedJWT.sign(signer);
 
-			return signedJWT.serialize(); // compact string: header.payload.signature
+			result = signedJWT.serialize(); // compact string: header.payload.signature
 		} catch (JOSEException e) {
 			throw new IllegalStateException("Could not sign attested assertion JWT", e);
 		}
+		
+    return result;
 	}
 }
 

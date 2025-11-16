@@ -16,13 +16,18 @@ import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.List;
 import grails.gorm.multitenancy.CurrentTenant;
 import grails.gorm.transactions.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Transactional
 @CurrentTenant
 @Service
 public class KeyPairService {
+
+	private static final Logger log = LoggerFactory.getLogger(KeyPairService.class);
 
 	@Resource
 	private SessionFactory sessionFactory;
@@ -30,20 +35,28 @@ public class KeyPairService {
 	@Transactional(readOnly = true)
 	public KeyPair getCurrentKeyForUsage(String usage) {
 
+		log.info("getCurrentKeyForUsage("+usage+")");
+
+		DBKeyPair kp = null;
+
 		// We find the key with the lowest date created - there can be keys that will come available in the future but we don't immediately
 		// use them so that downstream systems have a chance to assimilate the newer keys before we start using them.
-		DBKeyPair kp = sessionFactory.getCurrentSession()
+		List<DBKeyPair> lkp = sessionFactory.getCurrentSession()
 			.createQuery("from DBKeyPair kp where kp.usage = :usage and kp.availableFrom <= :now and kp.expiresAt >= :now order by kp.availableFrom asc", DBKeyPair.class)
       .setParameter("now", Instant.now())
       .setParameter("usage", usage)
-			.setMaxResults(1)
-			.uniqueResult();
+			.getResultList();
 
-		// Even if we find a valid key we should check if it is expiring soon and create a new key to cover the future. Ideally
-		// we would inform the sysadmin in some way as downstream systems will likely need to know (Unless we can find a way to jwks expose the public key)
-
-		// For now - create a new key
-		kp = createKeyPair(usage);
+		if ( ( lkp != null ) && ( lkp.size() > 0 ) ) {
+			log.info("Found existing key pair");
+			// Even if we find a valid key we should check if it is expiring soon and create a new key to cover the future. Ideally
+			// we would inform the sysadmin in some way as downstream systems will likely need to know (Unless we can find a way to jwks expose the public key)
+			kp = lkp.get(0);
+		}
+		else{
+			log.info("Create a new key pair");
+			kp = createKeyPair(usage);
+		}
 
 		return loadKeyPair(kp.getPublicKey(), kp.getPrivateKey(), kp.getAlg());
 	}
