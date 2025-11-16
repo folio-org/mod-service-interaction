@@ -21,6 +21,7 @@ import grails.gorm.multitenancy.CurrentTenant;
 import grails.gorm.transactions.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import grails.gorm.multitenancy.Tenants;
 
 @Transactional
 @CurrentTenant
@@ -36,6 +37,7 @@ public class KeyPairService {
 	public KeyPair getCurrentKeyForUsage(String usage) {
 
 		log.info("getCurrentKeyForUsage("+usage+")");
+		log.info("Tenants.currentId = {}", Tenants.currentId());
 
 		DBKeyPair kp = null;
 

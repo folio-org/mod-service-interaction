@@ -12,6 +12,7 @@ import com.k_int.web.toolkit.utils.GormUtils
 @Stepwise
 abstract class BaseSpec extends HttpSpec {
   def setupSpec() {
+		System.out.println("setting up spec");
     httpClientConfig = {
       client.clientCustomizer { HttpURLConnection conn ->
         conn.connectTimeout = 3000

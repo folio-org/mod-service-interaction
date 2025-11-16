@@ -7,6 +7,8 @@ import org.olf.rfc8693.DBKeyPair;
 import groovy.util.logging.Slf4j
 import com.k_int.okapi.OkapiTenantAwareController
 import org.springframework.beans.factory.annotation.Autowired
+import grails.gorm.multitenancy.Tenants
+
 
 /**
  * SecurityTokenService is a feature flag enabled function for mod-service-interaction 
@@ -30,14 +32,16 @@ class AttestedAssertionController {
   public token() {
     log.info("AttestedAssertionController::token");
     def result = [:]
-    DBKeyPair.withTransaction { status ->
 
-			log.info("Generating attestation assertion....");
+		log.info("Generating attestation assertion....");
 
-			String attestation = attestedAssertionGeneratorService.generateAssertion("subject","tenantId","audience","keyId")
-			log.info("Attestation: ${attestation}");
-			result.token=attestation;
-			result.status = 'OK'
+		Tenants.withCurrent {
+			DBKeyPair.withNewTransaction {
+				String attestation = attestedAssertionGeneratorService.generateAssertion("subject","tenantId","audience","keyId")
+				log.info("Attestation: ${attestation}");
+				result.token=attestation;
+				result.status = 'OK'
+			}
 		}
 
     render result as JSON

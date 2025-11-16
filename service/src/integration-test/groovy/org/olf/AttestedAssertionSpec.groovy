@@ -60,6 +60,7 @@ class AttestedAssertionSpec extends BaseSpec {
   }
 
   void "Test the generation of our Attestation JWT"() {
+		log.info("headers will be ${getAllHeaders()}");
 		Map resp = null;
     when: 'We GET the attestation token for'
       resp = doGet("/servint/attestation/token", [for:'extSvc'])
