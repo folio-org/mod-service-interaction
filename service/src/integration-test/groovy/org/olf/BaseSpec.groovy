@@ -21,7 +21,8 @@ abstract class BaseSpec extends HttpSpec {
     }
     addDefaultHeaders(
       (OkapiHeaders.TENANT): "${this.class.simpleName}",
-      (OkapiHeaders.USER_ID): "${this.class.simpleName}_user"
+      (OkapiHeaders.USER_ID): "${this.class.simpleName}_user",
+      (OkapiHeaders.TOKEN): "DUMMMY_TOKEN"
     ) 
   }
   

@@ -2,6 +2,8 @@ package mod.service.interaction
 
 import com.k_int.okapi.OkapiTenantAdminService
 import org.springframework.security.web.FilterChainProxy;
+import grails.plugin.springsecurity.SpringSecurityUtils
+
 
 class BootStrap {
 
@@ -37,6 +39,11 @@ class BootStrap {
         }
       }
     }
+
+		def configFilterNames = grailsApplication.config.grails.plugin.springsecurity.filterChain.filterNames
+		log.info "Spring Security filterChain.filterNames (via grailsApplication.config): ${configFilterNames}"
+
+		log.info("Bootstrap complete");
   }
 
 
