@@ -29,17 +29,15 @@ import grails.gorm.transactions.Transactional;
 
 @Transactional
 @CurrentTenant
-@Service
 public class AttestedAssertionGeneratorService {
 
-  @Resource
-  private KeyPairService keyPairService;
+  KeyPairService keyPairService;
 
 	public AttestedAssertionGeneratorService() {
 	}
 
 	@Transactional
-	public String generateAssertion( String subject, String tenantId, String audience, String keyId) {
+	public String generateAssertion( String subject, String folioTenantId, String audience, String keyId) {
 
 		String issuer = "issuer";
 		String result = null;
@@ -58,7 +56,7 @@ public class AttestedAssertionGeneratorService {
 				.issueTime(Date.from(now))
 				.expirationTime(Date.from(exp))
 				.jwtID(UUID.randomUUID().toString())
-				.claim("tenant", tenantId)
+				.claim("tenant", folioTenantId)
 				.build();
 
 			JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256)

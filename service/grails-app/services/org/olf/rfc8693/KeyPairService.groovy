@@ -25,13 +25,7 @@ import grails.gorm.multitenancy.Tenants;
 
 @Transactional
 @CurrentTenant
-@Service
 public class KeyPairService {
-
-	private static final Logger log = LoggerFactory.getLogger(KeyPairService.class);
-
-	@Resource
-	private SessionFactory sessionFactory;
 
 	@Transactional(readOnly = true)
 	public KeyPair getCurrentKeyForUsage(String usage) {
@@ -43,11 +37,12 @@ public class KeyPairService {
 
 		// We find the key with the lowest date created - there can be keys that will come available in the future but we don't immediately
 		// use them so that downstream systems have a chance to assimilate the newer keys before we start using them.
-		List<DBKeyPair> lkp = sessionFactory.getCurrentSession()
-			.createQuery("from DBKeyPair kp where kp.usage = :usage and kp.availableFrom <= :now and kp.expiresAt >= :now order by kp.availableFrom asc", DBKeyPair.class)
+		List<DBKeyPair> lkp = DBKeyPair.withSession { session ->
+			session.createQuery("from DBKeyPair kp where kp.usage = :usage and kp.availableFrom <= :now and kp.expiresAt >= :now order by kp.availableFrom asc", DBKeyPair.class)
       .setParameter("now", Instant.now())
       .setParameter("usage", usage)
 			.getResultList();
+		};
 
 		if ( ( lkp != null ) && ( lkp.size() > 0 ) ) {
 			log.info("Found existing key pair");
@@ -82,8 +77,7 @@ public class KeyPairService {
 		result.setPublicKey(pubString);
 		result.setPrivateKey(privString);
 
-		sessionFactory.getCurrentSession().saveOrUpdate(result);
-		sessionFactory.getCurrentSession().flush();    
+		result.save(flush:true, failOnError:true);
 
 		return result;
 	}
