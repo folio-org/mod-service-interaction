@@ -51,7 +51,7 @@ class AttestedAssertionSpec extends BaseSpec {
     when: 'We request an attestation jwt'
       withTenantNewTransaction {
         DBKeyPair.withTransaction { status ->
-					key = attestedAssertionGeneratorService.generateAssertion('one','two','three','four');
+					key = attestedAssertionGeneratorService.generateAssertion('one','two','three');
         }
       }
     then: 'We got a key'

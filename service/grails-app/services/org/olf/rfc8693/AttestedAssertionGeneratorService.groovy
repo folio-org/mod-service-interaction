@@ -37,14 +37,14 @@ public class AttestedAssertionGeneratorService {
 	}
 
 	@Transactional
-	public String generateAssertion( String subject, String folioTenantId, String audience, String keyId) {
+	public String generateAssertion( String subject, String folioTenantId, String audience) {
 
-		String issuer = "issuer";
+		String issuer = "FOLIO::mod-service-interaction";
 		String result = null;
 
 		try {
 
-			KeyPair keyPair = keyPairService.getCurrentKeyForUsage("extApp");
+			KeyPair keyPair = keyPairService.getCachedKeyForUsage(audience);
 
 			Instant now = Instant.now();
 			Instant exp = now.plusSeconds(300); // 5 minutes
@@ -60,7 +60,7 @@ public class AttestedAssertionGeneratorService {
 				.build();
 
 			JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256)
-				.keyID(keyId) // lets the receiver pick the right public key
+				.keyID(audience) // lets the receiver pick the right public key
 				.type(JOSEObjectType.JWT)
 				.build();
 

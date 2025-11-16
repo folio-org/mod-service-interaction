@@ -8,6 +8,8 @@ import groovy.util.logging.Slf4j
 import com.k_int.okapi.OkapiTenantAwareController
 import org.springframework.beans.factory.annotation.Autowired
 import grails.gorm.multitenancy.Tenants
+import org.springframework.security.core.userdetails.UserDetails
+import grails.plugin.springsecurity.SpringSecurityService
 
 
 /**
@@ -23,8 +25,8 @@ import grails.gorm.multitenancy.Tenants
 @CurrentTenant
 class AttestedAssertionController {
 
-	@Autowired
   AttestedAssertionGeneratorService attestedAssertionGeneratorService;
+	SpringSecurityService springSecurityService
 
   public AttestedAssertionController() {
   }
@@ -32,15 +34,19 @@ class AttestedAssertionController {
   public token() {
     log.info("AttestedAssertionController::token");
     def result = [:]
+		UserDetails ud = springSecurityService.principal;
+		String folioTenantId = Tenants.currentId()
+		String folioUsername = ud?.getUsername() ?: 'UNKNOWN';
+		
+		log.info("Generating attestation assertion....${folioTenantId} ${folioUsername} ${ud}");
 
-		log.info("Generating attestation assertion....");
 
 		Tenants.withCurrent {
 			DBKeyPair.withNewTransaction {
-
+			
 				log.info("Existing keys: ${DBKeyPair.list()}")
 				log.info("Test cert flow");
-				String attestation = attestedAssertionGeneratorService.generateAssertion("subject","tenantId","audience","keyId")
+				String attestation = attestedAssertionGeneratorService.generateAssertion(folioUsername,folioTenantId,"extApp");
 				log.info("Attestation: ${attestation}");
 				result.token=attestation;
 				result.status = 'OK'

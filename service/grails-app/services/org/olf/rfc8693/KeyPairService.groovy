@@ -27,6 +27,17 @@ import grails.gorm.multitenancy.Tenants;
 @CurrentTenant
 public class KeyPairService {
 
+	private Map<String,KeyPair> cache = [:];
+
+	public KeyPair getCachedKeyForUsage(String usage) {
+		KeyPair r = cache.get(usage);
+		if ( r == null ) {
+			r = getCurrentKeyForUsage(usage);
+			cache.put(usage, r);
+		}
+		return r;
+	}
+
 	@Transactional(readOnly = true)
 	public KeyPair getCurrentKeyForUsage(String usage) {
 
@@ -52,14 +63,14 @@ public class KeyPairService {
 		}
 		else{
 			log.info("Create a new key pair");
-			kp = createKeyPair(usage);
+			kp = createKeyPair(usage, Instant.now());
 		}
 
 		return loadKeyPair(kp.getPublicKey(), kp.getPrivateKey(), kp.getAlg());
 	}
 
 	@Transactional
-	public DBKeyPair createKeyPair(String usage) {
+	public DBKeyPair createKeyPair(String usage, Instant from) {
 
 		KeyPair kp = KeyUtil.generateRsaKeyPair();
 
@@ -70,8 +81,8 @@ public class KeyPairService {
 		String privString = Base64.getEncoder().encodeToString(privBytes);
 
 		DBKeyPair result = new DBKeyPair();
-		result.setAvailableFrom(Instant.now());
-		result.setExpiresAt(Instant.now().plus(730, ChronoUnit.DAYS));
+		result.setAvailableFrom(from);
+		result.setExpiresAt(from.plus(2*365L, ChronoUnit.DAYS));
 		result.setUsage(usage);
 		result.setAlg(kp.getPublic().getAlgorithm());
 		result.setPublicKey(pubString);
