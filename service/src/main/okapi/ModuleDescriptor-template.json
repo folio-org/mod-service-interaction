@@ -496,8 +496,7 @@
     { 
       "permissionName": "servint.extsvc.get",
       "displayName": "External Services Integration",
-      "description": "Permission to use external service integration features",
-      "visible": false
+      "description": "Permission to use external service integration features"
 		},
     {
       "permissionName": "servint.settings.get",
@@ -924,7 +923,7 @@
     { 
       "permissionName": "servint.extsvc.allow",
       "displayName": "External Services Integration",
-      "description": "Permission to use external service integration features",
+      "description": "Allow user to invoke extsvc integration features",
       "subPermissions": [
         "servint.extsvc.get"
       ]
