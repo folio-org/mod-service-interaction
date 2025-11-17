@@ -12,4 +12,5 @@ databaseChangeLog = {
   include file: 'service-interaction-2-2.groovy'
   include file: 'service-interaction-3-0.groovy'
   include file: 'service-interaction-3-1.groovy'
+  include file: 'service-interaction-4-3.groovy'
 }
