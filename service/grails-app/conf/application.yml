@@ -19,22 +19,18 @@ grails:
 
         controllerAnnotations:
           staticRules:
-            -
-              pattern: '/okapi/**'
+            - pattern: '/okapi/**'
               access:
                 - 'permitAll' # SHould maybe lock this down to the Super tenant once it is properly enforced?
-            -
-              pattern: '/application/**'
+            - pattern: '/application/**'
               access:
                 - 'permitAll'
-            -
-              pattern: '/**'
+            - pattern: '/**'
               access:
                 - 'permitAll'
         filterChain:
           chainMap:
-            - 
-              pattern: '/**'
+            - pattern: '/**'
               filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter,-basicAuthenticationFilter'
     databinding:
         dateFormats:

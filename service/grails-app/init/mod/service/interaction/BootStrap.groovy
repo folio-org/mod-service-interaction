@@ -1,10 +1,14 @@
 package mod.service.interaction
 
 import com.k_int.okapi.OkapiTenantAdminService
+import org.springframework.security.web.FilterChainProxy;
+import grails.plugin.springsecurity.SpringSecurityUtils
+
 
 class BootStrap {
 
   def grailsApplication
+  def springSecurityFilterChain
   OkapiTenantAdminService okapiTenantAdminService
 
   def init = { servletContext ->
@@ -23,6 +27,23 @@ class BootStrap {
     if ( resFile == null ) {
       log.error("Resource /module-tenant-changelog.groovy not found. Critical error in build - service will not function properly");
     }
+
+		if (springSecurityFilterChain instanceof FilterChainProxy) {
+      log.info("== Spring Security Filter Chains ==")
+      def ctx = grailsApplication.mainContext
+      springSecurityFilterChain.filterChains.each { chain ->
+        log.info("Pattern: ${chain.requestMatcher}")
+        chain.filters.eachWithIndex { filter, i ->
+	        def beanName = ctx.getBeanNamesForType(filter.class).find { ctx.getBean(it).is(filter) }
+		      log.info("  ${i + 1}. ${beanName ?: filter.class.simpleName} -> ${filter.class.name}")
+        }
+      }
+    }
+
+		def configFilterNames = grailsApplication.config.grails.plugin.springsecurity.filterChain.filterNames
+		log.info "Spring Security filterChain.filterNames (via grailsApplication.config): ${configFilterNames}"
+
+		log.info("Bootstrap complete");
   }
 
 

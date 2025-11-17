@@ -9,9 +9,16 @@ import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration
 import groovy.transform.CompileStatic
 import io.undertow.Undertow.Builder
+import org.springframework.context.annotation.ComponentScan
 
 @CompileStatic
 @EnableScheduling
+@ComponentScan(
+	basePackages = [
+		"mod.service.interaction",
+		"org.olf",
+	]
+)
 class Application extends GrailsAutoConfiguration {
   
   private void info ( final String message) {
