@@ -98,7 +98,7 @@ dependencies {
   implementation "org.hibernate:hibernate-core:5.6.15.Final"
   implementation "org.grails.plugins:events"
 
-  implementation 'org.grails.plugins:spring-security-core:6.1.1' // NOT IN LINE WITH GRAILS PATCH VERSION
+  implementation 'org.grails.plugins:spring-security-core:6.1.2' // NOT IN LINE WITH GRAILS PATCH VERSION
   // 5.8.9 affected by https://security.snyk.io/vuln/SNYK-JAVA-ORGSPRINGFRAMEWORKSECURITY-6457293
   implementation("org.springframework.security:spring-security-core:5.8.16")
   implementation("org.springframework.security:spring-security-web:5.8.16")
@@ -128,8 +128,8 @@ dependencies {
   //testImplementation("io.micronaut:micronaut-http-client")
 
   /*  ---- Manually installed dependencies ---- */
-	implementation 'com.k_int.grails:web-toolkit-ce:10.4.0'
-  implementation('com.k_int.okapi:grails-okapi:8.0.2') {
+	implementation 'com.k_int.grails:web-toolkit-ce:10.2.0'
+  implementation('com.k_int.okapi:grails-okapi:7.5.3') {
     exclude group: 'com.vaadin.external.google', module: 'android-json'
   }
 
