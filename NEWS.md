@@ -1,3 +1,7 @@
+## 4.2.3 2025-11-28
+  * ERM-3851 Long standing connection issues bug
+  * ERM-3292 Stack traces should not be included in API responses
+
 ## 4.2.2 2025-03-11
   * SI-121 minio 8.5.17, kafka-clients 3.7.2, jackson 2.18.3 fixing vulns
   * SI-120 Upgrade undertow from 2.2.28.Final to 2.2.37.Final fixing vulns
