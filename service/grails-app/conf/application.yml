@@ -74,6 +74,13 @@ management:
         enabled: true
      defaults:
         enabled: false
+
+db:
+  maxpoolsize: 10
+  transactionIsolation: TRANSACTION_READ_COMMITTED
+  jmxEnabled: false
+  jmxExport: false
+
 ---
 grails:
     mime:
@@ -110,6 +117,9 @@ grails:
     converters:
         encoding: UTF-8
 
+endpoints:
+  include-stack-trace: false
+
 ---
 hibernate:
   cache:
@@ -121,7 +131,7 @@ hibernate:
 
 dataSource:
   pooled: true
-  jmxExport: false
+  jmxExport: "${db.jmxExport}"
   dbCreate: none
   username: "${db.username:folio_admin}"
   password: "${db.password:folio_admin}"
@@ -130,9 +140,9 @@ dataSource:
   url: "jdbc:postgresql://${db.host:localhost}:${db.port:5432}/${db.database:okapi_modules}"
   schemaHandler: com.k_int.okapi.OkapiSchemaHandler
   properties:
-    jmxEnabled: false
+    jmxEnabled: ${db.jmxEnabled:false}
     maximumPoolSize: ${db.maxpoolsize:10}
-    transactionIsolation: TRANSACTION_READ_COMMITTED
+    transactionIsolation: ${db.transactionIsolation:TRANSACTION_READ_COMMITTED}
 
 environments:
   test:
