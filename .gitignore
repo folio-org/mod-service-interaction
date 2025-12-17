@@ -1,2 +1,7 @@
 # You probably want the .gitignore under /service
 tools/testing/zk-single-kafka-single/
+
+*iml
+
+.idea
+*/.idea
