@@ -19,22 +19,18 @@ grails:
 
         controllerAnnotations:
           staticRules:
-            -
-              pattern: '/okapi/**'
+            - pattern: '/okapi/**'
               access:
                 - 'permitAll' # SHould maybe lock this down to the Super tenant once it is properly enforced?
-            -
-              pattern: '/application/**'
+            - pattern: '/application/**'
               access:
                 - 'permitAll'
-            -
-              pattern: '/**'
+            - pattern: '/**'
               access:
                 - 'permitAll'
         filterChain:
           chainMap:
-            - 
-              pattern: '/**'
+            - pattern: '/**'
               filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter,-basicAuthenticationFilter'
     databinding:
         dateFormats:
@@ -74,6 +70,13 @@ management:
         enabled: true
      defaults:
         enabled: false
+
+db:
+  maxpoolsize: 10
+  transactionIsolation: TRANSACTION_READ_COMMITTED
+  jmxEnabled: false
+  jmxExport: false
+
 ---
 grails:
     mime:
@@ -124,7 +127,7 @@ hibernate:
 
 dataSource:
   pooled: true
-  jmxExport: false
+  jmxExport: "${db.jmxExport}"
   dbCreate: none
   username: "${db.username:folio_admin}"
   password: "${db.password:folio_admin}"
@@ -133,9 +136,9 @@ dataSource:
   url: "jdbc:postgresql://${db.host:localhost}:${db.port:5432}/${db.database:okapi_modules}"
   schemaHandler: com.k_int.okapi.OkapiSchemaHandler
   properties:
-    jmxEnabled: false
+    jmxEnabled: ${db.jmxEnabled:false}
     maximumPoolSize: ${db.maxpoolsize:10}
-    transactionIsolation: TRANSACTION_READ_COMMITTED
+    transactionIsolation: ${db.transactionIsolation:TRANSACTION_READ_COMMITTED}
 
 environments:
   test:

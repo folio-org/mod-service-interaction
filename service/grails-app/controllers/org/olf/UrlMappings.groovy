@@ -61,5 +61,7 @@ class UrlMappings {
     }
 
     "/servint/numberGeneratorSequences" (resources:'numberGeneratorSequence');
+
+		"/servint/attestation/token" (controller:'attestedAssertion', action:'token', method: 'GET')
   }
 }
