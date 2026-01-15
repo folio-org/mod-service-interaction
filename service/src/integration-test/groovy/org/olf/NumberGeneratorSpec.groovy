@@ -221,5 +221,170 @@ class NumberGeneratorSpec extends BaseSpec {
       'issntest'          | '0317-8471' // Testing ISSN Algo
       'issntestx'         | '1050-124X' // Testing ISSN Algo with X checksum
   }
-}
 
+  void "Configure number generator for max value warning tests" () {
+    when: 'We post a number generator with sequences for testing max value warnings'
+      log.debug("Create number generator for max value warning tests")
+
+      Map max_test_numgen = [
+        'code': 'maxWarningTest',
+        'name': 'Max Warning Test Generator',
+        'sequences': [
+          // Sequence at maximum with NO threshold set - should warn when getting last number
+          [
+            'name': 'noThresholdAtMax',
+            'code': 'noThresholdAtMax',
+            'format': '000',
+            'nextValue': 5,
+            'maximumNumber': 5,
+            // maximumNumberThreshold deliberately NOT set
+            'enabled': true
+          ],
+          // Sequence with threshold set - existing behavior, should also warn
+          [
+            'name': 'withThresholdAtMax',
+            'code': 'withThresholdAtMax',
+            'format': '000',
+            'nextValue': 5,
+            'maximumNumber': 5,
+            'maximumNumberThreshold': 4,
+            'enabled': true
+          ],
+          // Sequence for testing OverThreshold warning (value between threshold and max)
+          [
+            'name': 'overThresholdTest',
+            'code': 'overThresholdTest',
+            'format': '000',
+            'nextValue': 4,
+            'maximumNumber': 6,
+            'maximumNumberThreshold': 4,
+            'enabled': true
+          ],
+          // Sequence for testing MaxReached error after exhaustion
+          [
+            'name': 'exhaustionTest',
+            'code': 'exhaustionTest',
+            'format': '000',
+            'nextValue': 3,
+            'maximumNumber': 3,
+            'enabled': true
+          ],
+          // Sequence where threshold equals maximum
+          [
+            'name': 'thresholdEqualsMax',
+            'code': 'thresholdEqualsMax',
+            'format': '000',
+            'nextValue': 5,
+            'maximumNumber': 5,
+            'maximumNumberThreshold': 5,
+            'enabled': true
+          ],
+          // Sequence with maximum configured but value far below it
+          [
+            'name': 'farFromMax',
+            'code': 'farFromMax',
+            'format': '000',
+            'nextValue': 1,
+            'maximumNumber': 100,
+            'enabled': true
+          ]
+        ]
+      ]
+
+      Map respMap = doPost("/servint/numberGenerators", max_test_numgen)
+
+    then: "Response is good and we have a new ID"
+      respMap.id != null
+      respMap.sequences.size() == 6
+  }
+
+  void "Test HitMaximum warning when reaching max value"(String seq, String description) {
+    when: 'We get the next number from a sequence at its maximum'
+      Map resp = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'maxWarningTest', 'sequence': seq])
+
+    then: 'We get the number with a WARNING status and HitMaximum code'
+      log.debug("Max warning test (${description}) - Got result ${resp}")
+      resp != null
+      resp.nextValue == '005'
+      resp.status == 'WARNING'
+      resp.warningCode == 'HitMaximum'
+      resp.warning != null
+
+    where:
+      seq                  | description
+      'noThresholdAtMax'   | 'without threshold set'
+      'withThresholdAtMax' | 'with threshold set'
+  }
+
+  void "Test OverThreshold warning when approaching maximum"() {
+    when: 'We get numbers from a sequence between threshold and maximum'
+      // nextValue starts at 4, threshold is 4, max is 6
+      Map resp1 = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'maxWarningTest', 'sequence': 'overThresholdTest'])
+      Map resp2 = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'maxWarningTest', 'sequence': 'overThresholdTest'])
+      Map resp3 = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'maxWarningTest', 'sequence': 'overThresholdTest'])
+
+    then: 'First two get OverThreshold warning, third gets HitMaximum'
+      // Value 4: at threshold, below max -> OverThreshold
+      resp1.nextValue == '004'
+      resp1.status == 'WARNING'
+      resp1.warningCode == 'OverThreshold'
+
+      // Value 5: over threshold, below max -> OverThreshold
+      resp2.nextValue == '005'
+      resp2.status == 'WARNING'
+      resp2.warningCode == 'OverThreshold'
+
+      // Value 6: at maximum -> HitMaximum
+      resp3.nextValue == '006'
+      resp3.status == 'WARNING'
+      resp3.warningCode == 'HitMaximum'
+  }
+
+  void "Test MaxReached error after sequence exhaustion"() {
+    when: 'We exhaust a sequence and try to get another number'
+      // nextValue starts at 3, max is 3
+      Map resp1 = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'maxWarningTest', 'sequence': 'exhaustionTest'])
+      Map resp2 = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'maxWarningTest', 'sequence': 'exhaustionTest'])
+
+    then: 'First call gets HitMaximum warning, second call gets MaxReached error'
+      // Value 3: at maximum -> HitMaximum warning but still generates
+      resp1.nextValue == '003'
+      resp1.status == 'WARNING'
+      resp1.warningCode == 'HitMaximum'
+
+      // Value 4: exceeds maximum -> MaxReached error, no value generated
+      resp2.nextValue == null
+      resp2.status == 'ERROR'
+      resp2.errorCode == 'MaxReached'
+  }
+
+  void "Test HitMaximum when threshold equals maximum"() {
+    when: 'We get a number where threshold equals maximum'
+      // nextValue is 5, threshold is 5, max is 5
+      Map resp = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'maxWarningTest', 'sequence': 'thresholdEqualsMax'])
+
+    then: 'We get HitMaximum warning (not OverThreshold) since we are at max'
+      resp.nextValue == '005'
+      resp.status == 'WARNING'
+      resp.warningCode == 'HitMaximum'
+      resp.warning != null
+  }
+
+  void "Test normal generation with maximum configured but not approached"() {
+    when: 'We get a number from a sequence with maximum set but far from it'
+      Map resp = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'maxWarningTest', 'sequence': 'farFromMax'])
+
+    then: 'We get the number with OK status and no warnings'
+      resp.nextValue == '001'
+      resp.status == 'OK'
+      resp.warningCode == null
+  }
+}

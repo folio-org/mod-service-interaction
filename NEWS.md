@@ -1,4 +1,5 @@
 ## 4.3.0 IN PROGRESS
+  * SI-95 HitMaximum warning not shown when maximum reached without threshold configured
 
 ## 4.2.3 2025-11-28
   * ERM-3851 Long standing connection issues bug
