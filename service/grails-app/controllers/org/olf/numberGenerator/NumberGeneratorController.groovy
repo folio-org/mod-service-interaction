@@ -63,68 +63,27 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
 
         switch (next_seqno) {
           case null:
-            result.status = 'ERROR'
-            result.errorCode = 'NoNextValue'
-            result.message = 'Unable to determine next value in the sequence'
-            // Undo any changes made to ngs
+            applyNoNextValueError(result)
             status.setRollbackOnly()
-            break;
-          case {
-            ngs.maximumNumber != null &&
-            it > ngs.maximumNumber
-          }:
-            result.status = 'ERROR'
-            result.errorCode = 'MaxReached'
-            result.message = 'Number generator sequence has reached its maximum number'
-            // Undo any changes made to ngs
+            break
+          case { hasExceededMaximum(ngs, it) }:
+            applyMaxReachedError(result)
             status.setRollbackOnly()
-            break;
-          case {
-            ngs.maximumNumber != null &&
-            ngs.maximumNumberThreshold != null &&
-            it >= ngs.maximumNumberThreshold
-          }:
-            if (ngs.maximumNumber != null && next_seqno == ngs.maximumNumber) {
-              // Special case for if this is the generation which will hit the maximum
-              result.warningCode = 'HitMaximum'
-              result.warning = 'Number generator sequence has hit its maximum number'
-            } else {
-              result.warningCode = 'OverThreshold'
-              result.warning = 'Number generator sequence is approaching its maximum number'
-            }
-            result.status = 'WARNING'
-            // Don't break out, because we still want to generate the number, just with a warning
+            break
+          case { isAtMaximum(ngs, it) }:
+            applyHitMaximumWarning(result, ngs)
+            generateAndSetNextValue(result, ngs, next_seqno)
+            break
+          case { isOverThresholdButBelowMaximum(ngs, it) }:
+            applyOverThresholdWarning(result)
+            generateAndSetNextValue(result, ngs, next_seqno)
+            break
           default:
-            // Run the generator
-            DecimalFormat df = ngs.format ? new DecimalFormat(ngs.format) : null;
-            String generated_number = df ? df.format(next_seqno) : next_seqno.toString();
-            String checksum_input_template = applyPreChecksumTemplate ( ngs, generated_number );
-            String checksum = null;
-            if (ngs.checkDigitAlgo && ngs.checkDigitAlgo.value != 'none') {
-              checksum = generateCheckSum(ngs.checkDigitAlgo.value, checksum_input_template)
-            }
-      
-            // If we don't override the template generate strings of the format
-            // prefix-number-postfix-checksum
-            Map template_parameters = [
-                            prefix: ngs.prefix, // Deprecated
-                  generated_number: generated_number,
-              checksum_input_template: checksum_input_template,
-                           postfix: ngs.postfix, // Deprecated
-                          checksum: checksum
-            ]
-            def engine = getEngine()
-            // If the seq specifies a template, use it here, otherwise just use the default
-            def number_template = engine.createTemplate(ngs.outputTemplate?:default_template).make(template_parameters)
-            result.nextValue = number_template.toString();
-            ngs.save(flush:true, failOnError:true);
-            break;
+            generateAndSetNextValue(result, ngs, next_seqno)
+            break
         }
       } else {
-        result.status = 'ERROR'
-        result.errorCode = 'NoSequence'
-        result.message = "Unable to locate or create NumberGeneratorSequence for ${generator}.${sequence}".toString()
-        // Undo any changes made to ngs
+        applyNoSequenceError(result, generator, sequence)
         status.setRollbackOnly()
       }
     }
@@ -232,5 +191,71 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
     def engine = new SimpleTemplateEngine(gs)
     return engine;
 	}
-  
+
+  private boolean hasExceededMaximum(NumberGeneratorSequence ngs, Long value) {
+    return ngs.maximumNumber != null && value > ngs.maximumNumber
+  }
+
+  private boolean isAtMaximum(NumberGeneratorSequence ngs, Long value) {
+    return ngs.maximumNumber != null && value == ngs.maximumNumber
+  }
+
+  private boolean isOverThresholdButBelowMaximum(NumberGeneratorSequence ngs, Long value) {
+    return ngs.maximumNumber != null &&
+           ngs.maximumNumberThreshold != null &&
+           value >= ngs.maximumNumberThreshold &&
+           value < ngs.maximumNumber
+  }
+
+  private void applyNoNextValueError(Map result) {
+    result.status = 'ERROR'
+    result.errorCode = 'NoNextValue'
+    result.message = 'Unable to determine next value in the sequence'
+  }
+
+  private void applyMaxReachedError(Map result) {
+    result.status = 'ERROR'
+    result.errorCode = 'MaxReached'
+    result.message = 'Number generator sequence has reached its maximum number'
+  }
+
+  private void applyNoSequenceError(Map result, String generator, String sequence) {
+    result.status = 'ERROR'
+    result.errorCode = 'NoSequence'
+    result.message = "Unable to locate or create NumberGeneratorSequence for ${generator}.${sequence}".toString()
+  }
+
+  private void applyHitMaximumWarning(Map result, NumberGeneratorSequence ngs) {
+    result.warningCode = 'HitMaximum'
+    result.warning = "Number generator sequence has hit its maximum number of ${ngs.maximumNumber} and cannot be used again"
+    result.status = 'WARNING'
+  }
+
+  private void applyOverThresholdWarning(Map result) {
+    result.warningCode = 'OverThreshold'
+    result.warning = 'Number generator sequence is approaching its maximum number'
+    result.status = 'WARNING'
+  }
+
+  private void generateAndSetNextValue(Map result, NumberGeneratorSequence ngs, Long next_seqno) {
+    DecimalFormat df = ngs.format ? new DecimalFormat(ngs.format) : null
+    String generated_number = df ? df.format(next_seqno) : next_seqno.toString()
+    String checksum_input_template = applyPreChecksumTemplate(ngs, generated_number)
+    String checksum = null
+    if (ngs.checkDigitAlgo && ngs.checkDigitAlgo.value != 'none') {
+      checksum = generateCheckSum(ngs.checkDigitAlgo.value, checksum_input_template)
+    }
+
+    Map template_parameters = [
+                    prefix: ngs.prefix, // Deprecated
+          generated_number: generated_number,
+      checksum_input_template: checksum_input_template,
+                   postfix: ngs.postfix, // Deprecated
+                  checksum: checksum
+    ]
+    def engine = getEngine()
+    def number_template = engine.createTemplate(ngs.outputTemplate ?: default_template).make(template_parameters)
+    result.nextValue = number_template.toString()
+    ngs.save(flush: true, failOnError: true)
+  }
 }
