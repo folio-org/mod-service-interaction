@@ -1,5 +1,6 @@
 ## 4.3.0 IN PROGRESS
   * SI-95 HitMaximum warning not shown when maximum reached without threshold configured
+  * ERM-3223 Upgrade commons-io from 2.7 to 2.14.0 fixing XML DoS CVE-2024-47554
 
 ## 4.2.3 2025-11-28
   * ERM-3851 Long standing connection issues bug
