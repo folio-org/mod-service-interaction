@@ -102,6 +102,8 @@ dependencies {
   // 5.8.9 affected by https://security.snyk.io/vuln/SNYK-JAVA-ORGSPRINGFRAMEWORKSECURITY-6457293
   implementation("org.springframework.security:spring-security-core:5.8.16")
   implementation("org.springframework.security:spring-security-web:5.8.16")
+  // https://spring.io/security/cve-2024-38808
+  implementation("org.springframework:spring-expression:5.3.39")
 
   implementation "org.grails.plugins:views-json"
   implementation "org.grails.plugins:views-json-templates"
