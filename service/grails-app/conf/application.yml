@@ -31,7 +31,7 @@ grails:
         filterChain:
           chainMap:
             - pattern: '/**'
-              filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter,-basicAuthenticationFilter'
+              filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter,-basicAuthenticationFilter,-sitemesh3Secured'
     databinding:
         dateFormats:
           - 'yyyy-MM-dd HH:mm:ss.S'

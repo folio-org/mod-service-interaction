@@ -12,9 +12,8 @@ buildscript {
 		maven { url "https://repo.grails.org/grails/plugins" }
 	}
 	dependencies {
-		classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
-		classpath "org.grails.plugins:hibernate5:8.0.2" // Prev 7.3.0 
-		classpath "org.grails.plugins:views-gradle:3.1.1" // Prev 2.3.2
+		classpath platform("org.apache.grails:grails-gradle-bom:$grailsVersion")
+		classpath "org.apache.grails:grails-gradle-plugins"
 		classpath 'com.bmuschko:gradle-docker-plugin:6.6.1'
 	}
 }
@@ -40,8 +39,8 @@ apply plugin: "eclipse"
 apply plugin: 'eclipse-wtp'
 apply plugin: "idea"
 //apply plugin:"war"
-apply plugin: "org.grails.grails-web"
-apply plugin: "org.grails.plugins.views-json"
+apply plugin: "org.apache.grails.gradle.grails-web"
+apply plugin: "org.apache.grails.gradle.grails-gson"
 apply plugin: 'com.bmuschko.docker-remote-api'
 
 sourceSets {
@@ -78,33 +77,41 @@ configurations {
 ext['jackson.version'] = '2.18.3'
 
 dependencies {
-  /* ---- Grails 6 ---- */
+  implementation platform("org.apache.grails:grails-bom:$grailsVersion")
+  compileOnly platform("org.apache.grails:grails-bom:$grailsVersion")
+  testImplementation platform("org.apache.grails:grails-bom:$grailsVersion")
+
+  /* ---- Grails 7 ---- */
   compileOnly("io.micronaut:micronaut-inject-groovy")
-  console("org.grails:grails-console")
-	profile "org.grails.profiles:rest-api"
+  console("org.apache.grails:grails-console")
+	profile "org.apache.grails.profiles:rest-api"
 
-  implementation "org.grails:grails-core"
+  implementation "org.apache.grails:grails-core"
 
-  implementation "org.grails:grails-logging"
-  implementation "org.grails:grails-plugin-databinding"
-  implementation "org.grails:grails-plugin-interceptors"
-  implementation "org.grails:grails-plugin-rest"
-  implementation "org.grails:grails-plugin-services"
-  implementation "org.grails:grails-plugin-url-mappings"
-  implementation "org.grails:grails-web-boot"
-  implementation "org.grails:grails-plugin-codecs"
-  implementation "org.grails.plugins:hibernate5"
-  implementation "org.grails.plugins:async"
-  implementation "org.hibernate:hibernate-core:5.6.15.Final"
-  implementation "org.grails.plugins:events"
+  implementation "org.apache.grails:grails-logging"
+  implementation "org.apache.grails:grails-databinding"
+  implementation "org.apache.grails:grails-interceptors"
+  implementation "org.apache.grails:grails-rest-transforms"
+  implementation "org.apache.grails:grails-services"
+  implementation "org.apache.grails:grails-url-mappings"
+  implementation "org.apache.grails:grails-web-boot"
+  implementation "org.apache.grails:grails-data-hibernate5-spring-boot"
+  implementation "org.apache.grails.async:grails-async-core"
+  implementation "org.apache.grails:grails-events"
+  implementation "org.apache.grails:grails-micronaut"
+  // Transitional compatibility shim: Grails 7 runtime still reflects this type in some controller metadata paths.
+  implementation("org.grails:grails-web-sitemesh:6.2.4") {
+    transitive = false
+  }
 
-  implementation 'org.grails.plugins:spring-security-core:6.1.2' // NOT IN LINE WITH GRAILS PATCH VERSION
+  implementation("org.grails.plugins:spring-security-core:7.0.1-SNAPSHOT") {
+    exclude group: "org.grails"
+    exclude group: "org.grails.plugins"
+    exclude group: "org.codehaus.groovy"
+  }
   // 5.8.9 affected by https://security.snyk.io/vuln/SNYK-JAVA-ORGSPRINGFRAMEWORKSECURITY-6457293
-  implementation("org.springframework.security:spring-security-core:5.8.16")
-  implementation("org.springframework.security:spring-security-web:5.8.16")
 
-  implementation "org.grails.plugins:views-json"
-  implementation "org.grails.plugins:views-json-templates"
+  implementation "org.apache.grails:grails-views-gson"
 
   implementation "org.springframework.boot:spring-boot-autoconfigure"
   implementation "org.springframework.boot:spring-boot-starter-actuator"
@@ -117,13 +124,11 @@ dependencies {
   //runtimeOnly("org.apache.tomcat:tomcat-jdbc")
   //runtimeOnly("org.glassfish.web:el-impl:2.2.1-b05")
   testImplementation("io.micronaut:micronaut-inject-groovy")
-	
-	// These for whatever reason don't work purely with testImplementation anymore
-	compileOnly("org.grails:grails-gorm-testing-support")
-  compileOnly("org.spockframework:spock-core")
 
-  testImplementation("org.grails:grails-gorm-testing-support")
-  //testImplementation("org.grails:views-json-testing-support")
+  testImplementation "org.apache.grails.testing:grails-testing-support-core:$grailsTestingVersion"
+  testImplementation "org.apache.grails:grails-testing-support-web:$grailsTestingVersion"
+  testImplementation "org.apache.grails:grails-data-hibernate5:$grailsVersion"
+  testImplementation "org.apache.grails:grails-testing-support-datamapping"
   testImplementation("org.spockframework:spock-core")
   //testImplementation("io.micronaut:micronaut-http-client")
 
@@ -137,45 +142,27 @@ dependencies {
 	implementation 'org.codehaus.janino:janino:3.1.9'
 
 	implementation "org.springframework.boot:spring-boot-starter-undertow" // Replaces spring-boot-starter-tomcat
-  // security upgrade for undertow, using same exclusions as
-  // https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-undertow/2.7.18/spring-boot-starter-undertow-2.7.18.pom
-  implementation("io.undertow:undertow-core:2.2.37.Final")
-  implementation("io.undertow:undertow-servlet:2.2.37.Final") {
-    exclude group: "org.jboss.spec.javax.servlet", module: "jboss-servlet-api_4.0_spec"
-    exclude group: "org.jboss.spec.javax.annotation", module: "jboss-annotations-api_1.3_spec"
-  }
-  implementation("io.undertow:undertow-websockets-jsr:2.2.37.Final") {
-    exclude group: "org.jboss.spec.javax.websocket", module: "jboss-websocket-api_1.1_spec"
-    exclude group: "org.jboss.spec.javax.servlet", module: "jboss-servlet-api_4.0_spec"
-    exclude group: "org.jboss.spec.javax.annotation", module: "jboss-annotations-api_1.3_spec"
-  }
   
-	implementation "org.hibernate:hibernate-java8"
 	runtimeOnly "com.zaxxer:HikariCP:5.1.0"                             // Replaces Tomcat JDBC pool
   runtimeOnly "org.postgresql:postgresql:42.7.3"
 
-  implementation ('org.grails.plugins:database-migration:4.2.1') {
+	implementation ('org.grails.plugins:database-migration:6.0.0-M1') {
 		exclude group: 'org.liquibase', module: 'liquibase-core'
+    exclude group: 'org.grails', module: 'grails-shell'
 	}
-	implementation 'org.liquibase:liquibase-core:4.19.0' // Prev 4.17.2 -- taken from master of plugin database migration
+	implementation 'org.liquibase:liquibase-core'
 
 	implementation 'com.opencsv:opencsv:5.7.1'
   implementation 'commons-io:commons-io:2.14.0'
-  implementation('io.github.virtualdogbert:logback-groovy-config:1.14.1')
-  compileOnly 'ch.qos.logback:logback-classic:1.4.7'
-  // Is on runtime classpath via spring-boot-starter
-  runtimeOnly 'ch.qos.logback:logback-classic:1.2.13'
-
 	/*  ---- Manually installed testing dependencies ---- */
 	//implementation "org.grails:grails-gorm-testing-support:2.6.1"
 	//implementation "org.grails:grails-web-testing-support:2.6.1"
-	implementation "org.grails:grails-web-testing-support"
-	testImplementation "org.grails.plugins:geb"
-	testImplementation "org.seleniumhq.selenium:selenium-remote-driver:3.14.0"
-	testImplementation "org.seleniumhq.selenium:selenium-api:3.14.0"
-	testImplementation "org.seleniumhq.selenium:selenium-support:3.14.0"
-	testRuntimeOnly "org.seleniumhq.selenium:selenium-chrome-driver:3.14.0"
-	testRuntimeOnly "org.seleniumhq.selenium:selenium-firefox-driver:3.14.0"
+	testImplementation "org.gebish:geb-spock:7.0"
+	testImplementation "org.seleniumhq.selenium:selenium-remote-driver:4.28.1"
+	testImplementation "org.seleniumhq.selenium:selenium-api:4.28.1"
+	testImplementation "org.seleniumhq.selenium:selenium-support:4.28.1"
+	testRuntimeOnly "org.seleniumhq.selenium:selenium-chrome-driver:4.28.1"
+	testRuntimeOnly "org.seleniumhq.selenium:selenium-firefox-driver:4.28.1"
 	implementation 'org.z3950.zing:cql-java:1.13'
 
 	/* ---- Custom non profile deps ---- */
@@ -373,7 +360,7 @@ task createDockerfile(type: Dockerfile, dependsOn: prepareDocker) {
   exposePort 8080
 
   // Copying straight into the default directory should be enough
-  copyFile bootJar.archiveName, '/usr/verticles/application.jar'
+  copyFile bootJar.archiveFileName.get(), '/usr/verticles/application.jar'
 }
 
 task buildImage(type: DockerBuildImage, dependsOn: createDockerfile) {

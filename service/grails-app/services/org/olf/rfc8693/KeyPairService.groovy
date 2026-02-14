@@ -5,7 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 // Not until grails 7!
 // import jakarta.annotation.Resource;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import org.olf.rfc8693.DBKeyPair;

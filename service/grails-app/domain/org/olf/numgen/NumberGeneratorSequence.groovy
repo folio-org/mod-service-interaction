@@ -26,8 +26,18 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
   Long maximumNumber
   Long maximumNumberThreshold
 
-  //@Defaults(['None', 'EAN13', 'ModulusTenCheckDigit', 'ISBN10CheckDigit'])
-  // Defaults are now configured in the housekeeping service
+  // Ensure common checksum algorithms are present before request binding of checkDigitAlgo.
+  @Defaults([
+    'None',
+    'EAN13',
+    'ModulusTenCheckDigit',
+    'ISBN10CheckDigit',
+    'luhncheckdigit',
+    '1793_ltr_mod10_r',
+    '12_ltr_mod10_r',
+    'isbn10checkdigit',
+    'issncheckdigit'
+  ])
   @CategoryId(defaultInternal=true)
   RefdataValue checkDigitAlgo
 

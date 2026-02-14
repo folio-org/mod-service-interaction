@@ -6,9 +6,26 @@ pluginManagement {
         gradlePluginPortal()
     }
     plugins {
-        id "org.grails.grails-web" version "6.1.1"
-        id "org.grails.plugins.views-json" version "3.1.1"
+        id "org.apache.grails.gradle.grails-web" version "7.0.7"
     }
 }
 
 rootProject.name="mod-service-interaction"
+
+def localWebToolkit = file("../../web-toolkit-ce")
+if (localWebToolkit.exists()) {
+    includeBuild(localWebToolkit) {
+        dependencySubstitution {
+            substitute module("com.k_int.grails:web-toolkit-ce") using project(":")
+        }
+    }
+}
+
+def localGrailsOkapi = file("../../grails-okapi")
+if (localGrailsOkapi.exists()) {
+    includeBuild(localGrailsOkapi) {
+        dependencySubstitution {
+            substitute module("com.k_int.okapi:grails-okapi") using project(":")
+        }
+    }
+}
