@@ -1,3 +1,6 @@
+## 4.2.4 2026-02-16
+  * ERM-3223 Upgrade commons-io from 2.7 to 2.14.0 fixing XML DoS CVE-2024-47554
+
 ## 4.2.3 2025-11-28
   * ERM-3851 Long standing connection issues bug
   * ERM-3292 Stack traces should not be included in API responses

@@ -160,7 +160,7 @@ dependencies {
 	implementation 'org.liquibase:liquibase-core:4.19.0' // Prev 4.17.2 -- taken from master of plugin database migration
 
 	implementation 'com.opencsv:opencsv:5.7.1'
-  implementation 'commons-io:commons-io:2.7'
+  implementation 'commons-io:commons-io:2.14.0'
   implementation('io.github.virtualdogbert:logback-groovy-config:1.14.1')
   compileOnly 'ch.qos.logback:logback-classic:1.4.7'
   // Is on runtime classpath via spring-boot-starter
