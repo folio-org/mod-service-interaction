@@ -486,6 +486,12 @@
       ]
     }
   ],
+  "optional": [
+    {
+      "id": "dashboard",
+      "version": "1.0"
+    }
+  ],
   "requires": [
     {
       "id": "okapi",
