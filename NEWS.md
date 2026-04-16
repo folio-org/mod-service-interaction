@@ -1,5 +1,10 @@
-## 4.3.0 IN PROGRESS
+## 4.3.0 2026-04-16
+  * SI-152 Upgrade undertow-cor to 2.2.39
+  * SI-131: Missing Interface dependencies in module descriptor
+  * SI-129: Implement ENDPOINTS_INCLUDE_STACK_TRACE env variable for mod-service-interaction
   * SI-95 HitMaximum warning not shown when maximum reached without threshold configured
+  * ERM-3851: Long standing connection issues bug
+  * ERM-3306: Dependency upgrades
   * ERM-3223 Upgrade commons-io from 2.7 to 2.14.0 fixing XML DoS CVE-2024-47554
 
 ## 4.2.3 2025-11-28
