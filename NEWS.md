@@ -1,3 +1,6 @@
+## 4.2.6 2026-04-24
+  * SI-152 Upgrade undertow-core to 2.2.29 fixing OOM CVE-2024-4027
+
 ## 4.2.5 2026-02-16
   * ERM-3223 Upgrade commons-io from 2.7 to 2.14.0 fixing XML DoS CVE-2024-47554
 
