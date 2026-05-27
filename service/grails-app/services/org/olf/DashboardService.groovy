@@ -18,6 +18,7 @@ class DashboardService {
     // Set up a dashboard with the parameters defined in POST, and Dashboard Access Object alongside it
     Dashboard dashboard = new Dashboard ([
       name: dashboardParams.name,
+      description: dashboardParams.description,
       widgets: dashboardParams.widgets ?: [],
     ]).save(flush:true, failOnError: true);
 
