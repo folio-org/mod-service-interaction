@@ -1,3 +1,6 @@
+## 4.2.7 2026-06-08
+  * ERM-4055 Backport Security fix May 2026 to Sunflower
+
 ## 4.2.6 2026-04-24
   * SI-152 Upgrade undertow-core to 2.2.29 fixing OOM CVE-2024-4027
 
