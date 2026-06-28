@@ -1,3 +1,6 @@
+## 4.3.2 2026-06-29
+  * ERM-4108: Security fixes for Grails modules in Trillium
+
 ## 4.3.1 2026-05-29
   * SI-164: Dashboard: description entered on creation is not saved and not displayed in the dashboard overview
   * ERM-4022: Security fix May 2026
