@@ -51,6 +51,9 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
       Long next_seqno = null;
 
       if ( ngs != null  ) {
+        String current_year = NumberGeneratorSequence.currentYear()
+        resetNextValueOnYearChange(ngs, current_year)
+
         // Checksum algorithms explode if given 0 as a value
         if ( ( ngs.nextValue == null ) || ( ngs.nextValue == 1 ) ) {
           next_seqno = 1
@@ -72,14 +75,14 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
             break
           case { isAtMaximum(ngs, it) }:
             applyHitMaximumWarning(result, ngs)
-            generateAndSetNextValue(result, ngs, next_seqno)
+            generateAndSetNextValue(result, ngs, next_seqno, current_year)
             break
           case { isOverThresholdButBelowMaximum(ngs, it) }:
             applyOverThresholdWarning(result)
-            generateAndSetNextValue(result, ngs, next_seqno)
+            generateAndSetNextValue(result, ngs, next_seqno, current_year)
             break
           default:
-            generateAndSetNextValue(result, ngs, next_seqno)
+            generateAndSetNextValue(result, ngs, next_seqno, current_year)
             break
         }
       } else {
@@ -237,7 +240,39 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
     result.status = 'WARNING'
   }
 
-  private void generateAndSetNextValue(Map result, NumberGeneratorSequence ngs, Long next_seqno) {
+  // Adjusts nextValue in memory only. The success paths persist it via generateAndSetNextValue;
+  // the error paths roll the transaction back, so an unsaved reset is discarded.
+  private void resetNextValueOnYearChange(NumberGeneratorSequence ngs, String current_year) {
+    if (ngs.isYearResetPending(current_year)) {
+      ngs.nextValue = 1
+    }
+  }
+
+  // FOLIO _timer endpoint, invoked per-tenant by the platform scheduler. Eagerly reconciles every
+  // reset-on-year-change sequence so its persisted nextValue reflects the new calendar year rather
+  // than waiting for the next generation. Idempotent: a no-op when no stored year is stale.
+  def resetYearSequences() {
+    String current_year = NumberGeneratorSequence.currentYear()
+    int reset = 0
+
+    NumberGeneratorSequence.withTransaction {
+      NumberGeneratorSequence.createCriteria().list {
+        eq('resetOnYearChange', true)
+        lock true
+      }.findAll { it.isYearResetPending(current_year) }
+       .each {
+          it.nextValue = 1
+          it.lastUsedYear = current_year
+          it.save(failOnError: true)
+          reset++
+       }
+    }
+
+    log.info("resetYearSequences(tenant=${request.getHeader('x-okapi-tenant')}): reset ${reset} sequence(s) to 1 for ${current_year}")
+    render([currentYear: current_year, sequencesReset: reset] as JSON)
+  }
+
+  private void generateAndSetNextValue(Map result, NumberGeneratorSequence ngs, Long next_seqno, String current_year) {
     DecimalFormat df = ngs.format ? new DecimalFormat(ngs.format) : null
     String generated_number = df ? df.format(next_seqno) : next_seqno.toString()
     String checksum_input_template = applyPreChecksumTemplate(ngs, generated_number)
@@ -251,11 +286,13 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
           generated_number: generated_number,
       checksum_input_template: checksum_input_template,
                    postfix: ngs.postfix, // Deprecated
-                  checksum: checksum
+                  checksum: checksum,
+               current_year: current_year
     ]
     def engine = getEngine()
     def number_template = engine.createTemplate(ngs.outputTemplate ?: default_template).make(template_parameters)
     result.nextValue = number_template.toString()
+    ngs.lastUsedYear = current_year
     ngs.save(flush: true, failOnError: true)
   }
 }

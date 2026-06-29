@@ -9,6 +9,7 @@ import grails.gorm.multitenancy.Tenants
 import grails.testing.mixin.integration.Integration
 import groovy.json.JsonSlurper
 import java.time.LocalDate
+import java.time.ZoneOffset
 import spock.lang.Stepwise
 import spock.lang.Unroll
 
@@ -386,5 +387,218 @@ class NumberGeneratorSpec extends BaseSpec {
       resp.nextValue == '001'
       resp.status == 'OK'
       resp.warningCode == null
+  }
+
+  void "Configure number generator for year token tests"() {
+    when: 'We post a number generator with sequences for testing the current_year token'
+      // yearReset and yearNoReset have lastUsedYear='2000' to simulate a pending year-change
+      // on first generation, without requiring any additional PATCH calls in tests.
+      Map yearTokenNumgen = [
+        'code': 'yearTokenTest',
+        'name': 'Year Token Test Generator',
+        'sequences': [
+          [
+            'name': 'yearOnly',
+            'code': 'yearOnly',
+            'format': '000',
+            'nextValue': 1,
+            'enabled': true,
+            'outputTemplate': '${current_year}'
+          ],
+          [
+            'name': 'yearAndNum',
+            'code': 'yearAndNum',
+            'format': '000',
+            'nextValue': 1,
+            'enabled': true,
+            'outputTemplate': '${current_year}-${generated_number}'
+          ],
+          [
+            'name': 'yearReset',
+            'code': 'yearReset',
+            'format': '000',
+            'nextValue': 150,
+            'enabled': true,
+            'resetOnYearChange': true,
+            'lastUsedYear': '2000',
+            'outputTemplate': '${current_year}-${generated_number}'
+          ],
+          [
+            'name': 'yearNoReset',
+            'code': 'yearNoReset',
+            'format': '000',
+            'nextValue': 150,
+            'enabled': true,
+            'resetOnYearChange': false,
+            'lastUsedYear': '2000',
+            'outputTemplate': '${current_year}-${generated_number}'
+          ],
+          // Scenario 5 primary case: unpadded format ### → reset produces "YYYY-1" not "YYYY-001"
+          [
+            'name': 'yearResetUnpadded',
+            'code': 'yearResetUnpadded',
+            'format': '###',
+            'nextValue': 150,
+            'enabled': true,
+            'resetOnYearChange': true,
+            'lastUsedYear': '2000',
+            'outputTemplate': '${current_year}-${generated_number}'
+          ],
+          // Table example 1: ${current_year}-ABC ${generated_number}, format=000, nextValue=1 → "2026-ABC 001"
+          [
+            'name': 'tableExample1',
+            'code': 'tableExample1',
+            'format': '000',
+            'nextValue': 1,
+            'enabled': true,
+            'outputTemplate': '${current_year}-ABC ${generated_number}'
+          ],
+          // Table example 2: 01A-${current_year}-${generated_number}, format=0000, nextValue=1 → "01A-2026-0001"
+          [
+            'name': 'tableExample2',
+            'code': 'tableExample2',
+            'format': '0000',
+            'nextValue': 1,
+            'enabled': true,
+            'outputTemplate': '01A-${current_year}-${generated_number}'
+          ]
+        ]
+      ]
+
+      Map respMap = doPost("/servint/numberGenerators", yearTokenNumgen)
+
+    then: 'Response is good and we have a new ID'
+      respMap.id != null
+      respMap.sequences.size() == 7
+  }
+
+  void "current_year token resolves to the current year"() {
+    when: 'We get numbers from sequences using the current_year token'
+      String expectedYear = LocalDate.now(ZoneOffset.UTC).year.toString()
+      Map respYearOnly = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'yearTokenTest', 'sequence': 'yearOnly'])
+      Map respYearAndNum = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'yearTokenTest', 'sequence': 'yearAndNum'])
+
+    then: 'The current_year token resolves to the current year'
+      respYearOnly.nextValue == expectedYear
+      respYearAndNum.nextValue == "${expectedYear}-001".toString()
+  }
+
+  void "resetOnYearChange=true: nextValue resets to 1 on first generation after year changes"() {
+    when: 'We generate numbers from a sequence with resetOnYearChange=true and a stale lastUsedYear'
+      String expectedYear = LocalDate.now(ZoneOffset.UTC).year.toString()
+      Map resetResp = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'yearTokenTest', 'sequence': 'yearReset'])
+      Map afterResetResp = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'yearTokenTest', 'sequence': 'yearReset'])
+
+    then: 'First call resets to 1, subsequent calls increment normally'
+      resetResp.nextValue      == "${expectedYear}-001".toString()
+      afterResetResp.nextValue == "${expectedYear}-002".toString()
+  }
+
+  void "resetOnYearChange=false: nextValue continues from current value after year changes"() {
+    when: 'We generate two numbers from a sequence with resetOnYearChange=false and a stale lastUsedYear'
+      String expectedYear = LocalDate.now(ZoneOffset.UTC).year.toString()
+      Map noResetResp = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'yearTokenTest', 'sequence': 'yearNoReset'])
+      Map secondResp = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'yearTokenTest', 'sequence': 'yearNoReset'])
+
+    then: 'The sequence continues from its current nextValue and keeps incrementing'
+      noResetResp.nextValue == "${expectedYear}-150".toString()
+      secondResp.nextValue  == "${expectedYear}-151".toString()
+  }
+
+  void "resetOnYearChange=true with unpadded format: reset produces unpadded 1 (Scenario 5 primary case)"() {
+    when: 'We generate numbers from a sequence with format=### and resetOnYearChange=true'
+      String expectedYear = LocalDate.now(ZoneOffset.UTC).year.toString()
+      Map resetResp = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'yearTokenTest', 'sequence': 'yearResetUnpadded'])
+      Map afterResetResp = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'yearTokenTest', 'sequence': 'yearResetUnpadded'])
+
+    then: 'Reset produces an unpadded 1, subsequent call produces unpadded 2'
+      resetResp.nextValue      == "${expectedYear}-1".toString()
+      afterResetResp.nextValue == "${expectedYear}-2".toString()
+  }
+
+  void "Table example 1: {current_year}-ABC prefix template"() {
+    when: 'We generate a number using the first table example template'
+      String expectedYear = LocalDate.now(ZoneOffset.UTC).year.toString()
+      Map resp = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'yearTokenTest', 'sequence': 'tableExample1'])
+
+    then: 'Output is {year}-ABC 001'
+      resp.nextValue == "${expectedYear}-ABC 001".toString()
+  }
+
+  void "Table example 2: 01A-{current_year} prefix template"() {
+    when: 'We generate a number using the second table example template'
+      String expectedYear = LocalDate.now(ZoneOffset.UTC).year.toString()
+      Map resp = doGet("/servint/numberGenerators/getNextNumber",
+        ['generator': 'yearTokenTest', 'sequence': 'tableExample2'])
+
+    then: 'Output is 01A-{year}-0001'
+      resp.nextValue == "01A-${expectedYear}-0001".toString()
+  }
+
+  void "resetOnYearChange=true without the current_year token is rejected by validation"() {
+    when: 'We try to create a sequence with reset enabled but a template that omits the token'
+      Map invalidNumgen = [
+        'code': 'invalidResetTest',
+        'name': 'Invalid Reset Test Generator',
+        'sequences': [
+          [
+            'name': 'invalidReset',
+            'code': 'invalidReset',
+            'format': '000',
+            'nextValue': 1,
+            'enabled': true,
+            'resetOnYearChange': true,
+            'outputTemplate': '${generated_number}'
+          ]
+        ]
+      ]
+      doPost("/servint/numberGenerators", invalidNumgen)
+
+    then: 'The request is rejected by the domain validator'
+      thrown(Exception)
+  }
+
+  void "resetYearSequences timer endpoint resets only stale reset-enabled sequences"() {
+    given: 'A generator with a stale reset-enabled sequence and a stale control (no-reset) sequence'
+      Map timerNumgen = [
+        'code': 'timerResetTest',
+        'name': 'Timer Reset Test Generator',
+        'sequences': [
+          [
+            'name': 'timerStale', 'code': 'timerStale', 'format': '000', 'nextValue': 99, 'enabled': true,
+            'resetOnYearChange': true, 'lastUsedYear': '2000', 'outputTemplate': '${current_year}-${generated_number}'
+          ],
+          [
+            'name': 'timerControl', 'code': 'timerControl', 'format': '000', 'nextValue': 99, 'enabled': true,
+            'resetOnYearChange': false, 'lastUsedYear': '2000', 'outputTemplate': '${current_year}-${generated_number}'
+          ]
+        ]
+      ]
+      Map created = doPost("/servint/numberGenerators", timerNumgen)
+      String staleId   = created.sequences.find { it.code == 'timerStale' }.id
+      String controlId = created.sequences.find { it.code == 'timerControl' }.id
+
+    when: 'The platform timer invokes the reconcile endpoint'
+      String expectedYear = LocalDate.now(ZoneOffset.UTC).year.toString()
+      Map resp = doPost("/servint/numberGenerators/resetYearSequences", [:])
+      Map staleAfter   = doGet("/servint/numberGeneratorSequences/${staleId}")
+      Map controlAfter = doGet("/servint/numberGeneratorSequences/${controlId}")
+
+    then: 'Only the stale reset-enabled sequence is reset to 1 and reconciled to the current year'
+      resp.sequencesReset >= 1
+      resp.currentYear == expectedYear
+      staleAfter.nextValue == 1
+      staleAfter.lastUsedYear == expectedYear
+      controlAfter.nextValue == 99
+      controlAfter.lastUsedYear == '2000'
   }
 }
