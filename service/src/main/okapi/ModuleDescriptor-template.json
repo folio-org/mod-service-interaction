@@ -484,6 +484,22 @@
           "pathPattern": "/_/tenant/disable"
         }
       ]
+    },
+    {
+      "id": "_timer",
+      "version": "1.0",
+      "interfaceType": "system",
+      "handlers": [
+        {
+          "permissionsRequired": [],
+          "methods": [
+            "POST"
+          ],
+          "pathPattern": "/servint/numberGenerators/resetYearSequences",
+          "unit": "hour",
+          "delay": "24"
+        }
+      ]
     }
   ],
   "optional": [

@@ -57,6 +57,7 @@ class UrlMappings {
     "/servint/numberGenerators" (resources:'numberGenerator') {
       collection {
         "/getNextNumber" ( controller:'numberGenerator', action: 'getNextNumber')
+        "/resetYearSequences" ( controller:'numberGenerator', action: 'resetYearSequences', method: 'POST')
       }
     }
 

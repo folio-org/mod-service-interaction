@@ -6,6 +6,9 @@ import com.k_int.web.toolkit.refdata.Defaults
 import com.k_int.web.toolkit.refdata.RefdataValue
 import com.k_int.web.toolkit.refdata.CategoryId
 
+import java.time.LocalDate
+import java.time.ZoneOffset
+
 class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
 
   String id
@@ -20,6 +23,8 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
   String outputTemplate
   String description
   Boolean enabled = Boolean.TRUE
+  Boolean resetOnYearChange = Boolean.FALSE
+  String  lastUsedYear
 
   // Between them, these will determine the maximum number a sequence should be allowed to reach,
   // and a threshold beyond which a warning will be in the API response.
@@ -35,6 +40,9 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
   @Defaults(['Below threshold', 'Over threshold', 'At maximum'])
   RefdataValue maximumCheck
 
+  // isYearResetPending() looks like a boolean property to GORM; it is derived, not persisted.
+  static transients = ['yearResetPending']
+
   static constraints = {
                     prefix(nullable: true)
                    postfix(nullable: true)
@@ -45,6 +53,14 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
        preChecksumTemplate(nullable: true)
                description(nullable: true)
                    enabled(nullable: true)
+         resetOnYearChange(nullable: true, validator: { val, obj ->
+           // Only meaningful when the template uses the ${current_year} token; reject otherwise so the
+           // API cannot persist a flag that would silently never fire.
+           if (val && !obj.outputTemplate?.contains('${current_year}')) {
+             return 'resetOnYearChange.tokenMissing'
+           }
+         })
+              lastUsedYear(nullable: true)
              maximumNumber(nullable: true)
     maximumNumberThreshold(nullable: true)
               maximumCheck(nullable: true)
@@ -102,11 +118,22 @@ class NumberGeneratorSequence implements MultiTenant<NumberGeneratorSequence> {
        preChecksumTemplate column: 'ngs_pre_checksum_template'
                description column: 'ngs_description'
                    enabled column: 'ngs_enabled'
+         resetOnYearChange column: 'ngs_reset_on_year_change'
+              lastUsedYear column: 'ngs_last_used_year'
              maximumNumber column: 'ngs_maximum_number'
     maximumNumberThreshold column: 'ngs_maximum_number_threshold'
               maximumCheck column: 'ngs_maximum_check_fk'
   }
 
+
+  static String currentYear() {
+    LocalDate.now(ZoneOffset.UTC).year.toString()
+  }
+
+  // lastUsedYear != null => only resets a sequence that has actually been used before.
+  boolean isYearResetPending(String year = currentYear()) {
+    resetOnYearChange && lastUsedYear != null && lastUsedYear != year
+  }
 
   public String toString() {
     return "NumberGeneratorSequence(${owner?.code}.${code} ${prefix} ${nextValue} (Max:${maximumNumber}, Threshold:${maximumNumberThreshold}, Check:${maximumCheck?.value}) ${postfix} ${format} ${checkDigitAlgo?.value},${outputTemplate})".toString();
