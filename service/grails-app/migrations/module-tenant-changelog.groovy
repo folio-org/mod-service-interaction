@@ -13,4 +13,5 @@ databaseChangeLog = {
   include file: 'service-interaction-3-0.groovy'
   include file: 'service-interaction-3-1.groovy'
   include file: 'service-interaction-4-3.groovy'
+  include file: 'number-generator-year-reset.groovy'
 }
