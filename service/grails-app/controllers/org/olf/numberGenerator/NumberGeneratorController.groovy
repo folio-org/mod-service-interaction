@@ -51,8 +51,7 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
       Long next_seqno = null;
 
       if ( ngs != null  ) {
-        String current_year = NumberGeneratorSequence.currentYear()
-        resetNextValueOnYearChange(ngs, current_year)
+        resetNextValueOnYearChange(ngs)
 
         // Checksum algorithms explode if given 0 as a value
         if ( ( ngs.nextValue == null ) || ( ngs.nextValue == 1 ) ) {
@@ -75,14 +74,14 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
             break
           case { isAtMaximum(ngs, it) }:
             applyHitMaximumWarning(result, ngs)
-            generateAndSetNextValue(result, ngs, next_seqno, current_year)
+            generateAndSetNextValue(result, ngs, next_seqno)
             break
           case { isOverThresholdButBelowMaximum(ngs, it) }:
             applyOverThresholdWarning(result)
-            generateAndSetNextValue(result, ngs, next_seqno, current_year)
+            generateAndSetNextValue(result, ngs, next_seqno)
             break
           default:
-            generateAndSetNextValue(result, ngs, next_seqno, current_year)
+            generateAndSetNextValue(result, ngs, next_seqno)
             break
         }
       } else {
@@ -242,8 +241,8 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
 
   // Adjusts nextValue in memory only. The success paths persist it via generateAndSetNextValue;
   // the error paths roll the transaction back, so an unsaved reset is discarded.
-  private void resetNextValueOnYearChange(NumberGeneratorSequence ngs, String current_year) {
-    if (ngs.isYearResetPending(current_year)) {
+  private void resetNextValueOnYearChange(NumberGeneratorSequence ngs) {
+    if (ngs.isYearResetPending()) {
       ngs.nextValue = 1
     }
   }
@@ -272,7 +271,8 @@ class NumberGeneratorController extends OkapiTenantAwareController<NumberGenerat
     render([currentYear: current_year, sequencesReset: reset] as JSON)
   }
 
-  private void generateAndSetNextValue(Map result, NumberGeneratorSequence ngs, Long next_seqno, String current_year) {
+  private void generateAndSetNextValue(Map result, NumberGeneratorSequence ngs, Long next_seqno) {
+    String current_year = NumberGeneratorSequence.currentYear()
     DecimalFormat df = ngs.format ? new DecimalFormat(ngs.format) : null
     String generated_number = df ? df.format(next_seqno) : next_seqno.toString()
     String checksum_input_template = applyPreChecksumTemplate(ngs, generated_number)
