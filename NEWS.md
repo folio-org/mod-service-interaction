@@ -1,4 +1,5 @@
 ## 4.4.0 IN PROGRESS
+  * SI-151: Enable dynamic ${current_year} token in number generator output templates
 
 ## 4.3.1 2026-05-29
   * SI-164: Dashboard: description entered on creation is not saved and not displayed in the dashboard overview
