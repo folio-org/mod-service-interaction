@@ -1,0 +1,35 @@
+# Response envelope of the getNextNumber operation. Pure wire construct —
+# assembled per request, never persisted (exempt from DTO-mapping coverage,
+# governed by ADR-002). HTTP status is always 200; outcome travels in `status`.
+$id: next-number-result-dto
+title: NextNumberResultDto
+type: object
+required: [generator, sequence, status]
+properties:
+  generator:
+    type: string
+    description: Echo of the requested generator code.
+  sequence:
+    type: string
+    description: Echo of the requested sequence code.
+  status:
+    type: string
+    enum: [OK, WARNING, ERROR]
+    description: Generation outcome.
+  nextValue:
+    type: string
+    description: Rendered generated number; absent on ERROR.
+  warningCode:
+    type: string
+    enum: [HitMaximum, OverThreshold]
+    description: Warning discriminator when status is WARNING.
+  warning:
+    type: string
+    description: Human-readable warning message.
+  errorCode:
+    type: string
+    enum: [NoNextValue, MaxReached, NoSequence]
+    description: Error discriminator when status is ERROR.
+  message:
+    type: string
+    description: Human-readable error message.

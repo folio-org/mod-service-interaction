@@ -1,0 +1,27 @@
+[lane] [gate] 1 preflight: tools, artifacts, java, free ports — OK; output: /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/rver-lane
+ Network msi-rollout-lane_default Creating 
+ Network msi-rollout-lane_default Created 
+ Container msi-lane-pg Creating 
+ Container msi-lane-pg Created 
+ Container msi-lane-pg Starting 
+ Container msi-lane-pg Started 
+ Container msi-lane-pg Waiting 
+ Container msi-lane-pg Healthy 
+ Container msi-lane-okapi Creating 
+ Container msi-lane-okapi Created 
+ Container msi-lane-okapi Starting 
+ Container msi-lane-okapi Started 
+[lane] [gate] 2 infra: lane-pg healthy, Okapi 7.0.6 on :9138 — OK
+[lane] booting legacy module (mod-service-interaction-4.4.0-SNAPSHOT) on :8086 ...
+[lane] booting port module (mod-service-interaction-5.0.0-SNAPSHOT) on :8087 ...
+[lane] [gate] 3 modules: legacy pid 297181 + port pid 297182 answering — OK
+[lane] [gate] 4 registration: MDs + discovery + tenants lanec,lanebad legacy-enabled, routing verified — OK
+[lane] [gate] 5 injection: lanebad_mod_service_interaction corrupted to 34 tables — OK
+[lane] [gate] 6 control wave: exit 0, lanec complete PASS — OK
+[lane] [gate] 7 forced failure: exit 1, catalog gate FAIL, Okapi rollback re-verified — OK
+[lane] [gate] 8 repair + resume: exit 0, lanebad complete PASS in a fresh run dir — OK
+[lane] [gate] 9 immutability: 15 files of the failed run byte-identical — OK
+[lane] [gate] 10 final routing: lanec + lanebad list mod-service-interaction-5.0.0-SNAPSHOT — OK
+[lane] ALL 10 GATES PASSED — evidence under /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/rver-lane
+[lane] teardown: stopping modules and disposing of the lane rig
+lane exit: 0

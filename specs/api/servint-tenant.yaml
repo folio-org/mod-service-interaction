@@ -1,0 +1,104 @@
+# Okapi `_tenant` 2.0 system interface (ADR-012) — folio-spring
+# TenantController contract. System endpoints: no module permissions;
+# invoked by Okapi during enable/upgrade/purge.
+openapi: "3.1.0"
+info:
+  title: Tenant Lifecycle API
+  version: "2.0.0"
+  description: >
+    The `_tenant` 2.0 system interface with schema-per-tenant semantics:
+    provisioning runs the Liquibase tenant changelog synchronously; the
+    loadReference parameter seeds reference data; a purge job (blank
+    module_to + purge=true) drops the tenant schema; a disable job
+    (module_from present, blank module_to, purge=false) answers 204 without
+    migration or seeding side effects, so tenant data survives a disable.
+    A blank-module_to body that omits the purge flag is rejected 400 —
+    destructive intent must be explicit.
+
+paths:
+  /_/tenant:
+    post:
+      summary: Run a tenant job (enable, upgrade, disable, or purge)
+      operationId: postTenant
+      x-sdd-refs:
+        - specs/requirements/tenant-lifecycle.yaml#/id
+        - specs/requirements/reference-data-seeding.yaml#/id
+      description: >
+        With module_to set: creates the tenant's schema (legacy
+        OkapiTenantResolver naming) when absent and applies the module
+        tenant changelog; a repeat call upgrades the existing schema
+        idempotently. When the body carries parameter {key: loadReference,
+        value: "true"}, reference data is seeded afterwards: the
+        DashboardAccess.Access, NumberGeneratorSequence.CheckDigitAlgo, and
+        MaximumCheck vocabularies plus the eight default number generators —
+        all idempotently (lookupOrCreate; generators by code, sequences by
+        owner + code); {key: loadSample, value: "true"} loads the sample
+        widget types. With blank module_to and purge=true: purges the
+        tenant — the schema and all its data are dropped. With module_from
+        present, blank module_to, and purge=false (the shape Okapi sends on
+        disable): answers 204 without running Liquibase and without
+        seeding — schema and data stay untouched and only the tenant's
+        in-memory caches are evicted. A body with blank (or absent)
+        module_to whose purge flag is omitted or null is rejected with 400
+        and the errors envelope before any tenant work starts — dropping a
+        tenant schema requires an explicit purge=true, so the module never
+        binds a destructive default in its place. Okapi always sends the
+        flag explicitly on the 2.0 interface, making the rejection
+        unreachable on an Okapi-driven lifecycle. The job completes
+        synchronously.
+      x-folio-permissions-required: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./tenant-attributes-dto.yaml"
+      responses:
+        "204":
+          description: Tenant job completed synchronously.
+        "400":
+          description: >
+            Blank (or absent) module_to with an omitted or null purge
+            flag — destroying a tenant requires an explicit purge=true,
+            so the module refuses to guess. Answered with the errors
+            envelope; no tenant state is touched.
+
+  /_/tenant/{operationId}:
+    parameters:
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Tenant operation (job) identifier.
+    get:
+      summary: Check completion of a tenant operation
+      operationId: getTenant
+      x-sdd-refs:
+        - specs/requirements/tenant-lifecycle.yaml#/id
+      description: >
+        Reports whether the identified tenant operation has completed.
+        Every operation this module runs completes synchronously inside
+        POST /_/tenant, so the answer is always "true".
+      x-folio-permissions-required: []
+      responses:
+        "200":
+          description: Operation complete.
+          content:
+            text/plain:
+              schema:
+                type: string
+                enum: ["true"]
+    delete:
+      summary: Delete a tenant operation record
+      operationId: deleteTenant
+      x-sdd-refs:
+        - specs/requirements/tenant-lifecycle.yaml#/id
+      description: >
+        Acknowledges deletion of the identified tenant operation. The
+        module keeps no operation records (jobs complete synchronously), so
+        this is a no-op acknowledgement.
+      x-folio-permissions-required: []
+      responses:
+        "204":
+          description: Operation record deleted (no-op).

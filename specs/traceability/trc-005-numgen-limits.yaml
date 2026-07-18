@@ -1,0 +1,15 @@
+id: TRC-005
+title: Sequence maximum thresholds implementation
+description: Maximum-value guard order and warning/error envelopes on generation, with the legacy 422
+  validation envelope on invalid input.
+spec_ref: specs/requirements/numgen-limits.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.service.numgen.NumberGeneratorService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.web.LegacyValidationException
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.NumberGeneratorParityIT
+  kind: integration-test

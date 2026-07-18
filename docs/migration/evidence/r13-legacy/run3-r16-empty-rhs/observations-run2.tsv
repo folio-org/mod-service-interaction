@@ -1,0 +1,7 @@
+empty-eq2	prefix==	200	11
+empty-ne	prefix!=	200	11
+empty-eq1	prefix=	200	11
+empty-ltgt	prefix<>	200	11
+empty-ieq	code=i=	200	11
+empty-contains	code=~	200	11
+empty-ncontains	code!~	200	11

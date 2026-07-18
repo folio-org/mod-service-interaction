@@ -1,0 +1,158 @@
+app_setting|st_default_value|character varying|YES|
+app_setting|st_hidden|boolean|YES|
+app_setting|st_id|character varying|NO|
+app_setting|st_key|character varying|YES|
+app_setting|st_section|character varying|YES|
+app_setting|st_setting_type|character varying|YES|
+app_setting|st_value|text|YES|
+app_setting|st_version|bigint|NO|
+app_setting|st_vocab|character varying|YES|
+custom_property|definition_id|character varying|YES|
+custom_property|id|bigint|NO|
+custom_property|internal|boolean|NO|
+custom_property|note|text|YES|
+custom_property|parent_id|bigint|YES|
+custom_property|public_note|text|YES|
+custom_property|version|bigint|NO|
+custom_property_blob|id|bigint|NO|
+custom_property_blob|value|oid|NO|
+custom_property_boolean|id|bigint|NO|
+custom_property_boolean|value|boolean|NO|
+custom_property_container|id|bigint|NO|
+custom_property_decimal|id|bigint|NO|
+custom_property_decimal|value|numeric|NO|
+custom_property_definition|default_internal|boolean|NO|
+custom_property_definition|pd_ctx|character varying|YES|
+custom_property_definition|pd_description|text|YES|
+custom_property_definition|pd_id|character varying|NO|
+custom_property_definition|pd_label|character varying|NO|
+custom_property_definition|pd_name|character varying|NO|
+custom_property_definition|pd_primary|boolean|NO|
+custom_property_definition|pd_retired|boolean|NO|
+custom_property_definition|pd_type|character varying|NO|
+custom_property_definition|pd_weight|integer|NO|
+custom_property_definition|version|bigint|NO|
+custom_property_integer|id|bigint|NO|
+custom_property_integer|value|bigint|NO|
+custom_property_multi_blob|id|bigint|NO|
+custom_property_multi_blob_value|custom_property_multi_blob_id|bigint|NO|
+custom_property_multi_blob_value|value_byte;|bytea|YES|
+custom_property_multi_decimal|id|bigint|NO|
+custom_property_multi_decimal_value|custom_property_multi_decimal_id|bigint|NO|
+custom_property_multi_decimal_value|value_big_decimal|numeric|YES|
+custom_property_multi_integer|id|bigint|NO|
+custom_property_multi_integer_value|custom_property_multi_integer_id|bigint|NO|
+custom_property_multi_integer_value|value_big_integer|numeric|YES|
+custom_property_multi_local_date|id|bigint|NO|
+custom_property_multi_local_date_value|custom_property_multi_local_date_id|bigint|NO|
+custom_property_multi_local_date_value|value_local_date|date|YES|
+custom_property_multi_refdata|id|bigint|NO|
+custom_property_multi_refdata_refdata_value|custom_property_multi_refdata_value_id|bigint|NO|
+custom_property_multi_refdata_refdata_value|refdata_value_id|character varying|YES|
+custom_property_multi_text|id|bigint|NO|
+custom_property_multi_text_value|custom_property_multi_text_id|bigint|NO|
+custom_property_multi_text_value|value_string|character varying|YES|
+custom_property_refdata|id|bigint|NO|
+custom_property_refdata|value_id|character varying|NO|
+custom_property_refdata_definition|category_id|character varying|NO|
+custom_property_refdata_definition|pd_id|character varying|NO|
+custom_property_text|id|bigint|NO|
+custom_property_text|value|text|NO|
+dashboard|dshb_description|text|YES|
+dashboard|dshb_id|character varying|NO|
+dashboard|dshb_name|character varying|YES|
+dashboard|dshb_version|bigint|NO|
+dashboard_access|da_access_fk|character varying|YES|
+dashboard_access|da_dashboard_fk|character varying|YES|
+dashboard_access|da_date_created|timestamp without time zone|YES|
+dashboard_access|da_default_user_dashboard|boolean|NO|
+dashboard_access|da_id|character varying|NO|
+dashboard_access|da_user_dashboard_weight|bigint|YES|
+dashboard_access|da_user_fk|character varying|YES|
+dashboard_access|da_version|bigint|NO|
+dashboard_display_data|ddd_dash_id|character varying|YES|
+dashboard_display_data|ddd_id|character varying|NO|
+dashboard_display_data|ddd_layout_data|text|YES|
+dashboard_display_data|ddd_version|bigint|NO|
+db_key_pair|kp_alg|character varying|YES|
+db_key_pair|kp_available_from|timestamp without time zone|YES|
+db_key_pair|kp_expires_at|timestamp without time zone|YES|
+db_key_pair|kp_id|character varying|NO|
+db_key_pair|kp_private_key|text|YES|
+db_key_pair|kp_public_key|text|YES|
+db_key_pair|kp_usage|character varying|YES|
+db_key_pair|kp_version|bigint|NO|
+external_user|eu_id|character varying|NO|
+external_user|eu_version|bigint|NO|
+number_generator|ng_code|character varying|NO|
+number_generator|ng_default_seq_code|character varying|YES|
+number_generator|ng_description|character varying|YES|
+number_generator|ng_id|character varying|NO|
+number_generator|ng_name|character varying|NO|
+number_generator|ng_version|bigint|NO|
+number_generator_sequence|ngs_check_digit_algorithm_fk|character varying|YES|
+number_generator_sequence|ngs_code|character varying|NO|
+number_generator_sequence|ngs_description|character varying|YES|
+number_generator_sequence|ngs_enabled|boolean|YES|
+number_generator_sequence|ngs_format|character varying|YES|
+number_generator_sequence|ngs_id|character varying|NO|
+number_generator_sequence|ngs_last_used_year|character varying|YES|
+number_generator_sequence|ngs_maximum_check_fk|character varying|YES|
+number_generator_sequence|ngs_maximum_number|bigint|YES|
+number_generator_sequence|ngs_maximum_number_threshold|bigint|YES|
+number_generator_sequence|ngs_name|character varying|YES|
+number_generator_sequence|ngs_next_value|bigint|YES|
+number_generator_sequence|ngs_output_template|character varying|YES|
+number_generator_sequence|ngs_owner|character varying|NO|
+number_generator_sequence|ngs_postfix|character varying|YES|
+number_generator_sequence|ngs_pre_checksum_template|character varying|YES|
+number_generator_sequence|ngs_prefix|character varying|YES|
+number_generator_sequence|ngs_reset_on_year_change|boolean|YES|false
+number_generator_sequence|ngs_version|bigint|NO|
+refdata_category|internal|boolean|NO|
+refdata_category|rdc_description|character varying|NO|
+refdata_category|rdc_id|character varying|NO|
+refdata_category|rdc_version|bigint|NO|
+refdata_value|rdv_id|character varying|NO|
+refdata_value|rdv_label|character varying|NO|
+refdata_value|rdv_owner|character varying|NO|
+refdata_value|rdv_value|character varying|NO|
+refdata_value|rdv_version|bigint|NO|
+tenant_changelog|author|character varying|NO|
+tenant_changelog|comments|character varying|YES|
+tenant_changelog|contexts|character varying|YES|
+tenant_changelog|dateexecuted|timestamp without time zone|NO|
+tenant_changelog|deployment_id|character varying|YES|
+tenant_changelog|description|character varying|YES|
+tenant_changelog|exectype|character varying|NO|
+tenant_changelog|filename|character varying|NO|
+tenant_changelog|id|character varying|NO|
+tenant_changelog|labels|character varying|YES|
+tenant_changelog|liquibase|character varying|YES|
+tenant_changelog|md5sum|character varying|YES|
+tenant_changelog|orderexecuted|integer|NO|
+tenant_changelog|tag|character varying|YES|
+tenant_changelog_lock|id|integer|NO|
+tenant_changelog_lock|locked|boolean|NO|
+tenant_changelog_lock|lockedby|character varying|YES|
+tenant_changelog_lock|lockgranted|timestamp without time zone|YES|
+widget_definition|wdef_definition|text|YES|
+widget_definition|wdef_definition_version|character varying|YES|
+widget_definition|wdef_id|character varying|NO|
+widget_definition|wdef_name|character varying|YES|
+widget_definition|wdef_type_name|character varying|YES|
+widget_definition|wdef_type_version|character varying|YES|
+widget_definition|wdef_version|bigint|NO|
+widget_instance|wins_configuration|text|YES|
+widget_instance|wins_definition_name|character varying|YES|
+widget_instance|wins_definition_version|character varying|YES|
+widget_instance|wins_id|character varying|NO|
+widget_instance|wins_name|character varying|YES|
+widget_instance|wins_owner_fk|character varying|YES|
+widget_instance|wins_version|bigint|NO|
+widget_instance|wins_weight|bigint|YES|
+widget_type|wtype_id|character varying|NO|
+widget_type|wtype_name|character varying|YES|
+widget_type|wtype_schema|text|YES|
+widget_type|wtype_type_version|character varying|YES|
+widget_type|wtype_version|bigint|NO|

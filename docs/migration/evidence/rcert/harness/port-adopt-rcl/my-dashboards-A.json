@@ -1,0 +1,61 @@
+[
+  {
+    "access": {
+      "id": "7b68f84c4728626510d0c0eff24c746d",
+      "label": "Manage",
+      "owner": {
+        "desc": "DashboardAccess.Access",
+        "id": "6811675c8ffb24738d6dfacbbbb1181e",
+        "internal": true
+      },
+      "value": "manage"
+    },
+    "dashboard": {
+      "id": "388ad9ea-37d7-4c4f-aa74-ec1c985265bc",
+      "name": "Migration Board",
+      "widgets": [
+        {
+          "id": "cc083a92-34ec-430d-a439-6e5059bc0b1c",
+          "name": "M4 widget one",
+          "weight": 0
+        },
+        {
+          "id": "4ebfa16c-5970-49f4-a5d2-d19d47d75af4",
+          "name": "M4 widget two",
+          "weight": 1
+        }
+      ]
+    },
+    "dateCreated": "2026-07-22T18:59:05Z",
+    "defaultUserDashboard": false,
+    "id": "8d16f1bf-58b5-4bc6-9f99-60d2bc55b2ca",
+    "user": {
+      "id": "11111111-1111-1111-1111-111111111111"
+    },
+    "userDashboardWeight": 1
+  },
+  {
+    "access": {
+      "id": "7b68f84c4728626510d0c0eff24c746d",
+      "label": "Manage",
+      "owner": {
+        "desc": "DashboardAccess.Access",
+        "id": "6811675c8ffb24738d6dfacbbbb1181e",
+        "internal": true
+      },
+      "value": "manage"
+    },
+    "dashboard": {
+      "id": "f99d1a77-7531-4e84-be10-df2cdf05b413",
+      "name": "My dashboard",
+      "widgets": []
+    },
+    "dateCreated": "2026-07-22T18:59:05Z",
+    "defaultUserDashboard": true,
+    "id": "a4947f9b-1b2f-4357-9391-e84771dcd100",
+    "user": {
+      "id": "11111111-1111-1111-1111-111111111111"
+    },
+    "userDashboardWeight": 0
+  }
+]

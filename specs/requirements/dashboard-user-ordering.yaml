@@ -1,0 +1,42 @@
+# Bulk reordering of the caller's own dashboards
+# (legacy: DashboardController.editUserDashboards, PUT my-dashboards).
+
+id: REQ-009
+title: Dashboard user ordering
+description: >
+  When a user reorders their dashboards, the module shall accept a bulk
+  array of the caller's own DashboardAccess objects at
+  PUT /servint/dashboard/my-dashboards and apply only ordering fields:
+  userDashboardWeight updates freely; defaultUserDashboard may only
+  transition false→true, and electing a new default clears the flag on all
+  of the caller's other access objects. The whole request is rejected up
+  front — 400 when any item lacks id or user.id, 403 when any item names a
+  foreign user — and creation of new access objects via this route is
+  ignored. The endpoint returns the refreshed my-dashboards list.
+
+ears_pattern: event-driven
+priority: medium
+
+refs:
+  - specs/project/project.yaml#/goals/1
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      Each submitted item updates the userDashboardWeight of the caller's
+      matching access object; unchanged items are not re-saved.
+  - id: AC2
+    text: >
+      defaultUserDashboard only transitions false→true; when an item becomes
+      the default, defaultUserDashboard is cleared on all the caller's other
+      access objects, preserving a single default.
+  - id: AC3
+    text: >
+      The whole request is rejected with 400 when any item is missing id or
+      user.id, and with 403 when any item's user.id is not the caller's;
+      no item is applied in either case.
+  - id: AC4
+    text: >
+      The endpoint responds with the caller's refreshed my-dashboards list;
+      items without an existing access object (attempted creation) are
+      ignored.

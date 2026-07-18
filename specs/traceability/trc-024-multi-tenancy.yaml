@@ -1,0 +1,17 @@
+id: TRC-024
+title: Multi-tenancy enforcement
+description: Schema-per-tenant resolution with the legacy-identical schema naming, and tenant-scoped state
+  where legacy was tenant-blind (attestation key cache).
+spec_ref: specs/requirements/nfr-multi-tenancy.yaml#/id
+refs:
+- specs/decisions/006-schema-per-tenant-resolution.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.service.ServintTenantService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.SchemaNameParityTest
+  kind: integration-test
+- language: java
+  qualified_name: org.folio.servint.service.attestation.KeyPairService
+  kind: class

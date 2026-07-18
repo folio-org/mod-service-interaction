@@ -1,0 +1,238 @@
+[
+  {
+    "code": "inventory_accessionNumber",
+    "id": "610bc287-f48c-4cde-ba14-59075d25abe3",
+    "name": "Inventory: Accession number",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f906461019f906496330017",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f906461019f906496300016",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "accessionNumber",
+        "enabled": true,
+        "format": "00000",
+        "id": "2d44f4f3-82c0-4ea5-862e-0afee503ac8c",
+        "name": "Accession number",
+        "nextValue": 1,
+        "outputTemplate": "31A-2023-${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "inventory_callNumber",
+    "id": "8135fe80-93aa-4419-9f6a-7b27f709a882",
+    "name": "Inventory: Call number",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f906461019f906496330017",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f906461019f906496300016",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "callNumber",
+        "enabled": true,
+        "format": "00000",
+        "id": "ff029b0b-cc1e-4960-badb-7d37c1ebaccf",
+        "name": "Call number",
+        "nextValue": 1,
+        "outputTemplate": "B 2023 / ${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "inventory_itemBarcode",
+    "id": "e6c7fd04-09a0-400c-a257-77b63c9025a7",
+    "name": "Inventory: Item barcode",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f906461019f906496330017",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f906461019f906496300016",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "itemBarcode",
+        "enabled": true,
+        "format": "0000000000",
+        "id": "96c6fb72-0d53-467f-94e4-1a7294d3e125",
+        "name": "Item barcode",
+        "nextValue": 1,
+        "outputTemplate": "${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "openAccess",
+    "id": "8fb185eb-7381-4524-8f60-2af923215900",
+    "name": "Open access: Publication request number",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f906461019f906496330017",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f906461019f906496300016",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "requestSequence",
+        "enabled": true,
+        "format": "000000000",
+        "id": "87397dd1-e5e8-4bd8-9c32-44d0f5cebb7b",
+        "name": "Request sequence",
+        "nextValue": 1,
+        "outputTemplate": "oa-${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "organizations_vendorCode",
+    "id": "7c9a708d-0636-46c0-b01c-468f2d7ff60a",
+    "name": "Organizations: Vendor code",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f906461019f906496330017",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f906461019f906496300016",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "vendor",
+        "enabled": true,
+        "format": "000",
+        "id": "892ee04e-ad37-49f3-8c29-808630447a84",
+        "name": "Vendor",
+        "nextValue": 1,
+        "outputTemplate": "K${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "patronRequest",
+    "id": "f504c555-0ed8-495e-bd68-be612183d2a0",
+    "name": "ILL: Patron request number",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f906461019f9064963a0018",
+          "label": "31-RTL-mod10-I (EAN)",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f906461019f906496300016",
+            "internal": true
+          },
+          "value": "ean13"
+        },
+        "code": "requestSequence",
+        "enabled": true,
+        "format": "000000000",
+        "id": "675334c4-2043-4291-b23f-e497bc38ddc1",
+        "name": "Request sequence",
+        "nextValue": 1,
+        "outputTemplate": "ill-${generated_number}-${checksum}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "serialsManagement_patternNumber",
+    "id": "2033540d-8771-40c1-bee1-c2d2333689a8",
+    "name": "Serials management: Pattern number",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f906461019f906496330017",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f906461019f906496300016",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "patternNumber",
+        "enabled": true,
+        "format": "000000000",
+        "id": "27590574-2ad3-4d02-8966-0e0d3d523241",
+        "name": "Pattern number",
+        "nextValue": 1,
+        "outputTemplate": "pattern-${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "users_patronBarcode",
+    "id": "661a6fd9-937c-4067-86ff-fe3983a5cbf2",
+    "name": "Users: Patron barcode",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f906461019f9064963a0018",
+          "label": "31-RTL-mod10-I (EAN)",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f906461019f906496300016",
+            "internal": true
+          },
+          "value": "ean13"
+        },
+        "code": "staff",
+        "enabled": true,
+        "format": "000000000",
+        "id": "7f168238-9436-4ee5-bcad-1bb5fc29273c",
+        "name": "Staff",
+        "nextValue": 1,
+        "outputTemplate": "S${generated_number}-${checksum}",
+        "resetOnYearChange": false
+      },
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f906461019f9064963a0018",
+          "label": "31-RTL-mod10-I (EAN)",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f906461019f906496300016",
+            "internal": true
+          },
+          "value": "ean13"
+        },
+        "code": "patron",
+        "enabled": true,
+        "format": "000000000",
+        "id": "79be7a1f-fbb9-408c-918f-f9ab61c2cf3e",
+        "name": "Patron",
+        "nextValue": 1,
+        "outputTemplate": "P${generated_number}-${checksum}",
+        "resetOnYearChange": false
+      }
+    ]
+  }
+]

@@ -1,0 +1,54 @@
+id: TRC-023
+title: Data continuity enforcement
+description: "MARK_RAN-guarded adoption changesets reproduce the legacy DDL (constraint
+  names included; refdata_category.internal default corrected per review F-10, one
+  benign column-ordinal delta registered as D-16). What is proven where, stated as
+  the exact asserted scope (review-4 F-41): fresh-schema DDL and lifecycle by
+  TenantEnableIT, with the remediated catalog claims pinned by FreshDdlCatalogIT on
+  a schema built from scratch by the adoption-baseline changelog — targeted DDL
+  properties (table catalog, constraint names, column defaults), not a full DDL dump
+  comparison; adoption of populated legacy schemas both by the committed empirical
+  rehearsal against the real legacy module — the R13 re-run under
+  docs/migration/evidence/r13-legacy/ (rig identification incl. jar sha256, two
+  independent fresh-tenant runs with identical manifests, raw + normalized bodies,
+  per-table row counts, and the checked-in populated-schema pg_dump fixture
+  r13b-populated-schema.sql) — and in-suite by AdoptedSchemaUpgradeIT, which
+  restores that fixture and asserts the upgrade end to end: all 14 adoption
+  changesets MARK_RAN with zero EXECUTED; the table-name census identical to the
+  ground-truth fixture and unchanged by the upgrade except Liquibase's bookkeeping
+  pair; the row counts of all 37 legacy tables identical to the r13b ground truth
+  (run2/rowcounts.tsv — the whole committed fixture, parsed and compared table by
+  table, not a sample) both before and after the upgrade; generator and
+  widget-definition wire readbacks on the adopted schema; idempotent re-seeding;
+  and a repeat upgrade as a no-op. Honest residual: bit-for-bit row-content
+  identity — a per-column value comparison of every surviving row — is not asserted
+  by any IT; the executed continuity assertions are census, row counts, and wire
+  readback."
+spec_ref: specs/requirements/nfr-data-continuity.yaml#/id
+refs:
+- specs/decisions/005-liquibase-adoption-of-legacy-schemas.yaml#/id
+code_symbols:
+- language: xml
+  qualified_name: src/main/resources/db/changelog/changes/adoption-baseline-numgen.xml
+  kind: liquibase-changelog
+- language: xml
+  qualified_name: src/main/resources/db/changelog/changes/adoption-baseline-dashboards.xml
+  kind: liquibase-changelog
+- language: xml
+  qualified_name: src/main/resources/db/changelog/changes/adoption-baseline-keypair.xml
+  kind: liquibase-changelog
+- language: xml
+  qualified_name: src/main/resources/db/changelog/changes/adoption-baseline-settings.xml
+  kind: liquibase-changelog
+- language: xml
+  qualified_name: src/main/resources/db/changelog/changes/adoption-baseline.xml
+  kind: liquibase-changelog
+- language: java
+  qualified_name: org.folio.servint.TenantEnableIT
+  kind: integration-test
+- language: java
+  qualified_name: org.folio.servint.AdoptedSchemaUpgradeIT
+  kind: integration-test
+- language: java
+  qualified_name: org.folio.servint.FreshDdlCatalogIT
+  kind: integration-test

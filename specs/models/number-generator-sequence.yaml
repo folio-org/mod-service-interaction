@@ -1,0 +1,141 @@
+# Number generator sequence — the unit of generation state.
+# Legacy persistence: cols ngs_*, id uuid2 char(36); refdata FKs for
+# checkDigitAlgo (category NumberGeneratorSequence.CheckDigitAlgo) and
+# maximumCheck (category NumberGeneratorSequence.MaximumCheck).
+
+id: number-generator-sequence
+name: NumberGeneratorSequence
+description: >-
+  A single monotonically increasing sequence owned by a NumberGenerator.
+  Carries formatting (decimal format pattern), templating (pre-checksum and
+  output templates), check-digit configuration, year-reset behaviour and
+  maximum-value guard state. nextValue is the NEXT value to hand out; it is
+  incremented (under a pessimistic lock) on every successful generation.
+  Legacy columns: ngs_id, ngs_version, ngs_owner, ngs_code, ngs_name,
+  ngs_prefix, ngs_postfix, ngs_next_value, ngs_format,
+  ngs_check_digit_algorithm_fk, ngs_output_template,
+  ngs_pre_checksum_template, ngs_description, ngs_enabled,
+  ngs_reset_on_year_change, ngs_last_used_year, ngs_maximum_number,
+  ngs_maximum_number_threshold, ngs_maximum_check_fk.
+fields:
+  - name: id
+    type: uuid
+    required: true
+    description: Unique identifier (column ngs_id).
+  - name: code
+    type: string
+    required: true
+    description: Sequence code, unique within its owning generator (column ngs_code).
+  - name: name
+    type: string
+    required: true
+    description: Human-readable name (column ngs_name).
+  - name: prefix
+    type: string
+    required: false
+    nullable: true
+    description: Deprecated prefix used only by the default output template (column ngs_prefix).
+  - name: postfix
+    type: string
+    required: false
+    nullable: true
+    description: Deprecated postfix used only by the default output template (column ngs_postfix).
+  - name: format
+    type: string
+    required: false
+    nullable: true
+    description: >-
+      Decimal format pattern applied to the raw sequence value (e.g. 000000000
+      zero-pads to 9 digits; 000,000,000 groups with commas; unset renders the
+      bare integer). Column ngs_format.
+  - name: nextValue
+    type: integer
+    required: false
+    nullable: true
+    description: >-
+      Next value the sequence will hand out (column ngs_next_value). CRITICAL
+      migration invariant — must survive production upgrade so no number is
+      ever issued twice.
+  - name: preChecksumTemplate
+    type: string
+    required: false
+    nullable: true
+    description: >-
+      Optional template applied to the formatted number BEFORE the check digit
+      is computed; its output becomes the checksum input (parameter
+      generated_number). Column ngs_pre_checksum_template.
+  - name: outputTemplate
+    type: string
+    required: false
+    nullable: true
+    description: >-
+      Template producing the final rendered number. Available parameters:
+      prefix, postfix (deprecated), generated_number, checksum_input_template,
+      checksum, current_year. Column ngs_output_template.
+  - name: description
+    type: string
+    required: false
+    nullable: true
+    description: Optional free-text description (column ngs_description).
+  - name: enabled
+    type: boolean
+    required: false
+    nullable: true
+    description: Whether the sequence may be used (defaults true; column ngs_enabled).
+  - name: resetOnYearChange
+    type: boolean
+    required: false
+    nullable: true
+    description: >-
+      When true the sequence restarts at 1 on the first use (or timer run) after
+      the UTC calendar year changes. Only valid when outputTemplate contains the
+      ${current_year} token (validation error resetOnYearChange.tokenMissing
+      otherwise). Column ngs_reset_on_year_change.
+  - name: lastUsedYear
+    type: string
+    required: false
+    nullable: true
+    description: >-
+      UTC year (as string) of the last successful generation; drives the
+      year-reset-pending derivation. Column ngs_last_used_year.
+  - name: maximumNumber
+    type: integer
+    required: false
+    nullable: true
+    description: Hard ceiling for the raw sequence value (column ngs_maximum_number).
+  - name: maximumNumberThreshold
+    type: integer
+    required: false
+    nullable: true
+    description: Warning threshold below the maximum (column ngs_maximum_number_threshold).
+  - name: checkDigitAlgo
+    type: string
+    required: false
+    nullable: true
+    description: >-
+      Reference-data value (category NumberGeneratorSequence.CheckDigitAlgo)
+      selecting the check-digit algorithm: none, ean13, isbn10checkdigit,
+      issncheckdigit, luhncheckdigit, 1793_ltr_mod10_r, 12_ltr_mod10_r.
+      Column ngs_check_digit_algorithm_fk.
+  - name: maximumCheck
+    type: string
+    required: false
+    nullable: true
+    description: >-
+      DERIVED reference-data value (category NumberGeneratorSequence.MaximumCheck)
+      recomputed on every save: at_maximum when nextValue > maximumNumber;
+      over_threshold when nextValue > maximumNumberThreshold; below_threshold
+      when maximum and threshold are configured; null otherwise.
+      Column ngs_maximum_check_fk.
+relationships:
+  - name: owner
+    type: belongs_to
+    target: NumberGenerator
+    description: Owning generator (column ngs_owner).
+refs:
+  - specs/requirements/numgen-crud.yaml#/id
+  - specs/requirements/numgen-generation.yaml#/id
+  - specs/requirements/numgen-checksums.yaml#/id
+  - specs/requirements/numgen-year-reset.yaml#/id
+  - specs/requirements/numgen-limits.yaml#/id
+  - specs/requirements/listing-grammar.yaml#/id

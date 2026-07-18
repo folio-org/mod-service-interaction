@@ -1,0 +1,17 @@
+== step 1: fresh enable {module_to, purge:false} -> expect 204
+status=204  schema,changelog=1|14
+== step 2: flagless disable {module_from} (purge OMITTED) -> expect 400 purge.not.explicit, zero side effects
+status=400  schema,changelog=1|14
+-- body: {"errors":[{"message":"Blank module_to requires an explicit purge flag","code":"purge.not.explicit"}]}
+== step 3: empty body {} -> expect 400
+status=400  schema,changelog=1|14
+-- body: {"errors":[{"message":"Blank module_to requires an explicit purge flag","code":"purge.not.explicit"}]}
+== step 4: explicit null purge -> expect 400
+status=400  schema,changelog=1|14
+-- body: {"errors":[{"message":"Blank module_to requires an explicit purge flag","code":"purge.not.explicit"}]}
+== step 5: explicit disable {module_from, purge:false} -> expect 204, schema+changelog intact
+status=204  schema,changelog=1|14
+== step 6: re-enable {module_to, purge:false} -> expect 204
+status=204  schema,changelog=1|14
+== step 7: explicit purge {module_from, purge:true} -> expect 204, schema DROPPED
+status=204  schema,changelog=schema-gone

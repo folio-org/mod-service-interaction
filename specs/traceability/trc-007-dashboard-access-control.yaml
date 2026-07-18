@@ -1,0 +1,21 @@
+id: TRC-007
+title: Dashboard access control implementation
+description: Per-dashboard access levels with view-edit-manage subsumption, admin-authority override parsed
+  from x-okapi-permissions, and 403-before-404 ordering.
+spec_ref: specs/requirements/dashboard-access-control.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.service.dashboard.DashboardService#hasAccess
+  kind: method
+- language: java
+  qualified_name: org.folio.servint.domain.entity.DashboardAccess
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.DashboardAccessRepository
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.web.OkapiAuthorityService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.DashboardParityIT
+  kind: integration-test

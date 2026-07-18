@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/semantic-config.schema.json",
+  "title": "Semantic Lane Configuration Block",
+  "description": "The optional top-level 'semantic' block of sdd.config.yaml that configures the advisory semantic-validation lane. Credentials (API keys) are never stored here — they are read from the environment.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "model": {
+      "type": "object",
+      "description": "Judge-model coordinates. When absent, the lane stays inert and emits semantic.model-unconfigured.",
+      "required": ["provider", "model_id"],
+      "additionalProperties": false,
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "model_id": { "type": "string", "minLength": 1 },
+        "base_url": { "type": "string", "minLength": 1 }
+      }
+    },
+    "precision_floor": { "type": "number", "minimum": 0, "maximum": 1 },
+    "dismissal_kill_switch": { "type": "number", "minimum": 0, "maximum": 1 },
+    "evidence_span_min_ratio": { "type": "number", "minimum": 0, "maximum": 1 }
+  }
+}

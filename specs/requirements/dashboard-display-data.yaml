@@ -1,0 +1,32 @@
+# Per-dashboard layout blob (legacy: DashboardDisplayData; dashId is a
+# plain column, deliberately NOT a foreign key).
+
+id: REQ-011
+title: Dashboard display data
+description: >
+  While a dashboard exists, the module shall expose its display data —
+  a per-dashboard layout record {id, dashId, layoutData} where dashId is a
+  plain (non-FK) reference to the dashboard — at
+  /servint/dashboard/{id}/displayData: GET requires view access and returns
+  the record; PUT requires edit access, updates layoutData, and returns the
+  updated render.
+
+ears_pattern: state-driven
+priority: medium
+
+refs:
+  - specs/project/project.yaml#/goals/1
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      GET /servint/dashboard/{id}/displayData (view required) returns the
+      dashboard's display data as {id, dashId, layoutData}.
+  - id: AC2
+    text: >
+      PUT /servint/dashboard/{id}/displayData (edit required) updates
+      layoutData and returns the updated record.
+  - id: AC3
+    text: >
+      A caller lacking the required level receives 403 — view for GET,
+      edit for PUT.

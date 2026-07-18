@@ -1,0 +1,32 @@
+# R-VER build identity — rebuilt at closing HEAD (2026-07-23)
+
+mvn -B clean verify (full suite):
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.108 s -- in org.folio.servint.SchemaNameParityTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.100 s -- in org.folio.servint.K8sDeploymentTemplateTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.31 s -- in org.folio.servint.FreshDdlCatalogIT
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.396 s -- in org.folio.servint.WidgetFederationParityIT
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.417 s -- in org.folio.servint.NumberGeneratorConcurrencyIT
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.832 s -- in org.folio.servint.WidgetCacheTenantIsolationIT
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.921 s -- in org.folio.servint.RefdataSettingsParityIT
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.294 s -- in org.folio.servint.DisplayDataIdentityIT
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.087 s -- in org.folio.servint.WidgetCacheCapacityIT
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.750 s -- in org.folio.servint.DashboardParityIT
+Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.555 s -- in org.folio.servint.KiwtListingGrammarIT
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.317 s -- in org.folio.servint.TenantEnableIT
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.712 s -- in org.folio.servint.AttestationParityIT
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.001 s -- in org.folio.servint.TenantContractCompletenessIT
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.184 s -- in org.folio.servint.TenantSeedingMatrixIT
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.559 s -- in org.folio.servint.AdoptedSchemaUpgradeIT
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.129 s -- in org.folio.servint.NumberGeneratorParityIT
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.506 s -- in org.folio.servint.AttestationKeyLifecycleIT
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.366 s -- in org.folio.servint.ManagementSurfaceIT
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.859 s -- in org.folio.servint.ErrorEnvelopeMatrixIT
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.349 s -- in org.folio.servint.TenantDisableCacheEvictionIT
+Tests run: 106, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+
+Artifacts:
+9611a5bdeb771b06fb70f38a3aea7fcc487007baf4317c2d4ec28962e92f5eeb  target/mod-service-interaction-5.0.0-SNAPSHOT.jar
+6c14c1959000d156dbde0ec1da17d2c92ef20df004cc5ff0bc8449c1dc5233dd  target/ModuleDescriptor.json
+image mod-service-interaction:rver Id sha256:a358168ca5ea0f0890cc6d3ccf113da78101c37a21c899cb194451622220306b

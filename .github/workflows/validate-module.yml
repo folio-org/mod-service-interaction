@@ -18,17 +18,13 @@ jobs:
       - name: Setup java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
-      - name: Set up Maven
-        uses: stCarolas/setup-maven@v5
-        with:
-          maven-version: 3.8.2
+          distribution: 'temurin'
+          java-version: '21'
       - name: Set up settings file
         uses: 1arp/create-a-file-action@0.4.5
         with:
-          path: 'service'
-          file: 'settings.xml'
+          path: '.'
+          file: 'folio-settings.xml'
           content:
             <settings>
               <profiles>
@@ -48,7 +44,7 @@ jobs:
               </activeProfiles>
             </settings>
       - name: Run validator
-        run: mvn org.folio:folio-module-descriptor-validator:1.0.0:validate -DmoduleDescriptorFile=service/src/main/okapi/ModuleDescriptor-template.json -s service/settings.xml -l validate_module_descriptor_output.txt
+        run: mvn -B org.folio:folio-module-descriptor-validator:1.0.1:validate -DmoduleDescriptorFile=descriptors/ModuleDescriptor-template.json -s folio-settings.xml -l validate_module_descriptor_output.txt
       - name: Upload validator result
         uses: actions/upload-artifact@v4
         if: always()

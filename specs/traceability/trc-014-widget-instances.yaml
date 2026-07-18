@@ -1,0 +1,21 @@
+id: TRC-014
+title: Widget instances implementation
+description: Widget instance CRUD with flat definitionName/definitionVersion request binding, JSON-schema
+  configuration validation, and weight assignment.
+spec_ref: specs/requirements/widget-instances.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.domain.entity.WidgetInstance
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.WidgetInstanceRepository
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.controller.WidgetsController
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.service.widget.JsonSchemaService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.DashboardParityIT
+  kind: integration-test

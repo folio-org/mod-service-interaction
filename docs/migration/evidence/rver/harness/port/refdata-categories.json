@@ -1,0 +1,105 @@
+[
+  {
+    "desc": "DashboardAccess.Access",
+    "id": "6683e96b-78a2-42a7-9c52-14c055357682",
+    "internal": true,
+    "values": [
+      {
+        "id": "77ec8fba-d61c-49ba-9d8e-33f483b4c7f2",
+        "label": "Edit",
+        "value": "edit"
+      },
+      {
+        "id": "4f63617d-764f-498f-bc67-e8533fed86a9",
+        "label": "Manage",
+        "value": "manage"
+      },
+      {
+        "id": "b5a62cff-3034-41db-bfa2-97b1c0e2c66f",
+        "label": "View",
+        "value": "view"
+      }
+    ]
+  },
+  {
+    "desc": "M4.Custom",
+    "id": "29af0952-9da4-47fd-8489-96501411ddbc",
+    "internal": false,
+    "values": [
+      {
+        "id": "26fa5bcf-4a67-4265-b3d5-ab7f6ef986bb",
+        "label": "First",
+        "value": "first"
+      },
+      {
+        "id": "83e65966-e60f-449b-8d9e-b54c718031cd",
+        "label": "Second",
+        "value": "second_custom"
+      }
+    ]
+  },
+  {
+    "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+    "id": "8a70f36f-c687-40b7-b811-768b5eb3bb4c",
+    "internal": true,
+    "values": [
+      {
+        "id": "ef8003ed-bccb-4632-9b05-b4c0af2bb208",
+        "label": "12-LTR-mod10-R",
+        "value": "12_ltr_mod10_r"
+      },
+      {
+        "id": "99eca3fa-9063-45a1-82be-e8c17a440612",
+        "label": "1793-LTR-mod10-R",
+        "value": "1793_ltr_mod10_r"
+      },
+      {
+        "id": "533adda6-5dea-472a-83a0-f60c41dd6e54",
+        "label": "31-RTL-mod10-I (EAN)",
+        "value": "ean13"
+      },
+      {
+        "id": "a8f7cb73-e378-4996-9329-8773a6276422",
+        "label": "2345678910-RTL-mod11-I-X (ISBN10)",
+        "value": "isbn10checkdigit"
+      },
+      {
+        "id": "4427d316-49e4-4e41-b25a-d4498707c08a",
+        "label": "8765432-LTR-mod11-I-X (ISSN)",
+        "value": "issncheckdigit"
+      },
+      {
+        "id": "593725c5-2d1c-42f0-9368-33cfff5da44f",
+        "label": "21-RTL-mod10-I (Luhn)",
+        "value": "luhncheckdigit"
+      },
+      {
+        "id": "8c3e2164-d41b-4e9d-a7a0-49279cc4c6f9",
+        "label": "None",
+        "value": "none"
+      }
+    ]
+  },
+  {
+    "desc": "NumberGeneratorSequence.MaximumCheck",
+    "id": "b8923200-7674-4f06-b937-409c20026204",
+    "internal": true,
+    "values": [
+      {
+        "id": "3b2bf3ae-12f4-4f08-a548-5750dfe17b09",
+        "label": "At maximum",
+        "value": "at_maximum"
+      },
+      {
+        "id": "047fd84d-edb1-4969-a671-59b2dbfb7a5c",
+        "label": "Below threshold",
+        "value": "below_threshold"
+      },
+      {
+        "id": "a29285fa-35cf-4146-bdc7-44ff88ea7070",
+        "label": "Over threshold",
+        "value": "over_threshold"
+      }
+    ]
+  }
+]

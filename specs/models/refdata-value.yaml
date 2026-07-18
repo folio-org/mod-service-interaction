@@ -1,0 +1,36 @@
+# Controlled-vocabulary value (web-toolkit refdata pattern). Legacy
+# persistence: com.k_int.web.toolkit.refdata.RefdataValue (cols rdv_*),
+# owned by a RefdataCategory. Sequences reference values of the categories
+# NumberGeneratorSequence.CheckDigitAlgo and NumberGeneratorSequence.MaximumCheck.
+
+id: refdata-value
+name: RefdataValue
+description: >-
+  A single controlled-vocabulary value inside a refdata category. The value
+  field is the normalized machine token (e.g. ean13, at_maximum), the label
+  the human-readable form. Values are seeded idempotently per tenant on
+  reference-data load (lookupOrCreate) and referenced by domain entities as
+  foreign keys. Legacy columns: rdv_id, rdv_version, rdv_value, rdv_label,
+  rdv_owner (category FK).
+fields:
+  - name: id
+    type: uuid
+    required: true
+    description: Unique identifier (36-char UUID, column rdv_id).
+  - name: value
+    type: string
+    required: true
+    description: >-
+      Normalized machine token, unique within the owning category (column
+      rdv_value; normalization lowercases and strips to word characters).
+  - name: label
+    type: string
+    required: true
+    description: Human-readable label (column rdv_label).
+  - name: owner
+    type: uuid
+    required: true
+    description: Owning refdata category (column rdv_owner FK).
+refs:
+  - specs/requirements/numgen-crud.yaml#/id
+  - specs/requirements/numgen-checksums.yaml#/id

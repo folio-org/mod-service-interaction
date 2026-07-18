@@ -1,0 +1,73 @@
+# Wire shape of a NumberGeneratorSequence resource
+# (numberGeneratorSequence/_numberGeneratorSequence.gson): expands
+# checkDigitAlgo and maximumCheck as refdata objects; when rendered outside the
+# numberGenerator controller an owner snippet {id, name, code} is included.
+$id: number-generator-sequence-dto
+title: NumberGeneratorSequenceDto
+type: object
+required: [code]
+properties:
+  id:
+    type: string
+    description: Sequence identifier (UUID).
+  code:
+    type: string
+    description: Sequence code, unique within the owning generator.
+  name:
+    type: string
+    description: Human-readable name.
+  prefix:
+    type: string
+    description: Deprecated prefix (default output template only).
+  postfix:
+    type: string
+    description: Deprecated postfix (default output template only).
+  format:
+    type: string
+    description: Decimal format pattern for the raw value.
+  nextValue:
+    type: integer
+    format: int64
+    description: Next raw value the sequence will hand out.
+  preChecksumTemplate:
+    type: string
+    description: Template producing the checksum input from the formatted number.
+  outputTemplate:
+    type: string
+    description: Template producing the final rendered number.
+  description:
+    type: string
+    description: Optional description.
+  enabled:
+    type: boolean
+    description: Whether the sequence may be used.
+  resetOnYearChange:
+    type: boolean
+    description: Restart at 1 on first use after the UTC year changes.
+  lastUsedYear:
+    type: string
+    description: UTC year of the last successful generation.
+  maximumNumber:
+    type: integer
+    format: int64
+    description: Hard ceiling for the raw sequence value.
+  maximumNumberThreshold:
+    type: integer
+    format: int64
+    description: Warning threshold below the maximum.
+  checkDigitAlgo:
+    description: Expanded refdata value selecting the check-digit algorithm.
+    $ref: "./refdata-value-dto.yaml"
+  maximumCheck:
+    description: Expanded derived refdata value of the maximum guard state.
+    $ref: "./refdata-value-dto.yaml"
+  owner:
+    type: object
+    description: Owner snippet, present when rendered outside the generator context.
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      code:
+        type: string

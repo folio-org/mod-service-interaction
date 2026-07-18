@@ -1,0 +1,18 @@
+id: TRC-010
+title: Dashboard user management implementation
+description: Grant/revoke of dashboard access; the users-actions render carries the dashboard as an id-only
+  reference per the M4-verified legacy shape.
+spec_ref: specs/requirements/dashboard-user-management.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.service.dashboard.DashboardService#updateAccessToDashboard
+  kind: method
+- language: java
+  qualified_name: org.folio.servint.controller.DashboardsController
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.mapper.DashboardMapper#toDtoNoDashboard
+  kind: method
+- language: java
+  qualified_name: org.folio.servint.DashboardParityIT
+  kind: integration-test

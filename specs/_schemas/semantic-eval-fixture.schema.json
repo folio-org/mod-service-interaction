@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/semantic-eval-fixture.schema.json",
+  "title": "Semantic-Eval Labeled Fixture Set (C1 calibration)",
+  "description": "Governed labeled evaluation set of correct and deliberately-wrong-but-resolving (GherkinScenario)->(ApiOperation) pairs (FR-81). Marked fixture_kind 'semantic-eval' and EXCLUDED from the byte-parity / dual-runtime fixture set: it is never consumed by a parity test. Each pair carries a ground-truth label plus provenance; the quality gate (Cohen's kappa >= threshold, class balance, adversarial hard-negatives, full adjudication) is enforced by the Story 11.2 harness predicates against the checked-in kappa manifest, adjudication log, and hard-negative manifest. snake_case at the wire boundary.",
+  "type": "object",
+  "required": [
+    "fixture_kind",
+    "reference_type",
+    "status",
+    "candidate_provenance",
+    "items"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "fixture_kind": {
+      "const": "semantic-eval",
+      "description": "Marks the set as semantic-eval so the byte-parity / dual-runtime fixture loader never discovers it (FR-81 AC1)."
+    },
+    "reference_type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The reference-type rule id whose enumeration granularity the set is aligned to (FR-81 AC3)."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["awaiting-calibration", "calibrated"],
+      "description": "'awaiting-calibration' until real >=2-rater labels + Cohen's kappa + full adjudication land; only then does the full FR-81 quality gate enforce."
+    },
+    "candidate_provenance": {
+      "type": "string",
+      "enum": ["authored-spec-extraction", "human-curated"],
+      "description": "Source of the candidate pairs. A verdict-derived source is FORBIDDEN (closes the B2 thaw side-door): candidate pairs may never be sourced from disposition-inferred verdict data."
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/labeled_pair" }
+    }
+  },
+  "$defs": {
+    "labeled_pair": {
+      "type": "object",
+      "description": "One labeled unit, keyed by exactly one (source_spec_id, target_spec_id) pair (FR-81 AC5). The judged target varies per reference type: exactly one of 'api_op' (gherkin-scenario-has-api-backing) or 'acceptance_criterion' (acceptance-criterion-has-scenario-coverage) is present (oneOf). Both target objects are declared under 'properties' so additionalProperties:false admits whichever the oneOf selects (Draft 2020-12: additionalProperties only sees same-object properties, not oneOf subschemas).",
+      "required": [
+        "source_spec_id",
+        "target_spec_id",
+        "scenario_text",
+        "label",
+        "labeler_ids",
+        "label_date",
+        "adjudication_ref"
+      ],
+      "oneOf": [
+        { "required": ["api_op"] },
+        { "required": ["acceptance_criterion"] }
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "source_spec_id": { "type": "string", "minLength": 1 },
+        "target_spec_id": { "type": "string", "minLength": 1 },
+        "scenario_text": { "type": "string", "minLength": 1 },
+        "api_op": { "$ref": "#/$defs/api_op" },
+        "acceptance_criterion": { "$ref": "#/$defs/acceptance_criterion" },
+        "label": {
+          "type": "string",
+          "enum": ["correct", "wrong"],
+          "description": "Ground-truth label (FR-81 AC2)."
+        },
+        "labeler_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Independent rater ids. The >=2-rater requirement (FR-81 AC4) is enforced by the harness predicate, not the schema, so the awaiting-calibration seed validates structurally."
+        },
+        "label_date": { "type": ["string", "null"] },
+        "adjudication_ref": { "type": ["string", "null"] },
+        "real_target_ref": {
+          "type": "string",
+          "description": "For a wrong (hollow) pair: the operation the scenario actually backs, recorded for adjudication review."
+        }
+      }
+    },
+    "api_op": {
+      "type": "object",
+      "required": ["method", "path", "operationId", "summary"],
+      "additionalProperties": false,
+      "properties": {
+        "method": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "operationId": { "type": "string" },
+        "summary": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "acceptance_criterion": {
+      "type": "object",
+      "description": "The judged target for the acceptance-criterion-has-scenario-coverage reference type: the criterion's own id/text plus its parent requirement's id/title (the D3 requirement-general haystack context).",
+      "required": ["ac_id", "text", "requirement_spec_id", "requirement_title"],
+      "additionalProperties": false,
+      "properties": {
+        "ac_id": { "type": "string", "minLength": 1 },
+        "text": { "type": "string", "minLength": 1 },
+        "requirement_spec_id": { "type": "string", "minLength": 1 },
+        "requirement_title": { "type": "string", "minLength": 1 }
+      }
+    },
+    "kappa_threshold": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "default": 0.7,
+      "description": "Cohen's kappa acceptance threshold. A provisional, per-corpus and per-model-calibrated target (FR-81 AC7). This 'default' keyword is the single documented home for the value: no source constant carries it; configuration overrides via sdd.config.yaml semantic.kappa_threshold."
+    },
+    "kappa_manifest": {
+      "type": "object",
+      "description": "Checked-in inter-rater artifact. Each pair is independently rated; Cohen's kappa is computed over the per-rater labels before admission (FR-81 AC4).",
+      "required": ["reference_type", "status", "raters", "per_item_ratings", "kappa"],
+      "additionalProperties": false,
+      "properties": {
+        "reference_type": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "enum": ["awaiting-calibration", "calibrated"] },
+        "raters": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "per_item_ratings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/per_item_rating" }
+        },
+        "kappa": { "type": ["number", "null"], "minimum": -1, "maximum": 1 }
+      }
+    },
+    "per_item_rating": {
+      "type": "object",
+      "required": ["pair_key", "ratings"],
+      "additionalProperties": false,
+      "properties": {
+        "pair_key": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "ratings": {
+          "type": "object",
+          "minProperties": 2,
+          "additionalProperties": { "type": "string", "enum": ["correct", "wrong"] }
+        }
+      }
+    },
+    "adjudication_log": {
+      "type": "object",
+      "description": "Checked-in adjudication artifact. Every rater disagreement is adjudicated to full consensus with zero residual before admission (FR-81 AC5).",
+      "required": ["reference_type", "status", "entries"],
+      "additionalProperties": false,
+      "properties": {
+        "reference_type": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "enum": ["awaiting-calibration", "calibrated"] },
+        "entries": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/adjudication_entry" }
+        }
+      }
+    },
+    "adjudication_entry": {
+      "type": "object",
+      "required": ["pair_key", "disagreed_raters", "resolution", "resolved"],
+      "additionalProperties": false,
+      "properties": {
+        "pair_key": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "disagreed_raters": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "resolution": { "type": ["string", "null"], "enum": ["correct", "wrong", null] },
+        "resolved": { "type": "boolean" }
+      }
+    },
+    "hard_negative_manifest": {
+      "type": "object",
+      "description": "Checked-in adversarial artifact (FR-81 AC3, SC-19). Lists the wrong-but-resolving lexically-overlapping predicate-gaming bait pairs. CI counts them; genuine semantic hardness is human-judgment-bound.",
+      "required": ["reference_type", "hard_negative_keys", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "reference_type": { "type": "string", "minLength": 1 },
+        "hard_negative_keys": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "precision_report": {
+      "type": "object",
+      "description": "Committed FAIL-class precision calibration for one reference type (FR-82, Story 11.7): the recorded per-model verdict maps over the governed C1 set, from which the runtime precision gate derives its PrecisionReport. fixture_kind 'semantic-eval-precision' keeps it out of the byte-parity / dual-runtime fixture set. snake_case at the wire boundary.",
+      "required": ["fixture_kind", "reference_type", "reports"],
+      "additionalProperties": false,
+      "properties": {
+        "fixture_kind": {
+          "const": "semantic-eval-precision",
+          "description": "Marks the file as a semantic-eval precision calibration so the byte-parity / dual-runtime fixture loader never discovers it."
+        },
+        "reference_type": { "type": "string", "minLength": 1 },
+        "reports": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/precision_report_model" }
+        }
+      }
+    },
+    "precision_report_model": {
+      "type": "object",
+      "description": "One model's recorded verdict map over the C1 set. Precision is published PER model_id (NFR-34 provider variance).",
+      "required": [
+        "model_id",
+        "prompt_version",
+        "predicate_version",
+        "source_set_hash",
+        "provenance",
+        "verdicts"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "model_id": { "type": "string", "minLength": 1 },
+        "prompt_version": { "type": "string", "minLength": 1 },
+        "predicate_version": { "type": "string", "minLength": 1 },
+        "source_set_hash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "frozen_C1_hash of the set the verdicts were measured over; a mismatch against the current set voids the calibration (drift guard, NFR-34)."
+        },
+        "provenance": { "type": "string", "minLength": 1 },
+        "verdicts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/precision_verdict_entry" }
+        }
+      }
+    },
+    "precision_verdict_entry": {
+      "type": "object",
+      "description": "The lane's PASS|FAIL verdict for one (source_spec_id, target_spec_id) pair in the C1 set.",
+      "required": ["source_spec_id", "target_spec_id", "verdict"],
+      "additionalProperties": false,
+      "properties": {
+        "source_spec_id": { "type": "string", "minLength": 1 },
+        "target_spec_id": { "type": "string", "minLength": 1 },
+        "verdict": { "type": "string", "enum": ["PASS", "FAIL"] }
+      }
+    }
+  }
+}

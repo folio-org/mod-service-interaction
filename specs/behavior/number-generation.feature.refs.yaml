@@ -1,0 +1,70 @@
+# Sidecar for number-generation.feature — every scenario is backed by the
+# getNextNumber operation and traces to REQ-002/REQ-003 acceptance criteria.
+
+source: specs/behavior/number-generation.feature
+mappings:
+  - element: "#/feature/Number generation/scenario/First number from an auto-created sequence"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-generation.yaml#/acceptance_criteria/AC2
+      - specs/requirements/numgen-generation.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Number generation/scenario/Sequential numbers with prefix and default output template"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-generation.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Number generation/scenario/Prefix and postfix with grouped format"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-generation.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Number generation/scenario/Unformatted sequence renders the raw value"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-generation.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Number generation/scenario/High initial value is formatted"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-generation.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Number generation/scenario/Custom template slices the generated number with substring"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-generation.yaml#/acceptance_criteria/AC5
+  - element: "#/feature/Number generation/scenario/Pre-checksum template feeds the checksum input"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-generation.yaml#/acceptance_criteria/AC6
+  - element: "#/feature/Number generation/scenario/EAN13 check digit"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-checksums.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Number generation/scenario/Luhn check digit"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-checksums.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Number generation/scenario/ISBN-10 check digit"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-checksums.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Number generation/scenario/ISSN check digit including the X digit"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-checksums.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Number generation/scenario/Inverted modulus-10 with weights 1-7-9-3"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-checksums.yaml#/acceptance_criteria/AC5
+  - element: "#/feature/Number generation/scenario/Inverted modulus-10 with weights 1-2"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-checksums.yaml#/acceptance_criteria/AC6
+  - element: "#/feature/Number generation/scenario/Unknown check digit algorithm fails the request"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-checksums.yaml#/acceptance_criteria/AC7
+  - element: "#/feature/Number generation/scenario/Concurrent generation never duplicates numbers"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-generation.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Number generation/scenario/Successful generation stamps the last used year"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-generation.yaml#/acceptance_criteria/AC7

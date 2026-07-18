@@ -1,0 +1,36 @@
+# Widget type — a versioned JSON schema widgets of that type must satisfy.
+# Legacy persistence: cols wtype_*, id uuid2 char(36); unique constraint on
+# (name, typeVersion). Seeded from classpath sample data by the admin
+# type-import action.
+
+id: widget-type
+name: WidgetType
+description: >-
+  A named, versioned widget type whose schema (persisted as a JSON string)
+  validates widget definitions targeting it. Unique per (name,
+  typeVersion); several versions of one name coexist so federation can
+  select the latest compatible one. Legacy columns: wtype_id,
+  wtype_version, wtype_name, wtype_type_version, wtype_schema.
+fields:
+  - name: id
+    type: uuid
+    required: true
+    description: Unique identifier (36-char UUID, column wtype_id).
+  - name: name
+    type: string
+    required: true
+    description: Type name, unique together with typeVersion (column wtype_name).
+  - name: typeVersion
+    type: string
+    required: true
+    description: MAJOR.MINOR version of the type (column wtype_type_version).
+  - name: schema
+    type: string
+    required: true
+    description: >-
+      JSON schema the type's definitions must satisfy, persisted and
+      rendered as a string (column wtype_schema).
+refs:
+  - specs/requirements/widget-types.yaml#/id
+  - specs/requirements/widget-definition-federation.yaml#/id
+  - specs/requirements/admin-actions.yaml#/id

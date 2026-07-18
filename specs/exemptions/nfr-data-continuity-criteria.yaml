@@ -1,0 +1,12 @@
+# Exemption: data-continuity criteria are validated by migration rehearsal
+# against production-shaped schemas (M4) — outside the behavior layer.
+
+id: EX-nfr-data-continuity-criteria
+rule_id: acceptance-criterion-has-scenario-coverage
+target: specs/requirements/nfr-data-continuity.yaml#/acceptance_criteria/*
+category: validated-outside-behavior-layer
+reason: >
+  NFR-002's criteria assert schema-adoption and state-survival properties
+  that only a migration rehearsal against a production-shaped legacy
+  database can verify; they have no per-operation behavior scenario.
+governed_by: specs/decisions/001-spec-first-parity-migration.yaml#/id

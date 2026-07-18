@@ -7,3 +7,11 @@ tools/testing/zk-single-kafka-single/
 */.idea
 
 cdx-bom.json
+
+# Java module build output
+target/
+/.claude/skills/bmad*
+/.claude/skills/sdd*
+/.agents/skills/bmad-*
+/.sdd/
+/.codegraph/

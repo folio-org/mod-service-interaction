@@ -1,0 +1,50 @@
+# AppSetting entity → wire DTO — web-toolkit default render; every column
+# projects identically, settingType included (it is a plain string).
+
+id: app-setting-to-dto
+name: AppSetting to AppSettingDto
+description: >
+  Identity projection of the setting onto its wire shape; nulls are
+  omitted like the legacy default g.render.
+source:
+  type: model
+  ref: specs/models/app-setting.yaml#/id
+target:
+  type: dto
+  ref: specs/api/app-setting-dto.yaml#/$id
+field_mappings:
+  - source_field: id
+    target_field: id
+    transform: identity
+  - source_field: section
+    target_field: section
+    transform: identity
+  - source_field: key
+    target_field: key
+    transform: identity
+  - source_field: settingType
+    target_field: settingType
+    transform: identity
+  - source_field: vocab
+    target_field: vocab
+    transform: identity
+  - source_field: defValue
+    target_field: defValue
+    transform: identity
+  - source_field: value
+    target_field: value
+    transform: identity
+  - source_field: hidden
+    target_field: hidden
+    transform: identity
+refs:
+  - specs/models/app-setting.yaml#/id
+  - specs/api/app-setting-dto.yaml#/type
+  - specs/api/app-setting-dto.yaml#/properties/id
+  - specs/api/app-setting-dto.yaml#/properties/section
+  - specs/api/app-setting-dto.yaml#/properties/key
+  - specs/api/app-setting-dto.yaml#/properties/settingType
+  - specs/api/app-setting-dto.yaml#/properties/vocab
+  - specs/api/app-setting-dto.yaml#/properties/defValue
+  - specs/api/app-setting-dto.yaml#/properties/value
+  - specs/api/app-setting-dto.yaml#/properties/hidden

@@ -1,0 +1,35 @@
+PASS  p1 relayed 200 + upstream body
+PASS  persistence produced artifacts
+PASS  no cleartext header-authorization
+PASS  no cleartext header-okapi
+PASS  no cleartext header-cookie
+PASS  no cleartext header-proxy-auth
+PASS  no cleartext header-custom-auth
+PASS  no cleartext query-access-token
+PASS  no cleartext query-jwt
+PASS  no cleartext query-token-1
+PASS  no cleartext query-token-2
+PASS  no cleartext query-api-key
+PASS  no cleartext query-password
+PASS  all probes logged
+PASS  p1 path access_token correlation hash
+PASS  p1 path jwt correlation hash
+PASS  p1 non-credential param verbatim
+PASS  p1 authorization correlation hash
+PASS  p1 x-okapi-token correlation hash
+PASS  p1 cookie correlation hash
+PASS  p1 proxy-authorization correlation hash
+PASS  p2 mixed-case Access_Token redacted
+PASS  p2 mixed-case API_KEY redacted
+PASS  p2 both repeated token values redacted
+PASS  p2 custom *-authorization redacted
+PASS  tenant capture header file redacts Authorization
+PASS  upstream saw 4 requests
+PASS  upstream p1 query verbatim
+PASS  upstream p1 authorization verbatim
+PASS  upstream p1 x-okapi-token verbatim
+PASS  upstream p1 cookie verbatim
+PASS  upstream p1 proxy-authorization verbatim
+PASS  upstream p3 body verbatim
+
+SELF-TEST PASSED: every credential channel redacted, forwarding intact

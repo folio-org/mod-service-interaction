@@ -1,0 +1,5 @@
+# Read-only pre-capture probe subset for rollout-lane.sh (same two rows the
+# R-CERT rehearsal used as PRE_PROBES — production-safe, no mutations).
+# Columns: id	method	user	expect_legacy	expect_port	path	body
+numgen	GET	A	200	200	/servint/numberGenerators?perPage=100&sort=code%3Basc	-
+settings	GET	A	200	200	/servint/settings/appSettings?perPage=100&sort=key%3Basc	-

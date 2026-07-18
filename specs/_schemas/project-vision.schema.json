@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/project-vision.schema.json",
+  "title": "SDD Project Vision Specification",
+  "description": "Schema for specs/project/vision.(yaml|yml|json) documents.",
+  "type": "object",
+  "required": ["vision", "positioning", "differentiator"],
+  "additionalProperties": false,
+  "properties": {
+    "vision": { "type": "string", "minLength": 1 },
+    "positioning": { "type": "string", "minLength": 1 },
+    "differentiator": { "type": "string", "minLength": 1 },
+    "rationale": { "type": "string", "minLength": 1 },
+    "refs": { "$ref": "#/$defs/ref_list" }
+  },
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "pattern": "^\\S+#(?!#)\\S+$"
+    },
+    "ref_list": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ref" },
+      "uniqueItems": true
+    }
+  }
+}

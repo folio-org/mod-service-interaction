@@ -1,0 +1,70 @@
+# SDD Project Specification — singleton.
+# Migration project: rewrite the legacy Grails/Groovy mod-service-interaction
+# as a Java Spring Boot FOLIO module (folio-spring-support), wire- and
+# data-compatible with the legacy module for a seamless production cutover.
+
+name: mod-service-interaction
+description: >
+  FOLIO cross-app connectivity module: user-configurable dashboards and
+  widgets, configurable number generators (barcodes, request numbers,
+  vendor codes), and RFC 8693 attested assertions for module-to-module
+  federated trust. This spec universe captures the legacy module's exact
+  wire and behavior contracts as the parity target for the Java Spring
+  Boot rewrite.
+version: "1.0.0"
+
+domain: library-services-platform
+
+tags: [folio, okapi, spring-boot, migration, multi-tenant]
+
+links:
+  legacy-repo: https://github.com/folio-org/mod-service-interaction
+  baseline-library: https://github.com/folio-org/folio-spring-support
+
+goals:
+  - title: Number generation parity
+    description: >
+      Preserve the number generator surface — CRUD, atomic next-number
+      generation with templates and check digits, year-based reset, and
+      maximum guards — byte-compatible with the legacy module.
+    refs:
+      - specs/requirements/numgen-crud.yaml#/id
+      - specs/requirements/numgen-generation.yaml#/id
+      - specs/requirements/numgen-checksums.yaml#/id
+      - specs/requirements/numgen-year-reset.yaml#/id
+      - specs/requirements/numgen-limits.yaml#/id
+  - title: Dashboard and widget parity
+    description: >
+      Preserve user dashboards, per-dashboard access control, widget
+      instances, and cross-module widget definition federation.
+    refs:
+      - specs/requirements/dashboard-crud.yaml#/id
+      - specs/requirements/dashboard-access-control.yaml#/id
+      - specs/requirements/dashboard-provisioning.yaml#/id
+      - specs/requirements/dashboard-user-ordering.yaml#/id
+      - specs/requirements/dashboard-user-management.yaml#/id
+      - specs/requirements/dashboard-display-data.yaml#/id
+      - specs/requirements/widget-definitions.yaml#/id
+      - specs/requirements/widget-definition-federation.yaml#/id
+      - specs/requirements/widget-instances.yaml#/id
+      - specs/requirements/widget-types.yaml#/id
+  - title: Attested assertion parity
+    description: >
+      Preserve the RFC 8693 attestation token surface with per-tenant RSA
+      key management.
+    refs:
+      - specs/requirements/attested-assertions.yaml#/id
+  - title: Platform parity and seamless cutover
+    description: >
+      The Java module drops in for the Grails module: identical Okapi
+      interfaces and permissions, schema-per-tenant data continuity, and
+      tenant lifecycle (reference data seeding) parity.
+    refs:
+      - specs/requirements/refdata-management.yaml#/id
+      - specs/requirements/app-settings.yaml#/id
+      - specs/requirements/reference-data-seeding.yaml#/id
+      - specs/requirements/tenant-lifecycle.yaml#/id
+      - specs/requirements/admin-actions.yaml#/id
+      - specs/requirements/nfr-wire-compatibility.yaml#/id
+      - specs/requirements/nfr-data-continuity.yaml#/id
+      - specs/requirements/nfr-multi-tenancy.yaml#/id

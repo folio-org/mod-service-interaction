@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/adr.schema.json",
+  "title": "SDD Architecture Decision Record",
+  "description": "Schema for specs/decisions/*.(yaml|yml|json) ADR documents.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "date",
+    "status",
+    "context",
+    "decision",
+    "consequences"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "date": {
+      "type": "string",
+      "$comment": "Regex enforces YYYY-MM-DD shape only; impossible cross-field dates such as Feb 30 or Apr 31 require format: date with format-assertion, but Draft202012Validator is currently used without format_checker enabled.",
+      "format": "date",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "accepted", "deprecated", "superseded"]
+    },
+    "context": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "decision": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "consequences": {
+      "type": "object",
+      "required": ["positive", "negative"],
+      "additionalProperties": false,
+      "properties": {
+        "positive": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
+        },
+        "negative": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
+        }
+      }
+    },
+    "refs": { "$ref": "#/$defs/ref_list" }
+  },
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "pattern": "^\\S+#(?!#)\\S+$"
+    },
+    "ref_list": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ref" },
+      "uniqueItems": true
+    }
+  }
+}

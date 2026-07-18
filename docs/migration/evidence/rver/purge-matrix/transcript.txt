@@ -1,0 +1,27 @@
+# R-VER gate 1 — R30 adversarial purge matrix over the wire (review-4 F-37)
+# Target: rver-port (mod-service-interaction:rver) :8081, tenant rvpm, db okapi_modules_test
+# Date: 2026-07-23T19:03:36Z
+enable  POST /_/tenant  body={"module_to":"mod-service-interaction-5.0.0","parameters":[{"key":"loadReference","value":"true"}]}  -> HTTP 204 (expect 204) errcode=-  [PASS]
+side-effect probe [after enable]: GET /servint/numberGenerators -> HTTP 200 (expect 200)  [PASS]
+## F-32 flagless trio (omitted / {} / null purge -> 400 purge.not.explicit)
+f32-flagless  POST /_/tenant  body={"module_from":"mod-service-interaction-5.0.0"}  -> HTTP 400 (expect 400) errcode=purge.not.explicit  [PASS]
+f32-empty  POST /_/tenant  body={}  -> HTTP 400 (expect 400) errcode=purge.not.explicit  [PASS]
+f32-null  POST /_/tenant  body={"module_from":"mod-service-interaction-5.0.0","purge":null}  -> HTTP 400 (expect 400) errcode=purge.not.explicit  [PASS]
+## F-37 non-Boolean / duplicate discriminators (each would purge or mis-route via coercion)
+f37-string-true  POST /_/tenant  body={"module_from":"mod-service-interaction-5.0.0","purge":"true"}  -> HTTP 400 (expect 400) errcode=purge.not.explicit  [PASS]
+f37-string-false  POST /_/tenant  body={"module_from":"mod-service-interaction-5.0.0","purge":"false"}  -> HTTP 400 (expect 400) errcode=purge.not.explicit  [PASS]
+f37-int-1  POST /_/tenant  body={"module_from":"mod-service-interaction-5.0.0","purge":1}  -> HTTP 400 (expect 400) errcode=purge.not.explicit  [PASS]
+f37-int-0  POST /_/tenant  body={"module_from":"mod-service-interaction-5.0.0","purge":0}  -> HTTP 400 (expect 400) errcode=purge.not.explicit  [PASS]
+f37-dup-ft  POST /_/tenant  body={"purge": false, "purge": true}  -> HTTP 400 (expect 400) errcode=purge.not.explicit  [PASS]
+f37-dup-tf  POST /_/tenant  body={"purge": true, "purge": false}  -> HTTP 400 (expect 400) errcode=purge.not.explicit  [PASS]
+f37-moduleto-string  POST /_/tenant  body={"module_to":"mod-service-interaction-5.0.0","purge":"true"}  -> HTTP 400 (expect 400) errcode=purge.not.explicit  [PASS]
+f37-array  POST /_/tenant  body={"module_from":"mod-service-interaction-5.0.0","purge":[true]}  -> HTTP 400 (expect 400) errcode=purge.not.explicit  [PASS]
+## controls: nested purge invisible (flagless 400), malformed keeps converter path
+ctl-nested  POST /_/tenant  body={"module_from":"mod-service-interaction-5.0.0","extra":{"purge":true}}  -> HTTP 400 (expect 400) errcode=purge.not.explicit  [PASS]
+ctl-malformed  POST /_/tenant  body={"purge":  -> HTTP 400 (expect 400) errcode=malformed.json  [PASS]
+side-effect probe [after all rejections (schema intact)]: GET /servint/numberGenerators -> HTTP 200 (expect 200)  [PASS]
+## closing controls: explicit Boolean discriminators still work
+disable-false  POST /_/tenant  body={"module_from":"mod-service-interaction-5.0.0","purge":false}  -> HTTP 204 (expect 204) errcode=-  [PASS]
+side-effect probe [after disable purge:false (data kept)]: GET /servint/numberGenerators -> HTTP 200 (expect 200)  [PASS]
+purge-true  POST /_/tenant  body={"module_from":"mod-service-interaction-5.0.0","purge":true}  -> HTTP 204 (expect 204) errcode=-  [PASS]
+matrix exit: 0

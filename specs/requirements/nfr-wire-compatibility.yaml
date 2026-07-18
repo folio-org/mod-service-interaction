@@ -1,0 +1,45 @@
+# NFR: byte-compatible HTTP surface. Validated by parity fixtures and the
+# descriptor diff during cutover (M5), not by behavior scenarios.
+
+id: NFR-001
+title: Wire compatibility
+description: >
+  The Java module shall present an HTTP surface byte-compatible with the
+  legacy Grails module: identical routes, methods, parameters, permission
+  names, status codes, and response wire shapes — including the outcome
+  envelopes whose HTTP status is always 200. The generated ModuleDescriptor
+  shall provide the same Okapi interfaces (servint, dashboard 1.0
+  interfaceType multiple, _timer 1.0 — with `_tenant` deliberately upgraded
+  to 2.0 per ADR-012, registered as dossier deviation D-17) and
+  byte-compatible permissionSets including every `replaces` entry, so
+  existing permission assignments and clients keep working unchanged
+  through cutover.
+
+ears_pattern: ubiquitous
+priority: high
+no_api_coverage_expected: true
+
+refs:
+  - specs/project/project.yaml#/goals/3
+  - specs/decisions/001-spec-first-parity-migration.yaml#/id
+  - specs/decisions/002-wire-envelope-exemptions.yaml#/id
+  - specs/decisions/012-tenant-interface-2-0.yaml#/id
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      Every legacy route and method exists in the new module with identical
+      path, parameters, guarding permission, status codes, and response
+      wire shape.
+  - id: AC2
+    text: >
+      The ModuleDescriptor provides servint, dashboard 1.0 (interfaceType
+      multiple), _timer 1.0, and _tenant 2.0 (the sole deliberate interface
+      deviation, per ADR-012 / dossier D-17) with permissionSets
+      byte-compatible with the legacy descriptor, including the replaces
+      entries for renamed permissions.
+  - id: AC3
+    text: >
+      The legacy parity fixtures (check-digit, templating, year-reset, and
+      limit cases) produce byte-identical outputs on the legacy and new
+      modules.

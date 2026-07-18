@@ -1,0 +1,20 @@
+[
+  {
+    "code": "ab%cd",
+    "id": "8afe2a86-b976-4680-825a-a5504efdd261",
+    "name": "r32 literal-percent discriminator",
+    "sequences": []
+  },
+  {
+    "code": "ab_cd",
+    "id": "a2782042-3d8e-4165-83bb-b713d2cd8c68",
+    "name": "r32 underscore discriminator",
+    "sequences": []
+  },
+  {
+    "code": "abXcd",
+    "id": "2171527a-f4bc-4d46-a927-f906b961a1e1",
+    "name": "r32 single-char discriminator",
+    "sequences": []
+  }
+]

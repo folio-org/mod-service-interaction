@@ -1,0 +1,105 @@
+[
+  {
+    "desc": "DashboardAccess.Access",
+    "id": "eec19c003b9d198c043a0d3838f5b26a",
+    "internal": true,
+    "values": [
+      {
+        "id": "ff8081819f838b7f019f838e9f71001a",
+        "label": "View",
+        "value": "view"
+      },
+      {
+        "id": "ff8081819f838b7f019f838e9f6e0019",
+        "label": "Edit",
+        "value": "edit"
+      },
+      {
+        "id": "120eb666edcb10909a9dfc5a4565b172",
+        "label": "Manage",
+        "value": "manage"
+      }
+    ]
+  },
+  {
+    "desc": "M4.Custom",
+    "id": "ff8081819f838b7f019f838eb5bb0027",
+    "internal": false,
+    "values": [
+      {
+        "id": "ff8081819f838b7f019f838eb5bc0028",
+        "label": "Second",
+        "value": "second_custom"
+      },
+      {
+        "id": "ff8081819f838b7f019f838eb5bc0029",
+        "label": "First",
+        "value": "first"
+      }
+    ]
+  },
+  {
+    "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+    "id": "ff8081819f838b7f019f838e9f78001b",
+    "internal": true,
+    "values": [
+      {
+        "id": "ff8081819f838b7f019f838e9f870022",
+        "label": "21-RTL-mod10-I (Luhn)",
+        "value": "luhncheckdigit"
+      },
+      {
+        "id": "ff8081819f838b7f019f838e9f7a001c",
+        "label": "None",
+        "value": "none"
+      },
+      {
+        "id": "ff8081819f838b7f019f838e9f850021",
+        "label": "8765432-LTR-mod11-I-X (ISSN)",
+        "value": "issncheckdigit"
+      },
+      {
+        "id": "ff8081819f838b7f019f838e9f7d001d",
+        "label": "31-RTL-mod10-I (EAN)",
+        "value": "ean13"
+      },
+      {
+        "id": "ff8081819f838b7f019f838e9f7f001e",
+        "label": "1793-LTR-mod10-R",
+        "value": "1793_ltr_mod10_r"
+      },
+      {
+        "id": "ff8081819f838b7f019f838e9f81001f",
+        "label": "12-LTR-mod10-R",
+        "value": "12_ltr_mod10_r"
+      },
+      {
+        "id": "ff8081819f838b7f019f838e9f830020",
+        "label": "2345678910-RTL-mod11-I-X (ISBN10)",
+        "value": "isbn10checkdigit"
+      }
+    ]
+  },
+  {
+    "desc": "NumberGeneratorSequence.MaximumCheck",
+    "id": "ff8081819f838b7f019f838e9f560015",
+    "internal": true,
+    "values": [
+      {
+        "id": "ff8081819f838b7f019f838e9f580016",
+        "label": "Below threshold",
+        "value": "below_threshold"
+      },
+      {
+        "id": "ff8081819f838b7f019f838e9f650017",
+        "label": "Over threshold",
+        "value": "over_threshold"
+      },
+      {
+        "id": "ff8081819f838b7f019f838e9f680018",
+        "label": "At maximum",
+        "value": "at_maximum"
+      }
+    ]
+  }
+]

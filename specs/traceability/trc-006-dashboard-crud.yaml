@@ -1,0 +1,24 @@
+id: TRC-006
+title: Dashboard CRUD implementation
+description: Dashboard resource CRUD over the adopted legacy tables with the legacy gson render shapes
+  (widget summaries).
+spec_ref: specs/requirements/dashboard-crud.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.controller.DashboardsController
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.domain.entity.Dashboard
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.DashboardRepository
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.mapper.DashboardMapper
+  kind: class
+- language: xml
+  qualified_name: src/main/resources/db/changelog/changes/adoption-baseline-dashboards.xml
+  kind: liquibase-changelog
+- language: java
+  qualified_name: org.folio.servint.DashboardParityIT
+  kind: integration-test

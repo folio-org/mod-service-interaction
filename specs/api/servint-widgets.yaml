@@ -1,0 +1,437 @@
+# Widget API surface — wire-compatible restatement of the legacy Grails
+# routes (UrlMappings.groovy) and ModuleDescriptor permissions: widget
+# definitions (local + federated + the permission-free `dashboard`
+# interface endpoint), widget instances (gated by the owning dashboard's
+# access level), and widget types.
+openapi: "3.1.0"
+info:
+  title: Widget API
+  version: "1.0.0"
+  description: >
+    Widget definitions, instances, and types. Definitions are served
+    locally, federated across every module implementing the `dashboard`
+    ^1.0 Okapi interface, and exposed permission-free at
+    /dashboard/definitions as this module's own implementation of that
+    interface. Instance operations derive their authorization from the
+    owning dashboard's access level (view < edit < manage).
+
+paths:
+  /servint/widgets/definitions:
+    get:
+      summary: List local widget definitions
+      operationId: listWidgetDefinitions
+      tags: [widgets]
+      x-sdd-refs:
+        - specs/requirements/widget-definitions.yaml#/id
+      description: >
+        Lists the module's own WidgetDefinition catalog with the web-toolkit
+        listing conventions. Each definition renders as {name, version,
+        type: {name, version}, definition} with definition parsed to a JSON
+        object; the entity id is never rendered.
+      x-folio-permissions-required: [servint.widgetDefinitions.collection.get]
+      parameters:
+        - $ref: "#/components/parameters/filters"
+        - $ref: "#/components/parameters/match"
+        - $ref: "#/components/parameters/term"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/perPage"
+        - $ref: "#/components/parameters/max"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/stats"
+      responses:
+        "200":
+          description: Local definitions (array, or stats envelope when stats=true).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./widget-definition-dto.yaml"
+
+  /servint/widgets/definitions/global:
+    get:
+      summary: List widget definitions federated across modules
+      operationId: listGlobalWidgetDefinitions
+      tags: [widgets]
+      x-sdd-refs:
+        - specs/requirements/widget-definition-federation.yaml#/id
+      description: >
+        Aggregates widget definitions from EVERY module implementing the
+        `dashboard` ^1.0 interface (each queried at /dashboard/definitions),
+        this module included. The harvest is cached at module level and
+        refetched when the implementor set changes or the cache is empty;
+        each definition is validated against the generic widget definition
+        schema and the schema of the latest compatible WidgetType, invalid
+        definitions and non-list responses are dropped, and same-name
+        conflicts across modules are dropped first-wins with an error
+        logged. Results honour name (case-insensitive exact), nameLike
+        (case-insensitive regex), and version — compatibleVersion(incoming,
+        comparison) = same MAJOR and incoming MINOR >= comparison MINOR —
+        keeping only the highest compatible MINOR per name per MAJOR.
+      x-folio-permissions-required: [servint.widgetDefinitions.collection.global.get]
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Case-insensitive exact definition name filter.
+        - name: nameLike
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Case-insensitive regex definition name filter.
+        - name: version
+          in: query
+          required: false
+          schema:
+            type: string
+          description: >-
+            MAJOR.MINOR version filter; matches definitions whose version is
+            compatible (same MAJOR, definition MINOR >= requested MINOR).
+      responses:
+        "200":
+          description: The federated, validated, de-duplicated definition list.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./widget-definition-dto.yaml"
+
+  /servint/widgets/definitions/{id}:
+    get:
+      summary: Get a local widget definition
+      operationId: getWidgetDefinition
+      tags: [widgets]
+      x-sdd-refs:
+        - specs/requirements/widget-definitions.yaml#/id
+      description: >
+        Returns one local definition in the definition wire shape; 404 when
+        the id is unknown.
+      x-folio-permissions-required: [servint.widgetDefinitions.item.get]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Definition identifier (UUID).
+      responses:
+        "200":
+          description: The definition.
+          content:
+            application/json:
+              schema:
+                $ref: "./widget-definition-dto.yaml"
+        "404":
+          description: No definition with that id.
+
+  /servint/widgets/instances:
+    get:
+      summary: List all widget instances (admin only)
+      operationId: listAllWidgetInstances
+      tags: [widgets]
+      x-sdd-refs:
+        - specs/requirements/widget-instances.yaml#/id
+      description: >
+        Index of every widget instance in the tenant, following the
+        web-toolkit listing conventions. Returns 403 unless the caller holds
+        the authority okapi.servint.dashboards.admin.allops.
+      x-folio-permissions-required: [servint.widgetInstances.collection.get]
+      parameters:
+        - $ref: "#/components/parameters/filters"
+        - $ref: "#/components/parameters/match"
+        - $ref: "#/components/parameters/term"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/perPage"
+        - $ref: "#/components/parameters/max"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/stats"
+      responses:
+        "200":
+          description: All instances (array, or stats envelope when stats=true).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./widget-instance-dto.yaml"
+        "403":
+          description: Caller does not hold the admin override authority.
+    post:
+      summary: Create a widget instance
+      operationId: createWidgetInstance
+      tags: [widgets]
+      x-sdd-refs:
+        - specs/requirements/widget-instances.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Creates an instance on the dashboard named by owner.id. Returns 404
+        when that dashboard does not exist and 403 unless the caller has
+        edit access on it. A null weight is auto-assigned — max(weights of
+        the dashboard's widgets) + 1, or 0 when it has none; an explicit
+        weight is preserved. The response renders definition {name, version}
+        in place of definitionName/definitionVersion.
+      x-folio-permissions-required: [servint.widgetInstances.item.post]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./widget-instance-dto.yaml"
+      responses:
+        "201":
+          description: The created instance.
+          content:
+            application/json:
+              schema:
+                $ref: "./widget-instance-dto.yaml"
+        "403":
+          description: Caller lacks edit access on the owning dashboard.
+        "404":
+          description: owner.id names no dashboard.
+
+  /servint/widgets/instances/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Instance identifier (UUID).
+    get:
+      summary: Get a widget instance
+      operationId: getWidgetInstance
+      tags: [widgets]
+      x-sdd-refs:
+        - specs/requirements/widget-instances.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Requires view access on the instance's owning dashboard.
+      x-folio-permissions-required: [servint.widgetInstances.item.get]
+      responses:
+        "200":
+          description: The instance.
+          content:
+            application/json:
+              schema:
+                $ref: "./widget-instance-dto.yaml"
+        "403":
+          description: Caller lacks view access on the owning dashboard.
+        "404":
+          description: No instance with that id.
+    put:
+      summary: Update a widget instance
+      operationId: updateWidgetInstance
+      tags: [widgets]
+      x-sdd-refs:
+        - specs/requirements/widget-instances.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Requires edit access on the instance's owning dashboard. Updates the
+        instance and returns the updated render.
+      x-folio-permissions-required: [servint.widgetInstances.item.put]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./widget-instance-dto.yaml"
+      responses:
+        "200":
+          description: The updated instance.
+          content:
+            application/json:
+              schema:
+                $ref: "./widget-instance-dto.yaml"
+        "403":
+          description: Caller lacks edit access on the owning dashboard.
+        "404":
+          description: No instance with that id.
+    delete:
+      summary: Delete a widget instance
+      operationId: deleteWidgetInstance
+      tags: [widgets]
+      x-sdd-refs:
+        - specs/requirements/widget-instances.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Requires edit access on the instance's owning dashboard.
+      x-folio-permissions-required: [servint.widgetInstances.item.delete]
+      responses:
+        "204":
+          description: Deleted.
+        "403":
+          description: Caller lacks edit access on the owning dashboard.
+        "404":
+          description: No instance with that id.
+
+  /servint/widgets/types:
+    get:
+      summary: List widget types
+      operationId: listWidgetTypes
+      tags: [widgets]
+      x-sdd-refs:
+        - specs/requirements/widget-types.yaml#/id
+      description: >
+        Lists the WidgetType catalog with the web-toolkit listing
+        conventions; each type renders plainly with its schema as the
+        persisted JSON string. Types are unique per (name, typeVersion) and
+        several versions of one name coexist.
+      x-folio-permissions-required: [servint.widgetTypes.collection.get]
+      parameters:
+        - $ref: "#/components/parameters/filters"
+        - $ref: "#/components/parameters/match"
+        - $ref: "#/components/parameters/term"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/perPage"
+        - $ref: "#/components/parameters/max"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/stats"
+      responses:
+        "200":
+          description: Widget types (array, or stats envelope when stats=true).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./widget-type-dto.yaml"
+
+  /dashboard/definitions:
+    get:
+      summary: Serve local widget definitions on the dashboard interface
+      operationId: serveDashboardDefinitions
+      tags: [dashboardDefinitions]
+      x-sdd-refs:
+        - specs/requirements/widget-definitions.yaml#/id
+      description: >
+        The module's implementation of the `dashboard` 1.0 Okapi interface
+        (interfaceType multiple): serves the SAME local WidgetDefinition
+        render as /servint/widgets/definitions, GET only, with NO
+        permissions required — this is the endpoint federation harvests
+        from every implementing module.
+      x-folio-permissions-required: []
+      responses:
+        "200":
+          description: The module's local widget definitions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./widget-definition-dto.yaml"
+
+  /servint/dashboard/{id}/widgets:
+    get:
+      summary: List a dashboard's widget instances
+      operationId: getDashboardWidgets
+      tags: [widgets]
+      x-sdd-refs:
+        - specs/requirements/widget-instances.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Requires view access on the dashboard. Lists the widget instances
+        owned by it, each rendered with definition {name, version}.
+      x-folio-permissions-required: [servint.dashboards.widgets.collection.get]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Dashboard identifier (UUID).
+      responses:
+        "200":
+          description: The dashboard's widget instances.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./widget-instance-dto.yaml"
+        "403":
+          description: Caller lacks view access.
+        "404":
+          description: No dashboard with that id.
+
+components:
+  parameters:
+    filters:
+      name: filters
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Web-toolkit filter expressions (repeatable).
+    match:
+      name: match
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Property names the term parameter matches against (repeatable).
+    term:
+      name: term
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Search term applied to the match properties.
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Sort expressions property;asc|desc (repeatable).
+    perPage:
+      name: perPage
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: >
+        Page size; absent or 0 means the default 10; values above 100 are
+        silently clamped to 100 (never rejected).
+    max:
+      name: max
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: Legacy alias for perPage; perPage wins when both are sent.
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: >
+        1-based page number; takes precedence over offset, which is
+        otherwise used to derive the page.
+    offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: Result offset (alias page for page-based access).
+    stats:
+      name: stats
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: When true, wrap results in {results, totalRecords, ...}.

@@ -1,0 +1,10 @@
+# Wire-only result envelope of GET /servint/dashboard/{id}/my-access —
+# assembled per request from the caller's DashboardAccess; never persisted.
+$id: my-access-result-dto
+title: MyAccessResultDto
+type: object
+required: [access]
+properties:
+  access:
+    type: string
+    description: The caller's access level on the dashboard (view/edit/manage).

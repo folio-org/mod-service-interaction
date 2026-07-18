@@ -1,0 +1,30 @@
+# Per-dashboard layout blob. Legacy persistence: cols ddd_*; dashId is a
+# plain column referencing the dashboard id — deliberately NOT a foreign key.
+
+id: dashboard-display-data
+name: DashboardDisplayData
+description: >-
+  The layout record of one dashboard: an opaque layoutData payload keyed by
+  dashId (a non-FK reference to the dashboard's id). Created empty alongside
+  every dashboard and deleted with it. Legacy columns: ddd_id, ddd_version,
+  ddd_dash_id, ddd_layout_data.
+fields:
+  - name: id
+    type: uuid
+    required: true
+    description: Unique identifier (column ddd_id).
+  - name: dashId
+    type: uuid
+    required: true
+    description: >-
+      Id of the dashboard the layout belongs to (column ddd_dash_id; plain
+      column, not a foreign key).
+  - name: layoutData
+    type: string
+    required: false
+    nullable: true
+    description: Opaque layout payload (column ddd_layout_data).
+refs:
+  - specs/requirements/dashboard-display-data.yaml#/id
+  - specs/requirements/dashboard-provisioning.yaml#/id
+  - specs/requirements/admin-actions.yaml#/id

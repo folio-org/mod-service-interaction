@@ -1,0 +1,43 @@
+# Default-dashboard auto-provisioning and creator access grants
+# (legacy: DashboardService.getDashboardsForUser / createDashboard).
+
+id: REQ-008
+title: Dashboard provisioning
+description: >
+  When a user first interacts with the dashboard surface, the module shall
+  provision their default dashboard exactly as the legacy module does:
+  GET /servint/dashboard/my-dashboards for a user with zero dashboards
+  auto-creates a dashboard named "My dashboard" with a manage-level access
+  object (defaultUserDashboard=true) and an empty DashboardDisplayData;
+  creating a dashboard via POST grants the creator manage access with
+  weight equal to the user's prior dashboard count and marks it the default
+  only when the user previously had none. Provisioning is idempotent —
+  repeat calls never create duplicates.
+
+ears_pattern: event-driven
+priority: high
+
+refs:
+  - specs/project/project.yaml#/goals/1
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      GET /servint/dashboard/my-dashboards for a user with zero dashboards
+      creates "My dashboard" with a manage access object,
+      defaultUserDashboard=true, userDashboardWeight=0, and an empty
+      DashboardDisplayData row, and returns that access object in the list.
+  - id: AC2
+    text: >
+      Subsequent my-dashboards calls return the user's existing access
+      objects without creating further dashboards.
+  - id: AC3
+    text: >
+      POST /servint/dashboard grants the creator a manage access object with
+      userDashboardWeight equal to the user's prior dashboard count and
+      defaultUserDashboard=true only when the user previously had zero
+      dashboards; an empty DashboardDisplayData row is created alongside.
+  - id: AC4
+    text: >
+      my-dashboards returns DashboardAccess objects with the access refdata
+      value and the dashboard expanded.

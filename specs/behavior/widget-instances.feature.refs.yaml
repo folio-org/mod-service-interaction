@@ -1,0 +1,32 @@
+# Sidecar for widget-instances.feature — instance CRUD + weight coverage.
+
+source: specs/behavior/widget-instances.feature
+mappings:
+  - element: "#/feature/Widget instances/scenario/Create an instance requires an editable dashboard"
+    refs:
+      - specs/api/servint-widgets.yaml#/paths/~1servint~1widgets~1instances/post
+      - specs/requirements/widget-instances.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Widget instances/scenario/Fetch an instance with view access"
+    refs:
+      - specs/api/servint-widgets.yaml#/paths/~1servint~1widgets~1instances~1{id}/get
+      - specs/requirements/widget-instances.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Widget instances/scenario/Update requires edit access"
+    refs:
+      - specs/api/servint-widgets.yaml#/paths/~1servint~1widgets~1instances~1{id}/put
+      - specs/requirements/widget-instances.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Widget instances/scenario/Delete requires edit access"
+    refs:
+      - specs/api/servint-widgets.yaml#/paths/~1servint~1widgets~1instances~1{id}/delete
+      - specs/requirements/widget-instances.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Widget instances/scenario/Full instance index is admin only"
+    refs:
+      - specs/api/servint-widgets.yaml#/paths/~1servint~1widgets~1instances/get
+      - specs/requirements/widget-instances.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Widget instances/scenario/Null weight is auto-assigned"
+    refs:
+      - specs/api/servint-widgets.yaml#/paths/~1servint~1widgets~1instances/post
+      - specs/requirements/widget-instances.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Widget instances/scenario/List the widgets of a dashboard"
+    refs:
+      - specs/api/servint-widgets.yaml#/paths/~1servint~1dashboard~1{id}~1widgets/get
+      - specs/requirements/widget-instances.yaml#/acceptance_criteria/AC5

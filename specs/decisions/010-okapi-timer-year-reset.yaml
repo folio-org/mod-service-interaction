@@ -1,0 +1,39 @@
+# ADR-010 — scheduled work stays Okapi-driven: the _timer interface calls
+# the year-based sequence reset endpoint; no in-process scheduler.
+
+id: ADR-010
+title: Okapi _timer drives year-based sequence reset
+date: "2026-07-17"
+status: accepted
+
+context: >
+  Number generator sequences using the ${current_year} token reset when
+  the year rolls over (REQ-005 area, numgen-year-reset); the legacy module
+  exposes this as an endpoint invoked by Okapi's _timer 1.0 interface, and
+  the same reset is also reachable as an explicit admin action
+  (REQ-021). Okapi timers give exactly-one-invocation semantics across
+  module instances and per-tenant execution context; an in-process
+  scheduler (Spring @Scheduled) would instead fire once per instance with
+  no tenant context and would double-fire in clustered deployments.
+
+decision: >
+  Keep the _timer interface entries in the ModuleDescriptor identical to
+  the legacy declarations and route them to the same reset endpoint the
+  admin action uses, implemented once in a numgen service. The module
+  runs no internal scheduler; Okapi remains the only trigger. The
+  endpoint stays idempotent per year so overlapping or repeated timer
+  fires cannot double-reset a sequence.
+
+consequences:
+  positive:
+    - Single-invocation and per-tenant semantics are delegated to the
+      platform; clustered deployment needs no leader election.
+    - Timer behavior at cutover is unchanged from the operator's view.
+  negative:
+    - Reset scheduling depends on Okapi timer availability; a stalled
+      timer subsystem delays year rollover until the admin action is run
+      manually.
+
+refs:
+  - specs/requirements/numgen-year-reset.yaml#/id
+  - specs/requirements/admin-actions.yaml#/id

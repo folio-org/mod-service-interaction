@@ -1,0 +1,12 @@
+{
+  "module_to" : "mod-service-interaction-5.0.0-SNAPSHOT",
+  "module_from" : "mod-service-interaction-4.4.0-SNAPSHOT",
+  "purge" : false,
+  "parameters" : [ {
+    "key" : "loadReference",
+    "value" : "true"
+  }, {
+    "key" : "loadSample",
+    "value" : "true"
+  } ]
+}

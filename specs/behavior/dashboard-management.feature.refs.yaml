@@ -1,0 +1,24 @@
+# Sidecar for dashboard-management.feature — CRUD + admin index coverage.
+
+source: specs/behavior/dashboard-management.feature
+mappings:
+  - element: "#/feature/Dashboard management/scenario/Create a dashboard"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard/post
+      - specs/requirements/dashboard-crud.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Dashboard management/scenario/Fetch a dashboard with widget summaries"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}/get
+      - specs/requirements/dashboard-crud.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Dashboard management/scenario/Update a dashboard"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}/put
+      - specs/requirements/dashboard-crud.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Dashboard management/scenario/Delete a dashboard removes access and display data"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}/delete
+      - specs/requirements/dashboard-crud.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Dashboard management/scenario/Admin index requires the override authority"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard/get
+      - specs/requirements/dashboard-crud.yaml#/acceptance_criteria/AC5

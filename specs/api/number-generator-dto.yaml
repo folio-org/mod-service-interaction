@@ -1,0 +1,27 @@
+# Wire shape of a NumberGenerator resource. Legacy render expands the owned
+# sequences fully (numberGenerator/_numberGenerator.gson).
+$id: number-generator-dto
+title: NumberGeneratorDto
+type: object
+required: [code, name]
+properties:
+  id:
+    type: string
+    description: Generator identifier (UUID).
+  code:
+    type: string
+    description: Unique generator code.
+  name:
+    type: string
+    description: Human-readable name.
+  description:
+    type: string
+    description: Optional description.
+  defaultSequenceCode:
+    type: string
+    description: Code of the sequence used when none is specified.
+  sequences:
+    type: array
+    description: Fully expanded owned sequences.
+    items:
+      $ref: "./number-generator-sequence-dto.yaml"

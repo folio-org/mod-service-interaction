@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Adoption baseline per ADR-005: one changeset per legacy table/sequence/
+     index/constraint, guarded by preConditions with onFail=MARK_RAN so that
+     populated legacy schemas are adopted untouched while fresh tenants get
+     equivalent DDL. The exhaustive baseline is authored in M4 against the
+     legacy module-tenant-changelog; M2 ships the empty skeleton so tenant
+     enable exercises the full Liquibase path. -->
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+</databaseChangeLog>

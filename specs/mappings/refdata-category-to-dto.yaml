@@ -1,0 +1,35 @@
+# RefdataCategory entity → wire DTO — web-toolkit render with values
+# expanded through the value mapping.
+
+id: refdata-category-to-dto
+name: RefdataCategory to RefdataCategoryDto
+description: >
+  Identity projection of the category's scalar fields; the owned values
+  collection is expanded in place through the refdata value mapping.
+source:
+  type: model
+  ref: specs/models/refdata-category.yaml#/id
+target:
+  type: dto
+  ref: specs/api/refdata-category-dto.yaml#/$id
+field_mappings:
+  - source_field: id
+    target_field: id
+    transform: identity
+  - source_field: desc
+    target_field: desc
+    transform: identity
+  - source_field: internal
+    target_field: internal
+    transform: identity
+  - source_field: values
+    target_field: values
+    transform: expand-collection(refdata-value-to-dto)
+refs:
+  - specs/mappings/refdata-value-to-dto.yaml#/id
+  - specs/models/refdata-category.yaml#/id
+  - specs/api/refdata-category-dto.yaml#/type
+  - specs/api/refdata-category-dto.yaml#/properties/id
+  - specs/api/refdata-category-dto.yaml#/properties/desc
+  - specs/api/refdata-category-dto.yaml#/properties/internal
+  - specs/api/refdata-category-dto.yaml#/properties/values

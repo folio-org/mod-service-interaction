@@ -1,0 +1,14 @@
+# Exemption: `_tenant` request envelope — the Okapi platform defines this
+# inbound shape; it drives provisioning and is never persisted.
+
+id: EX-tenant-attributes-envelope
+rule_id: api-dto-property-has-dto-mapping-coverage
+target: specs/api/tenant-attributes-dto.yaml#/properties/*
+category: platform-interface
+reason: >
+  TenantAttributesDto is the inbound body of the Okapi `_tenant` system
+  interface — a platform-defined envelope (module ids plus init
+  parameters) consumed transiently by tenant provisioning. Nothing in it
+  maps to a persistent entity of this module, so DtoMapping coverage would
+  fabricate a model that does not exist.
+governed_by: specs/decisions/002-wire-envelope-exemptions.yaml#/id

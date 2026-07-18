@@ -1,0 +1,42 @@
+diff-runs: A=/home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/harness/legacy  B=/home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/harness/port-adopt-rcl
+diff-runs: allowlist=/home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/harness/deviation-allowlist.tsv
+
+  dashboard-displaydata        byte-equal   
+  dashboard-users              byte-equal   
+  dashboard-widgets            byte-equal   
+  f04-bad-sort                 sorted-equal array order only (D-4)
+  f04-filter-nextvalue-gt5     byte-equal   
+  f04-perpage-0                sorted-equal array order only (D-4)
+  f04-perpage-101              byte-equal   
+  f14-duplicate-code           allowed      registered deviation D-24 — status 500 vs 409
+  f14-invalid-boolean          allowed      registered deviation D-28 — status 500 vs 200
+  f14-malformed-json           allowed      registered deviation D-22 — status 500 vs 400
+  f14-missing-tenant           allowed      registered deviation D-23 — status 500 vs 400
+  f14-perpage-nonnumeric       sorted-equal array order only (D-4)
+  f14-stats-notabool           sorted-equal array order only (D-4)
+  f21-10k-filter               allowed      registered deviation D-31 — body differs (status 400 on both); diff /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/harness/legacy/f21-10k-filter.json /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/harness/port-adopt-rcl/f21-10k-filter.json
+  f21-empty-rhs                byte-equal   
+  f21-escaped-literal          allowed      registered deviation D-29 — body differs (status 200 on both); diff /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/harness/legacy/f21-escaped-literal.json /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/harness/port-adopt-rcl/f21-escaped-literal.json
+  f21-gt-notanumber            allowed      registered deviation D-30 — status 500 vs 200
+  f21-unbalanced-paren         allowed      registered deviation D-30 — status 500 vs 200
+  my-dashboards-A              sorted-equal array order only (D-4)
+  my-dashboards-B              sorted-equal array order only (D-4)
+  my-widgets-A                 allowed      registered deviation D-1 — status 500 vs 404
+  numgen                       byte-equal   
+  numgen-sequences             byte-equal   
+  r22-empty-and-trailing       byte-equal   
+  r22-empty-dotted-top         byte-equal   
+  r22-empty-leading            allowed      registered deviation D-32 — body differs (status 400 on both); diff /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/harness/legacy/r22-empty-leading.json /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/harness/port-adopt-rcl/r22-empty-leading.json
+  r22-empty-not                allowed      registered deviation D-32 — status 500 vs 200
+  r22-empty-or-paren           byte-equal   
+  r22-empty-top-unknown        sorted-equal array order only (D-4)
+  r22-uncoercible-compound     allowed      registered deviation D-30 — status 500 vs 200
+  refdata-categories           sorted-equal array order only (D-4)
+  refdata-lookup-checkdigit    byte-equal   
+  settings                     byte-equal   
+  widget-defs                  byte-equal   
+  widget-types                 byte-equal   
+
+diff-runs: byte-equal=15 sorted-equal=8 allowed=12 diverged=0
+diff-runs: OK — no unregistered divergence
+diff-runs exit code: 0

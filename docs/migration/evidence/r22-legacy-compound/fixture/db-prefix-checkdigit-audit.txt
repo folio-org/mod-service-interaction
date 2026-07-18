@@ -1,0 +1,13 @@
+absorbpfx|value:&&code==plain|NULL
+accessionNumber|NULL|none
+callNumber|NULL|none
+checked|NULL|ean13
+emptypfx|NULL|NULL
+itemBarcode|NULL|none
+patron|NULL|ean13
+patternNumber|NULL|none
+plain|value:m4-|NULL
+requestSequence|NULL|ean13
+requestSequence|NULL|none
+staff|NULL|ean13
+vendor|NULL|none

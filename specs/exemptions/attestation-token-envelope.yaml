@@ -1,0 +1,14 @@
+# Exemption: attestation token envelope — assembled per request around the
+# freshly signed JWS; never persisted, no backing model to map from.
+
+id: EX-attestation-token-envelope
+rule_id: api-dto-property-has-dto-mapping-coverage
+target: specs/api/attestation-token-dto.yaml#/properties/*
+category: spec-introduced-envelope
+reason: >
+  AttestationTokenDto is a wire-only outcome envelope: the compact JWS is
+  produced transiently by the signing service and the status field is a
+  constant discriminator. Neither is read back into persistent state — the
+  underlying DBKeyPair entity never crosses the API boundary — so
+  DtoMapping coverage would fabricate a model that does not exist.
+governed_by: specs/decisions/002-wire-envelope-exemptions.yaml#/id

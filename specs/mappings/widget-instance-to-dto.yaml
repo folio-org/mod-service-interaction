@@ -1,0 +1,54 @@
+# WidgetInstance entity → wire DTO. Legacy renderer:
+# widgetInstance/_widgetInstance.gson (full render minus
+# definitionName/definitionVersion, plus composed definition {name, version}).
+
+id: widget-instance-to-dto
+name: WidgetInstance to WidgetInstanceDto
+description: >
+  Projects the instance entity onto its wire shape: the
+  definitionName/definitionVersion pair composes the definition object, the
+  owning dashboard collapses to its id stub, and the remaining fields pass
+  through unchanged.
+source:
+  type: model
+  ref: specs/models/widget-instance.yaml#/id
+target:
+  type: dto
+  ref: specs/api/widget-instance-dto.yaml#/$id
+field_mappings:
+  - source_field: id
+    target_field: id
+    transform: identity
+  - source_field: name
+    target_field: name
+    transform: identity
+  - source_field: weight
+    target_field: weight
+    transform: identity
+  - source_field: definitionName
+    target_field: definition
+    transform: "compose(name: definitionName, version: definitionVersion)"
+  - source_field: definitionName
+    target_field: definitionName
+    transform: request-only-binding
+  - source_field: definitionVersion
+    target_field: definitionVersion
+    transform: request-only-binding
+  - source_field: configuration
+    target_field: configuration
+    transform: identity
+  - source_field: owner
+    target_field: owner
+    transform: id-stub(Dashboard)
+refs:
+  - specs/models/widget-instance.yaml#/id
+  - specs/models/dashboard.yaml#/id
+  - specs/api/widget-instance-dto.yaml#/type
+  - specs/api/widget-instance-dto.yaml#/properties/id
+  - specs/api/widget-instance-dto.yaml#/properties/name
+  - specs/api/widget-instance-dto.yaml#/properties/weight
+  - specs/api/widget-instance-dto.yaml#/properties/definition
+  - specs/api/widget-instance-dto.yaml#/properties/definitionName
+  - specs/api/widget-instance-dto.yaml#/properties/definitionVersion
+  - specs/api/widget-instance-dto.yaml#/properties/configuration
+  - specs/api/widget-instance-dto.yaml#/properties/owner

@@ -1,0 +1,20 @@
+# Sidecar for dashboard-provisioning.feature — auto-provisioning coverage.
+
+source: specs/behavior/dashboard-provisioning.feature
+mappings:
+  - element: "#/feature/Dashboard provisioning/scenario/First my-dashboards call provisions a default dashboard"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1my-dashboards/get
+      - specs/requirements/dashboard-provisioning.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Dashboard provisioning/scenario/Provisioning is idempotent"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1my-dashboards/get
+      - specs/requirements/dashboard-provisioning.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Dashboard provisioning/scenario/Creating a dashboard grants the creator manage access"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard/post
+      - specs/requirements/dashboard-provisioning.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Dashboard provisioning/scenario/My dashboards expands access and dashboard"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1my-dashboards/get
+      - specs/requirements/dashboard-provisioning.yaml#/acceptance_criteria/AC4

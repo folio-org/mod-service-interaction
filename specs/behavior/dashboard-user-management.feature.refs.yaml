@@ -1,0 +1,28 @@
+# Sidecar for dashboard-user-management.feature — editDashboardUsers coverage.
+
+source: specs/behavior/dashboard-user-management.feature
+mappings:
+  - element: "#/feature/Dashboard user management/scenario/Managing users requires manage access"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}~1users/post
+      - specs/requirements/dashboard-user-management.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Dashboard user management/scenario/Grant access to a new user"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}~1users/post
+      - specs/requirements/dashboard-user-management.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Dashboard user management/scenario/Duplicate or self grants are ignored"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}~1users/post
+      - specs/requirements/dashboard-user-management.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Dashboard user management/scenario/Delete a user access object"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}~1users/post
+      - specs/requirements/dashboard-user-management.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Dashboard user management/scenario/Edit changes only the access level"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}~1users/post
+      - specs/requirements/dashboard-user-management.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Dashboard user management/scenario/List dashboard users without expanding the dashboard"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}~1users/get
+      - specs/requirements/dashboard-user-management.yaml#/acceptance_criteria/AC5

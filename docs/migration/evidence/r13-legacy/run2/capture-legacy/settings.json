@@ -1,0 +1,23 @@
+[
+  {
+    "id": "ff8081819f838b7f019f838eb5990025",
+    "key": "alpha",
+    "section": "m4",
+    "settingType": "String",
+    "value": "one"
+  },
+  {
+    "hidden": true,
+    "id": "ff8081819f838b7f019f838eb5aa0026",
+    "key": "secret",
+    "section": "m4",
+    "settingType": "Password",
+    "value": "s3cr3t"
+  },
+  {
+    "id": "ff8081819f838b7f019f838ea0490023",
+    "key": "test_app_setting",
+    "section": "test",
+    "settingType": "String"
+  }
+]

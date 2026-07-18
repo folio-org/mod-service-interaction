@@ -1,0 +1,41 @@
+# Admin action API surface — wire-compatible restatement of the legacy
+# AdminController route (UrlMappings.groovy).
+openapi: "3.1.0"
+info:
+  title: Admin API
+  version: "1.0.0"
+  description: >
+    Administrative maintenance actions, dispatched by path segment. Part of
+    the `servint` Okapi interface.
+
+paths:
+  /servint/admin/{action}:
+    get:
+      summary: Execute an admin action
+      operationId: executeAdminAction
+      tags: [admin]
+      x-sdd-refs:
+        - specs/requirements/admin-actions.yaml#/id
+      description: >
+        Dispatches on the action segment and answers {status: "OK"} —
+        triggerTypeImport: import widget types from the classpath sample
+        data, skipping existing (name, typeVersion) pairs;
+        triggerTypeImportClean: delete every widget type first, then
+        import afresh; ensureDisplayData: create an empty
+        DashboardDisplayData for each dashboard lacking one.
+      x-folio-permissions-required: [servint.admin.action.execute]
+      parameters:
+        - name: action
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [triggerTypeImport, triggerTypeImportClean, ensureDisplayData]
+          description: The maintenance action to execute.
+      responses:
+        "200":
+          description: Action executed.
+          content:
+            application/json:
+              schema:
+                $ref: "./admin-result-dto.yaml"

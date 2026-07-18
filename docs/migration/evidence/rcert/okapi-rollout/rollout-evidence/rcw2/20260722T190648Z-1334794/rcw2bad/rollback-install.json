@@ -1,0 +1,5 @@
+[ {
+  "id" : "mod-service-interaction-4.4.0-SNAPSHOT",
+  "from" : "mod-service-interaction-5.0.0-SNAPSHOT",
+  "action" : "enable"
+} ]

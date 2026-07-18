@@ -1,0 +1,58 @@
+# Application setting (web-toolkit pattern). Legacy persistence:
+# com.k_int.web.toolkit.settings.AppSetting (cols st_*).
+
+id: app-setting
+name: AppSetting
+description: >-
+  A tenant-scoped module setting keyed by section + key. Carries an
+  optional setting type and vocabulary constraining the value, plus a
+  default value beside the tenant-set value and a hidden flag. Legacy
+  columns: st_id, st_version, st_section, st_key, st_setting_type,
+  st_vocab, st_default_value, st_value, st_hidden.
+fields:
+  - name: id
+    type: uuid
+    required: true
+    description: Unique identifier (36-char UUID, column st_id).
+  - name: section
+    type: string
+    required: false
+    nullable: true
+    description: Settings section grouping related keys (column st_section).
+  - name: key
+    type: string
+    required: true
+    description: Setting key, unique within its section (column st_key).
+  - name: settingType
+    type: string
+    required: false
+    nullable: true
+    description: >-
+      Plain string naming the value type of the setting (column
+      st_setting_type).
+  - name: vocab
+    type: string
+    required: false
+    nullable: true
+    description: >-
+      Optional vocabulary (refdata category key) constraining the value
+      (column st_vocab).
+  - name: defValue
+    type: string
+    required: false
+    nullable: true
+    description: Default value used when no tenant value is set (column st_default_value).
+  - name: value
+    type: string
+    required: false
+    nullable: true
+    description: The tenant-set value (column st_value).
+  - name: hidden
+    type: boolean
+    required: false
+    nullable: true
+    description: >-
+      When true the setting is excluded from filter-driven UIs (column
+      st_hidden).
+refs:
+  - specs/requirements/app-settings.yaml#/id

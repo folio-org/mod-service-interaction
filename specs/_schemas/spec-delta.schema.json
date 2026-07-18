@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/spec-delta.schema.json",
+  "title": "SDD SpecDelta",
+  "description": "Canonical machine-readable branch diff for comparing two loaded SDD graph namespaces.",
+  "type": "object",
+  "required": ["base_branch", "compare_branch", "node_deltas", "edge_deltas", "summary"],
+  "additionalProperties": false,
+  "properties": {
+    "base_branch": {
+      "type": "string",
+      "minLength": 1
+    },
+    "compare_branch": {
+      "type": "string",
+      "minLength": 1
+    },
+    "node_deltas": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/node_delta" }
+    },
+    "edge_deltas": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/edge_delta" }
+    },
+    "summary": {
+      "$ref": "#/$defs/delta_summary"
+    },
+    "errors": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "validation-result.schema.json#/$defs/validation_error" }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["errors"]
+      },
+      "then": {
+        "properties": {
+          "node_deltas": {
+            "maxItems": 0
+          },
+          "edge_deltas": {
+            "maxItems": 0
+          },
+          "summary": {
+            "properties": {
+              "added_count": {
+                "const": 0
+              },
+              "removed_count": {
+                "const": 0
+              },
+              "modified_count": {
+                "const": 0
+              },
+              "total_delta_count": {
+                "const": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "pattern": "^\\S+#(?!#)\\S+$"
+    },
+    "ref_list": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ref" },
+      "uniqueItems": true
+    },
+    "delta_value": {
+      "description": "Graph property values are serialized as scalars or arrays of scalars.",
+      "anyOf": [
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "boolean" },
+        { "type": "null" },
+        {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "type": "string" },
+              { "type": "number" },
+              { "type": "boolean" },
+              { "type": "null" }
+            ]
+          }
+        }
+      ]
+    },
+    "node_property_change": {
+      "type": "object",
+      "required": ["property_name"],
+      "additionalProperties": false,
+      "properties": {
+        "property_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "before": {
+          "$ref": "#/$defs/delta_value"
+        },
+        "after": {
+          "$ref": "#/$defs/delta_value"
+        }
+      },
+      "anyOf": [
+        { "required": ["before"] },
+        { "required": ["after"] }
+      ]
+    },
+    "node_delta": {
+      "type": "object",
+      "required": ["spec_id", "label", "change_type", "branch", "file_path", "line_number"],
+      "additionalProperties": false,
+      "properties": {
+        "spec_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "change_type": {
+          "type": "string",
+          "enum": ["added", "removed", "modified"]
+        },
+        "branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "file_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "line_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "changes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/node_property_change" },
+          "minItems": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "change_type": { "const": "modified" }
+            },
+            "required": ["change_type"]
+          },
+          "then": {
+            "required": ["changes"]
+          }
+        }
+      ]
+    },
+    "edge_delta": {
+      "type": "object",
+      "required": [
+        "spec_id",
+        "source_id",
+        "target_id",
+        "relationship_type",
+        "change_type",
+        "branch",
+        "file_path",
+        "line_number"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "spec_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relationship_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "change_type": {
+          "type": "string",
+          "enum": ["added", "removed"]
+        },
+        "branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "file_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "line_number": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "delta_summary": {
+      "type": "object",
+      "required": ["added_count", "removed_count", "modified_count", "total_delta_count"],
+      "additionalProperties": false,
+      "properties": {
+        "added_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "removed_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "modified_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_delta_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

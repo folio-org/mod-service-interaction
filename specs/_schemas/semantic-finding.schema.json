@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/semantic-finding.schema.json",
+  "title": "Semantic Advisory Finding",
+  "description": "One surfaced advisory finding emitted by the severed semantic-validation lane (ADR-043 Decision 2, ADR-044, ADR-045, FR-68). Advisory only: never a ValidationError, never an edit to a spec file. snake_case at the wire boundary. The eligibility-visibility fields (FR-68 AC6, ADR-053/FR-84) are required: the lane stamps escalation_eligible and effective_confidence_threshold on every finding, identically in strict and non-strict runs.",
+  "type": "object",
+  "required": [
+    "rule_id",
+    "source_spec_id",
+    "target_spec_id",
+    "verdict",
+    "confidence",
+    "predicate",
+    "rationale",
+    "evidence_span_source",
+    "evidence_span_target",
+    "discrepancy_kind",
+    "model_id",
+    "prompt_version",
+    "verdict_source",
+    "finding_id",
+    "recommended_disposition",
+    "escalation_eligible",
+    "effective_confidence_threshold"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "rule_id": { "type": "string", "minLength": 1 },
+    "source_spec_id": { "type": "string", "minLength": 1 },
+    "target_spec_id": { "type": "string", "minLength": 1 },
+    "verdict": { "type": "string", "enum": ["PASS", "SUSPECT", "FAIL", "UNKNOWN"] },
+    "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+    "predicate": { "type": "string", "minLength": 1 },
+    "rationale": { "type": "string", "minLength": 1 },
+    "evidence_span_source": { "type": "string" },
+    "evidence_span_target": { "type": "string" },
+    "discrepancy_kind": {
+      "type": "string",
+      "enum": ["reference_mismatch", "content_drift", "ambiguous", "none"]
+    },
+    "model_id": { "type": "string", "minLength": 1 },
+    "prompt_version": { "type": "string", "minLength": 1 },
+    "verdict_source": { "type": "string", "enum": ["cache", "model", "unavailable"] },
+    "finding_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "recommended_disposition": { "type": "string", "enum": ["no_op", "act", "defer"] },
+    "escalation_eligible": { "type": "boolean" },
+    "effective_confidence_threshold": { "type": "number", "minimum": 0, "maximum": 1 }
+  },
+  "$defs": {
+    "rule_gate_disclosure": {
+      "description": "FR-68 AC9 OPTIONAL payload-level disclosure — NOT part of the per-finding object above. The findings artifact MAY carry a top-level `rule_gates` map keyed by registered rule_id; each value gives that entry's OWN precision-gate status and whether it participated as active or inert. Emitted only by the lane path (sdd.semantic.serialization.findings_payload) and identically in strict and non-strict runs; it is NEVER an input to the FR-84 strict exit-code projection. Emission is enforced in serialization; this $def documents the wire shape. `additionalProperties` here validates each per-rule entry.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["gate_status", "active"],
+        "properties": {
+          "gate_status": { "type": "string", "enum": ["PASS", "FAIL", "UNCALIBRATED"] },
+          "active": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

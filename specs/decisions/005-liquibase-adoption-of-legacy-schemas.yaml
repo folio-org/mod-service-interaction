@@ -1,0 +1,49 @@
+# ADR-005 — how the Java module takes over existing per-tenant Postgres
+# schemas without data loss: an adoption baseline changelog whose
+# preconditions MARK_RAN over already-present legacy DDL.
+
+id: ADR-005
+title: Liquibase adoption baseline for legacy per-tenant schemas
+date: "2026-07-17"
+status: accepted
+
+context: >
+  Legacy tenant schemas are created by Grails GORM plus Groovy-DSL
+  Liquibase changelogs (module-tenant-changelog.groovy) and hold production
+  data (dashboards, widget instances, number generator sequences, key
+  pairs, refdata, settings). NFR-002 requires in-place adoption: at cutover
+  the Java module must run against the very same schemas, and a fresh
+  tenant enabled on the Java module must end up with equivalent DDL.
+  folio-spring-base runs an XML changelog per tenant schema through
+  FolioSpringLiquibase during the _tenant call, using its own
+  databasechangelog bookkeeping per schema. The reference modules lay
+  changelogs out as db/changelog/changelog-master.xml including files under
+  db/changelog/changes/, and mod-consortia-keycloak demonstrates data
+  migration changesets from a predecessor module.
+
+decision: >
+  Author an XML adoption-baseline changelog under
+  src/main/resources/db/changelog: for every legacy table, sequence, index
+  and constraint, a changeset guarded by preConditions (tableExists /
+  columnExists / indexExists) with onFail=MARK_RAN. On an existing tenant
+  schema every baseline changeset marks itself ran and leaves data
+  untouched; on a fresh tenant the same changesets create DDL equivalent to
+  the legacy module's. Legacy Grails Liquibase bookkeeping tables are left
+  in place and ignored — the Java module tracks its own changelog history.
+  All post-cutover schema evolution appends new changesets after the
+  baseline.
+
+consequences:
+  positive:
+    - One changelog serves both adoption of populated schemas and creation
+      of fresh ones, so the paths cannot diverge.
+    - No data copy, no downtime window for schema conversion at cutover.
+  negative:
+    - The baseline must enumerate legacy DDL exhaustively; a missed
+      constraint surfaces only on fresh-tenant installs.
+    - Orphaned legacy bookkeeping tables remain in adopted schemas until a
+      post-parity cleanup release.
+
+refs:
+  - specs/requirements/nfr-data-continuity.yaml#/id
+  - specs/requirements/tenant-lifecycle.yaml#/id

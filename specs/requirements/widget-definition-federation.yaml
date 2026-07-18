@@ -1,0 +1,49 @@
+# Cross-module widget definition federation (legacy:
+# WidgetDefinitionService.fetchDefinitions + compatibleVersion /
+# latestCompatibleType) — the module CONSUMES the `dashboard` interface it
+# also provides.
+
+id: REQ-013
+title: Widget definition federation
+description: >
+  When a client requests the global definition catalog, the module shall
+  aggregate widget definitions from EVERY module implementing the
+  `dashboard` ^1.0 interface by calling GET /dashboard/definitions on each
+  implementor, validate and de-duplicate the harvest, and filter it by the
+  caller's name/nameLike/version criteria. Version semantics throughout use
+  compatibleVersion(incoming, comparison): versions are MAJOR.MINOR strings,
+  compatible when the MAJOR parts are equal and the incoming MINOR is
+  greater than or equal to the comparison MINOR.
+
+ears_pattern: event-driven
+priority: high
+
+refs:
+  - specs/project/project.yaml#/goals/1
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      GET /servint/widgets/definitions/global returns definitions gathered
+      from every dashboard ^1.0 implementor, including this module's own.
+  - id: AC2
+    text: >
+      Fetched definitions are cached at module level; the cache is refetched
+      when the set of dashboard-interface implementors changes or the cache
+      is empty.
+  - id: AC3
+    text: >
+      Each harvested definition is validated against the generic widget
+      definition schema and then against the schema of the latest compatible
+      WidgetType (same type name, compatible version, highest MINOR);
+      definitions failing validation and non-list implementor responses are
+      dropped.
+  - id: AC4
+    text: >
+      When two modules serve a definition with the same name, the first one
+      wins and the conflict is dropped with an error logged.
+  - id: AC5
+    text: >
+      Results honour the filters — name (case-insensitive exact), nameLike
+      (case-insensitive regex), version (compatibleVersion match) — and only
+      the highest compatible MINOR per definition name per MAJOR is kept.

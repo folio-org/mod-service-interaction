@@ -1,0 +1,29 @@
+# Widget types (legacy: WidgetTypeController + WidgetType domain) — the
+# schema catalog federation validates definitions against.
+
+id: REQ-015
+title: Widget types
+description: >
+  When a client browses widget types, the module shall list its WidgetType
+  catalog read-only at /servint/widgets/types in the plain render — id,
+  name, typeVersion, and schema as the persisted JSON string. Types are
+  unique per (name, typeVersion) pair; multiple versions of the same type
+  name coexist so federation can pick the latest compatible one.
+
+ears_pattern: event-driven
+priority: medium
+
+refs:
+  - specs/project/project.yaml#/goals/1
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      GET /servint/widgets/types lists widget types with the web-toolkit
+      listing conventions; each type renders plainly with schema as a
+      string.
+  - id: AC2
+    text: >
+      Types are unique per (name, typeVersion): re-importing an existing
+      pair leaves a single row, while a new typeVersion of an existing name
+      adds a coexisting row.

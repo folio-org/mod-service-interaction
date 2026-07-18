@@ -1,0 +1,32 @@
+# Wire shape of a Dashboard resource. Legacy render (dashboard/_dashboard.gson):
+# full render minus the widgets association, plus widgets as summaries.
+$id: dashboard-dto
+title: DashboardDto
+type: object
+properties:
+  id:
+    type: string
+    description: Dashboard identifier (UUID).
+  name:
+    type: string
+    description: Display name.
+  description:
+    type: string
+    description: Optional description.
+  widgets:
+    type: array
+    description: >-
+      Owned widget instances rendered ONLY as summaries — never the full
+      widget instance shape.
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Widget instance identifier.
+        weight:
+          type: integer
+          description: Ordering weight within the dashboard.
+        name:
+          type: string
+          description: Widget instance name.

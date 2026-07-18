@@ -1,0 +1,29 @@
+-- databasechangelog existence + exectype breakdown --
+                changelog_table                 
+------------------------------------------------
+ r20r_mod_service_interaction.databasechangelog
+(1 row)
+
+ exectype | count 
+----------+-------
+ MARK_RAN |    14
+(1 row)
+
+-- total changelog rows --
+ changelog_rows 
+----------------
+             14
+(1 row)
+
+-- business row counts --
+             t             | count 
+---------------------------+-------
+ app_setting               |     1
+ number_generator          |     8
+ number_generator_sequence |     9
+ refdata_category          |     3
+ refdata_value             |    13
+ widget_definition         |     0
+ widget_type               |     1
+(7 rows)
+

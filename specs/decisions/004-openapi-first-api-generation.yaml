@@ -1,0 +1,45 @@
+# ADR-004 — the API layer is generated from the committed specs/api OpenAPI
+# files; controllers implement the generated interfaces, never hand-written
+# route mappings.
+
+id: ADR-004
+title: OpenAPI-first API layer generated from specs/api
+date: "2026-07-17"
+status: accepted
+
+context: >
+  M0 captured all 51 legacy operations as OpenAPI files under specs/api,
+  including the web-toolkit listing conventions (perPage/page/stats/filters
+  parameters, always-200 envelopes) and the exact permission annotations.
+  NFR-001 requires byte-compatible wire behavior, so any drift between the
+  spec and the served API is a cutover defect. The reference modules
+  generate Java server interfaces and DTO classes from OpenAPI with
+  openapi-generator-maven-plugin (7.x) and implement the generated *Api
+  interfaces in @RestController classes, making the spec the single source
+  of the served surface.
+
+decision: >
+  Generate the server API interfaces and DTO classes at build time from the
+  committed specs/api OpenAPI files using openapi-generator-maven-plugin,
+  consuming the spec files unmodified (no shadow copies). Controllers
+  implement the generated interfaces only; no hand-written @RequestMapping
+  routes. The web-toolkit listing semantics (match/filters/term query
+  translation, perPage/page paging, stats envelope assembly) are
+  implemented once in a shared query support component reused by every
+  listing endpoint so all collections behave identically to the legacy
+  kiwt doTheLookup pipeline.
+
+consequences:
+  positive:
+    - The served API cannot drift from the governed spec; codegen fails the
+      build on contract mismatch.
+    - DTO shapes stay identical to the M0-captured wire shapes, directly
+      supporting the parity fixtures.
+  negative:
+    - kiwt query translation must be re-implemented faithfully, including
+      its quirks; this shared component is the highest-risk parity surface.
+    - Spec changes require a build round-trip before controllers compile.
+
+refs:
+  - specs/requirements/nfr-wire-compatibility.yaml#/id
+  - specs/decisions/003-spring-boot-folio-spring-stack.yaml#/id

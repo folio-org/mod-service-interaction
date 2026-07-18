@@ -1,0 +1,37 @@
+# Infrastructure for rollout-lane.sh — the recurring rollout rehearsal lane
+# (M9 R38, review-4 F-45). A DISPOSABLE rig, isolated from the standing dev
+# rig and from tools/testing: its own Postgres on ${LANE_PG_PORT:-54329} and
+# its own dev-mode (in-memory) Okapi on ${LANE_OKAPI_PORT:-9138}. Never point
+# this at a database that holds state you care about — the lane drops tables
+# on purpose (forced-failure injection).
+#
+# Okapi runs host-networked so it can proxy to the two module processes the
+# lane boots on host ports; dev mode keeps all Okapi state in memory, so
+# `down` disposes of it completely.
+name: msi-rollout-lane
+
+services:
+  lane-pg:
+    image: postgres:18-alpine
+    container_name: msi-lane-pg
+    environment:
+      POSTGRES_DB: okapi_modules_lane
+      POSTGRES_USER: folio_admin
+      POSTGRES_PASSWORD: folio_admin   # local throwaway fixture, same as tools/testing
+    ports:
+      - "127.0.0.1:${LANE_PG_PORT:-54329}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U folio_admin -d okapi_modules_lane"]
+      interval: 2s
+      timeout: 3s
+      retries: 60
+
+  lane-okapi:
+    image: ${LANE_OKAPI_IMAGE:-folioorg/okapi:latest}
+    container_name: msi-lane-okapi
+    network_mode: host
+    command: ["dev"]
+    environment:
+      # The image reads JAVA_OPTIONS; JAVA_OPTS is set too for older tags.
+      JAVA_OPTIONS: "-Dport=${LANE_OKAPI_PORT:-9138}"
+      JAVA_OPTS: "-Dport=${LANE_OKAPI_PORT:-9138}"

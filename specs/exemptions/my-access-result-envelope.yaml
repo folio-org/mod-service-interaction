@@ -1,0 +1,14 @@
+# Exemption: my-access response envelope — assembled per request from the
+# caller's DashboardAccess; never persisted, no backing model to map from.
+
+id: EX-my-access-result-envelope
+rule_id: api-dto-property-has-dto-mapping-coverage
+target: specs/api/my-access-result-dto.yaml#/properties/*
+category: spec-introduced-envelope
+reason: >
+  MyAccessResultDto is a wire-only envelope carrying a single access-level
+  string extracted from the caller's DashboardAccess object. It is never
+  read back into persistent state and the legacy module has no
+  corresponding domain class, so DtoMapping coverage would fabricate a
+  model that does not exist.
+governed_by: specs/decisions/002-wire-envelope-exemptions.yaml#/id

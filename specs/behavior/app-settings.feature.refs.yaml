@@ -1,0 +1,24 @@
+# Sidecar for app-settings.feature — AppSetting CRUD coverage.
+
+source: specs/behavior/app-settings.feature
+mappings:
+  - element: "#/feature/Application settings/scenario/List settings"
+    refs:
+      - specs/api/servint-refdata-settings.yaml#/paths/~1servint~1settings~1appSettings/get
+      - specs/requirements/app-settings.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Application settings/scenario/Create a setting"
+    refs:
+      - specs/api/servint-refdata-settings.yaml#/paths/~1servint~1settings~1appSettings/post
+      - specs/requirements/app-settings.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Application settings/scenario/Fetch a setting"
+    refs:
+      - specs/api/servint-refdata-settings.yaml#/paths/~1servint~1settings~1appSettings~1{id}/get
+      - specs/requirements/app-settings.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Application settings/scenario/Update a setting value"
+    refs:
+      - specs/api/servint-refdata-settings.yaml#/paths/~1servint~1settings~1appSettings~1{id}/put
+      - specs/requirements/app-settings.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Application settings/scenario/Delete a setting"
+    refs:
+      - specs/api/servint-refdata-settings.yaml#/paths/~1servint~1settings~1appSettings~1{id}/delete
+      - specs/requirements/app-settings.yaml#/acceptance_criteria/AC4

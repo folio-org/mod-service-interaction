@@ -1,0 +1,12 @@
+# Exemption: multi-tenancy criteria are validated by tenant lifecycle and
+# isolation testing across schemas — outside the behavior layer.
+
+id: EX-nfr-multi-tenancy-criteria
+rule_id: acceptance-criterion-has-scenario-coverage
+target: specs/requirements/nfr-multi-tenancy.yaml#/acceptance_criteria/*
+category: validated-outside-behavior-layer
+reason: >
+  NFR-003's criteria assert cross-tenant isolation and per-tenant timer
+  execution — platform-level properties verified by multi-tenant test
+  harnesses, not by per-operation Gherkin scenarios.
+governed_by: specs/decisions/001-spec-first-parity-migration.yaml#/id

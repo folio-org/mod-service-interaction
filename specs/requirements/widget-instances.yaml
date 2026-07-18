@@ -1,0 +1,48 @@
+# Widget instances on dashboards (legacy: WidgetInstanceController +
+# WidgetInstance.beforeValidate) — CRUD gated by the OWNING DASHBOARD's
+# access level, plus automatic weight assignment.
+
+id: REQ-014
+title: Widget instances
+description: >
+  When a client manages widget instances, the module shall gate every
+  operation on the caller's access level for the instance's owning
+  dashboard: view to read, edit to create, update, or delete. Creating an
+  instance against a missing dashboard returns 404; the index of ALL
+  instances is reserved to the admin override authority. On save, a null
+  weight is assigned automatically: the maximum weight among the owning
+  dashboard's widgets plus one, or 0 when the dashboard has none. The wire
+  shape replaces definitionName/definitionVersion with definition {name,
+  version}.
+
+ears_pattern: event-driven
+priority: high
+
+refs:
+  - specs/project/project.yaml#/goals/1
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      POST /servint/widgets/instances returns 404 when owner.id names no
+      dashboard and 403 unless the caller has edit access on that dashboard;
+      the created instance renders definition {name, version} in place of
+      definitionName/definitionVersion.
+  - id: AC2
+    text: >
+      GET on an instance requires view access on its owning dashboard; PUT
+      and DELETE require edit access; callers below the level receive 403.
+  - id: AC3
+    text: >
+      GET /servint/widgets/instances (index of all instances) returns 403
+      unless the caller holds the admin override authority
+      okapi.servint.dashboards.admin.allops.
+  - id: AC4
+    text: >
+      An instance saved with weight null is assigned max(weights of the
+      owner's widgets) + 1, or 0 when the dashboard has no widgets; an
+      explicit weight is preserved unchanged.
+  - id: AC5
+    text: >
+      GET /servint/dashboard/{id}/widgets lists the dashboard's widget
+      instances (view access required).

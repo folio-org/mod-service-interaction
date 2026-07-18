@@ -1,0 +1,31 @@
+# Wire shape of an application setting — web-toolkit default render of
+# com.k_int.web.toolkit.settings.AppSetting; settingType is a plain string
+# (column st_setting_type), not a refdata reference.
+$id: app-setting-dto
+title: AppSettingDto
+type: object
+properties:
+  id:
+    type: string
+    description: Setting identifier (UUID).
+  section:
+    type: string
+    description: Settings section.
+  key:
+    type: string
+    description: Setting key within the section.
+  settingType:
+    type: string
+    description: Value type of the setting (e.g. String), a plain string.
+  vocab:
+    type: string
+    description: Vocabulary (refdata category key) constraining the value.
+  defValue:
+    type: string
+    description: Default value.
+  value:
+    type: string
+    description: Tenant-set value.
+  hidden:
+    type: boolean
+    description: When true the setting is excluded from filter-driven UIs.

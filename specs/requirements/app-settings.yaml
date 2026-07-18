@@ -1,0 +1,36 @@
+# Application settings surface (legacy: web-toolkit SettingController
+# extending OkapiTenantAwareController<AppSetting>).
+
+id: REQ-018
+title: Application settings
+description: >
+  When a client manages module settings, the module shall provide
+  web-toolkit AppSetting CRUD at /servint/settings/appSettings: settings
+  are keyed by section + key, may carry a controlled vocabulary or setting
+  type, and hold a default value beside the tenant-set value. Wire shapes
+  and listing conventions follow the web-toolkit exactly.
+
+ears_pattern: event-driven
+priority: medium
+
+refs:
+  - specs/project/project.yaml#/goals/3
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      GET /servint/settings/appSettings lists settings with the web-toolkit
+      listing conventions (filters, match+term, sort, stats envelope,
+      perPage capped at 100).
+  - id: AC2
+    text: >
+      POST /servint/settings/appSettings creates a setting and returns its
+      render.
+  - id: AC3
+    text: >
+      GET /servint/settings/appSettings/{id} returns the setting; an
+      unknown id returns 404.
+  - id: AC4
+    text: >
+      PUT updates the setting's value and returns the updated render;
+      DELETE removes the setting.

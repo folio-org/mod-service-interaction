@@ -1,0 +1,35 @@
+# Dashboard entity → wire DTO. Legacy renderer: dashboard/_dashboard.gson
+# (full render minus widgets, plus widgets as summaries).
+
+id: dashboard-to-dto
+name: Dashboard to DashboardDto
+description: >
+  Identity projection of the dashboard's scalar fields; the owned widgets
+  relationship is projected to summaries {id, weight, name} — the full
+  widget instance shape is never rendered inside a dashboard.
+source:
+  type: model
+  ref: specs/models/dashboard.yaml#/id
+target:
+  type: dto
+  ref: specs/api/dashboard-dto.yaml#/$id
+field_mappings:
+  - source_field: id
+    target_field: id
+    transform: identity
+  - source_field: name
+    target_field: name
+    transform: identity
+  - source_field: description
+    target_field: description
+    transform: identity
+  - source_field: widgets
+    target_field: widgets
+    transform: project-collection(id, weight, name)
+refs:
+  - specs/models/dashboard.yaml#/id
+  - specs/api/dashboard-dto.yaml#/type
+  - specs/api/dashboard-dto.yaml#/properties/id
+  - specs/api/dashboard-dto.yaml#/properties/name
+  - specs/api/dashboard-dto.yaml#/properties/description
+  - specs/api/dashboard-dto.yaml#/properties/widgets

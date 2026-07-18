@@ -1,0 +1,39 @@
+# Inbound body of the Okapi `_tenant` 2.0 interface — platform-defined
+# envelope (module ids + purge flag + parameter list); never persisted.
+# module_to is absent on a purge job (blank module_to + purge=true).
+$id: tenant-attributes-dto
+title: TenantAttributesDto
+type: object
+properties:
+  module_to:
+    type: string
+    description: >-
+      Module id being enabled or upgraded to; absent (blank) on a purge
+      job.
+  module_from:
+    type: string
+    description: Previously enabled module id on upgrade or purge.
+  purge:
+    type: boolean
+    description: >-
+      When true with a blank module_to, the job purges the tenant — the
+      schema and all its data are dropped. The flag must be explicit
+      whenever module_to is blank: a blank-module_to body with purge
+      omitted or null is rejected 400 (no destructive default), and an
+      explicit false marks a disable.
+  parameters:
+    type: array
+    description: >-
+      Tenant init parameters; {key: loadReference, value: "true"} triggers
+      reference-data seeding and {key: loadSample, value: "true"} triggers
+      sample-data loading.
+    items:
+      type: object
+      required: [key]
+      properties:
+        key:
+          type: string
+          description: Parameter name.
+        value:
+          type: string
+          description: Parameter value.

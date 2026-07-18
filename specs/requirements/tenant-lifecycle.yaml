@@ -1,0 +1,82 @@
+# Okapi tenant lifecycle — `_tenant` 2.0 (ADR-012; folio-spring
+# TenantController/TenantService + Liquibase module changelog) with
+# schema-per-tenant provisioning, upgrade, disable, and purge.
+
+id: REQ-020
+title: Tenant lifecycle
+description: >
+  When Okapi drives the tenant lifecycle, the module shall implement the
+  `_tenant` 2.0 system interface with schema-per-tenant semantics: POST
+  /_/tenant with module_to creates (or upgrades) the tenant's schema by
+  running the Liquibase tenant changelog and answers 204 on synchronous
+  completion; the loadReference=true parameter triggers reference-data
+  seeding; POST /_/tenant with blank module_to and purge=true purges the
+  tenant schema; a disable arrives as POST /_/tenant with module_from
+  present, blank module_to, and purge=false, and is answered 204 without
+  running Liquibase and without seeding — only the tenant's in-memory
+  caches are evicted, so tenant data survives a disable. A body with blank
+  module_to whose purge flag is omitted or null shall be rejected with 400
+  and no side effects — destroying a tenant requires an explicit
+  purge=true, never a default — and a purge member that is not exactly one
+  top-level JSON Boolean shall be rejected with 400 and no side effects,
+  never coerced. GET and DELETE
+  /_/tenant/{operationId} answer the declared operation-status contract.
+  Schema naming follows the legacy OkapiTenantResolver convention so
+  existing production schemas are adopted unchanged.
+
+ears_pattern: event-driven
+priority: high
+
+refs:
+  - specs/project/project.yaml#/goals/3
+  - specs/decisions/012-tenant-interface-2-0.yaml#/id
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      POST /_/tenant with module_to creates the tenant schema (legacy naming
+      convention), applies the module's tenant changelog, and answers 204; a
+      repeat POST upgrades the existing schema idempotently instead of
+      failing.
+  - id: AC2
+    text: >
+      POST /_/tenant carrying parameter {key: loadReference, value: "true"}
+      additionally triggers the loadReference-gated reference-data seeding
+      (the check-digit vocabulary and the default generators, per REQ-019);
+      the @Defaults baseline vocabularies are seeded by every enable
+      regardless of parameters.
+  - id: AC3
+    text: >
+      POST /_/tenant with blank module_to and purge=true purges the tenant:
+      the schema and all its data are dropped, and the call answers 204.
+  - id: AC4
+    text: >
+      POST /_/tenant with module_from present, blank module_to, and
+      purge=false (the shape Okapi sends on disable) answers 204 and leaves
+      the tenant untouched: no Liquibase run (the changelog row count is
+      unchanged), no re-seeding (a seeded value deleted before the disable
+      stays deleted), schema and business rows intact; the tenant's
+      in-memory caches are evicted.
+  - id: AC5
+    text: >
+      GET /_/tenant/{operationId} answers 200 text/plain "true" (every
+      tenant operation completes synchronously) and DELETE
+      /_/tenant/{operationId} answers 204.
+  - id: AC6
+    text: >
+      POST /_/tenant with blank (or absent) module_to whose purge flag is
+      omitted or null answers 400 with the errors envelope and touches no
+      tenant state: no schema DDL, no Liquibase run, no seeding — the
+      schema and every row survive exactly as they were. The purge
+      discriminator is explicit only as exactly one top-level JSON Boolean
+      purge member: a body whose purge member is a coercible non-Boolean
+      scalar ("true", "false", 1, 0), appears more than once (either
+      order), or carries a structured value answers 400 with the same
+      errors envelope before any binding, side-effect-free, regardless of
+      module_to; a purge member nested below the top level never counts as
+      the flag. Purging requires an explicit purge=true and a disable
+      requires an explicit purge=false; the module never substitutes a
+      destructive default for a missing flag and never coerces one from a
+      non-Boolean value. Malformed JSON keeps its own malformed-body 400
+      path. (Okapi always sends the flag correctly on the 2.0 interface,
+      so only hand-crafted calls can reach these rejections.)

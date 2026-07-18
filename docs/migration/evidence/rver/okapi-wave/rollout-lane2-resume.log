@@ -1,0 +1,19 @@
+rollout: wave 'lane2' run 20260723T191224Z-299199: 1 tenant(s); MODE=okapi MODULE_TO=mod-service-interaction-5.0.0-SNAPSHOT MODULE_FROM=mod-service-interaction-4.4.0-SNAPSHOT MAX_FAILURES=1 DRY_RUN=false
+rollout: ledger: /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/rver-lane/rollout-evidence/rollout-ledger.csv (append-only); evidence: /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/rver-lane/rollout-evidence/lane2/20260723T191224Z-299199/<tenant>/ (immutable — a retry gets a new run-id)
+rollout:   [pass] preflight: psql connectivity + /admin/health + okapi reachability
+rollout: --- tenant lanebad (schema lanebad_mod_service_interaction) ---
+  [pass]     numgen: GET /servint/numberGenerators?perPage=100&sort=code%3Basc -> 200
+  [pass]     settings: GET /servint/settings/appSettings?perPage=100&sort=key%3Basc -> 200
+capture: 2 probes captured to /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/rver-lane/rollout-evidence/lane2/20260723T191224Z-299199/lanebad/pre (manifest.json written)
+capture: OK — every pinned expectation held
+rollout:   [pass] pre-capture -> /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/rver-lane/rollout-evidence/lane2/20260723T191224Z-299199/lanebad/pre
+rollout:   [pass] pre-snapshot -> /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/rver-lane/rollout-evidence/lane2/20260723T191224Z-299199/lanebad/{catalog,counts}-before.txt
+rollout:   [pass] enable: Okapi install (mod-service-interaction-5.0.0-SNAPSHOT) -> 200
+rollout:   [pass] routing: Okapi lists mod-service-interaction-5.0.0-SNAPSHOT for lanebad
+rollout:   [pass] post-verify: catalog unchanged, no row-count regression
+rollout:   [pass] changelog: EXECUTED=0 MARK_RAN=14
+rollout:   [pass] smoke numgen-list: GET /servint/numberGenerators?perPage=1 -> 200 (via okapi)
+rollout:   [pass] smoke settings-list: GET /servint/settings/appSettings?perPage=1 -> 200 (via okapi)
+rollout:   [pass] tenant lanebad complete (routing verified)
+rollout: wave 'lane2' run 20260723T191224Z-299199 finished: passed=1 failed=0 skipped=0
+rollout: OK — every tenant in wave 'lane2' passed with verified Okapi routing

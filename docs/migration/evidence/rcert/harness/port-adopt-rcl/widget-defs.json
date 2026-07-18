@@ -1,0 +1,21 @@
+[
+  {
+    "definition": {
+      "baseUrl": "/erm/sas",
+      "results": {
+        "columns": [
+          {
+            "label": "Name",
+            "name": "agreementName"
+          }
+        ]
+      }
+    },
+    "name": "m4-def",
+    "type": {
+      "name": "SimpleSearch",
+      "version": "1.0"
+    },
+    "version": "1.0"
+  }
+]

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Adoption baseline (ADR-005) for the settings slice: app_setting.
+     Column set transcribed from the legacy Groovy changelogs
+     (setup-app-settings.groovy + wtk/hidden-appsetting.feat.groovy) —
+     which declare NO primary key on st_id, only NOT NULL. MARK_RANs when
+     the table already exists. The st_hidden column gets its own changeset
+     because legacy schemas gained it in a separate migration. -->
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+  <changeSet id="adopt-app-setting" author="mod-service-interaction-java">
+    <preConditions onFail="MARK_RAN">
+      <not><tableExists tableName="app_setting"/></not>
+    </preConditions>
+    <createTable tableName="app_setting">
+      <column name="st_id" type="VARCHAR(36)"><constraints nullable="false"/></column>
+      <column name="st_version" type="BIGINT"><constraints nullable="false"/></column>
+      <column name="st_section" type="VARCHAR(255)"/>
+      <column name="st_key" type="VARCHAR(255)"/>
+      <column name="st_setting_type" type="VARCHAR(255)"/>
+      <column name="st_vocab" type="VARCHAR(255)"/>
+      <column name="st_default_value" type="VARCHAR(255)"/>
+      <column name="st_value" type="text"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="adopt-app-setting-hidden" author="mod-service-interaction-java">
+    <preConditions onFail="MARK_RAN">
+      <not><columnExists tableName="app_setting" columnName="st_hidden"/></not>
+    </preConditions>
+    <addColumn tableName="app_setting">
+      <column name="st_hidden" type="boolean"/>
+    </addColumn>
+  </changeSet>
+
+</databaseChangeLog>

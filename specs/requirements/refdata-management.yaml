@@ -1,0 +1,44 @@
+# Controlled-vocabulary surface (legacy: web-toolkit RefdataController) —
+# category CRUD plus the domain/property value lookup.
+
+id: REQ-017
+title: Reference data management
+description: >
+  When a client manages controlled vocabularies, the module shall provide
+  web-toolkit refdata semantics: CRUD over refdata categories at
+  /servint/refdata (values expanded inside their category), and a value
+  lookup at /servint/refdata/{domain}/{property} that resolves the category
+  registered for the domain + property pair and returns its values as a
+  kiwt list — 404 when no category matches.
+
+ears_pattern: event-driven
+priority: medium
+
+refs:
+  - specs/project/project.yaml#/goals/3
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      GET /servint/refdata lists refdata categories with the web-toolkit
+      listing conventions, each category rendering its values expanded.
+  - id: AC2
+    text: >
+      POST /servint/refdata creates a category together with its values.
+  - id: AC5
+    text: >
+      GET /servint/refdata/{id} returns the category with its values
+      expanded; an unknown id returns 404.
+  - id: AC6
+    text: >
+      PUT updates the category (including adding or changing values) and
+      returns the updated render; DELETE removes the category.
+  - id: AC3
+    text: >
+      GET /servint/refdata/{domain}/{property} resolves the category for
+      the domain + property pair and returns its values as a kiwt list
+      honouring term, match, sort, stats, and perPage capped at 100.
+  - id: AC4
+    text: >
+      GET /servint/refdata/{domain}/{property} returns 404 when no category
+      is registered for the pair.

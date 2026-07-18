@@ -1,0 +1,45 @@
+# Sidecar for numgen-management.feature — one scenario per CRUD operation
+# so every ApiOperation of the management surface has behavior coverage.
+
+source: specs/behavior/numgen-management.feature
+mappings:
+  - element: "#/feature/Number generator management/scenario/Create a generator with embedded sequences"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators/post
+      - specs/requirements/numgen-crud.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Number generator management/scenario/List generators with the stats envelope"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators/get
+      - specs/requirements/numgen-crud.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Number generator management/scenario/Fetch a single generator"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1{id}/get
+      - specs/requirements/numgen-crud.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Number generator management/scenario/Update a generator"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1{id}/put
+      - specs/requirements/numgen-crud.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Number generator management/scenario/Delete a generator cascades to its sequences"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1{id}/delete
+      - specs/requirements/numgen-crud.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Number generator management/scenario/Create a sequence directly"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGeneratorSequences/post
+      - specs/requirements/numgen-crud.yaml#/id
+  - element: "#/feature/Number generator management/scenario/List sequences with the owner snippet"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGeneratorSequences/get
+      - specs/requirements/numgen-crud.yaml#/acceptance_criteria/AC5
+  - element: "#/feature/Number generator management/scenario/Fetch a single sequence"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGeneratorSequences~1{id}/get
+      - specs/requirements/numgen-crud.yaml#/acceptance_criteria/AC5
+  - element: "#/feature/Number generator management/scenario/Update a sequence"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGeneratorSequences~1{id}/put
+      - specs/requirements/numgen-crud.yaml#/id
+  - element: "#/feature/Number generator management/scenario/Delete a sequence"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGeneratorSequences~1{id}/delete
+      - specs/requirements/numgen-crud.yaml#/id

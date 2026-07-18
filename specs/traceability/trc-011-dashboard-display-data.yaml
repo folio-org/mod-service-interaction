@@ -1,0 +1,14 @@
+id: TRC-011
+title: Dashboard display data implementation
+description: Display-data rows ensured per dashboard and rendered on the displayData sub-route.
+spec_ref: specs/requirements/dashboard-display-data.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.domain.entity.DashboardDisplayData
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.DashboardDisplayDataRepository
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.service.dashboard.DashboardService#ensureDisplayData
+  kind: method

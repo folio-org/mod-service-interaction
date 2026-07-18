@@ -1,0 +1,47 @@
+# ADR-011 — the Okapi ModuleDescriptor of the Java module must provide the
+# identical interface and permission surface as the legacy descriptor; the
+# descriptor diff is an M5 cutover gate artifact.
+
+id: ADR-011
+title: ModuleDescriptor parity as a cutover gate
+date: "2026-07-17"
+status: accepted
+
+context: >
+  Okapi routes traffic and enforces permissions from the ModuleDescriptor.
+  The legacy descriptor (generated from a template at build time) provides
+  the servint interface, multiple dashboard 1.0 interfaces, _tenant 1.2
+  and _timer 1.0, and defines the servint.* permission set that consuming
+  apps and stored permission assignments depend on. Any divergence —
+  a renamed permission, a dropped interface version, a changed handler
+  path — breaks clients or locks users out at upgrade. Reference modules
+  keep descriptors/ModuleDescriptor-template.json filtered by Maven and
+  validate it with folio-module-descriptor-validator.
+
+decision: >
+  Maintain descriptors/ModuleDescriptor-template.json by hand in the Java
+  module, Maven-filtered for version tokens and validated in the build by
+  folio-module-descriptor-validator. Provided interfaces, handler paths,
+  interface versions, permission names, displayNames, subPermissions, and
+  timer declarations are copied from the legacy generated descriptor and
+  may differ only in module id/version, launch descriptor, and the
+  `_tenant` interface block — deliberately upgraded from 1.2 to 2.0 per
+  ADR-012 and registered as dossier deviation D-17. A machine-readable
+  diff between the legacy and Java descriptors is a required M5 cutover
+  artifact and must show an empty provides/permissions delta outside that
+  registered `_tenant` block.
+
+consequences:
+  positive:
+    - Upgrade is invisible to Okapi and to permission assignments; no
+      client re-registration needed.
+    - The descriptor diff turns interface parity from a review opinion
+      into a checkable gate.
+  negative:
+    - Legacy permission quirks (naming inconsistencies, over-broad sets)
+      are frozen for the parity release.
+
+refs:
+  - specs/requirements/nfr-wire-compatibility.yaml#/id
+  - specs/requirements/tenant-lifecycle.yaml#/id
+  - specs/decisions/001-spec-first-parity-migration.yaml#/id

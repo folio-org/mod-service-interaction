@@ -1,0 +1,28 @@
+# Sidecar for dashboard-access.feature — access-hierarchy coverage.
+
+source: specs/behavior/dashboard-access.feature
+mappings:
+  - element: "#/feature/Dashboard access control/scenario/A manage holder passes view and edit checks"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}/put
+      - specs/requirements/dashboard-access-control.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Dashboard access control/scenario/A view-only user cannot update the dashboard"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}/put
+      - specs/requirements/dashboard-access-control.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Dashboard access control/scenario/An edit user cannot delete the dashboard"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}/delete
+      - specs/requirements/dashboard-access-control.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Dashboard access control/scenario/A user with no access receives 403"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}/get
+      - specs/requirements/dashboard-access-control.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Dashboard access control/scenario/My access reports the caller's level"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}~1my-access/get
+      - specs/requirements/dashboard-access-control.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Dashboard access control/scenario/Admin override bypasses access checks"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard/get
+      - specs/requirements/dashboard-access-control.yaml#/acceptance_criteria/AC4

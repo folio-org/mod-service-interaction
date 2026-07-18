@@ -1,0 +1,455 @@
+# Dashboard API surface — wire-compatible restatement of the legacy Grails
+# routes (UrlMappings.groovy) and ModuleDescriptor permissions. All
+# dashboard-scoped operations are gated by the caller's DashboardAccess
+# level (view < edit < manage); the Okapi authority
+# okapi.servint.dashboards.admin.allops bypasses every check.
+openapi: "3.1.0"
+info:
+  title: Dashboard API
+  version: "1.0.0"
+  description: >
+    User dashboards with per-dashboard access control: CRUD, the caller's
+    own dashboard list (with default-dashboard auto-provisioning), bulk
+    ordering, per-dashboard user management, and display-data (layout)
+    access. Part of the `servint` Okapi interface.
+
+paths:
+  /servint/dashboard:
+    get:
+      summary: List all dashboards (admin only)
+      operationId: listAllDashboards
+      tags: [dashboards]
+      x-sdd-refs:
+        - specs/requirements/dashboard-crud.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Index of every dashboard in the tenant, following the web-toolkit
+        listing conventions. Reserved to administrators: returns 403 unless
+        the caller holds the authority okapi.servint.dashboards.admin.allops.
+      x-folio-permissions-required: [servint.dashboards.collection.get]
+      parameters:
+        - $ref: "#/components/parameters/filters"
+        - $ref: "#/components/parameters/match"
+        - $ref: "#/components/parameters/term"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/perPage"
+        - $ref: "#/components/parameters/max"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/stats"
+      responses:
+        "200":
+          description: All dashboards (array, or stats envelope when stats=true).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./dashboard-dto.yaml"
+        "403":
+          description: Caller does not hold the admin override authority.
+    post:
+      summary: Create a dashboard
+      operationId: createDashboard
+      tags: [dashboards]
+      x-sdd-refs:
+        - specs/requirements/dashboard-crud.yaml#/id
+        - specs/requirements/dashboard-provisioning.yaml#/id
+      description: >
+        Creates the dashboard and provisions the creator's grant: a
+        manage-level DashboardAccess object with userDashboardWeight equal to
+        the user's prior dashboard count and defaultUserDashboard=true only
+        when the user previously had zero dashboards. An empty
+        DashboardDisplayData row is created alongside.
+      x-folio-permissions-required: [servint.dashboards.item.post]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./dashboard-dto.yaml"
+      responses:
+        "201":
+          description: Created dashboard with an empty widgets summary array.
+          content:
+            application/json:
+              schema:
+                $ref: "./dashboard-dto.yaml"
+
+  /servint/dashboard/my-dashboards:
+    get:
+      summary: List the caller's dashboards
+      operationId: getMyDashboards
+      tags: [dashboards]
+      x-sdd-refs:
+        - specs/requirements/dashboard-provisioning.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Returns the caller's DashboardAccess objects with the access refdata
+        value and the dashboard expanded. Auto-provisioning: when the caller
+        has zero dashboards, a dashboard named "My dashboard" is created
+        first — manage access, defaultUserDashboard=true, weight 0, plus an
+        empty DashboardDisplayData — and returned in the list. Subsequent
+        calls never create duplicates.
+      x-folio-permissions-required: [servint.dashboards.user.get]
+      responses:
+        "200":
+          description: The caller's access objects, dashboard and access expanded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./dashboard-access-dto.yaml"
+    put:
+      summary: Reorder the caller's dashboards
+      operationId: editUserDashboards
+      tags: [dashboards]
+      x-sdd-refs:
+        - specs/requirements/dashboard-user-ordering.yaml#/id
+      description: >
+        Bulk update of the caller's OWN access objects, ordering fields only:
+        userDashboardWeight updates freely; defaultUserDashboard may only
+        transition false→true, and electing a new default clears the flag on
+        all the caller's other access objects (single-default invariant).
+        The whole request is rejected before any item applies — 400 when any
+        item lacks id or user.id, 403 when any item's user.id is not the
+        caller's. Items without an existing access object (attempted
+        creation) are ignored; unchanged items are not re-saved. Responds
+        with the caller's refreshed my-dashboards list.
+      x-folio-permissions-required: [servint.dashboards.user.put]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              description: >-
+                The caller's access objects; each item must carry id and
+                user.id and may update userDashboardWeight and
+                defaultUserDashboard.
+              items:
+                $ref: "./dashboard-access-dto.yaml"
+      responses:
+        "200":
+          description: The refreshed my-dashboards list.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./dashboard-access-dto.yaml"
+        "400":
+          description: An item is missing id or user.id; nothing was applied.
+        "403":
+          description: An item names a user other than the caller; nothing was applied.
+
+  /servint/dashboard/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Dashboard identifier (UUID).
+    get:
+      summary: Get a dashboard
+      operationId: getDashboard
+      tags: [dashboards]
+      x-sdd-refs:
+        - specs/requirements/dashboard-crud.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Requires view access. Returns the dashboard's scalar fields plus
+        widgets rendered as summaries [{id, weight, name}].
+      x-folio-permissions-required: [servint.dashboards.item.get]
+      responses:
+        "200":
+          description: The dashboard with widget summaries.
+          content:
+            application/json:
+              schema:
+                $ref: "./dashboard-dto.yaml"
+        "403":
+          description: Caller lacks view access.
+        "404":
+          description: No dashboard with that id.
+    put:
+      summary: Update a dashboard
+      operationId: updateDashboard
+      tags: [dashboards]
+      x-sdd-refs:
+        - specs/requirements/dashboard-crud.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Requires edit access. Updates name/description and returns the
+        updated render.
+      x-folio-permissions-required: [servint.dashboards.item.put]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./dashboard-dto.yaml"
+      responses:
+        "200":
+          description: The updated dashboard.
+          content:
+            application/json:
+              schema:
+                $ref: "./dashboard-dto.yaml"
+        "403":
+          description: Caller lacks edit access.
+        "404":
+          description: No dashboard with that id.
+    delete:
+      summary: Delete a dashboard
+      operationId: deleteDashboard
+      tags: [dashboards]
+      x-sdd-refs:
+        - specs/requirements/dashboard-crud.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Requires manage access. First deletes every DashboardAccess and
+        DashboardDisplayData row referencing the dashboard, then the
+        dashboard itself (owned widget instances cascade).
+      x-folio-permissions-required: [servint.dashboards.item.delete]
+      responses:
+        "204":
+          description: Deleted, including all access and display-data rows.
+        "403":
+          description: Caller lacks manage access.
+        "404":
+          description: No dashboard with that id.
+
+  /servint/dashboard/{id}/users:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Dashboard identifier (UUID).
+    get:
+      summary: List a dashboard's users
+      operationId: getDashboardUsers
+      tags: [dashboards]
+      x-sdd-refs:
+        - specs/requirements/dashboard-user-management.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Requires view access. Lists the dashboard's DashboardAccess objects
+        with the access refdata expanded but the dashboard NOT expanded
+        (users-action render).
+      x-folio-permissions-required: [servint.dashboards.access.item.get]
+      responses:
+        "200":
+          description: The dashboard's access objects (dashboard omitted).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./dashboard-access-dto.yaml"
+        "403":
+          description: Caller lacks view access.
+    post:
+      summary: Edit a dashboard's users
+      operationId: editDashboardUsers
+      tags: [dashboards]
+      x-sdd-refs:
+        - specs/requirements/dashboard-user-management.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Requires manage access. Bulk add/update/delete of the dashboard's
+        access objects; each item is one of — no id: create access for
+        user.id with weight = that user's dashboard count and default =
+        (count == 0), ignored when the target is the caller or the user
+        already has access on the dashboard; id + _delete:true: delete the
+        access object; id without _delete: change ONLY the access level,
+        re-saving just when it changed. Items whose access object belongs to
+        the caller or references a different dashboard are ignored. Responds
+        with the refreshed users list (dashboard omitted).
+      x-folio-permissions-required: [servint.dashboards.access.item.post]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              description: >-
+                Access items {id?, _delete?, user: {id}, access: <refdata id
+                or value>}; semantics per item described on the operation.
+              items:
+                type: object
+                description: One access grant instruction.
+      responses:
+        "200":
+          description: The refreshed users list (dashboard omitted).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./dashboard-access-dto.yaml"
+        "403":
+          description: Caller lacks manage access.
+
+  /servint/dashboard/{id}/my-access:
+    get:
+      summary: Get the caller's access level on a dashboard
+      operationId: getMyAccess
+      tags: [dashboards]
+      x-sdd-refs:
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Requires view access. Returns {access: <value>} naming the caller's
+        access level (view/edit/manage) on the dashboard.
+      x-folio-permissions-required: [servint.dashboards.myAccess.item.get]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Dashboard identifier (UUID).
+      responses:
+        "200":
+          description: The caller's access level.
+          content:
+            application/json:
+              schema:
+                $ref: "./my-access-result-dto.yaml"
+        "403":
+          description: Caller has no access to the dashboard.
+
+  /servint/dashboard/{id}/displayData:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Dashboard identifier (UUID).
+    get:
+      summary: Get a dashboard's display data
+      operationId: getDisplayData
+      tags: [dashboards]
+      x-sdd-refs:
+        - specs/requirements/dashboard-display-data.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Requires view access. Returns the dashboard's display-data record
+        {id, dashId, layoutData}.
+      x-folio-permissions-required: [servint.dashboards.displayData.get]
+      responses:
+        "200":
+          description: The display-data record.
+          content:
+            application/json:
+              schema:
+                $ref: "./dashboard-display-data-dto.yaml"
+        "403":
+          description: Caller lacks view access.
+    put:
+      summary: Update a dashboard's display data
+      operationId: updateDisplayData
+      tags: [dashboards]
+      x-sdd-refs:
+        - specs/requirements/dashboard-display-data.yaml#/id
+        - specs/requirements/dashboard-access-control.yaml#/id
+      description: >
+        Requires edit access. Binds the submitted payload onto the record,
+        updates layoutData, and returns the updated render.
+      x-folio-permissions-required: [servint.dashboards.displayData.put]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./dashboard-display-data-dto.yaml"
+      responses:
+        "200":
+          description: The updated display-data record.
+          content:
+            application/json:
+              schema:
+                $ref: "./dashboard-display-data-dto.yaml"
+        "403":
+          description: Caller lacks edit access.
+
+components:
+  parameters:
+    filters:
+      name: filters
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Web-toolkit filter expressions (repeatable).
+    match:
+      name: match
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Property names the term parameter matches against (repeatable).
+    term:
+      name: term
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Search term applied to the match properties.
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Sort expressions property;asc|desc (repeatable).
+    perPage:
+      name: perPage
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: >
+        Page size; absent or 0 means the default 10; values above 100 are
+        silently clamped to 100 (never rejected).
+    max:
+      name: max
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: Legacy alias for perPage; perPage wins when both are sent.
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: >
+        1-based page number; takes precedence over offset, which is
+        otherwise used to derive the page.
+    offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: Result offset (alias page for page-based access).
+    stats:
+      name: stats
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: When true, wrap results in {results, totalRecords, ...}.

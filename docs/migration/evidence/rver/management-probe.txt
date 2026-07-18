@@ -1,0 +1,39 @@
+# R-VER gate 7 — management-surface probe over the wire (review-4 F-43, DP-2(a))
+# Target: rver-port container (image mod-service-interaction:rver), http://localhost:8081
+# Date: 2026-07-23T19:03:09Z
+
+GET /admin -> HTTP 200
+GET /admin/health -> HTTP 200
+GET /admin/metrics -> HTTP 200
+GET /admin/metrics/jvm.memory.used -> HTTP 200
+GET /admin/loggers -> HTTP 404
+GET /admin/loggers/org.folio.servint -> HTTP 404
+
+# the exact F-43 reproduction: unauthenticated log-level flip
+POST /admin/loggers/org.folio.servint {"configuredLevel":"TRACE"} -> HTTP 404
+
+# /admin discovery links (must expose exactly health + metrics):
+{
+    "_links": {
+        "self": {
+            "href": "http://localhost:8081/admin",
+            "templated": false
+        },
+        "health-path": {
+            "href": "http://localhost:8081/admin/health/{*path}",
+            "templated": true
+        },
+        "health": {
+            "href": "http://localhost:8081/admin/health",
+            "templated": false
+        },
+        "metrics-requiredMetricName": {
+            "href": "http://localhost:8081/admin/metrics/{requiredMetricName}",
+            "templated": true
+        },
+        "metrics": {
+            "href": "http://localhost:8081/admin/metrics",
+            "templated": false
+        }
+    }
+}

@@ -1,0 +1,42 @@
+# Per-dashboard access levels (legacy: DashboardAccess + hasAccess checks
+# in DashboardController; refdata category DashboardAccess.Access).
+
+id: REQ-007
+title: Dashboard access control
+description: >
+  While a dashboard exists, the module shall gate every dashboard-scoped
+  operation on the caller's access level for that dashboard. Levels form a
+  strict hierarchy view < edit < manage (a higher level implies every lower
+  one); exactly one DashboardAccess object exists per (dashboard, user)
+  pair, its level held as a refdata value of category DashboardAccess.Access.
+  Reads require view, updates require edit, destructive and access-granting
+  operations require manage; a caller without the required level receives
+  403. The Okapi authority okapi.servint.dashboards.admin.allops bypasses
+  all dashboard access checks.
+
+ears_pattern: state-driven
+priority: high
+
+refs:
+  - specs/project/project.yaml#/goals/1
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      Access levels are hierarchical: a user holding manage passes edit and
+      view checks; a user holding edit passes view checks but not manage
+      checks; a user holding only view fails edit and manage checks.
+  - id: AC2
+    text: >
+      GET /servint/dashboard/{id} requires view; PUT requires edit; DELETE
+      requires manage. A caller lacking the level — including one with no
+      access object at all — receives 403.
+  - id: AC3
+    text: >
+      GET /servint/dashboard/{id}/my-access returns {access: <value>} naming
+      the caller's access level on the dashboard (view required).
+  - id: AC4
+    text: >
+      A caller holding the authority okapi.servint.dashboards.admin.allops
+      bypasses every dashboard access check, including the index of all
+      dashboards.

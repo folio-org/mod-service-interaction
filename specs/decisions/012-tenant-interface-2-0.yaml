@@ -1,0 +1,101 @@
+# ADR-012 — adopt the Okapi `_tenant` 2.0 interface instead of re-implementing
+# the legacy 1.2 contract (party-review F-02 / deviation D-17; remediation
+# decision D-A; disable model corrected per re-review F-18 — deviation D-26;
+# omitted-purge destructive default removed per review-3 F-32).
+
+id: ADR-012
+title: Adopt the `_tenant` 2.0 interface, superseding 1.2 parity
+date: "2026-07-22"
+status: accepted
+
+context: >
+  The legacy Grails module provides `_tenant` 1.2 (POST/DELETE /_/tenant plus
+  POST /_/tenant/disable). folio-spring-base implements only the 2.0 contract
+  (TenantController/TenantApi: POST /_/tenant returning 204, GET and DELETE
+  /_/tenant/{operationId}). Under 2.0 every lifecycle transition arrives as a
+  POST /_/tenant job: Okapi (TenantManager at commit dd321ba, the "2.0"
+  interface case) always sends an explicit purge flag — enable/upgrade as
+  {module_to, [module_from], purge:false}, disable as {module_from,
+  purge:false}, purge as {module_from, purge:true}. An earlier revision of
+  this record wrongly stated that a plain disable never reaches the module
+  (re-review finding F-18, REGRESSED F-02). With folio-spring-base 10.0.0's
+  stock routing (isDisableJob = blank module_to AND purge), a disable-shaped
+  body falls through to createOrUpdateTenant, so out of the box every disable
+  re-runs Liquibase and re-seeds reference data — wasteful side effects on a
+  transition that must leave the tenant untouched. One binding nuance: the
+  TenantAttributes DTO defaults purge to true, so a hand-crafted body that
+  omits purge with a blank module_to binds as a purge job; Okapi itself never
+  omits the flag on 2.0. Party review №3 (F-32) flagged that inherited
+  binding as a destructive default: a caller that merely forgets the flag
+  would silently drop a tenant schema. The port's descriptor initially declared 1.2 while
+  the runtime served 2.0 routes (the review's Blocker F-02, seeded deviation
+  D-17). Re-implementing 1.2 on Spring would go against the framework grain,
+  and the interface's sole consumer is Okapi, which drives the lifecycle from
+  the installed descriptor. Both reference modules (mod-consortia-keycloak,
+  mod-users-keycloak) declare `_tenant` 2.0.
+
+decision: >
+  Declare and implement `_tenant` 2.0: POST /_/tenant with module_to
+  creates or upgrades the tenant schema synchronously (204;
+  loadReference/loadSample parameters conditionally invoke the seeding
+  hooks); blank module_to with purge=true purges the tenant schema. A
+  disable-shaped body — module_from present, module_to blank, purge
+  explicitly false — is answered 204 as a deliberate near-no-op: no
+  Liquibase run, no reference-data seeding, tenant schema and data
+  untouched; the module only evicts that tenant's in-memory caches (the
+  widget-definition cache and the signing-key cache, the same evictions a
+  purge performs) so a later re-enable starts cold. A body with blank (or
+  absent) module_to whose purge flag is omitted or null is rejected 400
+  with the errors envelope before any tenant work — destructive intent
+  must be explicit (purge only on purge=true, disable only on
+  purge=false), so the module inspects the wire-level flag rather than
+  folio-spring's defaulted binding and the DTO's purge-defaults-true
+  initialization can never route a flagless body to the purge path. Okapi
+  never sends that shape on 2.0 — the R20 cutover rehearsal captured every
+  Okapi 7.0.6 tenant call carrying the flag explicitly — so the rejection
+  is unreachable on an Okapi-driven lifecycle. GET
+  /_/tenant/{operationId} answers 200 text/plain "true" — every operation
+  completes synchronously, so the port overrides folio-spring's
+  not-implemented default to answer the declared contract truthfully — and
+  DELETE /_/tenant/{operationId} answers 204 no-op job cleanup. The legacy
+  /_/tenant/disable route is not carried over. This narrows ADR-011's
+  byte-parity mandate: the `_tenant` interface block is a deliberate,
+  dossier-registered deviation (D-17; disable semantics registered as
+  D-26); every other provided interface and permission stays byte-parity.
+
+consequences:
+  positive:
+    - The descriptor and the runtime agree; every declared tenant route
+      behaves as declared (resolves review Blocker F-02).
+    - A real Okapi disable is side-effect-free on tenant data — no schema
+      DDL, no re-seeding, no new changelog rows — verified against the
+      Okapi TenantManager source (commit dd321ba) and the folio-spring-base
+      10.0.0 sources rather than inferred (closes re-review F-18; the
+      delta from legacy 1.2 is dossier-registered as D-26).
+    - Tenant lifecycle rides folio-spring's supported path (synchronized
+      createOrUpdateTenant, FolioSpringLiquibase, conditional
+      loadReferenceData/loadSampleData hooks) for enable, upgrade, and
+      purge; only the disable shape is intercepted before it.
+    - Matches the reference modules, so platform operators see the
+      ecosystem-standard lifecycle contract.
+    - No destructive default remains — the only path that drops a tenant
+      schema carries an explicit purge=true; a flagless blank-module_to
+      body answers 400 instead of losing data (resolves review-3 F-32).
+  negative:
+    - The ModuleDescriptor `_tenant` block deviates from the legacy
+      descriptor and Okapi treats the upgrade as an interface version bump;
+      the deviation must stay registered in the cutover dossier (D-17).
+    - Legacy automation that called POST /_/tenant/disable or bare DELETE
+      /_/tenant directly (bypassing Okapi) would break; no such consumer is
+      known.
+    - Rejecting flagless blank-module_to bodies deviates from
+      folio-spring's stock TenantController binding (purge defaults true),
+      so the module must read the purge flag as it appeared on the wire;
+      hand-crafted callers now have to send the flag explicitly — as every
+      Okapi-issued job already does.
+
+refs:
+  - specs/requirements/tenant-lifecycle.yaml#/id
+  - specs/requirements/nfr-wire-compatibility.yaml#/id
+  - specs/decisions/003-spring-boot-folio-spring-stack.yaml#/id
+  - specs/decisions/011-module-descriptor-parity.yaml#/id

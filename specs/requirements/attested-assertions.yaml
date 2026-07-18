@@ -1,0 +1,49 @@
+# RFC 8693 attested assertions (legacy: AttestationController +
+# KeyPairService, nimbus-jose-jwt) — short-lived signed JWTs supporting
+# module-to-module federated trust, backed by per-tenant RSA key pairs.
+
+id: REQ-016
+title: Attested assertion tokens
+description: >
+  When a caller requests an attestation token, the module shall sign and
+  return a short-lived RS256 JWT whose claims identify the calling user and
+  tenant, using a per-tenant RSA key pair selected earliest-valid-first and
+  created on demand. The response envelope is {token: <compact JWS>,
+  status: "OK"} and the endpoint is guarded by the servint.extsvc.get
+  permission.
+
+ears_pattern: event-driven
+priority: high
+
+refs:
+  - specs/project/project.yaml#/goals/2
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      GET /servint/attestation/token returns {token, status: "OK"} where
+      token is a compact JWS signed with RS256.
+  - id: AC2
+    text: >
+      The JWT carries iss "FOLIO::mod-service-interaction", sub = the
+      calling user's FOLIO user id (the x-okapi-user-id header value,
+      falling back to the user_id claim of the x-okapi-token when the
+      header is absent, or "UNKNOWN" when neither is present), aud
+      "extApp", iat = now, exp = now + 300 seconds, a random UUID jti, and
+      a tenant claim naming the tenant id; the JWS header carries kid equal
+      to the signing key record's id (stable while that pair signs,
+      different after any rotation; the audience travels in aud) and
+      typ JWT.
+  - id: AC3
+    text: >
+      The signing key is selected per usage from the tenant's stored key
+      pairs: candidates must satisfy availableFrom <= now <= expiresAt,
+      ordered by availableFrom ascending, first taken — the EARLIEST valid
+      key wins so future keys can be pre-published; the selection is cached
+      per usage.
+  - id: AC4
+    text: >
+      When no valid key pair exists for the usage, an RSA-2048 pair is
+      created with availableFrom = now and expiresAt = now + 730 days,
+      stored Base64-encoded (X.509 public, PKCS#8 private), and used for
+      signing.

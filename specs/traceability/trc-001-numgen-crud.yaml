@@ -1,0 +1,36 @@
+id: TRC-001
+title: Number generator CRUD implementation
+description: Generated-API controller, JPA entities/repositories, MapStruct mapper, and the kiwt listing
+  component behind the number-generator and sequence CRUD surface; the adoption changelog supplies the
+  legacy tables.
+spec_ref: specs/requirements/numgen-crud.yaml#/id
+refs:
+- specs/decisions/004-openapi-first-api-generation.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.controller.NumberGeneratorsController
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.domain.entity.NumberGenerator
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.domain.entity.NumberGeneratorSequence
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.NumberGeneratorRepository
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.NumberGeneratorSequenceRepository
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.mapper.NumgenMapper
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.web.KiwtListing
+  kind: class
+- language: xml
+  qualified_name: src/main/resources/db/changelog/changes/adoption-baseline-numgen.xml
+  kind: liquibase-changelog
+- language: java
+  qualified_name: org.folio.servint.NumberGeneratorParityIT
+  kind: integration-test

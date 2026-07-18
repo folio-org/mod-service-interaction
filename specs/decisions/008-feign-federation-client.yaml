@@ -1,0 +1,51 @@
+# ADR-008 — cross-module widget-definition federation uses Spring
+# HTTP-interface clients enriched with the caller's Okapi context by
+# folio-spring. (Supersedes the earlier OpenFeign wording — folio-spring
+# 10.x dropped Spring Cloud OpenFeign for Spring Framework 7 HTTP
+# interfaces.)
+
+id: ADR-008
+title: Spring HTTP-interface federation clients with Okapi header enrichment
+date: "2026-07-17"
+status: accepted
+
+context: >
+  Widget-definition federation (REQ-013) aggregates definitions from other
+  applications' modules through Okapi: the module discovers implementors of
+  the dashboard interface and fetches their /dashboard/definitions,
+  applying compatibleVersion MAJOR.MINOR selection. The legacy module does
+  this with grails-okapi HTTP helpers under the calling user's identity.
+  folio-spring-base 10.x has removed Spring Cloud OpenFeign support in
+  favor of Spring Framework 7 HTTP-interface clients — declarative
+  @HttpExchange interfaces materialized by HttpServiceProxyFactory over
+  RestClient — with EnrichUrlAndHeadersInterceptor (enabled via
+  folio.exchange.enabled) pointing every call at the Okapi URL from
+  FolioExecutionContext and propagating tenant/token headers; the Boot-4
+  reference modules declare all cross-module clients this way.
+
+decision: >
+  Implement federation with declarative Spring HTTP-interface clients
+  (@HttpExchange interfaces created through folio-spring's
+  HttpServiceProxyFactory, folio.exchange.enabled=true): one client for
+  Okapi's proxy discovery (which modules provide the dashboard interface
+  for the tenant) and one for fetching /dashboard/definitions from each
+  implementor, addressed per provider via the X-Okapi-Module-Id header.
+  Calls execute in the caller's FolioExecutionContext (user token, same
+  tenant) — no system user, matching legacy authorization behavior.
+  compatibleVersion selection and de-duplication logic live in a
+  federation service, not in the clients.
+
+consequences:
+  positive:
+    - Declarative clients keep the federation transport trivial and
+      testable; URL/header enrichment is platform-standard and needs no
+      extra dependency — no Spring Cloud release train to track.
+    - Authorization semantics stay identical to legacy (caller identity).
+  negative:
+    - Okapi discovery responses must be parsed defensively — implementor
+      sets vary per tenant and version skew is expected at upgrade time.
+    - Per-provider error isolation (legacy skips failing implementors) must
+      be hand-rolled around the typed client calls.
+
+refs:
+  - specs/requirements/widget-definition-federation.yaml#/id

@@ -1,0 +1,18 @@
+[
+  {
+    "code": "plain",
+    "enabled": true,
+    "format": "00000",
+    "id": "4019e250-16e9-4ddb-8a9b-eee74e374266",
+    "lastUsedYear": "2026",
+    "name": "plain",
+    "nextValue": 4,
+    "owner": {
+      "code": "m4gen",
+      "id": "b4acbb72-bb0a-40d6-b239-c94d6270393d",
+      "name": "M4 Generator"
+    },
+    "prefix": "m4-",
+    "resetOnYearChange": false
+  }
+]

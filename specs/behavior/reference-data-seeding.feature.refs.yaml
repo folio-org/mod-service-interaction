@@ -1,0 +1,25 @@
+# Sidecar for reference-data-seeding.feature — per-trigger seeding
+# coverage; the trigger is the `_tenant` provisioning operation.
+
+source: specs/behavior/reference-data-seeding.feature
+mappings:
+  - element: "#/feature/Reference data seeding/scenario/Enable without parameters seeds only the baseline vocabularies"
+    refs:
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant/post
+      - specs/requirements/reference-data-seeding.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Reference data seeding/scenario/Check digit algorithms are seeded on reference load"
+    refs:
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant/post
+      - specs/requirements/reference-data-seeding.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Reference data seeding/scenario/Default generators are seeded on reference load"
+    refs:
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant/post
+      - specs/requirements/reference-data-seeding.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Reference data seeding/scenario/Widget types are imported on sample load"
+    refs:
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant/post
+      - specs/requirements/reference-data-seeding.yaml#/acceptance_criteria/AC5
+  - element: "#/feature/Reference data seeding/scenario/Reference loads are idempotent"
+    refs:
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant/post
+      - specs/requirements/reference-data-seeding.yaml#/acceptance_criteria/AC4

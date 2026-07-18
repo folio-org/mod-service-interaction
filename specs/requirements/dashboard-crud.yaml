@@ -1,0 +1,46 @@
+# Wire-compatible CRUD over dashboards (legacy: DashboardController).
+# The admin-only index and the widgets-summary render are part of the
+# legacy wire contract and must be preserved byte-compatible.
+
+id: REQ-006
+title: Dashboard CRUD
+description: >
+  When a client manages dashboards, the module shall provide create, read,
+  update, and delete operations at /servint/dashboard, preserving the legacy
+  wire shape: a dashboard renders its scalar fields (id, name, description)
+  plus a widgets array of summaries {id, weight, name} instead of fully
+  expanded widget instances. Deleting a dashboard shall first delete all of
+  its DashboardAccess and DashboardDisplayData rows. The collection index of
+  ALL dashboards shall be reserved to callers holding the admin override
+  authority.
+
+ears_pattern: event-driven
+priority: high
+
+refs:
+  - specs/project/project.yaml#/goals/1
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      POST /servint/dashboard with {name, description} creates the dashboard
+      and returns its render with an empty widgets summary array.
+  - id: AC2
+    text: >
+      GET /servint/dashboard/{id} returns the dashboard's scalar fields plus
+      widgets as summaries [{id, weight, name}] — never the full widget
+      instance render.
+  - id: AC3
+    text: >
+      PUT /servint/dashboard/{id} updates name/description and returns the
+      updated render; GET on an unknown id returns 404.
+  - id: AC4
+    text: >
+      DELETE /servint/dashboard/{id} deletes the dashboard after first
+      deleting every DashboardAccess and DashboardDisplayData row that
+      references it.
+  - id: AC5
+    text: >
+      GET /servint/dashboard (index of all dashboards, kiwt listing
+      conventions) returns 403 unless the caller holds the admin override
+      authority okapi.servint.dashboards.admin.allops.

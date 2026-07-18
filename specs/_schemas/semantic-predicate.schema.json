@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/semantic-predicate.schema.json",
+  "title": "Semantic Predicate Catalog Entry",
+  "description": "A single reference-type predicate consumed by the advisory semantic-validation lane. Governs shared/semantic/reference-types/<rule_id>/predicate.yaml.",
+  "type": "object",
+  "required": [
+    "rule_id",
+    "predicate_version",
+    "prompt_version",
+    "source_type",
+    "target_type",
+    "confidence_threshold",
+    "predicate_text"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "rule_id": { "type": "string", "minLength": 1 },
+    "predicate_version": { "type": "string", "minLength": 1 },
+    "prompt_version": { "type": "string", "minLength": 1 },
+    "source_type": { "type": "string", "minLength": 1 },
+    "target_type": { "type": "string", "minLength": 1 },
+    "confidence_threshold": { "type": "number", "minimum": 0, "maximum": 1 },
+    "predicate_text": { "type": "string", "minLength": 1 },
+    "labeling_rubric": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional human-labeler rubric — the SOUND/HOLLOW boundary encoded as anchor examples (one per class) that ship with the predicate under the FR-76 drift guard, so the C1 labeled set calibrates against the same boundary the judge is prompted on."
+    }
+  }
+}

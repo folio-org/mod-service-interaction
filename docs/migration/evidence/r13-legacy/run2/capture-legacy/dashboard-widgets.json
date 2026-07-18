@@ -1,0 +1,28 @@
+[
+  {
+    "configuration": "{\"filters\":[]}",
+    "definition": {
+      "name": "m4-def",
+      "version": "1.0"
+    },
+    "id": "7d9b49b2-e791-4942-8938-8248d2630120",
+    "name": "M4 widget one",
+    "owner": {
+      "id": "38668b57-5a37-44f8-adec-5594f02067a0"
+    },
+    "weight": 0
+  },
+  {
+    "configuration": "{\"filters\":[{\"name\":\"x\"}]}",
+    "definition": {
+      "name": "m4-def",
+      "version": "1.0"
+    },
+    "id": "4b63805e-f211-4aa6-8109-3c4ac21a7f12",
+    "name": "M4 widget two",
+    "owner": {
+      "id": "38668b57-5a37-44f8-adec-5594f02067a0"
+    },
+    "weight": 1
+  }
+]

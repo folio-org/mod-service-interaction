@@ -1,0 +1,35 @@
+diff-runs: A=/home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/r18/legacy  B=/home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/r18/port-adopt-r18l
+diff-runs: allowlist=/home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/harness/deviation-allowlist.tsv
+
+  dashboard-displaydata        byte-equal   
+  dashboard-users              sorted-equal array order only (D-4)
+  dashboard-widgets            sorted-equal array order only (D-4)
+  f04-bad-sort                 sorted-equal array order only (D-4)
+  f04-filter-nextvalue-gt5     byte-equal   
+  f04-perpage-0                byte-equal   
+  f04-perpage-101              sorted-equal array order only (D-4)
+  f14-duplicate-code           allowed      registered deviation D-24 — status 500 vs 409
+  f14-invalid-boolean          allowed      registered deviation D-28 — status 500 vs 200
+  f14-malformed-json           allowed      registered deviation D-22 — status 500 vs 400
+  f14-missing-tenant           allowed      registered deviation D-23 — status 500 vs 400
+  f14-perpage-nonnumeric       sorted-equal array order only (D-4)
+  f14-stats-notabool           byte-equal   
+  f21-10k-filter               allowed      registered deviation D-31 — body differs (status 400 on both); diff /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/r18/legacy/f21-10k-filter.json /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/r18/port-adopt-r18l/f21-10k-filter.json
+  f21-empty-rhs                byte-equal   
+  f21-escaped-literal          allowed      registered deviation D-29 — body differs (status 200 on both); diff /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/r18/legacy/f21-escaped-literal.json /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/r18/port-adopt-r18l/f21-escaped-literal.json
+  f21-gt-notanumber            allowed      registered deviation D-30 — status 500 vs 200
+  f21-unbalanced-paren         allowed      registered deviation D-30 — status 500 vs 200
+  my-dashboards-A              sorted-equal array order only (D-4)
+  my-dashboards-B              sorted-equal array order only (D-4)
+  my-widgets-A                 allowed      registered deviation D-1 — status 500 vs 404
+  numgen                       sorted-equal array order only (D-4)
+  numgen-sequences             byte-equal   
+  refdata-categories           sorted-equal array order only (D-4)
+  refdata-lookup-checkdigit    byte-equal   
+  settings                     byte-equal   
+  widget-defs                  byte-equal   
+  widget-types                 byte-equal   
+
+diff-runs: byte-equal=10 sorted-equal=9 allowed=9 diverged=0
+diff-runs: OK — no unregistered divergence
+diff-runs exit code: 0

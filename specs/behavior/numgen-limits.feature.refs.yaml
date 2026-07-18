@@ -1,0 +1,33 @@
+# Sidecar for numgen-limits.feature — scenarios trace to REQ-005 ACs; the
+# derivation scenario is backed by the sequence PUT operation (save-time rule).
+
+source: specs/behavior/numgen-limits.feature
+mappings:
+  - element: "#/feature/Sequence maximum limits/scenario/Exceeding the maximum is refused"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-limits.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Sequence maximum limits/scenario/Hitting the maximum still generates with a warning"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-limits.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Sequence maximum limits/scenario/Threshold equal to maximum warns HitMaximum at the maximum"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-limits.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Sequence maximum limits/scenario/Passing the threshold warns OverThreshold"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-limits.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Sequence maximum limits/scenario/Far below the maximum generates normally"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-limits.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Sequence maximum limits/scenario/Unresolvable next value is an error"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-limits.yaml#/acceptance_criteria/AC5
+  - element: "#/feature/Sequence maximum limits/scenario/Saving a sequence derives its maximum check state"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGeneratorSequences~1{id}/put
+      - specs/requirements/numgen-limits.yaml#/acceptance_criteria/AC6

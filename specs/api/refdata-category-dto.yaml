@@ -1,0 +1,22 @@
+# Wire shape of a refdata category — web-toolkit render with the owned
+# values expanded. No request-side required list: legacy partial PUTs bind
+# only the provided fields; create-time presence of desc is enforced by
+# the controller with the legacy 422 errors envelope.
+$id: refdata-category-dto
+title: RefdataCategoryDto
+type: object
+properties:
+  id:
+    type: string
+    description: Category identifier (UUID).
+  desc:
+    type: string
+    description: Category name / domain.property registration key.
+  internal:
+    type: boolean
+    description: Whether the category is module-seeded.
+  values:
+    type: array
+    description: The category's controlled values, expanded.
+    items:
+      $ref: "./refdata-value-dto.yaml"

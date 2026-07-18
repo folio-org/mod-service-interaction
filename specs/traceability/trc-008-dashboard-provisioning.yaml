@@ -1,0 +1,18 @@
+id: TRC-008
+title: Default dashboard provisioning implementation
+description: 'First-contact provisioning: external user find-or-create keyed by the FOLIO user UUID and
+  default ''My dashboard'' creation on my-dashboards.'
+spec_ref: specs/requirements/dashboard-provisioning.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.service.dashboard.DashboardService#createDefaultDashboard
+  kind: method
+- language: java
+  qualified_name: org.folio.servint.service.dashboard.ExternalUserService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.domain.entity.ExternalUser
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.ExternalUserRepository
+  kind: class

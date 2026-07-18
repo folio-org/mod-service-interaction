@@ -1,0 +1,18 @@
+id: TRC-015
+title: Widget types implementation
+description: Widget type storage, classpath sample-data import, and latest-compatible-version resolution
+  over MAJOR.MINOR type versions.
+spec_ref: specs/requirements/widget-types.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.domain.entity.WidgetType
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.WidgetTypeRepository
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.service.widget.WidgetTypeService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.service.widget.VersionService
+  kind: class

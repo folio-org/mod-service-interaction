@@ -1,0 +1,39 @@
+# RefdataValue entity → wire DTO. Legacy renderer: web-toolkit refdata
+# rendering — {id, value, label, owner{id, desc, internal}}; the owner
+# reference is omitted only when the value renders inside its owning
+# category's values array (empirically verified against a running legacy
+# module, M4).
+
+id: refdata-value-to-dto
+name: RefdataValue to RefdataValueDto
+description: >
+  Projection of a refdata value onto its wire shape; the owning category
+  renders as a compact owner reference (id, desc, internal) in every
+  standalone/expanded context and is omitted only inside the category's own
+  values array.
+source:
+  type: model
+  ref: specs/models/refdata-value.yaml#/id
+target:
+  type: dto
+  ref: specs/api/refdata-value-dto.yaml#/$id
+field_mappings:
+  - source_field: id
+    target_field: id
+    transform: identity
+  - source_field: value
+    target_field: value
+    transform: identity
+  - source_field: label
+    target_field: label
+    transform: identity
+  - source_field: owner
+    target_field: owner
+    transform: "owner-ref(id, desc, internal) — omitted in category-embedded renders"
+refs:
+  - specs/models/refdata-value.yaml#/id
+  - specs/api/refdata-value-dto.yaml#/type
+  - specs/api/refdata-value-dto.yaml#/properties/id
+  - specs/api/refdata-value-dto.yaml#/properties/value
+  - specs/api/refdata-value-dto.yaml#/properties/label
+  - specs/api/refdata-value-dto.yaml#/properties/owner

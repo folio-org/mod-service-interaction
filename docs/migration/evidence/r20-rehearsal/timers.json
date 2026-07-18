@@ -1,0 +1,11 @@
+[ {
+  "id" : "mod-service-interaction_0",
+  "routingEntry" : {
+    "methods" : [ "POST" ],
+    "pathPattern" : "/servint/numberGenerators/resetYearSequences",
+    "unit" : "hour",
+    "delay" : "24",
+    "permissionsRequired" : [ ]
+  },
+  "modified" : false
+} ]

@@ -1,0 +1,45 @@
+# Local widget definition surface (legacy: WidgetDefinitionController) —
+# the read-only catalog of widget definitions this module hosts, served both
+# under /servint and, permission-free, on the `dashboard` Okapi interface.
+
+id: REQ-012
+title: Widget definitions
+description: >
+  When a client browses widget definitions, the module shall serve its local
+  WidgetDefinition catalog read-only at /servint/widgets/definitions and,
+  additionally, at GET /dashboard/definitions — the endpoint of the
+  `dashboard` 1.0 Okapi interface (interfaceType multiple) that requires NO
+  permissions so any implementing module can be harvested by federation.
+  The wire shape must be preserved exactly: {name, version, type: {name,
+  version}, definition} where version renders the entity's
+  definitionVersion, type renders typeName/typeVersion, and definition is
+  the PARSED JSON object, never the stored string. The entity id is never
+  rendered (legacy gson renders with includes:[]; empirically verified
+  against a running legacy module).
+
+ears_pattern: event-driven
+priority: high
+
+refs:
+  - specs/project/project.yaml#/goals/1
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      GET /servint/widgets/definitions lists the local definitions with the
+      web-toolkit listing conventions, each rendered in the definition wire
+      shape.
+  - id: AC2
+    text: >
+      GET /servint/widgets/definitions/{id} returns a single definition;
+      an unknown id returns 404.
+  - id: AC3
+    text: >
+      GET /dashboard/definitions serves the same local-definition render
+      with no permission required, as the module's implementation of the
+      `dashboard` 1.0 interface.
+  - id: AC4
+    text: >
+      The rendered shape maps definitionVersion to version and
+      typeName/typeVersion to type {name, version}, and carries definition
+      as the parsed JSON object rather than the persisted string.

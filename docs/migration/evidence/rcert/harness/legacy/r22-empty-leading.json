@@ -1,0 +1,5 @@
+{
+  "error": 400,
+  "message": "Failure in SimpleLookupService. Invalid property: prefix",
+  "timestamp": "2026-07-22T18:59:12.180705741Z"
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "plugin-manifest.schema.json",
+  "title": "SDD Plugin Manifest",
+  "type": "object",
+  "required": ["plugin_id", "spec_type", "folder", "format", "extensions", "validator"],
+  "additionalProperties": false,
+  "properties": {
+    "plugin_id": { "type": "string", "minLength": 1 },
+    "spec_type": { "type": "string", "minLength": 1 },
+    "folder": { "type": "string", "minLength": 1 },
+    "schema_path": { "type": "string", "minLength": 1 },
+    "format": {
+      "type": "string",
+      "enum": ["yaml", "openapi", "gherkin", "structurizr-dsl"]
+    },
+    "extensions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "singleton": { "type": "boolean" },
+    "singleton_filename": { "type": "string" },
+    "validator": { "type": "string", "minLength": 1 },
+    "normalizer": { "type": "string" },
+    "graph_edge_definitions": { "type": "array" },
+    "supplementary_files": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["schema_path"],
+        "additionalProperties": false,
+        "properties": {
+          "schema_path": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  },
+  "if": {
+    "properties": { "format": { "const": "yaml" } },
+    "required": ["format"]
+  },
+  "then": {
+    "required": ["schema_path", "normalizer"]
+  }
+}

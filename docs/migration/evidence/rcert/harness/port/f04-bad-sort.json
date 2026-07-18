@@ -1,0 +1,278 @@
+[
+  {
+    "code": "inventory_callNumber",
+    "id": "0d00186e-a373-4ca0-982b-a4dee8fe54de",
+    "name": "Inventory: Call number",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "f18e2aa0-1f00-48dc-8418-4cc0579017fb",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "63364732-7e2e-4edf-beb8-ac056a5d64b0",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "callNumber",
+        "enabled": true,
+        "format": "00000",
+        "id": "ee42dfb8-5ab0-4756-b1f2-2854a50730ae",
+        "name": "Call number",
+        "nextValue": 1,
+        "outputTemplate": "B 2023 / ${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "m4gen",
+    "id": "1d665177-3d9c-40b3-a090-b7620b4abafb",
+    "name": "M4 Generator",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "d071cf0e-a7b4-491d-949d-46532975be85",
+          "label": "31-RTL-mod10-I (EAN)",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "63364732-7e2e-4edf-beb8-ac056a5d64b0",
+            "internal": true
+          },
+          "value": "ean13"
+        },
+        "code": "checked",
+        "enabled": true,
+        "format": "000000000",
+        "id": "9d71d2b1-96e5-421f-8dd0-ff1d12aacd8c",
+        "lastUsedYear": "2026",
+        "name": "checked",
+        "nextValue": 2,
+        "outputTemplate": "0698${generated_number}${checksum}",
+        "resetOnYearChange": false
+      },
+      {
+        "code": "plain",
+        "enabled": true,
+        "format": "00000",
+        "id": "f83cb9fe-40ee-4f72-a40a-f91b6a7d857f",
+        "lastUsedYear": "2026",
+        "name": "plain",
+        "nextValue": 4,
+        "prefix": "m4-",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "serialsManagement_patternNumber",
+    "id": "22892d7e-2483-4eac-9c86-dc9e6bfda04c",
+    "name": "Serials management: Pattern number",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "f18e2aa0-1f00-48dc-8418-4cc0579017fb",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "63364732-7e2e-4edf-beb8-ac056a5d64b0",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "patternNumber",
+        "enabled": true,
+        "format": "000000000",
+        "id": "c0463821-a7f2-4ac4-b47b-cf88b3317246",
+        "name": "Pattern number",
+        "nextValue": 1,
+        "outputTemplate": "pattern-${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "users_patronBarcode",
+    "id": "27f663c4-46a8-4fd6-b67b-a028654b2d6f",
+    "name": "Users: Patron barcode",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "d071cf0e-a7b4-491d-949d-46532975be85",
+          "label": "31-RTL-mod10-I (EAN)",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "63364732-7e2e-4edf-beb8-ac056a5d64b0",
+            "internal": true
+          },
+          "value": "ean13"
+        },
+        "code": "patron",
+        "enabled": true,
+        "format": "000000000",
+        "id": "4990234f-8d11-4f8e-a703-b24cac723ea4",
+        "name": "Patron",
+        "nextValue": 1,
+        "outputTemplate": "P${generated_number}-${checksum}",
+        "resetOnYearChange": false
+      },
+      {
+        "checkDigitAlgo": {
+          "id": "d071cf0e-a7b4-491d-949d-46532975be85",
+          "label": "31-RTL-mod10-I (EAN)",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "63364732-7e2e-4edf-beb8-ac056a5d64b0",
+            "internal": true
+          },
+          "value": "ean13"
+        },
+        "code": "staff",
+        "enabled": true,
+        "format": "000000000",
+        "id": "d4e1521c-364b-4268-9255-1ee98d811284",
+        "name": "Staff",
+        "nextValue": 1,
+        "outputTemplate": "S${generated_number}-${checksum}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "organizations_vendorCode",
+    "id": "38045109-72ac-44ae-9a2b-24f9a3173556",
+    "name": "Organizations: Vendor code",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "f18e2aa0-1f00-48dc-8418-4cc0579017fb",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "63364732-7e2e-4edf-beb8-ac056a5d64b0",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "vendor",
+        "enabled": true,
+        "format": "000",
+        "id": "cad9b39a-c43c-4ae1-8f36-f9eaa4a2b5d1",
+        "name": "Vendor",
+        "nextValue": 1,
+        "outputTemplate": "K${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "openAccess",
+    "id": "3bf6e198-6ced-4bef-910a-e848eb892381",
+    "name": "Open access: Publication request number",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "f18e2aa0-1f00-48dc-8418-4cc0579017fb",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "63364732-7e2e-4edf-beb8-ac056a5d64b0",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "requestSequence",
+        "enabled": true,
+        "format": "000000000",
+        "id": "b14ee9e5-32d7-4acd-9a5c-88f31486ebb8",
+        "name": "Request sequence",
+        "nextValue": 1,
+        "outputTemplate": "oa-${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "inventory_itemBarcode",
+    "id": "48d12e3e-94c5-4b56-8efe-660f710f402a",
+    "name": "Inventory: Item barcode",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "f18e2aa0-1f00-48dc-8418-4cc0579017fb",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "63364732-7e2e-4edf-beb8-ac056a5d64b0",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "itemBarcode",
+        "enabled": true,
+        "format": "0000000000",
+        "id": "7987d772-6cc8-4e69-a87c-349284c81bda",
+        "name": "Item barcode",
+        "nextValue": 1,
+        "outputTemplate": "${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "patronRequest",
+    "id": "54f8964c-5eac-44fd-b6bc-88aed796cd15",
+    "name": "ILL: Patron request number",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "d071cf0e-a7b4-491d-949d-46532975be85",
+          "label": "31-RTL-mod10-I (EAN)",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "63364732-7e2e-4edf-beb8-ac056a5d64b0",
+            "internal": true
+          },
+          "value": "ean13"
+        },
+        "code": "requestSequence",
+        "enabled": true,
+        "format": "000000000",
+        "id": "abdf1a47-b954-4b49-8d15-e97da1c94573",
+        "name": "Request sequence",
+        "nextValue": 1,
+        "outputTemplate": "ill-${generated_number}-${checksum}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "inventory_accessionNumber",
+    "id": "5f723260-bdd4-407e-86d4-3248229cd034",
+    "name": "Inventory: Accession number",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "f18e2aa0-1f00-48dc-8418-4cc0579017fb",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "63364732-7e2e-4edf-beb8-ac056a5d64b0",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "accessionNumber",
+        "enabled": true,
+        "format": "00000",
+        "id": "5f1bd2a0-2450-40d9-9133-cfc2bf7bc1c1",
+        "lastUsedYear": "2026",
+        "name": "Accession number",
+        "nextValue": 2,
+        "outputTemplate": "31A-2023-${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  }
+]

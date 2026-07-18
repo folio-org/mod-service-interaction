@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/exemptions.schema.json",
+  "title": "SDD Rule Exemption Specification",
+  "description": "Per-node coverage exemption for the cross-ref.orphan-node rule family (FR86, ADR-054). The target is either an exact canonical ref or a governed prefix pattern: a canonical-ref prefix ending in a single trailing '*'.",
+  "type": "object",
+  "required": ["id", "rule_id", "target", "category", "reason", "governed_by"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^EX-[a-z0-9][a-z0-9-]*$" },
+    "rule_id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "target": { "$ref": "#/$defs/ref" },
+    "category": {
+      "enum": [
+        "external-plugin",
+        "platform-interface",
+        "framework-produced",
+        "runtime-computed",
+        "spec-introduced-envelope",
+        "inbound-discriminator",
+        "cli-surface-not-modeled",
+        "validated-outside-behavior-layer"
+      ]
+    },
+    "reason": { "type": "string", "minLength": 1 },
+    "governed_by": { "$ref": "#/$defs/ref" },
+    "refs": { "$ref": "#/$defs/ref_list" }
+  },
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "pattern": "^\\S+#(?!#)\\S+$"
+    },
+    "ref_list": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ref" },
+      "uniqueItems": true
+    }
+  }
+}

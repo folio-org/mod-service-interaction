@@ -1,0 +1,45 @@
+id: TRC-022
+title: Wire compatibility enforcement
+description: 'The parity integration suites pin legacy wire shapes endpoint-by-endpoint (M4: 8/13 byte-identical
+  captures); mappers and the shared error machinery reproduce the legacy renders and envelopes.'
+spec_ref: specs/requirements/nfr-wire-compatibility.yaml#/id
+refs:
+- specs/decisions/001-spec-first-parity-migration.yaml#/id
+- specs/decisions/002-wire-envelope-exemptions.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.NumberGeneratorParityIT
+  kind: integration-test
+- language: java
+  qualified_name: org.folio.servint.DashboardParityIT
+  kind: integration-test
+- language: java
+  qualified_name: org.folio.servint.WidgetFederationParityIT
+  kind: integration-test
+- language: java
+  qualified_name: org.folio.servint.AttestationParityIT
+  kind: integration-test
+- language: java
+  qualified_name: org.folio.servint.RefdataSettingsParityIT
+  kind: integration-test
+- language: java
+  qualified_name: org.folio.servint.controller.ServintExceptionHandlers
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.web.LegacyValidationException
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.web.KiwtListing
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.mapper.DashboardMapper
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.mapper.NumgenMapper
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.mapper.WidgetMapper
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.mapper.RefdataSettingsMapper
+  kind: class

@@ -1,0 +1,11 @@
+HTTP/1.1 201 Created
+Connection: keep-alive
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Location: http://localhost:8080/servint/numberGeneratorSequences/891a5dd5-68a8-43fd-af54-a3488b2ab243
+Transfer-Encoding: chunked
+Content-Type: application/json;charset=UTF-8
+Content-Language: en-US
+Date: Tue, 21 Jul 2026 07:21:12 GMT
+

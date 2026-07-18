@@ -1,0 +1,21 @@
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   TenantContractCompletenessIT.servedTenantSurfaceMatchesTheSpec:67 [served /_/tenant* handler mappings vs /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/r26-mutations/servint-tenant-extra-op.yaml declared operations] 
+Expecting actual:
+  ["DELETE /_/tenant/{operationId}",
+    "GET /_/tenant/{operationId}",
+    "POST /_/tenant"]
+to contain exactly in any order:
+  ["DELETE /_/tenant/{operationId}",
+    "GET /_/tenant/{operationId}",
+    "POST /_/tenant",
+    "PUT /_/tenant"]
+but could not find the following elements:
+  ["PUT /_/tenant"]
+
+[INFO] 
+[ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0
+[ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 9.765 s <<< FAILURE! -- in org.folio.servint.TenantContractCompletenessIT
+[ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0
+[INFO] BUILD FAILURE
+exit=1

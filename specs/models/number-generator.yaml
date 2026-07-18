@@ -1,0 +1,45 @@
+# Number generator aggregate root — a named family of sequences.
+# Legacy persistence: table via GORM (cols ng_*), id uuid2 char(36).
+
+id: number-generator
+name: NumberGenerator
+description: >-
+  A configurable number generator identified by a unique code. Owns a set of
+  sequences; an optional default sequence code names the sequence used when a
+  caller does not specify one. Persisted per tenant (schema-per-tenant).
+  Legacy columns: ng_id, ng_version, ng_code, ng_name, ng_description,
+  ng_default_seq_code.
+fields:
+  - name: id
+    type: uuid
+    required: true
+    description: Unique identifier (36-char UUID, column ng_id).
+  - name: code
+    type: string
+    required: true
+    description: Unique machine code of the generator (column ng_code).
+  - name: name
+    type: string
+    required: true
+    description: Human-readable name (column ng_name).
+  - name: description
+    type: string
+    required: false
+    nullable: true
+    description: Optional free-text description (column ng_description).
+  - name: defaultSequenceCode
+    type: string
+    required: false
+    nullable: true
+    description: >-
+      Optional code of the sequence used when generation is requested without an
+      explicit sequence (column ng_default_seq_code).
+relationships:
+  - name: sequences
+    type: has_many
+    target: NumberGeneratorSequence
+    description: Owned sequences; deleting the generator cascades to them (all-delete-orphan).
+refs:
+  - specs/requirements/numgen-crud.yaml#/id
+  - specs/requirements/numgen-generation.yaml#/id
+  - specs/requirements/listing-grammar.yaml#/id

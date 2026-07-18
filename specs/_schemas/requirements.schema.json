@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/requirements.schema.json",
+  "title": "SDD Requirement Specification",
+  "description": "Schema for specs/requirements/*.(yaml|yml|json) documents. One requirement payload per file.",
+  "type": "object",
+  "required": ["id", "title", "description", "ears_pattern", "priority", "acceptance_criteria"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "ears_pattern": {
+      "type": "string",
+      "enum": ["ubiquitous", "event-driven", "state-driven", "optional", "complex"]
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["high", "medium", "low"]
+    },
+    "no_api_coverage_expected": {
+      "type": "boolean",
+      "description": "Whether this requirement is intentionally outside the current API operation surface. Requirements marked true are exempt from direct ApiOperation coverage warnings."
+    },
+    "refs": { "$ref": "#/$defs/ref_list" },
+    "acceptance_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/acceptance_criterion" }
+    }
+  },
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "pattern": "^\\S+#(?!#)\\S+$"
+    },
+    "ref_list": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ref" },
+      "uniqueItems": true
+    },
+    "acceptance_criterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^AC[0-9]+[a-z]?$"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      }
+    }
+  }
+}

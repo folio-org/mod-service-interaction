@@ -1,0 +1,34 @@
+# Wire shape of a widget definition. Legacy render
+# (widgetDefinition/_widgetDefinition.gson, includes:[]): ONLY the block
+# content is rendered — version maps from definitionVersion, type from
+# typeName/typeVersion, and definition is the PARSED JSON object. The
+# entity id is NEVER rendered (empirically verified against a running
+# legacy module, M4) — including in listing, single-fetch, and create
+# responses.
+$id: widget-definition-dto
+title: WidgetDefinitionDto
+type: object
+required: [name, version, type, definition]
+properties:
+  name:
+    type: string
+    description: Definition name (unique per version within a module).
+  version:
+    type: string
+    description: MAJOR.MINOR version — rendered from the entity's definitionVersion.
+  type:
+    type: object
+    description: The widget type targeted — rendered from typeName/typeVersion.
+    required: [name, version]
+    properties:
+      name:
+        type: string
+        description: Widget type name.
+      version:
+        type: string
+        description: Widget type MAJOR.MINOR version.
+  definition:
+    type: object
+    description: >-
+      The definition body as a PARSED JSON object — never the persisted
+      string form.

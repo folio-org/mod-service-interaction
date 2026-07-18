@@ -1,0 +1,101 @@
+# Wire-capture probe list — read by capture.sh (review F-11 remediation).
+# Tab-separated columns:
+#   id	method	user	expect_legacy	expect_port	path	body
+# - id: unique probe name (no spaces); becomes <id>.json in the capture dir.
+# - user: A | B (X-Okapi-User-Id + tenant header) | notenant (tenant header deliberately omitted).
+# - expect_legacy / expect_port: HTTP status capture.sh asserts for that side,
+#   or * = not yet pinned (recorded in the manifest, cross-run divergence still
+#   caught by diff-runs.sh; pin after the first legacy baseline run).
+# - path: URL-encoded request path ({DASH} is replaced by the "Migration Board" dashboard id).
+# - body: request body for POST/PUT, or - for none. May be deliberately malformed.
+# Append new probe rows (filter/perPage/sort matrices, error probes) here — no script change needed.
+#
+# --- The 13 M4 endpoints ---
+refdata-categories	GET	A	200	200	/servint/refdata?perPage=100&sort=desc%3Basc	-
+refdata-lookup-checkdigit	GET	A	200	200	/servint/refdata/NumberGeneratorSequence/checkDigitAlgo?perPage=100&sort=value%3Basc	-
+numgen	GET	A	200	200	/servint/numberGenerators?perPage=100&sort=code%3Basc	-
+numgen-sequences	GET	A	200	200	/servint/numberGeneratorSequences?perPage=100&sort=code%3Basc	-
+my-dashboards-A	GET	A	200	200	/servint/dashboard/my-dashboards	-
+my-dashboards-B	GET	B	200	200	/servint/dashboard/my-dashboards	-
+dashboard-users	GET	A	200	200	/servint/dashboard/{DASH}/users	-
+dashboard-widgets	GET	A	200	200	/servint/dashboard/{DASH}/widgets	-
+dashboard-displaydata	GET	A	200	200	/servint/dashboard/{DASH}/displayData	-
+widget-types	GET	A	200	200	/servint/widgets/types?perPage=100&sort=name%3Basc	-
+widget-defs	GET	A	200	200	/servint/widgets/definitions?perPage=100&sort=name%3Basc	-
+# D-1: dead legacy endpoint — legacy 500 (NPE), port 404 (route never declared).
+my-widgets-A	GET	A	500	404	/servint/widgets/instances/my-widgets	-
+settings	GET	A	200	200	/servint/settings/appSettings?perPage=100&sort=key%3Basc	-
+#
+# --- Review F-04 probes: kiwt filter / paging / sort matrix (legacy statuses measured by the review) ---
+f04-filter-nextvalue-gt5	GET	A	200	200	/servint/numberGeneratorSequences?filters=nextValue%3E5&perPage=100&sort=code%3Basc	-
+f04-perpage-0	GET	A	200	200	/servint/numberGenerators?perPage=0&sort=code%3Basc	-
+f04-perpage-101	GET	A	200	200	/servint/numberGenerators?perPage=101&sort=code%3Basc	-
+f04-bad-sort	GET	A	200	200	/servint/numberGenerators?sort=noSuchProperty%3Basc&perPage=100	-
+#
+# --- Review F-14 probes: error and header handling (port statuses pinned to the stable
+# --- mappings D-22..D-25 / ErrorEnvelopeMatrixIT; legacy statuses pinned from
+# --- docs/migration/evidence/r13-legacy/observations.md) ---
+f14-malformed-json	POST	A	500	400	/servint/numberGenerators	{"code":"broken"
+f14-missing-tenant	GET	notenant	500	400	/servint/numberGenerators?perPage=10	-
+# D-28: invalid boolean filter — legacy 500 (ConversionFailedException), port coerces garbage to false (200).
+f14-invalid-boolean	GET	A	500	200	/servint/numberGeneratorSequences?filters=enabled%3D%3Dnotabool&perPage=100&sort=code%3Basc	-
+# kiwt param leniency for stats/perPage (legacy-identical, no dossier entry): garbage values behave as absent.
+f14-stats-notabool	GET	A	200	200	/servint/numberGenerators?stats=notabool&perPage=100&sort=code%3Basc	-
+f14-perpage-nonnumeric	GET	A	200	200	/servint/numberGenerators?perPage=abc&sort=code%3Basc	-
+# D-24 integrity conflict: duplicates populate.sh's m4gen code; state-neutral on both sides
+# (legacy 500 rolls back, port 409 rejects) so listings stay comparable across runs.
+f14-duplicate-code	POST	A	500	409	/servint/numberGenerators	{"code":"m4gen","name":"duplicate code probe"}
+#
+# --- R16 probes: F-21 directed parser rows (legacy pins from docs/migration/evidence/r13-legacy) ---
+# f21-empty-rhs: parity after the KiwtListing empty-RHS fix — both sides drop the clause, full listing.
+f21-empty-rhs	GET	A	200	200	/servint/numberGeneratorSequences?filters=nextValue%3D%3D&perPage=100&sort=code%3Basc	-
+# f21-escaped-literal: statuses match, bodies diverge (legacy literal backslash 0 rows; port unescapes) — allowlist D-29.
+f21-escaped-literal	GET	A	200	200	/servint/numberGeneratorSequences?filters=code%3D%3Dpl%5Cain&perPage=100&sort=code%3Basc	-
+# f21-unbalanced-paren: legacy 500, port drops the clause (200) — D-30.
+f21-unbalanced-paren	GET	A	500	200	/servint/numberGeneratorSequences?filters=%28code%3D%3Dplain&perPage=100&sort=code%3Basc	-
+# f21-gt-notanumber: legacy 500, port drops the clause (200) — D-30.
+f21-gt-notanumber	GET	A	500	200	/servint/numberGeneratorSequences?filters=nextValue%3Enotanumber&perPage=100&sort=code%3Basc	-
+# f21-10k-filter: container-level rejection both sides (400); bodies diverge (legacy empty, port error body) — allowlist D-31.
+f21-10k-filter	GET	A	400	400	/servint/numberGeneratorSequences?filters=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&perPage=100&sort=code%3Basc	-
+#
+# --- R22 probes: F-26 compound empty-RHS absorption (legacy pins from docs/migration/evidence/r22-legacy-compound) ---
+# r22-empty-and-trailing: whole-parameter collapse to code=="alpha&&prefix==" — both sides 200, 0 rows.
+r22-empty-and-trailing	GET	A	200	200	/servint/numberGenerators?filters=code%3D%3Dalpha%26%26prefix%3D%3D&perPage=100&sort=code%3Basc	-
+# r22-empty-or-paren: paren-stripped collapse to code=="alpha||prefix==" — both sides 200, 0 rows.
+r22-empty-or-paren	GET	A	200	200	/servint/numberGenerators?filters=%28code%3D%3Dalpha%7C%7Cprefix%3D%3D%29&perPage=100&sort=code%3Basc	-
+# r22-empty-leading: absorbed subject `prefix` is not a generator property — 400 both sides; envelopes differ (allowlist D-32).
+r22-empty-leading	GET	A	400	400	/servint/numberGenerators?filters=prefix%3D%3D%26%26code%3D%3Dalpha	-
+# r22-empty-top-unknown: top-level empty RHS on an unknown property — dropped before validation, both 200 full listing.
+r22-empty-top-unknown	GET	A	200	200	/servint/numberGenerators?filters=notAProp%3D%3D&perPage=100&sort=code%3Basc	-
+# r22-empty-dotted-top: dotted-path empty RHS — dropped, no join residue, both 200 full listing.
+r22-empty-dotted-top	GET	A	200	200	/servint/numberGeneratorSequences?filters=checkDigitAlgo.value%3D%3D&perPage=100&sort=code%3Basc	-
+# r22-empty-not: legacy 500, port drops the parameter (200) — D-32.
+r22-empty-not	GET	A	500	200	/servint/numberGenerators?filters=%21%28prefix%3D%3D%29&perPage=100&sort=code%3Basc	-
+# r22-uncoercible-compound: legacy 500, port whole-parameter drop (200) — D-30.
+r22-uncoercible-compound	GET	A	500	200	/servint/numberGeneratorSequences?filters=code%3D%3Dplain%26%26nextValue%3D%3Dabc&perPage=100&sort=code%3Basc	-
+#
+# --- M9 R31/R32 probes: escaped-token + wildcard semantics (legacy pins from
+# --- docs/migration/evidence/r31-escaped-oracle + r32-wildcard-oracle; discriminator
+# --- fixture rows created by populate.sh: alpha\&&prefix==, ab_cd, abXcd, ab%cd, ab$2cd) ---
+# r31-esc-and-empty: escaped && before empty RHS — ONE raw comparison, matches the discriminator row on both sides (F-38 row 1).
+r31-esc-and-empty	GET	A	200	200	/servint/numberGenerators?filters=code%3D%3Dalpha%5C%26%26prefix%3D%3D&perPage=100&sort=code%3Basc	-
+# r31-single-lt-identifier: single < with identifier tail — 400 Invalid property: beta both sides; envelopes differ (allowlist D-32 class).
+r31-single-lt-identifier	GET	A	400	400	/servint/numberGenerators?filters=code%3D%3Dalpha%3Cbeta&perPage=100	-
+# r31-single-gt-numeric: single > with non-identifier tail — legacy 500, port drops the clause (200) — D-30.
+r31-single-gt-numeric	GET	A	500	200	/servint/numberGenerators?filters=code%3D%3Dalpha%3E5&perPage=100&sort=code%3Basc	-
+# r32-contains-pct: non-leading % becomes literal $2 — the ab$2cd fixture row matches on both sides (F-39 row 1, positive proof).
+r32-contains-pct	GET	A	200	200	/servint/numberGenerators?filters=code%3D~ab%25cd&perPage=100&sort=code%3Basc	-
+# r32-contains-underscore: _ is a live single-char wildcard in =~ — 3 fixture rows both sides.
+r32-contains-underscore	GET	A	200	200	/servint/numberGenerators?filters=code%3D~ab_cd&perPage=100&sort=code%3Basc	-
+# r32-contains-esc-pct: \% is an escaped literal percent — exactly the ab%cd row both sides.
+r32-contains-esc-pct	GET	A	200	200	/servint/numberGenerators?filters=code%3D~ab%5C%25cd&perPage=100&sort=code%3Basc	-
+# r32-cieq-pct: =i= is the unwrapped ilike — same broken transform, matches ab$2cd both sides.
+r32-cieq-pct	GET	A	200	200	/servint/numberGenerators?filters=code%3Di%3Dab%25cd&perPage=100&sort=code%3Basc	-
+# r32-match-pct: match/term passes % through LIVE — every ab*cd fixture row both sides.
+r32-match-pct	GET	A	200	200	/servint/numberGenerators?match=code&term=ab%25cd&perPage=100&sort=code%3Basc	-
+# r32-match-multiterm: repeated term parameters — legacy 500 (uncaught), port comma-joins and answers 200 — D-33.
+r32-match-multiterm	GET	A	500	200	/servint/numberGenerators?match=code&term=ab%25cd&term=abcd&perPage=100&sort=code%3Basc	-
+# r32-raw-unencoded-pct: what a naive client that fails to encode '%' actually sends — '%cd' is a
+# syntactically valid escape decoding to a non-UTF-8 byte. Legacy Tomcat 9 decodes leniently (200,
+# 0 rows); port Tomcat 10.1 rejects at the container (400, platform body) — D-34 (R-VER oracle re-run).
+r32-raw-unencoded-pct	GET	A	200	400	/servint/numberGenerators?filters=code%3D~ab%cd&perPage=100&sort=code%3Basc	-

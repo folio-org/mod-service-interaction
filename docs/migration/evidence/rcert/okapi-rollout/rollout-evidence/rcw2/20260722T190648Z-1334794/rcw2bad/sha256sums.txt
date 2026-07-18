@@ -1,0 +1,12 @@
+ddad5c0cfdcafbbc966e6ba48eff7f962174a7d7dd564331e32b3bd0c46819af  ./catalog-after.txt
+4e6cf8cf794ad3493e0841a5db213d4ec8f31c0f40f082193aba9ba46b34eb8b  ./catalog-before.txt
+29f1335151ba843f69a38b0f5eb503c2d9b3d26c56cdc0e8bc58d03c2867fa69  ./catalog.diff
+56be6316227262686bacf68761c8f073bc55cac2cffd3137c2429da60d872b28  ./counts-after.txt
+54502ffd6b25248e75428714f4ffc925f72e259d8d9e590d930a87bd2ead7370  ./counts-before.txt
+d1eadce937a9ebe76214a06f0482ad31f2cbb026bf5f0608596fb3707727258e  ./enable.json
+cbadf8e42f7c97fb154ceaaf14b0e45c49ba7a2ffdc314349b814382010e9a68  ./okapi-modules.json
+7ec37616abcebbe59d6c09f0de317040a06b32efcba63a12bf3a233c3194f19f  ./pre/manifest.json
+35790026954dc1e81be2152411dd29f5072ad78b11872d04d58a5b7eea18112b  ./pre/numgen.json
+91187617991b776f3bd0f89cad5ad81ad41f938ff369754a9b23ddcc140adbf0  ./pre/settings.json
+e9d5501c59e033f09e07caea40ffa883bc30dc92ffa96cb9ff7f10c818717d85  ./rollback-install.json
+ba44ffb39f791a45a53f7e45b65e92c35cb3aa5650a9bfb7982573d1fb3b1cdd  ./rollback-modules.json

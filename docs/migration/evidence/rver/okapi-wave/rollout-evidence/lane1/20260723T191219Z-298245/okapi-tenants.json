@@ -1,0 +1,9 @@
+[ {
+  "id" : "lanebad"
+}, {
+  "id" : "lanec"
+}, {
+  "id" : "supertenant",
+  "name" : "supertenant",
+  "description" : "Okapi built-in super tenant"
+} ]

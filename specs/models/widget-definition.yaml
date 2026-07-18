@@ -1,0 +1,50 @@
+# Widget definition — a versioned, typed widget blueprint hosted by this
+# module. Legacy persistence: cols wdef_*, id uuid2 char(36);
+# unique constraint on (name, definitionVersion).
+
+id: widget-definition
+name: WidgetDefinition
+description: >-
+  A widget blueprint this module hosts and serves on the `dashboard`
+  interface: a named, versioned JSON definition tied to a widget type by
+  name + version. The definition body is persisted as a JSON string but
+  always rendered parsed. Unique per (name, definitionVersion).
+  Legacy columns: wdef_id, wdef_version, wdef_name, wdef_definition,
+  wdef_definition_version, wdef_type_name, wdef_type_version.
+fields:
+  - name: id
+    type: uuid
+    required: true
+    description: Unique identifier (36-char UUID, column wdef_id).
+  - name: name
+    type: string
+    required: true
+    description: >-
+      Definition name, unique together with definitionVersion (column
+      wdef_name).
+  - name: definition
+    type: string
+    required: true
+    description: >-
+      The widget definition body as a persisted JSON string (column
+      wdef_definition); parsed to an object on render.
+  - name: definitionVersion
+    type: string
+    required: true
+    description: >-
+      MAJOR.MINOR version of the definition (column
+      wdef_definition_version); rendered on the wire as `version`.
+  - name: typeName
+    type: string
+    required: true
+    description: Name of the widget type the definition targets (column wdef_type_name).
+  - name: typeVersion
+    type: string
+    required: true
+    description: >-
+      MAJOR.MINOR version of the targeted widget type (column
+      wdef_type_version); resolved to the latest compatible WidgetType at
+      validation time.
+refs:
+  - specs/requirements/widget-definitions.yaml#/id
+  - specs/requirements/widget-definition-federation.yaml#/id

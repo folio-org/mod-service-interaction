@@ -1,0 +1,34 @@
+# WidgetType entity → wire DTO — plain identity render; schema remains the
+# persisted JSON string.
+
+id: widget-type-to-dto
+name: WidgetType to WidgetTypeDto
+description: >
+  Identity projection of the widget type onto its wire shape
+  {id, name, typeVersion, schema}; the schema string is NOT parsed.
+source:
+  type: model
+  ref: specs/models/widget-type.yaml#/id
+target:
+  type: dto
+  ref: specs/api/widget-type-dto.yaml#/$id
+field_mappings:
+  - source_field: id
+    target_field: id
+    transform: identity
+  - source_field: name
+    target_field: name
+    transform: identity
+  - source_field: typeVersion
+    target_field: typeVersion
+    transform: identity
+  - source_field: schema
+    target_field: schema
+    transform: identity
+refs:
+  - specs/models/widget-type.yaml#/id
+  - specs/api/widget-type-dto.yaml#/type
+  - specs/api/widget-type-dto.yaml#/properties/id
+  - specs/api/widget-type-dto.yaml#/properties/name
+  - specs/api/widget-type-dto.yaml#/properties/typeVersion
+  - specs/api/widget-type-dto.yaml#/properties/schema

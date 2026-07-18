@@ -1,0 +1,6 @@
+# R-VER gate 6 — rendered k8s service smoke
+# (a) template drift probe (surefire unit test, from the closing-HEAD verify):
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.100 s -- in org.folio.servint.K8sDeploymentTemplateTest
+# (b) offline dry-run equivalent: envsubst render | kubeconform -strict
+#     (kubectl apply --dry-run=client requires API discovery; local kubeconfig points at an unreachable cluster)
+Summary: 3 resources found parsing stdin - Valid: 3, Invalid: 0, Errors: 0, Skipped: 0

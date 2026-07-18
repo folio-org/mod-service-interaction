@@ -1,0 +1,24 @@
+# Sidecar for dashboard-user-ordering.feature — editUserDashboards coverage.
+
+source: specs/behavior/dashboard-user-ordering.feature
+mappings:
+  - element: "#/feature/Dashboard user ordering/scenario/Reorder dashboards by weight"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1my-dashboards/put
+      - specs/requirements/dashboard-user-ordering.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Dashboard user ordering/scenario/Electing a new default clears the previous one"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1my-dashboards/put
+      - specs/requirements/dashboard-user-ordering.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Dashboard user ordering/scenario/Item missing id or user id rejects the whole request"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1my-dashboards/put
+      - specs/requirements/dashboard-user-ordering.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Dashboard user ordering/scenario/Foreign user id rejects the whole request"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1my-dashboards/put
+      - specs/requirements/dashboard-user-ordering.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Dashboard user ordering/scenario/Attempted creation through ordering is ignored"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1my-dashboards/put
+      - specs/requirements/dashboard-user-ordering.yaml#/acceptance_criteria/AC4

@@ -1,0 +1,16 @@
+rollout: wave 'lane2' run 20260723T191222Z-298702: 1 tenant(s); MODE=okapi MODULE_TO=mod-service-interaction-5.0.0-SNAPSHOT MODULE_FROM=mod-service-interaction-4.4.0-SNAPSHOT MAX_FAILURES=1 DRY_RUN=false
+rollout: ledger: /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/rver-lane/rollout-evidence/rollout-ledger.csv (append-only); evidence: /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/rver-lane/rollout-evidence/lane2/20260723T191222Z-298702/<tenant>/ (immutable — a retry gets a new run-id)
+rollout:   [pass] preflight: psql connectivity + /admin/health + okapi reachability
+rollout: --- tenant lanebad (schema lanebad_mod_service_interaction) ---
+  [pass]     numgen: GET /servint/numberGenerators?perPage=100&sort=code%3Basc -> 200
+  [pass]     settings: GET /servint/settings/appSettings?perPage=100&sort=key%3Basc -> 200
+capture: 2 probes captured to /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/rver-lane/rollout-evidence/lane2/20260723T191222Z-298702/lanebad/pre (manifest.json written)
+capture: OK — every pinned expectation held
+rollout:   [pass] pre-capture -> /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/rver-lane/rollout-evidence/lane2/20260723T191222Z-298702/lanebad/pre
+rollout:   [pass] pre-snapshot -> /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/rver-lane/rollout-evidence/lane2/20260723T191222Z-298702/lanebad/{catalog,counts}-before.txt
+rollout:   [pass] enable: Okapi install (mod-service-interaction-5.0.0-SNAPSHOT) -> 200
+rollout:   [pass] routing: Okapi lists mod-service-interaction-5.0.0-SNAPSHOT for lanebad
+rollout:   [fail] tenant lanebad at phase 'post-verify-catalog': catalog changed for adopted schema lanebad_mod_service_interaction (see /tmp/claude-1000/-home-taras-spashchenko-TS-github-mod-service-interaction/6e1d3a81-6c4f-432a-a3c9-1b389217bd05/scratchpad/rver-lane/rollout-evidence/lane2/20260723T191222Z-298702/lanebad/catalog.diff) — systemic-defect signal (runbook 3.3)
+rollout:   [pass] rollback: Okapi enable mod-service-interaction-4.4.0-SNAPSHOT + routing re-verified
+rollout: STOP — hard-stop failure (catalog/count/changelog verification or failed rollback) — aborts immediately regardless of MAX_FAILURES. Tenants not attempted: none
+rollout: wave 'lane2' run 20260723T191222Z-298702: passed=0 failed=1 skipped=0

@@ -1,0 +1,61 @@
+# Per-(dashboard, user) access grant. Legacy persistence: cols da_*,
+# FK columns *_fk; access level is a RefdataValue of category
+# DashboardAccess.Access (@Defaults [Manage, Edit, View], internal).
+
+id: dashboard-access
+name: DashboardAccess
+description: >-
+  The single access object tying one user to one dashboard: carries the
+  access level (view < edit < manage, as a refdata value), the user's
+  personal ordering weight for the dashboard, and whether it is the user's
+  default dashboard. Exactly one object exists per (dashboard, user) pair.
+  Legacy columns: da_id, da_version, da_dashboard_fk, da_user_fk,
+  da_access_fk, da_user_dashboard_weight, da_default_user_dashboard,
+  da_date_created.
+fields:
+  - name: id
+    type: uuid
+    required: true
+    description: Unique identifier (column da_id).
+  - name: access
+    type: string
+    required: true
+    description: >-
+      Reference-data value (category DashboardAccess.Access) naming the
+      level: view, edit, or manage. Higher levels imply lower ones.
+      Column da_access_fk.
+  - name: userDashboardWeight
+    type: integer
+    required: false
+    nullable: true
+    description: >-
+      The user's personal ordering weight for this dashboard (column
+      da_user_dashboard_weight); assigned as the user's dashboard count at
+      grant time.
+  - name: defaultUserDashboard
+    type: boolean
+    required: false
+    nullable: true
+    description: >-
+      Whether this is the user's default dashboard (defaults false; column
+      da_default_user_dashboard). At most one access object per user carries
+      true.
+  - name: dateCreated
+    type: date
+    required: false
+    nullable: true
+    description: Creation timestamp (column da_date_created).
+relationships:
+  - name: dashboard
+    type: belongs_to
+    target: Dashboard
+    description: The dashboard the grant applies to (column da_dashboard_fk).
+  - name: user
+    type: belongs_to
+    target: ExternalUser
+    description: The FOLIO user holding the grant (column da_user_fk).
+refs:
+  - specs/requirements/dashboard-access-control.yaml#/id
+  - specs/requirements/dashboard-provisioning.yaml#/id
+  - specs/requirements/dashboard-user-ordering.yaml#/id
+  - specs/requirements/dashboard-user-management.yaml#/id

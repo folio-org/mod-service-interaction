@@ -1,0 +1,9 @@
+id: TRC-021
+title: Admin actions implementation
+description: Admin trigger endpoints (type import, clean, ensureDisplayData) with legacy unknown-action
+  404 semantics.
+spec_ref: specs/requirements/admin-actions.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.controller.AdminController
+  kind: class

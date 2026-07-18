@@ -1,0 +1,13 @@
+# Exemption: resetYearSequences response envelope — per-run summary computed
+# by the timer sweep, never persisted; no backing model exists to map from.
+
+id: EX-year-reset-result-envelope
+rule_id: api-dto-property-has-dto-mapping-coverage
+target: specs/api/year-reset-result-dto.yaml#/properties/*
+category: spec-introduced-envelope
+reason: >
+  YearResetResultDto reports the outcome of one reset sweep (current UTC
+  year and the count of sequences reset). Both fields are computed during
+  the run and discarded; the legacy module has no corresponding domain
+  class, so DtoMapping coverage would fabricate a model that does not exist.
+governed_by: specs/decisions/002-wire-envelope-exemptions.yaml#/id

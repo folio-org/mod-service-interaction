@@ -1,0 +1,51 @@
+# R-VER gate 2 — per-probe compare, legacy (:8080, r31o) vs port (:8081, rvo)
+# Port fixture: oracle.py FIXTURE_CODES + planted discriminators ab$2cd / "ab%cd" / "alpha&&beta".
+# Legacy tenant additionally carries the Round-1 s-matrix/dx fixture rows the port tenant does not;
+# rows unique to one side's census are stripped before comparing (codes-common), so a verdict
+# reflects PARSER behavior, not fixture census. Raw per-side results in */probes-log.txt.
+# legacy BASELINE unfiltered perPage=100 -> HTTP 200 rows=64
+# port   BASELINE unfiltered perPage=100 -> HTTP 200 rows=45
+EQUAL-COMMON   c1   HTTP 200 codes-common=["\"ab%cd\"", "\"alpha&&beta\"", "a&b", "ab$2cd", "ab%cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd", "alpha", "alpha!x", "alpha&&beta", "alpha&&beta||gamma", "alpha&&prefix==", "alpha&&x", "alpha&beta", "alpha&beta|gamma", "alpha&prefix==", "alpha&x", "alpha(x", "alpha)x", "alpha\\!x", "alpha\\&&beta", "alpha\\&&beta\\||gamma", "alpha\\&&prefix==", "alpha\\&&x", "alpha\\&&x&&code==alpha", "alpha\\(x", "alpha\\)x", "alpha\\||beta", "alpha\\||prefix==", "alpha|beta", "alpha|prefix==", "alpha||beta", "alpha||prefix==", "a|b", "inventory_accessionNumber", "inventory_callNumber", "inventory_itemBarcode", "openAccess", "organizations_vendorCode", "patronRequest", "serialsManagement_patternNumber", "users_patronBarcode"]  (per-side censuses differ only by side-unique fixture rows)
+EQUAL          c2   HTTP 200 rows=1 codes=["alpha"]
+EQUAL          c3   HTTP 200 rows=1 codes=["alpha&&prefix=="]
+EQUAL          c4   HTTP 200 rows=1 codes=["alpha||prefix=="]
+EQUAL          c5   HTTP 200 rows=1 codes=["alpha"]
+EQUAL          e1   HTTP 200 rows=1 codes=["alpha\\&&prefix=="]
+EQUAL          e2   HTTP 200 rows=1 codes=["alpha\\||prefix=="]
+EQUAL          e3   HTTP 200 rows=1 codes=["alpha\\&&beta"]
+EQUAL          e4   HTTP 200 rows=1 codes=["alpha\\||beta"]
+EQUAL          e5   HTTP 200 rows=1 codes=["alpha\\&&beta\\||gamma"]
+EQUAL          q1   HTTP 200 rows=0 codes=[]
+EQUAL          q2   HTTP 200 rows=1 codes=["\"alpha&&beta\""]
+EQUAL          x1   HTTP 200 rows=1 codes=["alpha\\!x"]
+EQUAL          x2   HTTP 200 rows=1 codes=["alpha\\(x"]
+EQUAL          x3   HTTP 200 rows=1 codes=["alpha\\)x"]
+EQUAL-COMMON   x4   HTTP 200 codes-common=["\"ab%cd\"", "\"alpha&&beta\"", "a&b", "ab$2cd", "ab%cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd", "alpha", "alpha!x", "alpha&&beta", "alpha&&beta||gamma", "alpha&&prefix==", "alpha&&x", "alpha&beta", "alpha&beta|gamma", "alpha&prefix==", "alpha&x", "alpha(x", "alpha)x", "alpha\\!x", "alpha\\&&beta", "alpha\\&&beta\\||gamma", "alpha\\&&prefix==", "alpha\\&&x", "alpha\\&&x&&code==alpha", "alpha\\(x", "alpha\\)x", "alpha\\||beta", "alpha\\||prefix==", "alpha|beta", "alpha|prefix==", "alpha||beta", "alpha||prefix==", "a|b", "inventory_accessionNumber", "inventory_callNumber", "inventory_itemBarcode", "openAccess", "organizations_vendorCode", "patronRequest", "serialsManagement_patternNumber", "users_patronBarcode"]  (per-side censuses differ only by side-unique fixture rows)
+EQUAL-COMMON   x5   HTTP 200 codes-common=["\"ab%cd\"", "\"alpha&&beta\"", "a&b", "ab$2cd", "ab%cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd", "alpha", "alpha!x", "alpha&&beta", "alpha&&beta||gamma", "alpha&&prefix==", "alpha&&x", "alpha&beta", "alpha&beta|gamma", "alpha&prefix==", "alpha&x", "alpha(x", "alpha)x", "alpha\\!x", "alpha\\&&beta", "alpha\\&&beta\\||gamma", "alpha\\&&prefix==", "alpha\\&&x", "alpha\\&&x&&code==alpha", "alpha\\(x", "alpha\\)x", "alpha\\||beta", "alpha\\||prefix==", "alpha|beta", "alpha|prefix==", "alpha||beta", "alpha||prefix==", "a|b", "inventory_accessionNumber", "inventory_callNumber", "inventory_itemBarcode", "openAccess", "organizations_vendorCode", "patronRequest", "serialsManagement_patternNumber", "users_patronBarcode"]  (per-side censuses differ only by side-unique fixture rows)
+EQUAL-COMMON   x6   HTTP 200 codes-common=["\"ab%cd\"", "\"alpha&&beta\"", "a&b", "ab$2cd", "ab%cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd", "alpha", "alpha!x", "alpha&&beta", "alpha&&beta||gamma", "alpha&&prefix==", "alpha&&x", "alpha&beta", "alpha&beta|gamma", "alpha&prefix==", "alpha&x", "alpha(x", "alpha)x", "alpha\\!x", "alpha\\&&beta", "alpha\\&&beta\\||gamma", "alpha\\&&prefix==", "alpha\\&&x", "alpha\\&&x&&code==alpha", "alpha\\(x", "alpha\\)x", "alpha\\||beta", "alpha\\||prefix==", "alpha|beta", "alpha|prefix==", "alpha||beta", "alpha||prefix==", "a|b", "inventory_accessionNumber", "inventory_callNumber", "inventory_itemBarcode", "openAccess", "organizations_vendorCode", "patronRequest", "serialsManagement_patternNumber", "users_patronBarcode"]  (per-side censuses differ only by side-unique fixture rows)
+EQUAL          l1   HTTP 200 rows=1 codes=["a&b"]
+EQUAL          l2   HTTP 200 rows=1 codes=["a|b"]
+EQUAL          m1   HTTP 200 rows=0 codes=[]
+EQUAL          m2   HTTP 200 rows=2 codes=["alpha", "alpha\\&&x"]
+EQUAL          w1   HTTP 200 rows=1 codes=["ab$2cd"]
+EQUAL          w2   HTTP 200 rows=4 codes=["\"ab%cd\"", "ab%cd", "abXcd", "ab_cd"]
+EQUAL          w3   HTTP 200 rows=1 codes=["abcd"]
+EQUAL          w4   HTTP 200 rows=2 codes=["\"ab%cd\"", "ab%cd"]
+EQUAL          w5   HTTP 200 rows=1 codes=["ab_cd"]
+EQUAL          w6   HTTP 200 rows=8 codes=["\"ab%cd\"", "ab$2cd", "ab%cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd"]
+EQUAL-COMMON   w7   HTTP 200 codes-common=["\"ab%cd\"", "\"alpha&&beta\"", "a&b", "ab%cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd", "alpha", "alpha!x", "alpha&&beta", "alpha&&beta||gamma", "alpha&&prefix==", "alpha&&x", "alpha&beta", "alpha&beta|gamma", "alpha&prefix==", "alpha&x", "alpha(x", "alpha)x", "alpha\\!x", "alpha\\&&beta", "alpha\\&&beta\\||gamma", "alpha\\&&prefix==", "alpha\\&&x", "alpha\\&&x&&code==alpha", "alpha\\(x", "alpha\\)x", "alpha\\||beta", "alpha\\||prefix==", "alpha|beta", "alpha|prefix==", "alpha||beta", "alpha||prefix==", "a|b", "inventory_accessionNumber", "inventory_callNumber", "inventory_itemBarcode", "openAccess", "organizations_vendorCode", "patronRequest", "serialsManagement_patternNumber", "users_patronBarcode"]  (per-side censuses differ only by side-unique fixture rows)
+EQUAL          w8   HTTP 200 rows=1 codes=["\"ab%cd\""]
+EQUAL          w9   HTTP 200 rows=1 codes=["ab%cd"]
+EQUAL          w10  HTTP 200 rows=1 codes=["ab_cd"]
+EQUAL          w11  HTTP 200 rows=0 codes=[]
+EQUAL-COMMON   w12  HTTP 200 codes-common=["\"ab%cd\"", "\"alpha&&beta\"", "a&b", "ab$2cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd", "alpha", "alpha!x", "alpha&&beta", "alpha&&beta||gamma", "alpha&&prefix==", "alpha&&x", "alpha&beta", "alpha&beta|gamma", "alpha&prefix==", "alpha&x", "alpha(x", "alpha)x", "alpha\\!x", "alpha\\&&beta", "alpha\\&&beta\\||gamma", "alpha\\&&prefix==", "alpha\\&&x", "alpha\\&&x&&code==alpha", "alpha\\(x", "alpha\\)x", "alpha\\||beta", "alpha\\||prefix==", "alpha|beta", "alpha|prefix==", "alpha||beta", "alpha||prefix==", "a|b", "inventory_accessionNumber", "inventory_callNumber", "inventory_itemBarcode", "openAccess", "organizations_vendorCode", "patronRequest", "serialsManagement_patternNumber", "users_patronBarcode"]  (per-side censuses differ only by side-unique fixture rows)
+EQUAL          t1   HTTP 200 rows=8 codes=["\"ab%cd\"", "ab$2cd", "ab%cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd"]
+EQUAL          t2   HTTP 200 rows=4 codes=["\"ab%cd\"", "ab%cd", "abXcd", "ab_cd"]
+EQUAL          t3   HTTP 200 rows=1 codes=["abcd"]
+EQUAL          t4   HTTP 200 rows=2 codes=["\"ab%cd\"", "ab%cd"]
+EQUAL          t5   HTTP 200 rows=8 codes=["\"ab%cd\"", "ab$2cd", "ab%cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd"]
+DIVERGED       t6   legacy: HTTP 500 rows=-
+                    port:   HTTP 200 rows=0 codes=[]
+DIVERGED       r1   legacy: HTTP 200 rows=0 codes=[]
+                    port:   HTTP 400 rows=-
+# diverging after census normalization: 2 -> ['t6', 'r1']

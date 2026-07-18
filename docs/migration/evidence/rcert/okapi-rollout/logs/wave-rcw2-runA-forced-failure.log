@@ -1,0 +1,30 @@
+rollout: wave 'rcw2' run 20260722T190648Z-1334794: 2 tenant(s); MODE=okapi MODULE_TO=mod-service-interaction-5.0.0-SNAPSHOT MODULE_FROM=mod-service-interaction-4.4.0-SNAPSHOT MAX_FAILURES=1 DRY_RUN=false
+rollout: ledger: /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rollout-ledger.csv (append-only); evidence: /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw2/20260722T190648Z-1334794/<tenant>/ (immutable — a retry gets a new run-id)
+rollout:   [pass] preflight: psql connectivity + /admin/health + okapi reachability
+rollout: --- tenant rcw2ok (schema rcw2ok_mod_service_interaction) ---
+  [pass]     numgen: GET /servint/numberGenerators?perPage=100&sort=code%3Basc -> 200
+  [pass]     settings: GET /servint/settings/appSettings?perPage=100&sort=key%3Basc -> 200
+capture: 2 probes captured to /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw2/20260722T190648Z-1334794/rcw2ok/pre (manifest.json written)
+capture: OK — every pinned expectation held
+rollout:   [pass] pre-capture -> /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw2/20260722T190648Z-1334794/rcw2ok/pre
+rollout:   [pass] pre-snapshot -> /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw2/20260722T190648Z-1334794/rcw2ok/{catalog,counts}-before.txt
+rollout:   [pass] enable: Okapi install (mod-service-interaction-5.0.0-SNAPSHOT) -> 200
+rollout:   [pass] routing: Okapi lists mod-service-interaction-5.0.0-SNAPSHOT for rcw2ok
+rollout:   [pass] post-verify: catalog unchanged, no row-count regression
+rollout:   [pass] changelog: EXECUTED=0 MARK_RAN=14
+rollout:   [pass] smoke numgen-list: GET /servint/numberGenerators?perPage=1 -> 200 (via okapi)
+rollout:   [pass] smoke settings-list: GET /servint/settings/appSettings?perPage=1 -> 200 (via okapi)
+rollout:   [pass] tenant rcw2ok complete (routing verified)
+rollout: --- tenant rcw2bad (schema rcw2bad_mod_service_interaction) ---
+  [pass]     numgen: GET /servint/numberGenerators?perPage=100&sort=code%3Basc -> 200
+  [pass]     settings: GET /servint/settings/appSettings?perPage=100&sort=key%3Basc -> 200
+capture: 2 probes captured to /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw2/20260722T190648Z-1334794/rcw2bad/pre (manifest.json written)
+capture: OK — every pinned expectation held
+rollout:   [pass] pre-capture -> /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw2/20260722T190648Z-1334794/rcw2bad/pre
+rollout:   [pass] pre-snapshot -> /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw2/20260722T190648Z-1334794/rcw2bad/{catalog,counts}-before.txt
+rollout:   [pass] enable: Okapi install (mod-service-interaction-5.0.0-SNAPSHOT) -> 200
+rollout:   [pass] routing: Okapi lists mod-service-interaction-5.0.0-SNAPSHOT for rcw2bad
+rollout:   [fail] tenant rcw2bad at phase 'post-verify-catalog': catalog changed for adopted schema rcw2bad_mod_service_interaction (see /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw2/20260722T190648Z-1334794/rcw2bad/catalog.diff) — systemic-defect signal (runbook 3.3)
+rollout:   [pass] rollback: Okapi enable mod-service-interaction-4.4.0-SNAPSHOT + routing re-verified
+rollout: STOP — hard-stop failure (catalog/count/changelog verification or failed rollback) — aborts immediately regardless of MAX_FAILURES. Tenants not attempted: none
+rollout: wave 'rcw2' run 20260722T190648Z-1334794: passed=1 failed=1 skipped=0

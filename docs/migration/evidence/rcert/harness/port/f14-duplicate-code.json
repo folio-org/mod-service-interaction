@@ -1,0 +1,8 @@
+{
+  "errors": [
+    {
+      "code": "integrity.violation",
+      "message": "Request conflicts with existing data"
+    }
+  ]
+}

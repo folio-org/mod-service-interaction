@@ -1,0 +1,42 @@
+# ADR-001 — governing decision of the whole migration: the spec universe is
+# reverse-engineered from the legacy module first, and parity (wire + data)
+# is the acceptance bar for the Java rewrite.
+
+id: ADR-001
+title: Spec-first migration with wire and data parity as the acceptance bar
+date: "2026-07-17"
+status: accepted
+
+context: >
+  mod-service-interaction is a legacy Grails 6/Groovy FOLIO module being
+  rewritten as a Java Spring Boot module on folio-spring-support. The module
+  is consumed in production by other FOLIO apps (number generation,
+  dashboards, attestation), so the rewrite must be a drop-in replacement: no
+  client may need code changes and no tenant may lose data at cutover. The
+  legacy module has no unit tests but a strong integration suite whose
+  fixtures double as executable documentation of the wire contracts.
+
+decision: >
+  Reverse-engineer the complete legacy behavior into a governed SDD spec
+  universe BEFORE writing any Java code, and treat that universe as the
+  single source of truth for the rewrite. Every legacy route, permission,
+  wire shape, and behavior contract (including exact fixture input/output
+  pairs from the legacy integration specs) is captured as requirements, API
+  operations, DTO schemas, models, mappings, and Gherkin scenarios. The Java
+  implementation is acceptable only when it satisfies the spec universe:
+  byte-compatible wire responses, identical Okapi interfaces and permission
+  sets, and in-place adoption of the legacy per-tenant database schemas.
+
+consequences:
+  positive:
+    - The cutover is verifiable against pinned fixtures instead of opinion.
+    - Spec graph validation catches contract gaps before implementation.
+    - Legacy quirks (deprecated prefix/postfix, always-200 envelopes) are
+      preserved deliberately rather than lost accidentally.
+  negative:
+    - Legacy design flaws are reproduced faithfully instead of improved;
+      cleanups must wait for a post-parity major version.
+    - Authoring the full universe up front delays first Java code.
+
+refs:
+  - specs/project/project.yaml#/goals/3

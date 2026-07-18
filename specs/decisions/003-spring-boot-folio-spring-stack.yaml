@@ -1,0 +1,51 @@
+# ADR-003 — the target platform of the rewrite: Java 21 + Spring Boot 3 +
+# folio-spring-support 10.x, built with Maven, mirroring the layout of the
+# reference modules mod-consortia-keycloak and mod-users-keycloak.
+
+id: ADR-003
+title: Java 21 Spring Boot stack on folio-spring-support 10.x
+date: "2026-07-17"
+status: accepted
+
+context: >
+  The legacy module runs on Grails 6/Groovy with com.k_int web-toolkit and
+  grails-okapi — a stack FOLIO no longer invests in. Current FOLIO backend
+  canon is Spring Boot on folio-spring-support: folio-spring-base supplies
+  the Okapi execution context (FolioExecutionContext), schema-per-tenant
+  data-source routing, the _tenant API base implementation
+  (TenantController/TenantService) and FolioSpringLiquibase;
+  folio-spring-system-user supplies system-user scoped execution. The
+  reference modules mod-consortia-keycloak and mod-users-keycloak build on
+  folio-spring-base 10.x (Spring Boot 4.x, Java 21) with Maven and are the
+  proven template for project layout, testing, and CI.
+
+decision: >
+  Rewrite mod-service-interaction as a Java 21 / Spring Boot 4.x Maven
+  module on folio-spring-support 10.x. Use folio-spring-base for execution
+  context, tenant API, per-tenant schema routing and Liquibase integration;
+  add folio-spring-system-user only if a flow requires module identity
+  beyond the caller's token. Entity-to-DTO conversion is implemented with
+  MapStruct mappers generated per the specs/mappings layer. Project layout,
+  plugin set, and test harness follow mod-consortia-keycloak as the
+  reference implementation.
+
+consequences:
+  positive:
+    - The module joins the maintained FOLIO platform mainstream; upgrades
+      arrive via folio-spring-support instead of a dormant Grails stack.
+    - Reference modules provide proven wiring for every infrastructure
+      concern, cutting rewrite risk.
+    - Static typing plus MapStruct makes the specs/mappings layer directly
+      executable and verifiable.
+  negative:
+    - No Java port exists for com.k_int web-toolkit conveniences (refdata,
+      custom properties, criteria listing); their wire behavior must be
+      re-implemented by hand (see ADR-007 and ADR-004).
+    - Grails dynamic behaviors (GORM events, runtime meta-programming) have
+      no direct equivalent and must be made explicit in services.
+
+refs:
+  - specs/requirements/nfr-wire-compatibility.yaml#/id
+  - specs/requirements/nfr-multi-tenancy.yaml#/id
+  - specs/decisions/001-spec-first-parity-migration.yaml#/id
+  - specs/project/project.yaml#/goals/3

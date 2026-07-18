@@ -1,0 +1,12 @@
+id: TRC-009
+title: User dashboard ordering implementation
+description: Per-user dashboard weight reordering with the legacy per-item REQUIRES_NEW transaction semantics
+  and ignore rules.
+spec_ref: specs/requirements/dashboard-user-ordering.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.service.dashboard.DashboardService#updateUserDashboards
+  kind: method
+- language: java
+  qualified_name: org.folio.servint.DashboardParityIT
+  kind: integration-test

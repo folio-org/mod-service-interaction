@@ -1,0 +1,13 @@
+# Wire-only result envelope of GET /servint/attestation/token — the signed
+# JWT plus a status discriminator; assembled per request, never persisted.
+$id: attestation-token-dto
+title: AttestationTokenDto
+type: object
+required: [token, status]
+properties:
+  token:
+    type: string
+    description: The attestation token as a compact RS256 JWS.
+  status:
+    type: string
+    description: Outcome discriminator — "OK" on success.

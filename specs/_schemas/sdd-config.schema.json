@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/sdd-config.schema.json",
+  "title": "SDD Configuration",
+  "description": "Schema for sdd.config.yaml",
+  "type": "object",
+  "required": ["neo4j", "specs_dir", "default_branch", "rules"],
+  "additionalProperties": false,
+  "properties": {
+    "neo4j": {
+      "type": "object",
+      "required": ["uri", "username", "password", "database"],
+      "additionalProperties": false,
+      "properties": {
+        "uri": { "type": "string", "pattern": "^(bolt|neo4j)(\\+s|\\+ssc)?://" },
+        "username": { "type": "string" },
+        "password": { "type": "string" },
+        "database": { "type": "string" }
+      }
+    },
+    "specs_dir": { "type": "string" },
+    "default_branch": { "type": "string" },
+    "rules": {
+      "type": "object",
+      "required": ["disabled"],
+      "additionalProperties": false,
+      "properties": {
+        "disabled": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "semantic": {
+      "type": "object",
+      "description": "Optional advisory semantic-validation lane configuration. Credentials are read from the environment, never stored here.",
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "type": "object",
+          "required": ["provider", "model_id"],
+          "additionalProperties": false,
+          "properties": {
+            "provider": { "type": "string", "minLength": 1 },
+            "model_id": { "type": "string", "minLength": 1 },
+            "base_url": { "type": "string", "minLength": 1 }
+          }
+        },
+        "precision_floor": { "type": "number", "minimum": 0, "maximum": 1 },
+        "dismissal_kill_switch": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence_span_min_ratio": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

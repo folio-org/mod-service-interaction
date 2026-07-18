@@ -1,0 +1,33 @@
+rollout: wave 'rcw1' run 20260722T190634Z-1333720: 2 tenant(s); MODE=okapi MODULE_TO=mod-service-interaction-5.0.0-SNAPSHOT MODULE_FROM=mod-service-interaction-4.4.0-SNAPSHOT MAX_FAILURES=1 DRY_RUN=false
+rollout: ledger: /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rollout-ledger.csv (append-only); evidence: /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw1/20260722T190634Z-1333720/<tenant>/ (immutable — a retry gets a new run-id)
+rollout:   [pass] preflight: psql connectivity + /admin/health + okapi reachability
+rollout: --- tenant rcw1a (schema rcw1a_mod_service_interaction) ---
+  [pass]     numgen: GET /servint/numberGenerators?perPage=100&sort=code%3Basc -> 200
+  [pass]     settings: GET /servint/settings/appSettings?perPage=100&sort=key%3Basc -> 200
+capture: 2 probes captured to /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw1/20260722T190634Z-1333720/rcw1a/pre (manifest.json written)
+capture: OK — every pinned expectation held
+rollout:   [pass] pre-capture -> /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw1/20260722T190634Z-1333720/rcw1a/pre
+rollout:   [pass] pre-snapshot -> /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw1/20260722T190634Z-1333720/rcw1a/{catalog,counts}-before.txt
+rollout:   [pass] enable: Okapi install (mod-service-interaction-5.0.0-SNAPSHOT) -> 200
+rollout:   [pass] routing: Okapi lists mod-service-interaction-5.0.0-SNAPSHOT for rcw1a
+rollout:   [pass] post-verify: catalog unchanged, no row-count regression
+rollout:   [pass] changelog: EXECUTED=0 MARK_RAN=14
+rollout:   [pass] smoke numgen-list: GET /servint/numberGenerators?perPage=1 -> 200 (via okapi)
+rollout:   [pass] smoke settings-list: GET /servint/settings/appSettings?perPage=1 -> 200 (via okapi)
+rollout:   [pass] tenant rcw1a complete (routing verified)
+rollout: --- tenant rcw1b (schema rcw1b_mod_service_interaction) ---
+  [pass]     numgen: GET /servint/numberGenerators?perPage=100&sort=code%3Basc -> 200
+  [pass]     settings: GET /servint/settings/appSettings?perPage=100&sort=key%3Basc -> 200
+capture: 2 probes captured to /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw1/20260722T190634Z-1333720/rcw1b/pre (manifest.json written)
+capture: OK — every pinned expectation held
+rollout:   [pass] pre-capture -> /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw1/20260722T190634Z-1333720/rcw1b/pre
+rollout:   [pass] pre-snapshot -> /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rcert/okapi-rollout/rollout-evidence/rcw1/20260722T190634Z-1333720/rcw1b/{catalog,counts}-before.txt
+rollout:   [pass] enable: Okapi install (mod-service-interaction-5.0.0-SNAPSHOT) -> 200
+rollout:   [pass] routing: Okapi lists mod-service-interaction-5.0.0-SNAPSHOT for rcw1b
+rollout:   [pass] post-verify: catalog unchanged, no row-count regression
+rollout:   [pass] changelog: EXECUTED=0 MARK_RAN=14
+rollout:   [pass] smoke numgen-list: GET /servint/numberGenerators?perPage=1 -> 200 (via okapi)
+rollout:   [pass] smoke settings-list: GET /servint/settings/appSettings?perPage=1 -> 200 (via okapi)
+rollout:   [pass] tenant rcw1b complete (routing verified)
+rollout: wave 'rcw1' run 20260722T190634Z-1333720 finished: passed=2 failed=0 skipped=0
+rollout: OK — every tenant in wave 'rcw1' passed with verified Okapi routing

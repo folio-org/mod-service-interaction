@@ -1,0 +1,61 @@
+# Widget instance — a configured widget placed on a dashboard. Legacy
+# persistence: cols wins_*, id uuid2 char(36); owner FK wins_owner_fk.
+# beforeValidate assigns a null weight: max(owner's widget weights)+1,
+# or 0 when the dashboard has no widgets.
+
+id: widget-instance
+name: WidgetInstance
+description: >-
+  One placed widget on one dashboard: names the widget definition it
+  instantiates (by definitionName + definitionVersion), carries the
+  user's configuration as a JSON string, and an ordering weight that is
+  auto-assigned on save when null. Access to an instance is always derived
+  from its owning dashboard's access level. Legacy columns: wins_id,
+  wins_version, wins_name, wins_weight, wins_definition_name,
+  wins_definition_version, wins_configuration, wins_owner_fk.
+fields:
+  - name: id
+    type: uuid
+    required: true
+    description: Unique identifier (36-char UUID, column wins_id).
+  - name: name
+    type: string
+    required: true
+    description: Display name of the placed widget (column wins_name).
+  - name: weight
+    type: integer
+    required: false
+    nullable: true
+    description: >-
+      Ordering weight within the dashboard (column wins_weight). When null
+      at save time it is assigned max(weights of the owner's widgets) + 1,
+      or 0 when the dashboard has none.
+  - name: definitionName
+    type: string
+    required: true
+    description: >-
+      Name of the widget definition instantiated (column
+      wins_definition_name); rendered on the wire inside definition {name,
+      version}.
+  - name: definitionVersion
+    type: string
+    required: true
+    description: >-
+      Version of the widget definition instantiated (column
+      wins_definition_version).
+  - name: configuration
+    type: string
+    required: false
+    nullable: true
+    description: >-
+      The instance's configuration payload as a JSON string (column
+      wins_configuration).
+relationships:
+  - name: owner
+    type: belongs_to
+    target: Dashboard
+    description: >-
+      Owning dashboard (column wins_owner_fk); deleting the dashboard
+      cascades to its instances.
+refs:
+  - specs/requirements/widget-instances.yaml#/id

@@ -1,0 +1,56 @@
+# ADR-013 — The attestation identity model trusts Okapi-supplied headers;
+# the module port must therefore be Okapi-exclusive (review-4 F-44,
+# decision point DP-3 resolved as (a) accept + enforce).
+
+id: ADR-013
+title: Attestation trust boundary — Okapi-supplied identity, Okapi-exclusive module port
+date: "2026-07-23"
+status: accepted
+
+context: >
+  REQ-016 AC2 pins the attestation subject resolution inherited bug-for-bug
+  from the legacy module: sub = the x-okapi-user-id header value, falling
+  back to the user_id claim of the x-okapi-token when the header is absent,
+  or "UNKNOWN" when neither is present. Neither path is verified by the
+  module itself: the header is trusted as supplied, and the fallback reads
+  the token's payload without signature verification. Review-4 (finding
+  F-44) established that a caller with direct network access to the module
+  port could therefore mint an attested assertion naming any user id.
+  Decision point DP-3 was resolved by the module owner as option (a):
+  formally accept this identity model and enforce its boundary, rather than
+  add in-module token verification (option (b) — a legacy-parity break
+  requiring its own key-distribution design and oracle round).
+
+decision: >
+  The attestation identity model formally trusts the deployment boundary,
+  not in-module cryptography. X-Okapi-User-Id is an Okapi-supplied header
+  and is the preferred, trusted identity source; the x-okapi-token
+  user_id-claim fallback is retained solely as legacy parity and is valid
+  ONLY while the module port is reachable exclusively from the Okapi
+  gateway. That exclusivity is an enforced deployment invariant, not
+  advice: the shipped k8s template carries a NetworkPolicy restricting
+  module-port ingress to the Okapi gateway pods (placeholder selector
+  documented in-file), the README deployment and security guidance names
+  the obligation, and the template drift test pins the policy's presence
+  and port. Exposing the module port beyond Okapi voids the trust in every
+  assertion the module signs — consumers may treat tokens from such a
+  deployment as unattested. No verification code is added to the module on
+  this path.
+
+consequences:
+  positive:
+    - Wire-compatible with the legacy module — same identity resolution,
+      same claims, no key-distribution machinery in the parity release.
+    - The boundary is shipped and testable (NetworkPolicy + template drift
+      test + README guidance) instead of an unstated assumption; the
+      review-4 residual moves from "unprobed" to "accepted and enforced".
+  negative:
+    - Assertion trust is only as strong as the deployment boundary; a
+      cluster that omits or widens the NetworkPolicy silently degrades
+      every attestation consumer downstream.
+    - In-module verification of the token fallback stays out of scope
+      until a post-parity release defines key distribution, an algorithm
+      allow-list, and tenant binding (the DP-3(b) design).
+
+refs:
+  - specs/requirements/attested-assertions.yaml#/id

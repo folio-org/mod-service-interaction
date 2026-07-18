@@ -1,0 +1,2 @@
+rollout: missing required configuration: OKAPI_URL (required for MODE=okapi and for every non-dry run)
+rollout: the environment contract is documented in the header of this script

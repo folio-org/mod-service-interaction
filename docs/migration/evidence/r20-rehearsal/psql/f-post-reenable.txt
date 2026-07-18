@@ -1,0 +1,10 @@
+ changelog_rows 
+----------------
+             14
+(1 row)
+
+ exectype | count 
+----------+-------
+ MARK_RAN |    14
+(1 row)
+

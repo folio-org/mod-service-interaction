@@ -1,0 +1,41 @@
+# ADR-007 — refdata and app-settings endpoints are re-implemented bespoke
+# over the legacy web-toolkit table shapes; no mod-settings dependency, no
+# data relocation.
+
+id: ADR-007
+title: Bespoke refdata and app-settings over legacy web-toolkit tables
+date: "2026-07-17"
+status: accepted
+
+context: >
+  The legacy refdata (REQ-017) and app-settings (REQ-018) endpoints are
+  provided by com.k_int web-toolkit domain classes persisted in per-tenant
+  tables (refdata_category/refdata_value rdc_*/rdv_* columns, settings
+  st_*), and other FOLIO UI apps consume their exact wire shapes. The
+  toolkit has no Java port. FOLIO offers mod-settings as a platform
+  alternative, but moving settings there would change the wire contract
+  and require a cross-module data migration — both ruled out by NFR-001
+  and NFR-002 for the parity release.
+
+decision: >
+  Re-implement refdata and app-settings as small bespoke JPA entities and
+  repositories mapped onto the unchanged legacy table shapes, with
+  controllers serving the M0-captured endpoints byte-identically —
+  including lookupOrCreate semantics on category/value access and the
+  settings listing/edit contract. Category and value seeding runs from the
+  tenant lifecycle hook (ADR-006). Migration to mod-settings, if ever
+  desired, is a post-parity decision superseding this one.
+
+consequences:
+  positive:
+    - Zero wire drift and zero data movement for consuming UI apps at
+      cutover.
+    - The entities are trivial; bespoke code stays small and auditable.
+  negative:
+    - The module carries its own settings machinery instead of the
+      platform's; a later mod-settings consolidation costs a second
+      migration.
+
+refs:
+  - specs/requirements/refdata-management.yaml#/id
+  - specs/requirements/app-settings.yaml#/id

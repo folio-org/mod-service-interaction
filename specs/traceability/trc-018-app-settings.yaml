@@ -1,0 +1,23 @@
+id: TRC-018
+title: App settings implementation
+description: AppSetting CRUD with plain-string settingType (web-toolkit-ce 10.6.4 parity) and partial-PUT
+  binding; the adoption changelog supplies the legacy table.
+spec_ref: specs/requirements/app-settings.yaml#/id
+refs:
+- specs/decisions/007-bespoke-refdata-and-settings.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.domain.entity.AppSetting
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.AppSettingRepository
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.controller.RefdataSettingsController
+  kind: class
+- language: xml
+  qualified_name: src/main/resources/db/changelog/changes/adoption-baseline-settings.xml
+  kind: liquibase-changelog
+- language: java
+  qualified_name: org.folio.servint.RefdataSettingsParityIT
+  kind: integration-test

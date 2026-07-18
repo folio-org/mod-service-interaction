@@ -1,0 +1,40 @@
+# Attestation API surface — wire-compatible restatement of the legacy
+# Grails route (UrlMappings.groovy) and ModuleDescriptor permission.
+openapi: "3.1.0"
+info:
+  title: Attestation API
+  version: "1.0.0"
+  description: >
+    RFC 8693 attested assertions: short-lived RS256-signed JWTs vouching
+    for the calling user and tenant, backing module-to-module federated
+    trust. Part of the `servint` Okapi interface.
+
+paths:
+  /servint/attestation/token:
+    get:
+      summary: Issue an attestation token
+      operationId: getAttestationToken
+      tags: [attestation]
+      x-sdd-refs:
+        - specs/requirements/attested-assertions.yaml#/id
+      description: >
+        Signs and returns a short-lived JWT: RS256, iss
+        "FOLIO::mod-service-interaction", sub = the calling user's FOLIO
+        user id (the x-okapi-user-id header, else the user_id claim of
+        the x-okapi-token, else "UNKNOWN"), aud "extApp", iat now, exp
+        now + 300 seconds, a
+        random UUID jti, and a tenant claim; the JWS header carries kid =
+        the signing key record's id (stable per pair, different after
+        rotation) and typ JWT. The signing key is the tenant's EARLIEST
+        currently-valid stored pair for the usage (availableFrom <= now <=
+        expiresAt, ordered by availableFrom, cached per usage); when none
+        exists an RSA-2048 pair is created on demand valid for 730 days and
+        stored Base64-encoded (X.509 public, PKCS#8 private).
+      x-folio-permissions-required: [servint.extsvc.get]
+      responses:
+        "200":
+          description: The signed token envelope.
+          content:
+            application/json:
+              schema:
+                $ref: "./attestation-token-dto.yaml"

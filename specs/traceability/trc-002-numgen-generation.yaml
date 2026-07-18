@@ -1,0 +1,18 @@
+id: TRC-002
+title: Number generation implementation
+description: Pessimistic-lock number generation with template rendering (outputTemplate/preChecksumTemplate)
+  behind getNextNumber; fixture parity pinned by the IT.
+spec_ref: specs/requirements/numgen-generation.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.service.numgen.NumberGeneratorService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.service.numgen.NumberTemplateService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.controller.NumberGeneratorsController#getNextNumber
+  kind: method
+- language: java
+  qualified_name: org.folio.servint.NumberGeneratorParityIT
+  kind: integration-test

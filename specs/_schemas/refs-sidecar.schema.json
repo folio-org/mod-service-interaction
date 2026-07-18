@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "refs-sidecar.schema.json",
+  "title": "SDD Refs Sidecar",
+  "type": "object",
+  "required": ["source", "mappings"],
+  "additionalProperties": false,
+  "properties": {
+    "source": {
+      "type": "string",
+      "pattern": "^specs/(behavior|architecture)/[^#\\s]+$"
+    },
+    "mappings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["element", "refs"],
+        "additionalProperties": false,
+        "properties": {
+          "element": {
+            "type": "string",
+            "pattern": "^#/.+"
+          },
+          "refs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^specs/(api|architecture|behavior|decisions|mappings|models|project|requirements|traceability)/[^#\\s]*\\.[^#\\s/]+#/(?:[^~\\r\\n\\t\\f\\v]|~[01])+$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

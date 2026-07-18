@@ -1,0 +1,54 @@
+{
+  "artifact": "semantic-verdicts-summary",
+  "workstream": "R18",
+  "generated_at": "2026-07-21T12:09:40Z",
+  "git_revision": "2f566cf241aa3483c1a22b0e9bfbe4b94d55cdd3",
+  "command": "sdd validate --semantic --branch main-final --format json",
+  "structural": {
+    "pass": true,
+    "files_checked": 165,
+    "total_errors": 0,
+    "total_warnings": 0,
+    "sdd_spec_version": "0.4.51",
+    "validated_at": "2026-07-21T12:08:38.321Z"
+  },
+  "semantic_gate": {
+    "gate_status": "PASS",
+    "lane_status": "active",
+    "escalation_eligible_count": 0,
+    "rule_gates": {
+      "acceptance-criterion-has-scenario-coverage": {
+        "active": true,
+        "gate_status": "PASS"
+      },
+      "gherkin-scenario-has-api-backing": {
+        "active": true,
+        "gate_status": "PASS"
+      }
+    }
+  },
+  "verdict_counts": {
+    "total": 241,
+    "PASS": 241
+  },
+  "verdict_counts_per_rule": {
+    "acceptance-criterion-has-scenario-coverage": {
+      "PASS": 119
+    },
+    "gherkin-scenario-has-api-backing": {
+      "PASS": 122
+    }
+  },
+  "verdict_sources": {
+    "cache": 241
+  },
+  "judge_model": {
+    "model_id": "openai/claude-haiku-4-5-20251001",
+    "prompt_version": "1.5.0"
+  },
+  "content_digest": {
+    "algorithm": "sha256 over the concatenation of all finding_ids sorted lexicographically",
+    "finding_count": 241,
+    "sha256": "e4abc3677f65055738e5eb8185c493c6fc2fd30ea762248e0e71c095a8ba30c1"
+  }
+}

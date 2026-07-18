@@ -1,0 +1,18 @@
+# Wire shape of a widget type — plain render; schema stays a JSON string.
+$id: widget-type-dto
+title: WidgetTypeDto
+type: object
+required: [name, typeVersion, schema]
+properties:
+  id:
+    type: string
+    description: Type identifier (UUID).
+  name:
+    type: string
+    description: Type name (unique together with typeVersion).
+  typeVersion:
+    type: string
+    description: MAJOR.MINOR version of the type.
+  schema:
+    type: string
+    description: JSON schema of the type, rendered as the persisted string.

@@ -1,0 +1,48 @@
+# Granting, changing, and revoking other users' dashboard access
+# (legacy: DashboardController.editDashboardUsers / getDashboardUsers).
+
+id: REQ-010
+title: Dashboard user management
+description: >
+  When a manager edits who can use a dashboard, the module shall accept a
+  bulk array at POST /servint/dashboard/{id}/users (manage required) where
+  each item either creates access (no id), deletes it (id plus
+  _delete:true), or changes only the access level (id, no _delete). The
+  caller's own access object is untouchable through this route; duplicate
+  grants and items referencing another dashboard are ignored rather than
+  failing the request. GET /servint/dashboard/{id}/users lists the
+  dashboard's access objects (view required) without expanding the
+  dashboard.
+
+ears_pattern: event-driven
+priority: high
+
+refs:
+  - specs/project/project.yaml#/goals/1
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      POST /servint/dashboard/{id}/users requires manage access on the
+      dashboard (403 otherwise) and responds with the refreshed users list.
+  - id: AC2
+    text: >
+      An item without id creates an access object for the named user with
+      userDashboardWeight equal to that user's dashboard count and
+      defaultUserDashboard=true only when that count is zero; the item is
+      ignored when the target user is the caller or already has any access
+      on the dashboard.
+  - id: AC3
+    text: >
+      An item with id and _delete:true deletes the access object; items
+      whose access object belongs to the caller or references a different
+      dashboard are ignored.
+  - id: AC4
+    text: >
+      An item with id and no _delete may change only the access level; the
+      object is re-saved only when the level actually changed.
+  - id: AC5
+    text: >
+      GET /servint/dashboard/{id}/users (view required) lists the
+      dashboard's access objects with the access refdata expanded but the
+      dashboard NOT expanded.

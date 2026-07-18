@@ -1,0 +1,376 @@
+# Number generator API surface — wire-compatible restatement of the legacy
+# Grails routes (UrlMappings.groovy) and ModuleDescriptor permissions.
+# Collection endpoints follow the web-toolkit (kiwt) listing conventions:
+# plain JSON array by default, {results, totalRecords, ...} when stats=true.
+openapi: "3.1.0"
+info:
+  title: Number Generator API
+  version: "1.0.0"
+  description: >
+    CRUD for number generators and their sequences, next-number generation,
+    and the timer-driven year-based sequence reset. Part of the `servint`
+    Okapi interface; resetYearSequences is additionally wired to the
+    `_timer` 1.0 interface (unit=hour, delay=24).
+
+paths:
+  /servint/numberGenerators:
+    get:
+      summary: List number generators
+      operationId: listNumberGenerators
+      tags: [numberGenerators]
+      x-sdd-refs:
+        - specs/requirements/numgen-crud.yaml#/id
+        - specs/requirements/listing-grammar.yaml#/id
+      x-folio-permissions-required: [servint.numberGenerator.collection.get]
+      parameters:
+        - $ref: "#/components/parameters/filters"
+        - $ref: "#/components/parameters/match"
+        - $ref: "#/components/parameters/term"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/perPage"
+        - $ref: "#/components/parameters/max"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/stats"
+      responses:
+        "200":
+          description: Generators matching the filter (array, or stats envelope when stats=true).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./number-generator-dto.yaml"
+    post:
+      summary: Create a number generator
+      operationId: createNumberGenerator
+      tags: [numberGenerators]
+      x-sdd-refs:
+        - specs/requirements/numgen-crud.yaml#/id
+      x-folio-permissions-required: [servint.numberGenerator.item.post]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./number-generator-dto.yaml"
+      responses:
+        "201":
+          description: Created generator, sequences expanded.
+          content:
+            application/json:
+              schema:
+                $ref: "./number-generator-dto.yaml"
+
+  /servint/numberGenerators/getNextNumber:
+    get:
+      summary: Generate the next number from a sequence
+      operationId: getNextNumber
+      tags: [numberGenerators]
+      x-sdd-refs:
+        - specs/requirements/numgen-generation.yaml#/id
+        - specs/requirements/numgen-checksums.yaml#/id
+        - specs/requirements/numgen-year-reset.yaml#/id
+        - specs/requirements/numgen-limits.yaml#/id
+      description: >
+        Atomically hands out the next value of the sequence identified by
+        generator code + sequence code (pessimistic row lock; auto-creates
+        missing generator/sequence with library defaults). HTTP status is
+        always 200 — the outcome travels in the envelope `status` field.
+      x-folio-permissions-required: [servint.numberGenerator.generate.execute]
+      parameters:
+        - name: generator
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Code of the number generator.
+        - name: sequence
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Code of the sequence within the generator.
+      responses:
+        "200":
+          description: Generation result envelope (OK, WARNING, or ERROR).
+          content:
+            application/json:
+              schema:
+                $ref: "./next-number-result-dto.yaml"
+
+  /servint/numberGenerators/resetYearSequences:
+    post:
+      summary: Reset year-scoped sequences for the tenant
+      operationId: resetYearSequences
+      tags: [numberGenerators]
+      x-sdd-refs:
+        - specs/requirements/numgen-year-reset.yaml#/id
+      description: >
+        Timer-driven (Okapi `_timer`, every 24h) and manually invocable.
+        Locks all resetOnYearChange=true sequences; those whose lastUsedYear
+        is non-null and differs from the current UTC year are reset to
+        nextValue=1. Idempotent.
+      x-folio-permissions-required: []
+      responses:
+        "200":
+          description: Reset summary.
+          content:
+            application/json:
+              schema:
+                $ref: "./year-reset-result-dto.yaml"
+
+  /servint/numberGenerators/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Generator identifier (UUID).
+    get:
+      summary: Get a number generator
+      operationId: getNumberGenerator
+      tags: [numberGenerators]
+      x-sdd-refs:
+        - specs/requirements/numgen-crud.yaml#/id
+      x-folio-permissions-required: [servint.numberGenerator.item.get]
+      responses:
+        "200":
+          description: The generator, sequences expanded.
+          content:
+            application/json:
+              schema:
+                $ref: "./number-generator-dto.yaml"
+        "404":
+          description: No generator with that id.
+    put:
+      summary: Update a number generator
+      operationId: updateNumberGenerator
+      tags: [numberGenerators]
+      x-sdd-refs:
+        - specs/requirements/numgen-crud.yaml#/id
+      x-folio-permissions-required: [servint.numberGenerator.item.put]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./number-generator-dto.yaml"
+      responses:
+        "200":
+          description: The updated generator.
+          content:
+            application/json:
+              schema:
+                $ref: "./number-generator-dto.yaml"
+        "404":
+          description: No generator with that id.
+    delete:
+      summary: Delete a number generator
+      operationId: deleteNumberGenerator
+      tags: [numberGenerators]
+      x-sdd-refs:
+        - specs/requirements/numgen-crud.yaml#/id
+      description: Deletes the generator and cascades to its sequences.
+      x-folio-permissions-required: [servint.numberGenerator.item.delete]
+      responses:
+        "204":
+          description: Deleted.
+        "404":
+          description: No generator with that id.
+
+  /servint/numberGeneratorSequences:
+    get:
+      summary: List number generator sequences
+      operationId: listNumberGeneratorSequences
+      tags: [numberGenerators]
+      x-sdd-refs:
+        - specs/requirements/numgen-crud.yaml#/id
+        - specs/requirements/listing-grammar.yaml#/id
+      x-folio-permissions-required: [servint.numberGeneratorSequence.collection.get]
+      parameters:
+        - $ref: "#/components/parameters/filters"
+        - $ref: "#/components/parameters/match"
+        - $ref: "#/components/parameters/term"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/perPage"
+        - $ref: "#/components/parameters/max"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/stats"
+      responses:
+        "200":
+          description: >
+            Sequences matching the filter; each carries an owner snippet
+            {id, name, code} (rendered outside the generator context).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./number-generator-sequence-dto.yaml"
+    post:
+      summary: Create a number generator sequence
+      operationId: createNumberGeneratorSequence
+      tags: [numberGenerators]
+      x-sdd-refs:
+        - specs/requirements/numgen-crud.yaml#/id
+      x-folio-permissions-required: [servint.numberGeneratorSequence.item.post]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./number-generator-sequence-dto.yaml"
+      responses:
+        "201":
+          description: Created sequence.
+          content:
+            application/json:
+              schema:
+                $ref: "./number-generator-sequence-dto.yaml"
+
+  /servint/numberGeneratorSequences/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Sequence identifier (UUID).
+    get:
+      summary: Get a number generator sequence
+      operationId: getNumberGeneratorSequence
+      tags: [numberGenerators]
+      x-sdd-refs:
+        - specs/requirements/numgen-crud.yaml#/id
+      x-folio-permissions-required: [servint.numberGeneratorSequence.item.get]
+      responses:
+        "200":
+          description: The sequence, with owner snippet.
+          content:
+            application/json:
+              schema:
+                $ref: "./number-generator-sequence-dto.yaml"
+        "404":
+          description: No sequence with that id.
+    put:
+      summary: Update a number generator sequence
+      operationId: updateNumberGeneratorSequence
+      tags: [numberGenerators]
+      x-sdd-refs:
+        - specs/requirements/numgen-crud.yaml#/id
+        - specs/requirements/numgen-year-reset.yaml#/id
+        - specs/requirements/numgen-limits.yaml#/id
+      description: >
+        Updates any writable sequence property (nextValue, format, templates,
+        bounds, flags) and returns the updated wire shape. Save-time rules:
+        the derived maximumCheck refdata state is recomputed from nextValue
+        against maximumNumber/maximumNumberThreshold; resetOnYearChange=true
+        requires the outputTemplate to contain the ${current_year} token
+        (error code resetOnYearChange.tokenMissing).
+      x-folio-permissions-required: [servint.numberGeneratorSequence.item.put]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./number-generator-sequence-dto.yaml"
+      responses:
+        "200":
+          description: The updated sequence.
+          content:
+            application/json:
+              schema:
+                $ref: "./number-generator-sequence-dto.yaml"
+        "404":
+          description: No sequence with that id.
+    delete:
+      summary: Delete a number generator sequence
+      operationId: deleteNumberGeneratorSequence
+      tags: [numberGenerators]
+      x-sdd-refs:
+        - specs/requirements/numgen-crud.yaml#/id
+      x-folio-permissions-required: [servint.numberGeneratorSequence.item.delete]
+      responses:
+        "204":
+          description: Deleted.
+        "404":
+          description: No sequence with that id.
+
+components:
+  parameters:
+    filters:
+      name: filters
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Web-toolkit filter expressions (repeatable).
+    match:
+      name: match
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Property names the term parameter matches against (repeatable).
+    term:
+      name: term
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Search term applied to the match properties.
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Sort expressions property;asc|desc (repeatable).
+    perPage:
+      name: perPage
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: >
+        Page size; absent or 0 means the default 10; values above 100 are
+        silently clamped to 100 (never rejected).
+    max:
+      name: max
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: Legacy alias for perPage; perPage wins when both are sent.
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: >
+        1-based page number; takes precedence over offset, which is
+        otherwise used to derive the page.
+    offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: Result offset (alias page for page-based access).
+    stats:
+      name: stats
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: When true, wrap results in {results, totalRecords, ...}.

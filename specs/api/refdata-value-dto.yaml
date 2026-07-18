@@ -1,0 +1,36 @@
+# Wire shape of an expanded reference-data value as embedded in resource
+# renders (e.g. checkDigitAlgo, maximumCheck, dashboard access level) and
+# returned by the domain/property lookup. Empirically verified against a
+# running legacy module (M4): standalone/expanded renders embed the owning
+# category as `owner`; only values rendered inside their owning category's
+# own `values` array omit it.
+$id: refdata-value-dto
+title: RefdataValueDto
+type: object
+properties:
+  id:
+    type: string
+    description: Reference-data value identifier.
+  value:
+    type: string
+    description: Normalized machine value (lowercase, underscored).
+  label:
+    type: string
+    description: Human-readable display label.
+  owner:
+    type: object
+    description: >-
+      The owning refdata category as a compact reference — present in every
+      standalone/expanded render (lookup results, sequence
+      checkDigitAlgo/maximumCheck, dashboard access level); omitted when the
+      value renders inside its owning category's values array.
+    properties:
+      id:
+        type: string
+        description: Owning category identifier.
+      desc:
+        type: string
+        description: Category descriptor (Domain.Property).
+      internal:
+        type: boolean
+        description: Whether the category is module-internal.

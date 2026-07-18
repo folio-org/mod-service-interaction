@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Adoption baseline (ADR-005) for the numgen slice: refdata_category,
+     refdata_value, number_generator, number_generator_sequence. Column set
+     and constraint names transcribed from the legacy Groovy changelogs
+     (setup-refdata.groovy, number-generator-model.groovy,
+     service-interaction-3-1.groovy, number-generator-year-reset.groovy).
+     Each table's changeset MARK_RANs when the table already exists, so
+     populated legacy schemas are adopted untouched. -->
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+  <changeSet id="adopt-refdata-category" author="mod-service-interaction-java">
+    <preConditions onFail="MARK_RAN">
+      <not><tableExists tableName="refdata_category"/></not>
+    </preConditions>
+    <createTable tableName="refdata_category">
+      <column name="rdc_id" type="VARCHAR(36)"><constraints nullable="false" primaryKey="true" primaryKeyName="refdata_categoryPK"/></column>
+      <column name="rdc_version" type="BIGINT"><constraints nullable="false"/></column>
+      <column name="rdc_description" type="VARCHAR(255)"><constraints nullable="false"/></column>
+      <!-- No column DEFAULT: legacy DDL has none (setup-refdata.groovy adds
+           NOT NULL via addNotNullConstraint only); all insert paths set the
+           value explicitly (review F-10 / remediation R7). -->
+      <column name="internal" type="BOOLEAN"><constraints nullable="false"/></column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="adopt-refdata-value" author="mod-service-interaction-java">
+    <preConditions onFail="MARK_RAN">
+      <not><tableExists tableName="refdata_value"/></not>
+    </preConditions>
+    <createTable tableName="refdata_value">
+      <column name="rdv_id" type="VARCHAR(36)"><constraints nullable="false" primaryKey="true" primaryKeyName="refdata_valuePK"/></column>
+      <column name="rdv_version" type="BIGINT"><constraints nullable="false"/></column>
+      <column name="rdv_value" type="VARCHAR(255)"><constraints nullable="false"/></column>
+      <column name="rdv_owner" type="VARCHAR(36)"><constraints nullable="false"/></column>
+      <column name="rdv_label" type="VARCHAR(255)"><constraints nullable="false"/></column>
+    </createTable>
+    <createIndex indexName="rdv_entry_idx" tableName="refdata_value">
+      <column name="rdv_value"/>
+      <column name="rdv_owner"/>
+    </createIndex>
+    <addForeignKeyConstraint baseColumnNames="rdv_owner" baseTableName="refdata_value"
+      constraintName="FKh4fon2a7k4y8b2sicjm0i6oy8"
+      referencedColumnNames="rdc_id" referencedTableName="refdata_category"/>
+    <addUniqueConstraint columnNames="rdv_owner,rdv_value" constraintName="RDV_UNIQUE_VALUE" tableName="refdata_value"/>
+  </changeSet>
+
+  <changeSet id="adopt-number-generator" author="mod-service-interaction-java">
+    <preConditions onFail="MARK_RAN">
+      <not><tableExists tableName="number_generator"/></not>
+    </preConditions>
+    <createTable tableName="number_generator">
+      <column name="ng_id" type="VARCHAR(36)"><constraints nullable="false" primaryKey="true" primaryKeyName="NumberGeneratorPK"/></column>
+      <column name="ng_version" type="BIGINT"><constraints nullable="false"/></column>
+      <column name="ng_code" type="VARCHAR(36)"><constraints nullable="false"/></column>
+      <column name="ng_name" type="VARCHAR(100)"><constraints nullable="false"/></column>
+      <column name="ng_default_seq_code" type="VARCHAR(36)"/>
+      <column name="ng_description" type="VARCHAR(256)"/>
+    </createTable>
+    <addUniqueConstraint columnNames="ng_code" constraintName="NumberGeneratorUniqueCode" tableName="number_generator"/>
+  </changeSet>
+
+  <changeSet id="adopt-number-generator-sequence" author="mod-service-interaction-java">
+    <preConditions onFail="MARK_RAN">
+      <not><tableExists tableName="number_generator_sequence"/></not>
+    </preConditions>
+    <createTable tableName="number_generator_sequence">
+      <column name="ngs_id" type="VARCHAR(36)"><constraints nullable="false" primaryKey="true" primaryKeyName="NumberGeneratorSequencePK"/></column>
+      <column name="ngs_version" type="BIGINT"><constraints nullable="false"/></column>
+      <column name="ngs_owner" type="VARCHAR(36)"><constraints nullable="false"/></column>
+      <column name="ngs_code" type="VARCHAR(36)"><constraints nullable="false"/></column>
+      <column name="ngs_prefix" type="VARCHAR(100)"/>
+      <column name="ngs_postfix" type="VARCHAR(100)"/>
+      <column name="ngs_next_value" type="BIGINT"/>
+      <column name="ngs_format" type="VARCHAR(20)"/>
+      <column name="ngs_check_digit_algorithm_fk" type="VARCHAR(36)"/>
+      <column name="ngs_output_template" type="VARCHAR(256)"/>
+      <column name="ngs_description" type="VARCHAR(256)"/>
+      <column name="ngs_enabled" type="BOOLEAN"/>
+      <column name="ngs_name" type="VARCHAR(100)"/>
+      <column name="ngs_pre_checksum_template" type="VARCHAR(256)"/>
+      <column name="ngs_maximum_number" type="BIGINT"/>
+      <column name="ngs_maximum_number_threshold" type="BIGINT"/>
+      <column name="ngs_maximum_check_fk" type="VARCHAR(36)"/>
+      <column name="ngs_reset_on_year_change" type="BOOLEAN" defaultValueBoolean="false"/>
+      <column name="ngs_last_used_year" type="VARCHAR(4)"/>
+    </createTable>
+    <addUniqueConstraint columnNames="ngs_owner,ngs_code" constraintName="NumberGeneratorSequenceUniqueCode" tableName="number_generator_sequence"/>
+    <addForeignKeyConstraint baseColumnNames="ngs_owner" baseTableName="number_generator_sequence"
+      constraintName="number_generator_sequence_owner_fk"
+      referencedColumnNames="ng_id" referencedTableName="number_generator"/>
+    <addForeignKeyConstraint baseColumnNames="ngs_check_digit_algorithm_fk" baseTableName="number_generator_sequence"
+      constraintName="ngs_check_digit_algo_FK_CONSTRAINT"
+      referencedColumnNames="rdv_id" referencedTableName="refdata_value"/>
+    <addForeignKeyConstraint baseColumnNames="ngs_maximum_check_fk" baseTableName="number_generator_sequence"
+      constraintName="ngs_ngs_maximum_check_FK_CONSTRAINT"
+      referencedColumnNames="rdv_id" referencedTableName="refdata_value"/>
+  </changeSet>
+
+</databaseChangeLog>

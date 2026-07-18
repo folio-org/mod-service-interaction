@@ -1,0 +1,41 @@
+# Wire shape of a DashboardAccess resource. Legacy render
+# (dashboardAccess/_dashboardAccess.gson): access expanded as a refdata
+# object; dashboard expanded EXCEPT in the getDashboardUsers /
+# editDashboardUsers actions, where it renders as an id-only reference
+# (empirically verified against a running legacy module, M4).
+$id: dashboard-access-dto
+title: DashboardAccessDto
+type: object
+required: [user]
+properties:
+  id:
+    type: string
+    description: Access object identifier (UUID).
+  dashboard:
+    description: >-
+      The dashboard the grant applies to — expanded, EXCEPT when rendered
+      by the dashboard-users actions (GET/POST /servint/dashboard/{id}/users),
+      where only its id is populated (an {id}-only reference; never omitted).
+    $ref: "./dashboard-dto.yaml"
+  user:
+    type: object
+    description: FOLIO user holding the grant (reference stub).
+    required: [id]
+    properties:
+      id:
+        type: string
+        description: FOLIO user UUID.
+  access:
+    description: Access level as an expanded refdata value (view/edit/manage).
+    $ref: "./refdata-value-dto.yaml"
+  userDashboardWeight:
+    type: integer
+    description: The user's personal ordering weight for the dashboard.
+  defaultUserDashboard:
+    type: boolean
+    description: Whether this is the user's default dashboard.
+  dateCreated:
+    type: string
+    description: >-
+      Creation timestamp, rendered second-precision UTC in the legacy Grails
+      date format yyyy-MM-dd'T'HH:mm:ss'Z' (no fractional seconds).

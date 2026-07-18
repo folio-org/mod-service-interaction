@@ -1,0 +1,12 @@
+id: TRC-003
+title: Check-digit algorithms implementation
+description: All seven legacy check-digit algorithms (EAN13, ISBN10, ISSN, Luhn, mod10 variants incl.
+  R-variant double-invert) ported over commons-validator.
+spec_ref: specs/requirements/numgen-checksums.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.service.numgen.CheckDigitService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.NumberGeneratorParityIT
+  kind: integration-test

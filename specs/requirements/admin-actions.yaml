@@ -1,0 +1,35 @@
+# Administrative maintenance actions (legacy: AdminController in
+# ActionController.groovy) — widget type import and display-data repair.
+
+id: REQ-021
+title: Admin actions
+description: >
+  When an administrator invokes a maintenance action at
+  GET /servint/admin/{action}, the module shall execute it and answer
+  {status: "OK"}: triggerTypeImport loads widget types from the classpath
+  sample data skipping existing (name, typeVersion) pairs;
+  triggerTypeImportClean deletes all widget types first and then imports;
+  ensureDisplayData creates an empty DashboardDisplayData for every
+  dashboard lacking one.
+
+ears_pattern: event-driven
+priority: medium
+
+refs:
+  - specs/project/project.yaml#/goals/3
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      GET /servint/admin/triggerTypeImport imports widget types from the
+      classpath sample data, skips pairs already present by (name,
+      typeVersion), and returns {status: "OK"}.
+  - id: AC2
+    text: >
+      GET /servint/admin/triggerTypeImportClean first deletes every widget
+      type, then imports the sample data afresh.
+  - id: AC3
+    text: >
+      GET /servint/admin/ensureDisplayData creates an empty
+      DashboardDisplayData for each dashboard lacking one and leaves
+      dashboards that have one untouched.

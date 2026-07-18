@@ -1,0 +1,11 @@
+Module descriptors registered to Okapi (pre-built, NOT rebuilt for this run)
+
+legacy: service/build/resources/main/okapi/ModuleDescriptor.json
+  id: mod-service-interaction-4.4.0-SNAPSHOT   (_tenant 1.2, requires okapi 1.9)
+port:   target/ModuleDescriptor.json
+  id: mod-service-interaction-5.0.0-SNAPSHOT   (_tenant 2.0, requires okapi 1.9,
+      _timer POST /servint/numberGenerators/resetYearSequences unit=hour delay=24)
+
+sha256sum:
+2f94a80e3f63ae687cff126ba32a0d5a68fefc4b4c4e149bd393df456af2d814  service/build/resources/main/okapi/ModuleDescriptor.json
+6c14c1959000d156dbde0ec1da17d2c92ef20df004cc5ff0bc8449c1dc5233dd  target/ModuleDescriptor.json

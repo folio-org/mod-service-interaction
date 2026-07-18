@@ -1,0 +1,10 @@
+# Wire-only result envelope of GET /servint/admin/{action} — a constant
+# acknowledgement; never persisted.
+$id: admin-result-dto
+title: AdminResultDto
+type: object
+required: [status]
+properties:
+  status:
+    type: string
+    description: Outcome discriminator — "OK" on success.

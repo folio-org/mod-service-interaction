@@ -1,0 +1,21 @@
+id: TRC-012
+title: Widget definitions implementation
+description: Local widget-definition storage and the id-less definition render (name, version, type, parsed
+  definition JSON) per the legacy gson view.
+spec_ref: specs/requirements/widget-definitions.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.service.widget.WidgetDefinitionService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.domain.entity.WidgetDefinition
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.WidgetDefinitionRepository
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.mapper.WidgetMapper
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.controller.WidgetsController
+  kind: class

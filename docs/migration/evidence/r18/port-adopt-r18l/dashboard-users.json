@@ -1,0 +1,46 @@
+[
+  {
+    "access": {
+      "id": "4b080e70527cbafd95e15ce0c5ced4d5",
+      "label": "Manage",
+      "owner": {
+        "desc": "DashboardAccess.Access",
+        "id": "2a1a3a811066e308fa18d0068075bb69",
+        "internal": true
+      },
+      "value": "manage"
+    },
+    "dashboard": {
+      "id": "5f61f7e4-f667-4e7d-bf20-3e4d9e407116"
+    },
+    "dateCreated": "2026-07-21T12:06:24Z",
+    "defaultUserDashboard": false,
+    "id": "04e8ea84-52c7-4812-8ccc-206091878629",
+    "user": {
+      "id": "11111111-1111-1111-1111-111111111111"
+    },
+    "userDashboardWeight": 1
+  },
+  {
+    "access": {
+      "id": "ff8081819f839030019f8491e35c0005",
+      "label": "View",
+      "owner": {
+        "desc": "DashboardAccess.Access",
+        "id": "2a1a3a811066e308fa18d0068075bb69",
+        "internal": true
+      },
+      "value": "view"
+    },
+    "dashboard": {
+      "id": "5f61f7e4-f667-4e7d-bf20-3e4d9e407116"
+    },
+    "dateCreated": "2026-07-21T12:06:25Z",
+    "defaultUserDashboard": false,
+    "id": "103e1647-82c9-4d0b-9922-340924da08c9",
+    "user": {
+      "id": "22222222-2222-2222-2222-222222222222"
+    },
+    "userDashboardWeight": 1
+  }
+]

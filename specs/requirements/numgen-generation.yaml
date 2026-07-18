@@ -1,0 +1,65 @@
+# The getNextNumber contract — the module's most-consumed operation
+# (barcodes, request numbers, vendor codes across FOLIO). Legacy:
+# NumberGeneratorService.generateNextNumber, dossier §5.5, parity fixtures §6.
+
+id: REQ-002
+title: Next number generation
+description: >
+  When a client requests GET /servint/numberGenerators/getNextNumber with
+  generator and sequence codes, the module shall atomically hand out the
+  next number of that sequence under a pessimistic row lock in a single
+  transaction, render it through the sequence's format and templates, and
+  return the legacy result envelope with HTTP status always 200 (outcome in
+  the envelope status field: OK, WARNING, or ERROR).
+
+ears_pattern: event-driven
+priority: high
+
+refs:
+  - specs/project/project.yaml#/goals/0
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      The sequence is resolved by owning-generator code plus sequence code
+      with a pessimistic lock; concurrent requests never produce duplicate
+      numbers.
+  - id: AC2
+    text: >
+      A missing generator or sequence is auto-created with library defaults
+      (name=code; sequence gets checkDigitAlgo none, format '000000000',
+      nextValue 1, outputTemplate '${generated_number}'), so the first call
+      for a new pair yields 000000001 and the next 000000002. If the
+      sequence still cannot be resolved the envelope is ERROR/NoSequence and
+      the transaction rolls back.
+  - id: AC3
+    text: >
+      A nextValue of null or 1 issues raw value 1 and persists nextValue 2
+      (checksum algorithms reject 0); otherwise the raw value is the current
+      nextValue, which is post-incremented.
+  - id: AC4
+    text: >
+      The raw value is rendered through java-DecimalFormat-compatible
+      format when set, else toString. Fixtures: prefix 'user' + format
+      000000000 renders user-000000001; no format renders nf-1; nextValue
+      100000 + format 000000000 renders hi-000100000.
+  - id: AC5
+    text: >
+      The output template (default renders prefix-, generated number,
+      -postfix, -checksum segments, hyphen-joined, empty parts skipped) is
+      evaluated with parameters prefix, generated_number,
+      checksum_input_template, postfix, checksum, and current_year; template
+      expressions support at least ternary, concatenation, and substring.
+      Fixture: a template slicing generated_number with substring(0,4) and
+      substring(4,9) renders 0700-0000-7-00001-post.
+  - id: AC6
+    text: >
+      When preChecksumTemplate is set, the checksum input is its rendering
+      (parameter generated_number) instead of the bare generated number.
+      Fixture: preChecksumTemplate 100${generated_number}001 with template
+      0700-${checksum_input_template}-${checksum}-post renders
+      0700-100000000001001-3-post.
+  - id: AC7
+    text: >
+      On every successful generation the sequence's lastUsedYear is set to
+      the current UTC calendar year and the sequence state is persisted.

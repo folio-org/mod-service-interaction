@@ -1,0 +1,52 @@
+# ADR-006 — tenant isolation and lifecycle: folio-spring execution-context
+# schema routing, with the resolved schema name pinned to the legacy
+# OkapiTenantResolver naming so adopted data is found.
+
+id: ADR-006
+title: Schema-per-tenant resolution and tenant lifecycle via folio-spring
+date: "2026-07-17"
+status: accepted
+
+context: >
+  The legacy module isolates tenants with GORM SCHEMA multi-tenancy; the
+  schema name is derived by com.k_int OkapiTenantResolver from the tenant
+  id and module name. folio-spring-base derives the schema from the
+  x-okapi-tenant header via FolioExecutionContext and
+  FolioModuleMetadata.getDBSchemaName, routing every SQL statement through
+  DataSourceFolioWrapper. NFR-003 requires equivalent isolation; NFR-002
+  requires the Java module to resolve the SAME schema names the legacy
+  module created, or adopted data would be invisible. Tenant lifecycle
+  (enable/upgrade/disable/purge) plus reference-data seeding is the
+  _tenant interface's job (REQ-019, REQ-020); folio-spring exposes it via
+  TenantController/TenantService with overridable hooks
+  (afterTenantUpdate, afterTenantDeletion).
+
+decision: >
+  Use folio-spring-base execution-context multi-tenancy unchanged, with
+  the module's database schema naming verified against the legacy
+  OkapiTenantResolver output for every real tenant id shape (lowercasing,
+  dash-to-underscore) so resolved names are byte-identical to the schemas
+  the legacy module created. Implement the _tenant interface by extending
+  folio-spring's TenantService: afterTenantUpdate seeds refdata categories
+  and values, default number generators, and sample widget types
+  idempotently (parity with the legacy okapi:dataload:reference
+  subscriber); disable is a no-op preserving data; purge drops the tenant
+  schema. No module-level cross-tenant state is kept outside tenant
+  schemas.
+
+consequences:
+  positive:
+    - Tenant isolation, header handling, and lifecycle plumbing come from
+      the maintained platform library instead of bespoke code.
+    - Schema-name parity makes adoption of populated schemas automatic.
+  negative:
+    - Schema naming is an implicit contract; a mismatch is catastrophic and
+      must be guarded by an explicit cutover verification step (M4).
+    - Seeding logic moves from an event subscriber to a lifecycle hook and
+      must replicate the legacy idempotency exactly.
+
+refs:
+  - specs/requirements/nfr-multi-tenancy.yaml#/id
+  - specs/requirements/nfr-data-continuity.yaml#/id
+  - specs/requirements/tenant-lifecycle.yaml#/id
+  - specs/requirements/reference-data-seeding.yaml#/id

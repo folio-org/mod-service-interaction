@@ -1,0 +1,57 @@
+# SDD Sidecar Reference File
+# Companion to workspace.dsl — cross-references for the architecture spec.
+# Each container traces to the requirements of its area; the governing ADRs
+# anchor to the containers their decisions shape.
+
+source: specs/architecture/workspace.dsl
+mappings:
+  - element: "#/model/okapi"
+    refs:
+      - specs/requirements/widget-definition-federation.yaml#/id
+      - specs/requirements/tenant-lifecycle.yaml#/id
+  - element: "#/model/system"
+    refs:
+      - specs/requirements/nfr-wire-compatibility.yaml#/id
+      - specs/requirements/nfr-data-continuity.yaml#/id
+      - specs/requirements/nfr-multi-tenancy.yaml#/id
+      - specs/decisions/003-spring-boot-folio-spring-stack.yaml#/id
+      - specs/decisions/004-openapi-first-api-generation.yaml#/id
+      - specs/decisions/011-module-descriptor-parity.yaml#/id
+  - element: "#/model/system/numgen"
+    refs:
+      - specs/requirements/numgen-crud.yaml#/id
+      - specs/requirements/numgen-generation.yaml#/id
+      - specs/requirements/numgen-checksums.yaml#/id
+      - specs/requirements/numgen-year-reset.yaml#/id
+      - specs/requirements/numgen-limits.yaml#/id
+      - specs/decisions/002-wire-envelope-exemptions.yaml#/id
+      - specs/decisions/010-okapi-timer-year-reset.yaml#/id
+  - element: "#/model/system/dashboards"
+    refs:
+      - specs/requirements/dashboard-crud.yaml#/id
+      - specs/requirements/dashboard-access-control.yaml#/id
+      - specs/requirements/dashboard-provisioning.yaml#/id
+      - specs/requirements/dashboard-user-ordering.yaml#/id
+      - specs/requirements/dashboard-user-management.yaml#/id
+      - specs/requirements/dashboard-display-data.yaml#/id
+      - specs/requirements/widget-definitions.yaml#/id
+      - specs/requirements/widget-definition-federation.yaml#/id
+      - specs/requirements/widget-instances.yaml#/id
+      - specs/requirements/widget-types.yaml#/id
+      - specs/decisions/008-feign-federation-client.yaml#/id
+  - element: "#/model/system/attestation"
+    refs:
+      - specs/requirements/attested-assertions.yaml#/id
+      - specs/decisions/009-nimbus-jose-jwt-attestation.yaml#/id
+  - element: "#/model/system/platform"
+    refs:
+      - specs/requirements/refdata-management.yaml#/id
+      - specs/requirements/app-settings.yaml#/id
+      - specs/requirements/reference-data-seeding.yaml#/id
+      - specs/requirements/tenant-lifecycle.yaml#/id
+      - specs/requirements/admin-actions.yaml#/id
+      - specs/decisions/001-spec-first-parity-migration.yaml#/id
+      - specs/decisions/005-liquibase-adoption-of-legacy-schemas.yaml#/id
+      - specs/decisions/006-schema-per-tenant-resolution.yaml#/id
+      - specs/decisions/007-bespoke-refdata-and-settings.yaml#/id
+      - specs/decisions/012-tenant-interface-2-0.yaml#/id

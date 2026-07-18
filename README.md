@@ -22,9 +22,87 @@ This is the main starter repository for the Grails-based OLF - ERM backend modul
 
 - [Getting started](service/docs/getting-started.md "Getting started")
 
+## API-first code generation
+
+The Spring Boot module (Maven build at the repo root) is API-first: the OpenAPI specs under
+`specs/api/*.yaml` are the single source of truth for the served REST surface. They live in
+`specs/api` rather than the conventional `src/main/resources/swagger.api` because they are
+governed SDD artifacts (decision D-B) — the build consumes them directly and unmodified.
+
+Six `openapi-generator-maven-plugin` executions in `pom.xml` (`numgen`, `dashboards`,
+`widgets`, `attestation`, `refdata-settings`, `admin`) each generate:
+
+- interface-only API contracts, named per operation tag (`useTags=true`) into the flat
+  package `org.folio.servint.rest.resource`: `NumberGeneratorsApi`, `DashboardsApi`,
+  `WidgetsApi`, `DashboardDefinitionsApi`, `AttestationApi`, `RefdataSettingsApi`, `AdminApi`
+- DTOs into `org.folio.servint.domain.dto`
+
+Generated sources land in `target/generated-sources/src/main/java` and are added to the
+compile source roots by the generator plugin itself. Each controller in
+`org.folio.servint.controller` implements its generated `*Api` interface, and the
+interfaces are generated with `skipDefaultInterface=true`, so every spec operation is an
+abstract method rather than a default 501 stub. Spec→controller drift for these six
+generated surfaces is therefore compile-enforced: the workflow for any API change is
+edit the spec, rebuild (`mvn generate-sources`), and a controller missing an override
+for any declared operation fails compilation.
+
+The tenant lifecycle surface (`specs/api/servint-tenant.yaml`) is the one API spec
+deliberately outside the generated set: `ServintTenantController` hand-implements
+folio-spring's `TenantApi` contract (ADR-012), and a seventh generated interface would
+fork that inheritance. Its spec↔controller drift is contract-checked at runtime
+instead: `TenantContractCompletenessIT` compares the served `/_/tenant*` surface
+(Spring's handler mappings) against the spec's declared operations in both directions
+and pins the declared response statuses to the lifecycle contract `TenantEnableIT`
+exercises over the wire, so drift on either side fails the suite.
+
 # For ops folks trying to deploy the module
 
 A sample k8s deployment and service resource description can be [found in the scripts directory](https://github.com/folio-org/mod-service-interaction/blob/master/scripts/k8s_deployment_template.yaml)
+
+The Spring Boot module listens on port **8081** (`server.port` in
+`src/main/resources/application.yml`); the template's Deployment
+`containerPort`, Service `port`/`targetPort`, and liveness/readiness probes
+(HTTP GET `/admin/health` on 8081) all target that port, and
+`K8sDeploymentTemplateTest` fails the build if the template and the
+application config ever drift apart. The template's third document is a
+`NetworkPolicy` restricting module-port ingress to the Okapi gateway pods —
+it carries the attestation trust boundary (see the security section below)
+and its `podSelector` for Okapi is a placeholder you MUST adapt to your
+cluster's labels before applying.
+
+The management surface under `/admin` is **unauthenticated** and exposes
+exactly `health` and `metrics`
+(`management.endpoints.web.exposure.include`). The `loggers` endpoint is
+deliberately not exposed: on an unauthenticated surface it would let anyone
+who can reach the module port flip log levels at runtime. A deployment can
+re-enable it by overriding
+`MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,metrics,loggers`, but
+that re-opens the unauthenticated log-level flip — do so only behind the
+Okapi-only NetworkPolicy above, at your own risk. `ManagementSurfaceIT`
+pins the exposed surface.
+
+### Security: the attestation trust boundary (ADR-013)
+
+`GET /servint/attestation/token` signs a short-lived JWT whose subject is
+the calling user. The module does **not** verify that identity
+cryptographically: it trusts the Okapi-supplied `X-Okapi-User-Id` header,
+and when the header is absent it falls back to reading the `user_id` claim
+of the `x-okapi-token` **without signature verification** (legacy parity).
+The identity model is therefore only sound while the module port is
+reachable exclusively from the Okapi gateway. That exclusivity is a
+deployment invariant you must enforce:
+
+- Apply the `NetworkPolicy` shipped in the k8s template (third document),
+  after adapting its placeholder Okapi pod selector to your cluster.
+- Never expose the module port (8081) directly — no Ingress, LoadBalancer,
+  NodePort, or wide NetworkPolicy in front of it. Anyone who can reach the
+  port can mint an attested assertion naming any user id.
+- If your deployment cannot guarantee Okapi-exclusive ingress, treat every
+  assertion this module signs as unattested.
+
+The decision record is `specs/decisions/013-attestation-trust-boundary.yaml`
+(ADR-013): accepted trust model, enforced boundary, no in-module token
+verification in the parity release.
 
 Most importantly, the module requires a number of ENV settings which are different to the RMB defaults
 - OKAPI_SERVICE_PORT - port number for okapi

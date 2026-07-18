@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/metrics.schema.json",
+  "title": "SDD Metrics Specification",
+  "description": "Schema for third-party metrics plugin regression fixtures.",
+  "type": "object",
+  "required": ["id", "title", "description", "unit", "target"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
+    "unit": { "type": "string", "minLength": 1 },
+    "target": {
+      "type": "object",
+      "required": ["operator", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "operator": { "enum": ["<", "<=", "=", ">=", ">"] },
+        "value": { "type": "number" }
+      }
+    },
+    "refs": { "$ref": "#/$defs/ref_list" }
+  },
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "pattern": "^\\S+#(?!#)\\S+$"
+    },
+    "ref_list": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ref" },
+      "uniqueItems": true
+    }
+  }
+}

@@ -1,0 +1,14 @@
+2026-07-22T19:06:51Z POST /_/tenant -> upstream localhost:8080 (response 201)
+user-agent: Vert.x-WebClient/5.1.5
+X-Okapi-request-method: POST
+X-Okapi-Url: http://localhost:9130
+X-Okapi-Request-Id: 105511/proxy;926759/tenant
+X-Okapi-request-timestamp: 1784747211140
+Accept: */*
+X-Okapi-request-ip: 0:0:0:0:0:0:0:1
+X-Okapi-Url-to: http://localhost:18080
+X-Okapi-Match-Path-Pattern: /_/proxy/tenants/{tenantId}/install
+X-Okapi-Tenant: rcw2bad
+Content-Type: application/json; charset=UTF-8
+content-length: 120
+host: localhost:18080

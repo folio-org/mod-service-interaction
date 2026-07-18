@@ -1,0 +1,32 @@
+# Registered-deviation allowlist for diff-runs.sh.
+# Tab-separated columns: probe_id	deviation_ids	note
+# A probe listed here may diverge between a legacy and a port capture run
+# WITHOUT failing diff-runs.sh. Every row MUST cite a registered deviation
+# id (D-1..D-33) from ../wire-compat-deviations.md — do not add rows for
+# divergence that has no dossier entry; register the deviation first.
+#
+# NOTE: order-only listing differences (D-4) need no row here — diff-runs.sh
+# classifies them as sorted-equal automatically.
+my-widgets-A	D-1	dead legacy endpoint: legacy 500 (NPE) vs port 404
+# R9 error-envelope matrix (review F-14; pinned by ErrorEnvelopeMatrixIT):
+f14-malformed-json	D-22	malformed JSON: port 400 malformed.json envelope; legacy handling differs
+f14-missing-tenant	D-23	missing tenant header: port 400 text/plain (folio-spring); legacy 500 (TenantNotFoundException)
+f14-duplicate-code	D-24	integrity conflict: port sanitized 409 envelope; legacy 500 with raw-ish constraint detail
+f14-invalid-boolean	D-28	invalid boolean filter: legacy 500 (ConversionFailed); port coerces garbage to false, 200
+# f14-stats-notabool / f14-perpage-nonnumeric need no row: leniency is legacy-identical.
+# R16 F-21 directed parser rows (evidence docs/migration/evidence/r13-legacy):
+# f21-escaped-literal needs no row since M9 R31: D-29 is RETIRED — the port keeps
+# backslashes raw like legacy, so both sides answer 200 with 0 rows, byte-identical.
+f21-unbalanced-paren	D-30	malformed filter: legacy 500; port drops the clause, 200
+f21-gt-notanumber	D-30	uncoercible numeric value: legacy 500; port drops the clause, 200
+f21-10k-filter	D-31	oversized filter: both 400 at container level; legacy empty body, port error body
+# R22 F-26 compound empty-RHS rows (evidence docs/migration/evidence/r22-legacy-compound):
+r22-empty-leading	D-32	invalid absorbed subject: 400 both sides, platform envelopes differ
+r22-empty-not	D-32	negation with empty right side: legacy 500; port drops the parameter, 200
+r22-uncoercible-compound	D-30	uncoercible value inside a compound: legacy 500; port whole-parameter drop, 200
+# M9 R31/R32 rows (evidence docs/migration/evidence/r31-escaped-oracle + r32-wildcard-oracle):
+r31-single-lt-identifier	D-32	re-shaped single-op subject: 400 Invalid property both sides, platform envelopes differ
+r31-single-gt-numeric	D-30	non-identifier tail after single operator: legacy 500; port drops the clause, 200
+r32-match-multiterm	D-33	repeated term parameters: legacy 500; port comma-joins into one term, 200
+# M9 R-VER row (evidence docs/migration/evidence/rver/oracle-rerun):
+r32-raw-unencoded-pct	D-34	malformed percent-escape: legacy Tomcat 9 lenient 200 empty; port Tomcat 10.1 container-level 400

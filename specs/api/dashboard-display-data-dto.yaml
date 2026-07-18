@@ -1,0 +1,14 @@
+# Wire shape of a DashboardDisplayData resource — plain render.
+$id: dashboard-display-data-dto
+title: DashboardDisplayDataDto
+type: object
+properties:
+  id:
+    type: string
+    description: Display data identifier (UUID).
+  dashId:
+    type: string
+    description: Id of the dashboard the layout belongs to.
+  layoutData:
+    type: string
+    description: Opaque layout payload.

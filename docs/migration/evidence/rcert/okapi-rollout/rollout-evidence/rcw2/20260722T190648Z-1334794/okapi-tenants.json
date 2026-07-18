@@ -1,0 +1,13 @@
+[ {
+  "id" : "rcw1a"
+}, {
+  "id" : "rcw1b"
+}, {
+  "id" : "rcw2bad"
+}, {
+  "id" : "rcw2ok"
+}, {
+  "id" : "supertenant",
+  "name" : "supertenant",
+  "description" : "Okapi built-in super tenant"
+} ]

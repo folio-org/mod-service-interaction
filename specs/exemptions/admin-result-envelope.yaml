@@ -1,0 +1,14 @@
+# Exemption: admin action result envelope — a constant acknowledgement;
+# never persisted, no backing model to map from.
+
+id: EX-admin-result-envelope
+rule_id: api-dto-property-has-dto-mapping-coverage
+target: specs/api/admin-result-dto.yaml#/properties/*
+category: spec-introduced-envelope
+reason: >
+  AdminResultDto is a wire-only acknowledgement envelope whose single
+  status field is a constant discriminator produced by the admin actions.
+  It is never read back into persistent state and the legacy module has no
+  corresponding domain class, so DtoMapping coverage would fabricate a
+  model that does not exist.
+governed_by: specs/decisions/002-wire-envelope-exemptions.yaml#/id

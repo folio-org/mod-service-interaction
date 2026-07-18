@@ -1,0 +1,29 @@
+-- schema existence --
+         schema_name          
+------------------------------
+ r20r_mod_service_interaction
+(1 row)
+
+-- total table count in schema --
+ table_count 
+-------------
+          37
+(1 row)
+
+-- business row counts --
+             t             | count 
+---------------------------+-------
+ app_setting               |     1
+ number_generator          |     8
+ number_generator_sequence |     9
+ refdata_category          |     3
+ refdata_value             |    13
+ widget_definition         |     0
+ widget_type               |     1
+(7 rows)
+
+ widget_definition_recheck 
+---------------------------
+                         0
+(1 row)
+

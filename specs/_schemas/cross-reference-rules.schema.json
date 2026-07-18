@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/cross-reference-rules.schema.json",
+  "title": "Cross-Reference Rules Catalog",
+  "description": "Schema for built-in and project-local cross-reference rule catalogs.",
+  "type": "object",
+  "required": ["rules"],
+  "additionalProperties": false,
+  "properties": {
+    "rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    }
+  },
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rule": {
+      "type": "object",
+      "required": [
+        "rule_id",
+        "description",
+        "severity",
+        "source_type",
+        "target_type",
+        "cypher_file",
+        "message_template",
+        "error_code"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "rule_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "description": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["error", "warning"]
+        },
+        "source_type": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "target_type": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "cypher_file": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^\\\\]+\\.cypher$"
+        },
+        "census_file": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^\\\\]+\\.cypher$"
+        },
+        "message_template": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "error_code": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    }
+  }
+}

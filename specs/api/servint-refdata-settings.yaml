@@ -1,0 +1,351 @@
+# Refdata + settings API surface — wire-compatible restatement of the
+# legacy web-toolkit routes (UrlMappings.groovy) and ModuleDescriptor
+# permissions.
+openapi: "3.1.0"
+info:
+  title: Refdata and Settings API
+  version: "1.0.0"
+  description: >
+    Controlled-vocabulary categories (with the domain/property value
+    lookup) and application settings, both following the web-toolkit CRUD
+    and listing conventions. Part of the `servint` Okapi interface.
+
+paths:
+  /servint/refdata:
+    get:
+      summary: List refdata categories
+      operationId: listRefdataCategories
+      tags: [refdataSettings]
+      x-sdd-refs:
+        - specs/requirements/refdata-management.yaml#/id
+      description: >
+        Lists refdata categories with the web-toolkit listing conventions;
+        each category renders its values expanded.
+      x-folio-permissions-required: [servint.refdata.get]
+      parameters:
+        - $ref: "#/components/parameters/filters"
+        - $ref: "#/components/parameters/match"
+        - $ref: "#/components/parameters/term"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/perPage"
+        - $ref: "#/components/parameters/max"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/stats"
+      responses:
+        "200":
+          description: Categories (array, or stats envelope when stats=true).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./refdata-category-dto.yaml"
+    post:
+      summary: Create a refdata category
+      operationId: createRefdataCategory
+      tags: [refdataSettings]
+      x-sdd-refs:
+        - specs/requirements/refdata-management.yaml#/id
+      x-folio-permissions-required: [servint.refdata.post]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./refdata-category-dto.yaml"
+      responses:
+        "201":
+          description: Created category.
+          content:
+            application/json:
+              schema:
+                $ref: "./refdata-category-dto.yaml"
+
+  /servint/refdata/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Category identifier (UUID).
+    get:
+      summary: Get a refdata category
+      operationId: getRefdataCategory
+      tags: [refdataSettings]
+      x-sdd-refs:
+        - specs/requirements/refdata-management.yaml#/id
+      x-folio-permissions-required: [servint.refdata.get]
+      responses:
+        "200":
+          description: The category with values expanded.
+          content:
+            application/json:
+              schema:
+                $ref: "./refdata-category-dto.yaml"
+        "404":
+          description: No category with that id.
+    put:
+      summary: Update a refdata category
+      operationId: updateRefdataCategory
+      tags: [refdataSettings]
+      x-sdd-refs:
+        - specs/requirements/refdata-management.yaml#/id
+      x-folio-permissions-required: [servint.refdata.put]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./refdata-category-dto.yaml"
+      responses:
+        "200":
+          description: The updated category.
+          content:
+            application/json:
+              schema:
+                $ref: "./refdata-category-dto.yaml"
+        "404":
+          description: No category with that id.
+    delete:
+      summary: Delete a refdata category
+      operationId: deleteRefdataCategory
+      tags: [refdataSettings]
+      x-sdd-refs:
+        - specs/requirements/refdata-management.yaml#/id
+      x-folio-permissions-required: [servint.refdata.delete]
+      responses:
+        "204":
+          description: Deleted.
+        "404":
+          description: No category with that id.
+
+  /servint/refdata/{domain}/{property}:
+    get:
+      summary: Look up refdata values by domain and property
+      operationId: lookupRefdataValues
+      tags: [refdataSettings]
+      x-sdd-refs:
+        - specs/requirements/refdata-management.yaml#/id
+      description: >
+        Resolves the refdata category registered for the domain + property
+        pair (404 when none) and returns its values as a kiwt list filtered
+        to that category, honouring term, match, sort, stats, and perPage
+        capped at 100.
+      x-folio-permissions-required: [servint.refdata.get]
+      parameters:
+        - name: domain
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Domain part of the registration key (e.g. NumberGeneratorSequence).
+        - name: property
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Property part of the registration key (e.g. CheckDigitAlgo).
+        - $ref: "#/components/parameters/match"
+        - $ref: "#/components/parameters/term"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/perPage"
+        - $ref: "#/components/parameters/max"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/stats"
+      responses:
+        "200":
+          description: The category's values (array, or stats envelope).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./refdata-value-dto.yaml"
+        "404":
+          description: No category registered for the domain + property pair.
+
+  /servint/settings/appSettings:
+    get:
+      summary: List application settings
+      operationId: listAppSettings
+      tags: [refdataSettings]
+      x-sdd-refs:
+        - specs/requirements/app-settings.yaml#/id
+      x-folio-permissions-required: [servint.settings.get]
+      parameters:
+        - $ref: "#/components/parameters/filters"
+        - $ref: "#/components/parameters/match"
+        - $ref: "#/components/parameters/term"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/perPage"
+        - $ref: "#/components/parameters/max"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/stats"
+      responses:
+        "200":
+          description: Settings (array, or stats envelope when stats=true).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./app-setting-dto.yaml"
+    post:
+      summary: Create an application setting
+      operationId: createAppSetting
+      tags: [refdataSettings]
+      x-sdd-refs:
+        - specs/requirements/app-settings.yaml#/id
+      x-folio-permissions-required: [servint.settings.post]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./app-setting-dto.yaml"
+      responses:
+        "201":
+          description: Created setting.
+          content:
+            application/json:
+              schema:
+                $ref: "./app-setting-dto.yaml"
+
+  /servint/settings/appSettings/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Setting identifier (UUID).
+    get:
+      summary: Get an application setting
+      operationId: getAppSetting
+      tags: [refdataSettings]
+      x-sdd-refs:
+        - specs/requirements/app-settings.yaml#/id
+      x-folio-permissions-required: [servint.settings.get]
+      responses:
+        "200":
+          description: The setting.
+          content:
+            application/json:
+              schema:
+                $ref: "./app-setting-dto.yaml"
+        "404":
+          description: No setting with that id.
+    put:
+      summary: Update an application setting
+      operationId: updateAppSetting
+      tags: [refdataSettings]
+      x-sdd-refs:
+        - specs/requirements/app-settings.yaml#/id
+      x-folio-permissions-required: [servint.settings.put]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./app-setting-dto.yaml"
+      responses:
+        "200":
+          description: The updated setting.
+          content:
+            application/json:
+              schema:
+                $ref: "./app-setting-dto.yaml"
+        "404":
+          description: No setting with that id.
+    delete:
+      summary: Delete an application setting
+      operationId: deleteAppSetting
+      tags: [refdataSettings]
+      x-sdd-refs:
+        - specs/requirements/app-settings.yaml#/id
+      x-folio-permissions-required: [servint.settings.delete]
+      responses:
+        "204":
+          description: Deleted.
+        "404":
+          description: No setting with that id.
+
+components:
+  parameters:
+    filters:
+      name: filters
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Web-toolkit filter expressions (repeatable).
+    match:
+      name: match
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Property names the term parameter matches against (repeatable).
+    term:
+      name: term
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Search term applied to the match properties.
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: Sort expressions property;asc|desc (repeatable).
+    perPage:
+      name: perPage
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: >
+        Page size; absent or 0 means the default 10; values above 100 are
+        silently clamped to 100 (never rejected).
+    max:
+      name: max
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: Legacy alias for perPage; perPage wins when both are sent.
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: >
+        1-based page number; takes precedence over offset, which is
+        otherwise used to derive the page.
+    offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: Result offset (alias page for page-based access).
+    stats:
+      name: stats
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: When true, wrap results in {results, totalRecords, ...}.

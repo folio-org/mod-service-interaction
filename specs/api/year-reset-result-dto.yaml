@@ -1,0 +1,13 @@
+# Response envelope of the resetYearSequences timer operation. Pure wire
+# construct — never persisted (exempt from DTO-mapping coverage, ADR-002).
+$id: year-reset-result-dto
+title: YearResetResultDto
+type: object
+required: [currentYear, sequencesReset]
+properties:
+  currentYear:
+    type: string
+    description: Current UTC calendar year the sequences were reconciled to.
+  sequencesReset:
+    type: integer
+    description: Number of sequences reset to 1 by this run.

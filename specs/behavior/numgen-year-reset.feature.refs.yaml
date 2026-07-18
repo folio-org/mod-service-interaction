@@ -1,0 +1,26 @@
+# Sidecar for numgen-year-reset.feature — generation-path scenarios back the
+# getNextNumber op; the validation rule backs the sequence PUT op; the sweep
+# backs the resetYearSequences op.
+
+source: specs/behavior/numgen-year-reset.feature
+mappings:
+  - element: "#/feature/Year-based sequence reset/scenario/Year token renders the current year"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-year-reset.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Year-based sequence reset/scenario/Stale year with reset enabled restarts at one"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-year-reset.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Year-based sequence reset/scenario/Stale year with reset disabled continues counting"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1getNextNumber/get
+      - specs/requirements/numgen-year-reset.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Year-based sequence reset/scenario/Reset-enabled sequence requires the year token in its template"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGeneratorSequences~1{id}/put
+      - specs/requirements/numgen-year-reset.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Year-based sequence reset/scenario/Timer sweep resets only stale year-scoped sequences"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators~1resetYearSequences/post
+      - specs/requirements/numgen-year-reset.yaml#/acceptance_criteria/AC5

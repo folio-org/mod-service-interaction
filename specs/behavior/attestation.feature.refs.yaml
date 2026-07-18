@@ -1,0 +1,20 @@
+# Sidecar for attestation.feature — attested assertion coverage.
+
+source: specs/behavior/attestation.feature
+mappings:
+  - element: "#/feature/Attested assertion tokens/scenario/Issue a signed attestation token"
+    refs:
+      - specs/api/servint-attestation.yaml#/paths/~1servint~1attestation~1token/get
+      - specs/requirements/attested-assertions.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Attested assertion tokens/scenario/The token carries the attestation claim set"
+    refs:
+      - specs/api/servint-attestation.yaml#/paths/~1servint~1attestation~1token/get
+      - specs/requirements/attested-assertions.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Attested assertion tokens/scenario/The earliest valid key signs the token"
+    refs:
+      - specs/api/servint-attestation.yaml#/paths/~1servint~1attestation~1token/get
+      - specs/requirements/attested-assertions.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Attested assertion tokens/scenario/A missing key pair is created on demand"
+    refs:
+      - specs/api/servint-attestation.yaml#/paths/~1servint~1attestation~1token/get
+      - specs/requirements/attested-assertions.yaml#/acceptance_criteria/AC4

@@ -1,0 +1,34 @@
+id: TRC-019
+title: Reference data seeding implementation
+description: "Two-bucket seeding per REQ-019: the @Defaults baseline (Access + MaximumCheck)\
+  \ seeds unconditionally in afterTenantUpdate, the check-digit vocabulary and default\
+  \ generators seed in the loadReferenceData override (loadReference=\"true\" only), and\
+  \ widget types import in the loadSampleData override (loadSample=\"true\" only) —\
+  \ the six-case enable matrix (params omitted/true/false, repeat enable, advanced\
+  \ sequence survival) is pinned by TenantSeedingMatrixIT."
+spec_ref: specs/requirements/reference-data-seeding.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.service.ServintTenantService#afterTenantUpdate
+  kind: method
+- language: java
+  qualified_name: org.folio.servint.service.ServintTenantService#loadReferenceData
+  kind: method
+- language: java
+  qualified_name: org.folio.servint.service.ServintTenantService#loadSampleData
+  kind: method
+- language: java
+  qualified_name: org.folio.servint.service.numgen.NumgenSeedService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.service.dashboard.DashboardSeedService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.service.refdata.RefdataService#lookupOrCreate
+  kind: method
+- language: java
+  qualified_name: org.folio.servint.service.widget.WidgetTypeService#triggerTypeImport
+  kind: method
+- language: java
+  qualified_name: org.folio.servint.TenantSeedingMatrixIT
+  kind: integration-test

@@ -1,0 +1,5 @@
+# R-VER gate 5 — data-continuity pins (from the closing-HEAD mvn -B clean verify)
+# AdoptedSchemaUpgradeIT: 37-table before/after continuity vs the committed r13 ground-truth
+# rowcounts.tsv fixture (R34); FreshDdlCatalogIT: fresh-DDL catalog identity.
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.31 s -- in org.folio.servint.FreshDdlCatalogIT
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.559 s -- in org.folio.servint.AdoptedSchemaUpgradeIT

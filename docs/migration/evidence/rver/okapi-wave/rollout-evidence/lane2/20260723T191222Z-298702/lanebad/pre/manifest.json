@@ -1,0 +1,45 @@
+{
+  "side": "legacy",
+  "base_url": "http://localhost:8086",
+  "tenant": "lanebad",
+  "captured_at": "2026-07-23T19:12:22Z",
+  "probe_list": {
+    "file": "rollout-lane-preprobes.tsv",
+    "sha256": "1f24fddfc2967c67d5b029200b3f82678899c9fd1a3f727d197a63f0117b8e22"
+  },
+  "harness_git_rev": "66c5435",
+  "probe_count": 2,
+  "failed_probes": [],
+  "probes": [
+    {
+      "id": "numgen",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "numgen.json",
+      "body_sha256": "69ecd72d3850d0da7870ca1722422dfe22450472c11a4637f3a7544f3a0ec2cf",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "settings",
+      "request": {
+        "method": "GET",
+        "path": "/servint/settings/appSettings?perPage=100&sort=key%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "settings.json",
+      "body_sha256": "455f9d4734059b8c548b8b678aa1de6ba465836c66bda1bacf2b91228297788f",
+      "normalization": "jq-S",
+      "result": "pass"
+    }
+  ]
+}

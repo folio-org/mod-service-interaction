@@ -1,0 +1,16 @@
+# Sidecar for admin-actions.feature — admin action coverage.
+
+source: specs/behavior/admin-actions.feature
+mappings:
+  - element: "#/feature/Admin actions/scenario/Import widget types from sample data"
+    refs:
+      - specs/api/servint-admin.yaml#/paths/~1servint~1admin~1{action}/get
+      - specs/requirements/admin-actions.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Admin actions/scenario/Clean import replaces all types"
+    refs:
+      - specs/api/servint-admin.yaml#/paths/~1servint~1admin~1{action}/get
+      - specs/requirements/admin-actions.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Admin actions/scenario/Ensure display data repairs dashboards"
+    refs:
+      - specs/api/servint-admin.yaml#/paths/~1servint~1admin~1{action}/get
+      - specs/requirements/admin-actions.yaml#/acceptance_criteria/AC3

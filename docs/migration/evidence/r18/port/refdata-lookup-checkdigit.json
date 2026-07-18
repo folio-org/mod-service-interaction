@@ -1,0 +1,72 @@
+[
+  {
+    "id": "90061740-c80c-4637-aab4-750a89b0d1ea",
+    "label": "12-LTR-mod10-R",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "d4927b92-0340-4357-b0aa-d42850cb0ade",
+      "internal": true
+    },
+    "value": "12_ltr_mod10_r"
+  },
+  {
+    "id": "67634304-3924-46e7-b7c1-c0fd18f3de94",
+    "label": "1793-LTR-mod10-R",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "d4927b92-0340-4357-b0aa-d42850cb0ade",
+      "internal": true
+    },
+    "value": "1793_ltr_mod10_r"
+  },
+  {
+    "id": "c5fe0d77-0645-4ff2-87cf-f56d9d5a5e6a",
+    "label": "31-RTL-mod10-I (EAN)",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "d4927b92-0340-4357-b0aa-d42850cb0ade",
+      "internal": true
+    },
+    "value": "ean13"
+  },
+  {
+    "id": "dbf5836e-a9b1-4352-b83e-10f041d477bc",
+    "label": "2345678910-RTL-mod11-I-X (ISBN10)",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "d4927b92-0340-4357-b0aa-d42850cb0ade",
+      "internal": true
+    },
+    "value": "isbn10checkdigit"
+  },
+  {
+    "id": "c7aff8fe-8537-4db7-9386-efb63c45d29a",
+    "label": "8765432-LTR-mod11-I-X (ISSN)",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "d4927b92-0340-4357-b0aa-d42850cb0ade",
+      "internal": true
+    },
+    "value": "issncheckdigit"
+  },
+  {
+    "id": "c248ca05-c05a-4a5f-8cbc-0cdb50bc9f70",
+    "label": "21-RTL-mod10-I (Luhn)",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "d4927b92-0340-4357-b0aa-d42850cb0ade",
+      "internal": true
+    },
+    "value": "luhncheckdigit"
+  },
+  {
+    "id": "11ececd0-e6e6-45e1-8afe-23836a4a24d8",
+    "label": "None",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "d4927b92-0340-4357-b0aa-d42850cb0ade",
+      "internal": true
+    },
+    "value": "none"
+  }
+]

@@ -1,0 +1,14 @@
+# Exemption: getNextNumber response envelope — assembled per request in the
+# generation service, never persisted; no backing model exists to map from.
+
+id: EX-next-number-result-envelope
+rule_id: api-dto-property-has-dto-mapping-coverage
+target: specs/api/next-number-result-dto.yaml#/properties/*
+category: spec-introduced-envelope
+reason: >
+  NextNumberResultDto is a wire-only outcome envelope (status/warningCode/
+  errorCode discriminators around the transiently rendered number plus
+  echoed request codes). No field is read back into persistent state and the
+  legacy module has no corresponding domain class, so DtoMapping coverage
+  would fabricate a model that does not exist.
+governed_by: specs/decisions/002-wire-envelope-exemptions.yaml#/id

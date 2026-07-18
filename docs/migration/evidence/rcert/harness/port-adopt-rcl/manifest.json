@@ -1,0 +1,540 @@
+{
+  "side": "port",
+  "base_url": "http://localhost:8081",
+  "tenant": "rcl",
+  "captured_at": "2026-07-22T18:59:41Z",
+  "probe_list": {
+    "file": "probes.tsv",
+    "sha256": "48ee6edbaabf00c20849dd419f14ff3ea76ee66ef9cf84658b9ca30d538b80e5"
+  },
+  "harness_git_rev": "63c8b2f",
+  "probe_count": 35,
+  "failed_probes": [],
+  "probes": [
+    {
+      "id": "refdata-categories",
+      "request": {
+        "method": "GET",
+        "path": "/servint/refdata?perPage=100&sort=desc%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "refdata-categories.json",
+      "body_sha256": "83962a23dd581a70da52dbee8137448e647ebb2157ee2b496c9242dbfada9e83",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "refdata-lookup-checkdigit",
+      "request": {
+        "method": "GET",
+        "path": "/servint/refdata/NumberGeneratorSequence/checkDigitAlgo?perPage=100&sort=value%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "refdata-lookup-checkdigit.json",
+      "body_sha256": "2ea8248b91fac35cf9cdbc077b0f6105ba3691bd0ae9727897337140625cf32c",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "numgen",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "numgen.json",
+      "body_sha256": "3f34e564f5245dddf517f0f58f910a8fcd81473c332549f6117175a3d79837d8",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "numgen-sequences",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGeneratorSequences?perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "numgen-sequences.json",
+      "body_sha256": "307e5440d94b9179d29170b9ef1104ff2dfa011dde3f7f87a347a251b7d0113d",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "my-dashboards-A",
+      "request": {
+        "method": "GET",
+        "path": "/servint/dashboard/my-dashboards",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "my-dashboards-A.json",
+      "body_sha256": "025455439128e853359b55172271d3d3bd5f295c4e815d81eb795091ae2f967f",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "my-dashboards-B",
+      "request": {
+        "method": "GET",
+        "path": "/servint/dashboard/my-dashboards",
+        "user": "B",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "my-dashboards-B.json",
+      "body_sha256": "e25f490271f704d11e93fa7921b4f2f323241529db98a1f47ac5579e5b9a3d13",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "dashboard-users",
+      "request": {
+        "method": "GET",
+        "path": "/servint/dashboard/388ad9ea-37d7-4c4f-aa74-ec1c985265bc/users",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "dashboard-users.json",
+      "body_sha256": "423225cf334a3ed6ac63f5f27e416cbc26f6d097eb1787f4ea975e233900835a",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "dashboard-widgets",
+      "request": {
+        "method": "GET",
+        "path": "/servint/dashboard/388ad9ea-37d7-4c4f-aa74-ec1c985265bc/widgets",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "dashboard-widgets.json",
+      "body_sha256": "3c89389680211491cdfa7faf7f051415465fed98058b2db60992318373a56bbc",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "dashboard-displaydata",
+      "request": {
+        "method": "GET",
+        "path": "/servint/dashboard/388ad9ea-37d7-4c4f-aa74-ec1c985265bc/displayData",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "dashboard-displaydata.json",
+      "body_sha256": "356ce210d4fe44d58a8dca65cf5f663ce2602e0063522ea56132a7d765297d0e",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "widget-types",
+      "request": {
+        "method": "GET",
+        "path": "/servint/widgets/types?perPage=100&sort=name%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "widget-types.json",
+      "body_sha256": "ce0579142484d785ba560e581bb61148d63aa5bb8e67570e8090d1f84d971b4e",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "widget-defs",
+      "request": {
+        "method": "GET",
+        "path": "/servint/widgets/definitions?perPage=100&sort=name%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "widget-defs.json",
+      "body_sha256": "555b92a31265fd0020972d8c2b24ef4e45a97377e257b25d96cacbb8d37eae11",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "my-widgets-A",
+      "request": {
+        "method": "GET",
+        "path": "/servint/widgets/instances/my-widgets",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 404,
+      "actual_status": 404,
+      "response_file": "my-widgets-A.json",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "settings",
+      "request": {
+        "method": "GET",
+        "path": "/servint/settings/appSettings?perPage=100&sort=key%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "settings.json",
+      "body_sha256": "68bf43213918518d4eaf3347d6d59ec66c32c334c93e7cb94510a9b737148855",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f04-filter-nextvalue-gt5",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGeneratorSequences?filters=nextValue%3E5&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f04-filter-nextvalue-gt5.json",
+      "body_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f04-perpage-0",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?perPage=0&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f04-perpage-0.json",
+      "body_sha256": "3f34e564f5245dddf517f0f58f910a8fcd81473c332549f6117175a3d79837d8",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f04-perpage-101",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?perPage=101&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f04-perpage-101.json",
+      "body_sha256": "3f34e564f5245dddf517f0f58f910a8fcd81473c332549f6117175a3d79837d8",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f04-bad-sort",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?sort=noSuchProperty%3Basc&perPage=100",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f04-bad-sort.json",
+      "body_sha256": "8e5637ce3ae54043dfd49de0368d960fd1d8a883743e3ef49eb38f1685139a4b",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f14-malformed-json",
+      "request": {
+        "method": "POST",
+        "path": "/servint/numberGenerators",
+        "user": "A",
+        "body": "{\"code\":\"broken\""
+      },
+      "expected_status": 400,
+      "actual_status": 400,
+      "response_file": "f14-malformed-json.json",
+      "body_sha256": "ee4ed73f2736a6b145f8f454468d642ff3245813f4a440e47706d85667b720bb",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f14-missing-tenant",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?perPage=10",
+        "user": "notenant",
+        "body": null
+      },
+      "expected_status": 400,
+      "actual_status": 400,
+      "response_file": "f14-missing-tenant.json",
+      "body_sha256": "c8f3f0f0ec4910e7c015c1faef885cbc275ac223a031fa7365e86db4ec39d6c3",
+      "normalization": "raw",
+      "result": "pass"
+    },
+    {
+      "id": "f14-invalid-boolean",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGeneratorSequences?filters=enabled%3D%3Dnotabool&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f14-invalid-boolean.json",
+      "body_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f14-stats-notabool",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?stats=notabool&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f14-stats-notabool.json",
+      "body_sha256": "3f34e564f5245dddf517f0f58f910a8fcd81473c332549f6117175a3d79837d8",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f14-perpage-nonnumeric",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?perPage=abc&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f14-perpage-nonnumeric.json",
+      "body_sha256": "3f34e564f5245dddf517f0f58f910a8fcd81473c332549f6117175a3d79837d8",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f14-duplicate-code",
+      "request": {
+        "method": "POST",
+        "path": "/servint/numberGenerators",
+        "user": "A",
+        "body": "{\"code\":\"m4gen\",\"name\":\"duplicate code probe\"}"
+      },
+      "expected_status": 409,
+      "actual_status": 409,
+      "response_file": "f14-duplicate-code.json",
+      "body_sha256": "6419faa55a54648a0d36304f31a37737c82f31c46ce6ff7ea457f618ce230b43",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f21-empty-rhs",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGeneratorSequences?filters=nextValue%3D%3D&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f21-empty-rhs.json",
+      "body_sha256": "307e5440d94b9179d29170b9ef1104ff2dfa011dde3f7f87a347a251b7d0113d",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f21-escaped-literal",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGeneratorSequences?filters=code%3D%3Dpl%5Cain&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f21-escaped-literal.json",
+      "body_sha256": "dccddc5bd77ff91e242caafe36b47aec9153234aebb39147ca02213a8526fdf9",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f21-unbalanced-paren",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGeneratorSequences?filters=%28code%3D%3Dplain&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f21-unbalanced-paren.json",
+      "body_sha256": "307e5440d94b9179d29170b9ef1104ff2dfa011dde3f7f87a347a251b7d0113d",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f21-gt-notanumber",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGeneratorSequences?filters=nextValue%3Enotanumber&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f21-gt-notanumber.json",
+      "body_sha256": "307e5440d94b9179d29170b9ef1104ff2dfa011dde3f7f87a347a251b7d0113d",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f21-10k-filter",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGeneratorSequences?filters=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 400,
+      "actual_status": 400,
+      "response_file": "f21-10k-filter.json",
+      "body_sha256": "141d0eee920f04eae74509434b49e8c473014166b90ec31e6f03596a782bf89f",
+      "normalization": "raw",
+      "result": "pass"
+    },
+    {
+      "id": "r22-empty-and-trailing",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?filters=code%3D%3Dalpha%26%26prefix%3D%3D&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "r22-empty-and-trailing.json",
+      "body_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "r22-empty-or-paren",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?filters=%28code%3D%3Dalpha%7C%7Cprefix%3D%3D%29&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "r22-empty-or-paren.json",
+      "body_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "r22-empty-leading",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?filters=prefix%3D%3D%26%26code%3D%3Dalpha",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 400,
+      "actual_status": 400,
+      "response_file": "r22-empty-leading.json",
+      "body_sha256": "1799501fbb0c07b1a2ccf9cab2839428c1dab8260fdb72c725f4a30a672002cd",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "r22-empty-top-unknown",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?filters=notAProp%3D%3D&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "r22-empty-top-unknown.json",
+      "body_sha256": "3f34e564f5245dddf517f0f58f910a8fcd81473c332549f6117175a3d79837d8",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "r22-empty-dotted-top",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGeneratorSequences?filters=checkDigitAlgo.value%3D%3D&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "r22-empty-dotted-top.json",
+      "body_sha256": "307e5440d94b9179d29170b9ef1104ff2dfa011dde3f7f87a347a251b7d0113d",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "r22-empty-not",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?filters=%21%28prefix%3D%3D%29&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "r22-empty-not.json",
+      "body_sha256": "3f34e564f5245dddf517f0f58f910a8fcd81473c332549f6117175a3d79837d8",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "r22-uncoercible-compound",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGeneratorSequences?filters=code%3D%3Dplain%26%26nextValue%3D%3Dabc&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "r22-uncoercible-compound.json",
+      "body_sha256": "307e5440d94b9179d29170b9ef1104ff2dfa011dde3f7f87a347a251b7d0113d",
+      "normalization": "jq-S",
+      "result": "pass"
+    }
+  ]
+}

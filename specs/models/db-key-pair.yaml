@@ -1,0 +1,51 @@
+# Per-tenant signing key pair (legacy: DBKeyPair, table db_key_pair,
+# cols kp_*). Internal persistence only — key material NEVER crosses the
+# API boundary; only the signed JWT does.
+
+id: db-key-pair
+name: DBKeyPair
+description: >-
+  A stored asymmetric key pair used to sign attestation tokens, scoped by a
+  usage string (the token audience). Validity is bounded by
+  availableFrom/expiresAt; selection takes the earliest valid key so future
+  keys can be pre-published for rotation. Keys are Base64-encoded — X.509
+  for the public key, PKCS#8 for the private key. Legacy columns: kp_id,
+  kp_version, kp_available_from, kp_expires_at, kp_usage, kp_alg,
+  kp_public_key, kp_private_key.
+api_surface: internal
+fields:
+  - name: id
+    type: uuid
+    required: true
+    description: Unique identifier (36-char UUID, column kp_id).
+  - name: usage
+    type: string
+    required: true
+    description: >-
+      Usage scope of the pair — doubles as the token audience (column
+      kp_usage). The JWS kid header carries the pair's record id, not
+      this value.
+  - name: alg
+    type: string
+    required: true
+    description: Key algorithm as reported by the key factory, e.g. RSA (column kp_alg).
+  - name: availableFrom
+    type: instant
+    required: true
+    description: Start of the validity window (column kp_available_from).
+  - name: expiresAt
+    type: instant
+    required: true
+    description: >-
+      End of the validity window (column kp_expires_at); auto-created keys
+      get availableFrom + 730 days.
+  - name: publicKey
+    type: string
+    required: true
+    description: Base64-encoded X.509 public key (column kp_public_key).
+  - name: privateKey
+    type: string
+    required: true
+    description: Base64-encoded PKCS#8 private key (column kp_private_key).
+refs:
+  - specs/requirements/attested-assertions.yaml#/id

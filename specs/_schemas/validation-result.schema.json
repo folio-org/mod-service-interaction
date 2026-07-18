@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/validation-result.schema.json",
+  "title": "SDD Validation Result",
+  "description": "Canonical machine-readable validation result for SDD validation flows.",
+  "type": "object",
+  "required": ["pass", "total_errors", "total_warnings", "errors", "files_checked", "metadata"],
+  "additionalProperties": false,
+  "properties": {
+    "errors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/validation_error" }
+    },
+    "files_checked": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "metadata": {
+      "$ref": "#/$defs/validation_metadata"
+    },
+    "pass": {
+      "type": "boolean",
+      "description": "In non-strict mode, true when total_errors == 0. Strict mode may serialize warning-only results as false without changing warning severities or counts."
+    },
+    "rule_coverage": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/rule_coverage_entry" }
+    },
+    "total_errors": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "total_warnings": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "$defs": {
+    "rule_coverage_entry": {
+      "type": "object",
+      "required": ["covered", "exempt", "failing", "rule_id"],
+      "additionalProperties": false,
+      "properties": {
+        "covered": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "exempt": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failing": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "rule_id": {
+          "type": "string"
+        }
+      }
+    },
+    "validation_error": {
+      "type": "object",
+      "required": ["severity", "error_code", "message"],
+      "additionalProperties": false,
+      "properties": {
+        "details": {
+          "type": "object"
+        },
+        "error_code": {
+          "type": "string"
+        },
+        "field_path": {
+          "type": "string"
+        },
+        "file_path": {
+          "type": "string"
+        },
+        "line_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "rule_id": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["error", "warning", "info"]
+        }
+      }
+    },
+    "validation_metadata": {
+      "type": "object",
+      "required": ["elapsed_ms", "stage_timings", "sdd_spec_version", "timestamp"],
+      "additionalProperties": false,
+      "properties": {
+        "branch": {
+          "type": "string"
+        },
+        "elapsed_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sdd_spec_version": {
+          "type": "string"
+        },
+        "stage_timings": {
+          "$ref": "#/$defs/validation_stage_timings"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        }
+      }
+    },
+    "validation_stage_timings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "graph_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parse_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "rules_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "schema_ms": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

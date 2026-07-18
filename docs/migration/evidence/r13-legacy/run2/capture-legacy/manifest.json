@@ -1,0 +1,360 @@
+{
+  "side": "legacy",
+  "base_url": "http://localhost:8080",
+  "tenant": "r13b",
+  "captured_at": "2026-07-21T07:23:23Z",
+  "probe_list": {
+    "file": "probes.tsv",
+    "sha256": "f03bb4a90c15e04db075ed4ebb35e0cb4d7172c67179185d05809a8fe6871580"
+  },
+  "harness_git_rev": "05e0006",
+  "probe_count": 23,
+  "failed_probes": [],
+  "probes": [
+    {
+      "id": "refdata-categories",
+      "request": {
+        "method": "GET",
+        "path": "/servint/refdata?perPage=100&sort=desc%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "refdata-categories.json",
+      "body_sha256": "267b3314ec2197bf2e0905ab7589ca9e591aa3d9da23f9a0784d602cb7844709",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "refdata-lookup-checkdigit",
+      "request": {
+        "method": "GET",
+        "path": "/servint/refdata/NumberGeneratorSequence/checkDigitAlgo?perPage=100&sort=value%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "refdata-lookup-checkdigit.json",
+      "body_sha256": "27ee541d4676d336b7af1703120982045ad2f8ababec632ef04fdce8ece09aee",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "numgen",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "numgen.json",
+      "body_sha256": "cff7ec1869322b2736632ab897a25c689df9e74bd59c43a2cf09330f86846a33",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "numgen-sequences",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGeneratorSequences?perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "numgen-sequences.json",
+      "body_sha256": "25f39b6e584711ebffe84e8ae175bb783af08f402736084c3d9eb64f96a99862",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "my-dashboards-A",
+      "request": {
+        "method": "GET",
+        "path": "/servint/dashboard/my-dashboards",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "my-dashboards-A.json",
+      "body_sha256": "a0455d70b1406ce8aebb4b864aa7df873aa0222959db8686fb23b397d94aa5ed",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "my-dashboards-B",
+      "request": {
+        "method": "GET",
+        "path": "/servint/dashboard/my-dashboards",
+        "user": "B",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "my-dashboards-B.json",
+      "body_sha256": "d059121870b6c9eedaaf63661af272c5c52ecefc10d31e7776783d505dfb89bd",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "dashboard-users",
+      "request": {
+        "method": "GET",
+        "path": "/servint/dashboard/38668b57-5a37-44f8-adec-5594f02067a0/users",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "dashboard-users.json",
+      "body_sha256": "b09a0bf241f7adc8b5cbe1a917893f1266d216649d1dc26ad10de5615bb0d0a2",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "dashboard-widgets",
+      "request": {
+        "method": "GET",
+        "path": "/servint/dashboard/38668b57-5a37-44f8-adec-5594f02067a0/widgets",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "dashboard-widgets.json",
+      "body_sha256": "64065e00d056efc28aad7f18a60ab8f87806e5cc2208d8f316797d4c181a8d6f",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "dashboard-displaydata",
+      "request": {
+        "method": "GET",
+        "path": "/servint/dashboard/38668b57-5a37-44f8-adec-5594f02067a0/displayData",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "dashboard-displaydata.json",
+      "body_sha256": "b9d78a8ceff2fc66cea11c2d95d15d89ccb32d4f25ee4f599fc1b189f7f6a810",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "widget-types",
+      "request": {
+        "method": "GET",
+        "path": "/servint/widgets/types?perPage=100&sort=name%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "widget-types.json",
+      "body_sha256": "b6dc9292d1939464278870ba8c14803c91feefd4de23d393d12616b4fce47c43",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "widget-defs",
+      "request": {
+        "method": "GET",
+        "path": "/servint/widgets/definitions?perPage=100&sort=name%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "widget-defs.json",
+      "body_sha256": "555b92a31265fd0020972d8c2b24ef4e45a97377e257b25d96cacbb8d37eae11",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "my-widgets-A",
+      "request": {
+        "method": "GET",
+        "path": "/servint/widgets/instances/my-widgets",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 500,
+      "actual_status": 500,
+      "response_file": "my-widgets-A.json",
+      "body_sha256": "e72fc75982404e6f07f7b4b291ff10e2aa39e8451aa0039d8cac637b7925bfa8",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "settings",
+      "request": {
+        "method": "GET",
+        "path": "/servint/settings/appSettings?perPage=100&sort=key%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "settings.json",
+      "body_sha256": "9d400885db6e70151913a5b57720d192cb48a618de7834799d7c77e6f3cb0ddc",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f04-filter-nextvalue-gt5",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGeneratorSequences?filters=nextValue%3E5&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f04-filter-nextvalue-gt5.json",
+      "body_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f04-perpage-0",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?perPage=0&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f04-perpage-0.json",
+      "body_sha256": "65a4228726c46cdf65e7d8d383849bcaf5af129e2349e95aaf0a873138d57c9d",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f04-perpage-101",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?perPage=101&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f04-perpage-101.json",
+      "body_sha256": "5a4c594ffea81718918dc78a6223fc61fc4a0c4fce6ba0680cbf863b1c6e95a4",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f04-bad-sort",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?sort=noSuchProperty%3Basc&perPage=100",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "f04-bad-sort.json",
+      "body_sha256": "0440e16651495242eaf529572104408b1a113089781fb45d3783b835f5e53e52",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "f14-malformed-json",
+      "request": {
+        "method": "POST",
+        "path": "/servint/numberGenerators",
+        "user": "A",
+        "body": "{\"code\":\"broken\""
+      },
+      "expected_status": "unpinned",
+      "actual_status": 500,
+      "response_file": "f14-malformed-json.json",
+      "body_sha256": "fcdd2c39b2bf00af3a8729e2c1e1bc1d9ff1fe2a3379ec83d7581d442190a36e",
+      "normalization": "jq-S",
+      "result": "recorded"
+    },
+    {
+      "id": "f14-invalid-boolean",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGeneratorSequences?filters=enabled%3D%3Dnotabool&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": "unpinned",
+      "actual_status": 500,
+      "response_file": "f14-invalid-boolean.json",
+      "body_sha256": "68e03cff0da77da98ea7b829f52813759041c777feb13bcf1e627ff3c22611ae",
+      "normalization": "jq-S",
+      "result": "recorded"
+    },
+    {
+      "id": "f14-missing-tenant",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?perPage=10",
+        "user": "notenant",
+        "body": null
+      },
+      "expected_status": "unpinned",
+      "actual_status": 500,
+      "response_file": "f14-missing-tenant.json",
+      "body_sha256": "bed9ac53954f52fd124c960562a129d3f1df5242c99dc655b48ee272e0829d7b",
+      "normalization": "jq-S",
+      "result": "recorded"
+    },
+    {
+      "id": "f14-stats-notabool",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?stats=notabool&perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": "unpinned",
+      "actual_status": 200,
+      "response_file": "f14-stats-notabool.json",
+      "body_sha256": "5a4c594ffea81718918dc78a6223fc61fc4a0c4fce6ba0680cbf863b1c6e95a4",
+      "normalization": "jq-S",
+      "result": "recorded"
+    },
+    {
+      "id": "f14-perpage-nonnumeric",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?perPage=abc&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": "unpinned",
+      "actual_status": 200,
+      "response_file": "f14-perpage-nonnumeric.json",
+      "body_sha256": "5a4c594ffea81718918dc78a6223fc61fc4a0c4fce6ba0680cbf863b1c6e95a4",
+      "normalization": "jq-S",
+      "result": "recorded"
+    },
+    {
+      "id": "f14-duplicate-code",
+      "request": {
+        "method": "POST",
+        "path": "/servint/numberGenerators",
+        "user": "A",
+        "body": "{\"code\":\"m4gen\",\"name\":\"duplicate code probe\"}"
+      },
+      "expected_status": "unpinned",
+      "actual_status": 500,
+      "response_file": "f14-duplicate-code.json",
+      "body_sha256": "1d7943371d55d68ec770760f8739a2a4c4f7025d9fd25e8e2329dfe6226bb598",
+      "normalization": "jq-S",
+      "result": "recorded"
+    }
+  ]
+}

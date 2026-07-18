@@ -1,0 +1,17 @@
+id: TRC-004
+title: Year-based sequence reset implementation
+description: The current_year token and Okapi-timer-driven year reset; the repository lock query resets
+  all year-scoped sequences on year change.
+spec_ref: specs/requirements/numgen-year-reset.yaml#/id
+refs:
+- specs/decisions/010-okapi-timer-year-reset.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.service.numgen.NumberGeneratorService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.NumberGeneratorSequenceRepository#lockAllResetOnYearChange
+  kind: method
+- language: java
+  qualified_name: org.folio.servint.NumberGeneratorParityIT
+  kind: integration-test

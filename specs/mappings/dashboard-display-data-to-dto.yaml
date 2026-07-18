@@ -1,0 +1,29 @@
+# DashboardDisplayData entity → wire DTO — plain identity render.
+
+id: dashboard-display-data-to-dto
+name: DashboardDisplayData to DashboardDisplayDataDto
+description: >
+  Identity projection of the display-data record onto its wire shape
+  {id, dashId, layoutData}.
+source:
+  type: model
+  ref: specs/models/dashboard-display-data.yaml#/id
+target:
+  type: dto
+  ref: specs/api/dashboard-display-data-dto.yaml#/$id
+field_mappings:
+  - source_field: id
+    target_field: id
+    transform: identity
+  - source_field: dashId
+    target_field: dashId
+    transform: identity
+  - source_field: layoutData
+    target_field: layoutData
+    transform: identity
+refs:
+  - specs/models/dashboard-display-data.yaml#/id
+  - specs/api/dashboard-display-data-dto.yaml#/type
+  - specs/api/dashboard-display-data-dto.yaml#/properties/id
+  - specs/api/dashboard-display-data-dto.yaml#/properties/dashId
+  - specs/api/dashboard-display-data-dto.yaml#/properties/layoutData

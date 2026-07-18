@@ -1,0 +1,44 @@
+# Wire-compatible CRUD over number generators and their sequences
+# (legacy: NumberGeneratorController / NumberGeneratorSequenceController, kiwt).
+
+id: REQ-001
+title: Number generator and sequence CRUD
+description: >
+  When a client manages number generator configuration, the module shall
+  provide create, read, update, and delete operations for number generators
+  and their sequences at /servint/numberGenerators and
+  /servint/numberGeneratorSequences, preserving the legacy wire shapes:
+  generators expand their sequences fully; sequences expand checkDigitAlgo
+  and maximumCheck as refdata objects and carry an owner snippet
+  {id, name, code} when rendered outside the generator context.
+
+ears_pattern: event-driven
+priority: high
+
+refs:
+  - specs/project/project.yaml#/goals/0
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      POST /servint/numberGenerators with a generator payload (optionally
+      embedding sequences) creates the generator and returns it with
+      sequences fully expanded.
+  - id: AC2
+    text: >
+      Collection GETs honour the web-toolkit listing conventions (filters,
+      match+term, sort, perPage capped at 100, offset, stats envelope with
+      results and totalRecords when stats=true).
+  - id: AC3
+    text: >
+      PUT on an item updates it and returns the updated wire shape; GET on
+      an unknown id returns 404.
+  - id: AC4
+    text: >
+      DELETE /servint/numberGenerators/{id} deletes the generator and
+      cascades to all its sequences.
+  - id: AC5
+    text: >
+      Sequences listed or fetched via /servint/numberGeneratorSequences
+      include the owner snippet {id, name, code}; the same sequence rendered
+      inside its generator omits owner.

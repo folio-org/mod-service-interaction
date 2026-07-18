@@ -1,0 +1,13 @@
+# Sidecar for tenant-disable.feature — the disable job of `_tenant` 2.0
+# (module_from-only, purge=false POST; ADR-012 / D-26).
+
+source: specs/behavior/tenant-disable.feature
+mappings:
+  - element: "#/feature/Tenant disable/scenario/Disable answers 204 and keeps the data"
+    refs:
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant/post
+      - specs/requirements/tenant-lifecycle.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Tenant disable/scenario/Disable runs no migration and no seeding"
+    refs:
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant/post
+      - specs/requirements/tenant-lifecycle.yaml#/acceptance_criteria/AC4

@@ -1,0 +1,5 @@
+{
+  "error": 400,
+  "message": "Failure in SimpleLookupService. Invalid property: beta",
+  "timestamp": "2026-07-23T19:10:51.029285262Z"
+}

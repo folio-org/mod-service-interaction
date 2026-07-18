@@ -1,0 +1,29 @@
+# Sidecar for tenant-lifecycle.feature — `_tenant` 2.0 interface coverage.
+
+source: specs/behavior/tenant-lifecycle.feature
+mappings:
+  - element: "#/feature/Tenant lifecycle/scenario/Enable creates the tenant schema"
+    refs:
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant/post
+      - specs/requirements/tenant-lifecycle.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Tenant lifecycle/scenario/Reference parameter triggers seeding"
+    refs:
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant/post
+      - specs/requirements/tenant-lifecycle.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Tenant lifecycle/scenario/Purge drops the tenant schema"
+    refs:
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant/post
+      - specs/requirements/tenant-lifecycle.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Tenant lifecycle/scenario/Omitted purge flag is rejected instead of purging"
+    refs:
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant/post
+      - specs/requirements/tenant-lifecycle.yaml#/acceptance_criteria/AC6
+  - element: "#/feature/Tenant lifecycle/scenario/Non-Boolean or duplicate purge discriminators are rejected"
+    refs:
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant/post
+      - specs/requirements/tenant-lifecycle.yaml#/acceptance_criteria/AC6
+  - element: "#/feature/Tenant lifecycle/scenario/Operation status routes answer as declared"
+    refs:
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant~1{operationId}/get
+      - specs/api/servint-tenant.yaml#/paths/~1_~1tenant~1{operationId}/delete
+      - specs/requirements/tenant-lifecycle.yaml#/acceptance_criteria/AC5

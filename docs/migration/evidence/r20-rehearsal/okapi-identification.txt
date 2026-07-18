@@ -1,0 +1,23 @@
+Okapi identification — R20 rehearsal (run 2026-07-21)
+
+Image tag:      folioorg/okapi:latest (pulled 2026-07-21)
+RepoDigest:     folioorg/okapi@sha256:0a0d3c6230fa6644e5d064d55c215ee0de1c71c51369a948f57d953f4c9fd7da
+Image Id:       sha256:48976ccddca315f04ba0aa3e2006af34bfeeeb77bb4017bd0563785114931911
+Image created:  2026-07-20T17:44:37.949702009Z
+
+GET http://localhost:9130/_/version -> 7.0.6
+
+docker run command:
+  docker run -d --name okapi-r20 --network host folioorg/okapi:latest dev
+  (dev = in-memory storage, listens on 9130; container removed after the run)
+
+Port module container:
+  docker run -d --name msi-port-r20 --network host \
+    -e DB_HOST=localhost -e DB_PORT=54321 -e DB_DATABASE=okapi_modules_test \
+    -e DB_USERNAME=folio_admin -e DB_PASSWORD=folio_admin \
+    mod-service-interaction:r18
+  image Id sha256:decad90cb314fc80250331be5af23830d5782c8f79af3cc4fe77f04b05e31bb0 (R18 release image)
+
+Logging reverse proxies (proxy.py in this bundle, python3 stdlib):
+  :18080 -> http://localhost:8080  (legacy Grails module, host java process)
+  :18081 -> http://localhost:8081  (port container msi-port-r20)

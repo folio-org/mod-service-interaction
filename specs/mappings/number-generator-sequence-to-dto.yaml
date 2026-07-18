@@ -1,0 +1,95 @@
+# NumberGeneratorSequence entity → wire DTO. Legacy renderer:
+# numberGeneratorSequence/_numberGeneratorSequence.gson: refdata refs expanded
+# as {id, value, label}; owner rendered as a {id, name, code} snippet only
+# when the sequence is served outside its generator (kiwt sequence endpoints).
+
+id: number-generator-sequence-to-dto
+name: NumberGeneratorSequence to NumberGeneratorSequenceDto
+description: >
+  Identity projection of the sequence entity onto its wire shape.
+  checkDigitAlgo and maximumCheck are expanded from refdata foreign keys to
+  full refdata value objects; owner collapses to an {id, name, code} snippet
+  present only outside the generator context.
+source:
+  type: model
+  ref: specs/models/number-generator-sequence.yaml#/id
+target:
+  type: dto
+  ref: specs/api/number-generator-sequence-dto.yaml#/$id
+field_mappings:
+  - source_field: id
+    target_field: id
+    transform: identity
+  - source_field: code
+    target_field: code
+    transform: identity
+  - source_field: name
+    target_field: name
+    transform: identity
+  - source_field: prefix
+    target_field: prefix
+    transform: identity
+  - source_field: postfix
+    target_field: postfix
+    transform: identity
+  - source_field: format
+    target_field: format
+    transform: identity
+  - source_field: nextValue
+    target_field: nextValue
+    transform: identity
+  - source_field: preChecksumTemplate
+    target_field: preChecksumTemplate
+    transform: identity
+  - source_field: outputTemplate
+    target_field: outputTemplate
+    transform: identity
+  - source_field: description
+    target_field: description
+    transform: identity
+  - source_field: enabled
+    target_field: enabled
+    transform: identity
+  - source_field: resetOnYearChange
+    target_field: resetOnYearChange
+    transform: identity
+  - source_field: lastUsedYear
+    target_field: lastUsedYear
+    transform: identity
+  - source_field: maximumNumber
+    target_field: maximumNumber
+    transform: identity
+  - source_field: maximumNumberThreshold
+    target_field: maximumNumberThreshold
+    transform: identity
+  - source_field: checkDigitAlgo
+    target_field: checkDigitAlgo
+    transform: expand-refdata(refdata-value-to-dto)
+  - source_field: maximumCheck
+    target_field: maximumCheck
+    transform: expand-refdata(refdata-value-to-dto)
+  - source_field: owner
+    target_field: owner
+    transform: owner-snippet(id, name, code; only outside generator context)
+refs:
+  - specs/mappings/refdata-value-to-dto.yaml#/id
+  - specs/models/number-generator-sequence.yaml#/id
+  - specs/api/number-generator-sequence-dto.yaml#/type
+  - specs/api/number-generator-sequence-dto.yaml#/properties/id
+  - specs/api/number-generator-sequence-dto.yaml#/properties/code
+  - specs/api/number-generator-sequence-dto.yaml#/properties/name
+  - specs/api/number-generator-sequence-dto.yaml#/properties/prefix
+  - specs/api/number-generator-sequence-dto.yaml#/properties/postfix
+  - specs/api/number-generator-sequence-dto.yaml#/properties/format
+  - specs/api/number-generator-sequence-dto.yaml#/properties/nextValue
+  - specs/api/number-generator-sequence-dto.yaml#/properties/preChecksumTemplate
+  - specs/api/number-generator-sequence-dto.yaml#/properties/outputTemplate
+  - specs/api/number-generator-sequence-dto.yaml#/properties/description
+  - specs/api/number-generator-sequence-dto.yaml#/properties/enabled
+  - specs/api/number-generator-sequence-dto.yaml#/properties/resetOnYearChange
+  - specs/api/number-generator-sequence-dto.yaml#/properties/lastUsedYear
+  - specs/api/number-generator-sequence-dto.yaml#/properties/maximumNumber
+  - specs/api/number-generator-sequence-dto.yaml#/properties/maximumNumberThreshold
+  - specs/api/number-generator-sequence-dto.yaml#/properties/checkDigitAlgo
+  - specs/api/number-generator-sequence-dto.yaml#/properties/maximumCheck
+  - specs/api/number-generator-sequence-dto.yaml#/properties/owner

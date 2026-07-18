@@ -1,0 +1,40 @@
+# Controlled-vocabulary category (web-toolkit refdata pattern). Legacy
+# persistence: com.k_int.web.toolkit.refdata.RefdataCategory (cols rdc_*).
+# Categories are registered per domain.property (e.g.
+# NumberGeneratorSequence.CheckDigitAlgo, DashboardAccess.Access).
+
+id: refdata-category
+name: RefdataCategory
+description: >-
+  A named controlled-vocabulary category owning a set of RefdataValue rows.
+  The desc field carries the dotted domain.property registration key the
+  lookup endpoint resolves; internal categories are module-seeded
+  vocabularies. Legacy columns: rdc_id, rdc_version, rdc_description,
+  rdc_internal.
+fields:
+  - name: id
+    type: uuid
+    required: true
+    description: Unique identifier (36-char UUID, column rdc_id).
+  - name: desc
+    type: string
+    required: true
+    description: >-
+      Category name / registration key, e.g.
+      NumberGeneratorSequence.CheckDigitAlgo (column rdc_description).
+  - name: internal
+    type: boolean
+    required: false
+    nullable: true
+    description: >-
+      Whether the category is module-seeded rather than user-defined
+      (column rdc_internal).
+relationships:
+  - name: values
+    type: has_many
+    target: RefdataValue
+    description: The category's controlled values (RefdataValue.owner FK).
+refs:
+  - specs/requirements/refdata-management.yaml#/id
+  - specs/requirements/reference-data-seeding.yaml#/id
+  - specs/requirements/tenant-lifecycle.yaml#/id

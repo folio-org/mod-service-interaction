@@ -1,0 +1,55 @@
+# DashboardAccess entity → wire DTO. Legacy renderer:
+# dashboardAccess/_dashboardAccess.gson — access expanded as refdata;
+# dashboard expanded EXCEPT in the users actions
+# (getDashboardUsers/editDashboardUsers), where it renders as an id-only
+# reference (empirically verified against a running legacy module, M4).
+
+id: dashboard-access-to-dto
+name: DashboardAccess to DashboardAccessDto
+description: >
+  Projects the access grant onto its wire shape: the access refdata value is
+  expanded through the refdata mapping, the user relationship collapses to
+  its id stub, and the dashboard relationship is expanded through the
+  dashboard mapping except in the dashboard-users actions, where it renders
+  as an id-only reference. dateCreated renders second-precision UTC.
+source:
+  type: model
+  ref: specs/models/dashboard-access.yaml#/id
+target:
+  type: dto
+  ref: specs/api/dashboard-access-dto.yaml#/$id
+field_mappings:
+  - source_field: id
+    target_field: id
+    transform: identity
+  - source_field: dashboard
+    target_field: dashboard
+    transform: "expand-relation(dashboard-to-dto); id-stub in users actions"
+  - source_field: user
+    target_field: user
+    transform: id-stub(ExternalUser)
+  - source_field: access
+    target_field: access
+    transform: expand-refdata(DashboardAccess.Access)
+  - source_field: userDashboardWeight
+    target_field: userDashboardWeight
+    transform: identity
+  - source_field: defaultUserDashboard
+    target_field: defaultUserDashboard
+    transform: identity
+  - source_field: dateCreated
+    target_field: dateCreated
+    transform: "format-utc-seconds (yyyy-MM-dd'T'HH:mm:ss'Z')"
+refs:
+  - specs/mappings/dashboard-to-dto.yaml#/id
+  - specs/mappings/refdata-value-to-dto.yaml#/id
+  - specs/models/dashboard-access.yaml#/id
+  - specs/models/external-user.yaml#/id
+  - specs/api/dashboard-access-dto.yaml#/type
+  - specs/api/dashboard-access-dto.yaml#/properties/id
+  - specs/api/dashboard-access-dto.yaml#/properties/dashboard
+  - specs/api/dashboard-access-dto.yaml#/properties/user
+  - specs/api/dashboard-access-dto.yaml#/properties/access
+  - specs/api/dashboard-access-dto.yaml#/properties/userDashboardWeight
+  - specs/api/dashboard-access-dto.yaml#/properties/defaultUserDashboard
+  - specs/api/dashboard-access-dto.yaml#/properties/dateCreated

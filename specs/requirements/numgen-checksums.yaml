@@ -1,0 +1,58 @@
+# Check-digit algorithm parity — values are normalized refdata values of
+# category NumberGeneratorSequence.CheckDigitAlgo. Legacy backing:
+# commons-validator check-digit routines; fixtures from NumberGeneratorSpec.
+
+id: REQ-003
+title: Check digit algorithms
+description: >
+  The module shall compute the checksum of a generated number with the
+  algorithm selected by the sequence's checkDigitAlgo refdata value,
+  producing byte-identical results to the legacy commons-validator-backed
+  implementations for every seeded algorithm: ean13, isbn10checkdigit,
+  issncheckdigit, luhncheckdigit, 1793_ltr_mod10_r, and 12_ltr_mod10_r
+  (none or unset skips the checksum).
+
+ears_pattern: ubiquitous
+priority: high
+
+refs:
+  - specs/project/project.yaml#/goals/0
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      ean13 (EAN13 check digit). Fixtures: checksum input 001700002547's
+      final digit 7 is the EAN13 digit of 00170000254 (prefix 0017,
+      raw 254, format 0000000 renders 001700002547 as full output); prefix
+      069, postfix 1, format 000000000 renders 069-000000001-1-7.
+  - id: AC2
+    text: >
+      luhncheckdigit (Luhn). Fixture: nextValue 117707,
+      preChecksumTemplate 22356${generated_number}, format 00000000
+      renders 22356001177070.
+  - id: AC3
+    text: >
+      isbn10checkdigit (mod-11, X allowed). Fixtures: nextValue 100000,
+      format 000000000 renders 000100000-4; nextValue 30640615 with an
+      hyphenating substring template renders 0-306-40615-2.
+  - id: AC4
+    text: >
+      issncheckdigit (mod-11, X allowed). Fixtures: nextValue 317847,
+      format 0000000 renders 0317-8471; nextValue 1050124 renders
+      1050-124X.
+  - id: AC5
+    text: >
+      1793_ltr_mod10_r = inverted modulus-10 with weights [1,7,9,3]
+      applied left-to-right, inversion (10 - cs) % 10. Fixture: nextValue
+      771962, format 00000000, template ${generated_number}${checksum}077
+      renders 007719628077.
+  - id: AC6
+    text: >
+      12_ltr_mod10_r = inverted modulus-10 with weights [1,2] applied
+      left-to-right, inversion (10 - cs) % 10. Fixture: nextValue 7298,
+      preChecksumTemplate 05${generated_number}01, format 0000000 renders
+      050007298013.
+  - id: AC7
+    text: >
+      An unrecognized checkDigitAlgo value fails the request with a server
+      error (legacy: RuntimeException surfacing as HTTP 500).

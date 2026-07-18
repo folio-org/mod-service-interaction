@@ -1,0 +1,44 @@
+# NumberGenerator entity → wire DTO. Legacy renderer: numberGenerator/_numberGenerator.gson
+# (full render with sequences expanded).
+
+id: number-generator-to-dto
+name: NumberGenerator to NumberGeneratorDto
+description: >
+  Identity projection of the generator entity onto its wire shape; the owned
+  sequences collection is expanded in place (each element rendered through
+  the sequence mapping, without the owner snippet).
+source:
+  type: model
+  ref: specs/models/number-generator.yaml#/id
+target:
+  type: dto
+  ref: specs/api/number-generator-dto.yaml#/$id
+field_mappings:
+  - source_field: id
+    target_field: id
+    transform: identity
+  - source_field: code
+    target_field: code
+    transform: identity
+  - source_field: name
+    target_field: name
+    transform: identity
+  - source_field: description
+    target_field: description
+    transform: identity
+  - source_field: defaultSequenceCode
+    target_field: defaultSequenceCode
+    transform: identity
+  - source_field: sequences
+    target_field: sequences
+    transform: expand-collection(number-generator-sequence-to-dto, omit owner)
+refs:
+  - specs/mappings/number-generator-sequence-to-dto.yaml#/id
+  - specs/models/number-generator.yaml#/id
+  - specs/api/number-generator-dto.yaml#/type
+  - specs/api/number-generator-dto.yaml#/properties/id
+  - specs/api/number-generator-dto.yaml#/properties/code
+  - specs/api/number-generator-dto.yaml#/properties/name
+  - specs/api/number-generator-dto.yaml#/properties/description
+  - specs/api/number-generator-dto.yaml#/properties/defaultSequenceCode
+  - specs/api/number-generator-dto.yaml#/properties/sequences

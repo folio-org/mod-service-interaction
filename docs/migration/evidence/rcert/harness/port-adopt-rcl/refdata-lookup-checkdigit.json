@@ -1,0 +1,72 @@
+[
+  {
+    "id": "ff8081819f839030019f8b320e290042",
+    "label": "12-LTR-mod10-R",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "ff8081819f839030019f8b320e23003e",
+      "internal": true
+    },
+    "value": "12_ltr_mod10_r"
+  },
+  {
+    "id": "ff8081819f839030019f8b320e270041",
+    "label": "1793-LTR-mod10-R",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "ff8081819f839030019f8b320e23003e",
+      "internal": true
+    },
+    "value": "1793_ltr_mod10_r"
+  },
+  {
+    "id": "ff8081819f839030019f8b320e260040",
+    "label": "31-RTL-mod10-I (EAN)",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "ff8081819f839030019f8b320e23003e",
+      "internal": true
+    },
+    "value": "ean13"
+  },
+  {
+    "id": "ff8081819f839030019f8b320e2a0043",
+    "label": "2345678910-RTL-mod11-I-X (ISBN10)",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "ff8081819f839030019f8b320e23003e",
+      "internal": true
+    },
+    "value": "isbn10checkdigit"
+  },
+  {
+    "id": "ff8081819f839030019f8b320e2b0044",
+    "label": "8765432-LTR-mod11-I-X (ISSN)",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "ff8081819f839030019f8b320e23003e",
+      "internal": true
+    },
+    "value": "issncheckdigit"
+  },
+  {
+    "id": "ff8081819f839030019f8b320e2d0045",
+    "label": "21-RTL-mod10-I (Luhn)",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "ff8081819f839030019f8b320e23003e",
+      "internal": true
+    },
+    "value": "luhncheckdigit"
+  },
+  {
+    "id": "ff8081819f839030019f8b320e25003f",
+    "label": "None",
+    "owner": {
+      "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+      "id": "ff8081819f839030019f8b320e23003e",
+      "internal": true
+    },
+    "value": "none"
+  }
+]

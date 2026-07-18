@@ -1,0 +1,51 @@
+# ${current_year} token + year-based sequence reset (SI-151 feature parity).
+# Two reset paths: lazily at generation time (yearResetPending) and the
+# _timer-driven resetYearSequences sweep. Dossier §5.5 step 2, §5.6.
+
+id: REQ-004
+title: Year token and year-based sequence reset
+description: >
+  While a sequence has resetOnYearChange enabled, the module shall restart
+  its numbering at 1 on the first use after the UTC calendar year changes,
+  and shall expose the current UTC year to output templates as the
+  ${current_year} parameter. A timer-driven sweep proactively resets stale
+  year-scoped sequences for the tenant.
+
+ears_pattern: state-driven
+priority: medium
+
+refs:
+  - specs/project/project.yaml#/goals/0
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      ${current_year} in an output template renders the current UTC
+      calendar year. Fixtures: template ${current_year}-ABC
+      ${generated_number} with format 000 renders <year>-ABC 001; template
+      01A-${current_year}-${generated_number} with format 0000 renders
+      01A-<year>-0001.
+  - id: AC2
+    text: >
+      With resetOnYearChange=true and a stale non-null lastUsedYear
+      (differs from current UTC year), generation resets the sequence
+      in-transaction before issuing: fixtures render <year>-001 then
+      <year>-002 regardless of the pre-reset nextValue.
+  - id: AC3
+    text: >
+      With resetOnYearChange=false a stale lastUsedYear does not reset the
+      sequence: fixtures continue <year>-150 then <year>-151.
+  - id: AC4
+    text: >
+      Saving a sequence with resetOnYearChange=true whose outputTemplate
+      lacks the ${current_year} token is rejected with validation error
+      code resetOnYearChange.tokenMissing.
+  - id: AC5
+    text: >
+      POST /servint/numberGenerators/resetYearSequences (wired to the Okapi
+      _timer interface, unit=hour delay=24) locks all
+      resetOnYearChange=true sequences of the tenant and resets only those
+      with a stale non-null lastUsedYear to nextValue=1 and
+      lastUsedYear=current year, leaving current-year and reset-disabled
+      sequences untouched; it returns {currentYear, sequencesReset} and is
+      idempotent.

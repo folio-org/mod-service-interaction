@@ -1,0 +1,209 @@
+== Phase A: directed fixture (shared with r32-wildcard-oracle) ==
+CREATE "alpha" -> 201
+CREATE "alpha&&prefix==" -> 201
+CREATE "alpha\\&&prefix==" -> 201
+CREATE "alpha||prefix==" -> 201
+CREATE "alpha\\||prefix==" -> 201
+CREATE "alpha&prefix==" -> 201
+CREATE "alpha|prefix==" -> 201
+CREATE "alpha!x" -> 201
+CREATE "alpha\\!x" -> 201
+CREATE "alpha(x" -> 201
+CREATE "alpha\\(x" -> 201
+CREATE "alpha)x" -> 201
+CREATE "alpha\\)x" -> 201
+CREATE "a&b" -> 201
+CREATE "a|b" -> 201
+CREATE "alpha&&beta||gamma" -> 201
+CREATE "alpha\\&&beta\\||gamma" -> 201
+CREATE "alpha&beta|gamma" -> 201
+CREATE "alpha&&beta" -> 201
+CREATE "alpha\\&&beta" -> 201
+CREATE "alpha&beta" -> 201
+CREATE "alpha||beta" -> 201
+CREATE "alpha\\||beta" -> 201
+CREATE "alpha|beta" -> 201
+CREATE "alpha&&x" -> 201
+CREATE "alpha\\&&x" -> 201
+CREATE "alpha&x" -> 201
+CREATE "alpha\\&&x&&code==alpha" -> 201
+CREATE "ab_cd" -> 201
+CREATE "abXcd" -> 201
+CREATE "ab%cd" -> 201
+CREATE "abcd" -> 201
+CREATE "abXYcd" -> 201
+CREATE "ab\\%cd" -> 201
+BASELINE unfiltered perPage=100 -> HTTP 200 rows=42
+
+== Phase B: R31 escaped-token matrix ==
+c1 GET /servint/numberGenerators?perPage=100
+   decoded: (unfiltered baseline)
+   -> HTTP 200 rows=42 codes=["a&b", "ab%cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd", "alpha", "alpha!x", "alpha&&beta", "alpha&&beta||gamma", "alpha&&prefix==", "alpha&&x", "alpha&beta", "alpha&beta|gamma", "alpha&prefix==", "alpha&x", "alpha(x", "alpha)x", "alpha\\!x", "alpha\\&&beta", "alpha\\&&beta\\||gamma", "alpha\\&&prefix==", "alpha\\&&x", "alpha\\&&x&&code==alpha", "alpha\\(x", "alpha\\)x", "alpha\\||beta", "alpha\\||prefix==", "alpha|beta", "alpha|prefix==", "alpha||beta", "alpha||prefix==", "a|b", "inventory_accessionNumber", "inventory_callNumber", "inventory_itemBarcode", "openAccess", "organizations_vendorCode", "patronRequest", "serialsManagement_patternNumber", "users_patronBarcode"]
+c2 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha
+   decoded: code==alpha
+   -> HTTP 200 rows=1 codes=["alpha"]
+c3 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%26%26prefix%3D%3D
+   decoded: code==alpha&&prefix== (R22 dx2 re-confirm)
+   -> HTTP 200 rows=1 codes=["alpha&&prefix=="]
+c4 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%7C%7Cprefix%3D%3D
+   decoded: code==alpha||prefix== (R22 dx4 re-confirm)
+   -> HTTP 200 rows=1 codes=["alpha||prefix=="]
+c5 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%26%26code%3D%3Dalpha
+   decoded: code==alpha&&code==alpha (R22 c3)
+   -> HTTP 200 rows=1 codes=["alpha"]
+e1 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%5C%26%26prefix%3D%3D
+   decoded: code==alpha\&&prefix== (F-38 row 1)
+   -> HTTP 200 rows=1 codes=["alpha\\&&prefix=="]
+e2 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%5C%7C%7Cprefix%3D%3D
+   decoded: code==alpha\||prefix== (F-38 row 2)
+   -> HTTP 200 rows=1 codes=["alpha\\||prefix=="]
+e3 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%5C%26%26beta
+   decoded: code==alpha\&&beta
+   -> HTTP 200 rows=1 codes=["alpha\\&&beta"]
+e4 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%5C%7C%7Cbeta
+   decoded: code==alpha\||beta
+   -> HTTP 200 rows=1 codes=["alpha\\||beta"]
+e5 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%5C%26%26beta%5C%7C%7Cgamma
+   decoded: code==alpha\&&beta\||gamma
+   -> HTTP 200 rows=1 codes=["alpha\\&&beta\\||gamma"]
+q1 GET /servint/numberGenerators?perPage=100&filters=code%3D%3D%22alpha%5C%26%26beta%22
+   decoded: code=="alpha\&&beta"
+   -> HTTP 200 rows=0 codes=[]
+q2 GET /servint/numberGenerators?perPage=100&filters=code%3D%3D%22alpha%26%26beta%22
+   decoded: code=="alpha&&beta"
+   -> HTTP 200 rows=0 codes=[]
+x1 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%5C%21x
+   decoded: code==alpha\!x
+   -> HTTP 200 rows=1 codes=["alpha\\!x"]
+x2 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%5C%28x
+   decoded: code==alpha\(x
+   -> HTTP 200 rows=1 codes=["alpha\\(x"]
+x3 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%5C%29x
+   decoded: code==alpha\)x
+   -> HTTP 200 rows=1 codes=["alpha\\)x"]
+x4 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%21x
+   decoded: code==alpha!x (unescaped)
+   -> HTTP 200 rows=42 codes=["a&b", "ab%cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd", "alpha", "alpha!x", "alpha&&beta", "alpha&&beta||gamma", "alpha&&prefix==", "alpha&&x", "alpha&beta", "alpha&beta|gamma", "alpha&prefix==", "alpha&x", "alpha(x", "alpha)x", "alpha\\!x", "alpha\\&&beta", "alpha\\&&beta\\||gamma", "alpha\\&&prefix==", "alpha\\&&x", "alpha\\&&x&&code==alpha", "alpha\\(x", "alpha\\)x", "alpha\\||beta", "alpha\\||prefix==", "alpha|beta", "alpha|prefix==", "alpha||beta", "alpha||prefix==", "a|b", "inventory_accessionNumber", "inventory_callNumber", "inventory_itemBarcode", "openAccess", "organizations_vendorCode", "patronRequest", "serialsManagement_patternNumber", "users_patronBarcode"]
+x5 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%28x
+   decoded: code==alpha(x (unescaped)
+   -> HTTP 200 rows=42 codes=["a&b", "ab%cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd", "alpha", "alpha!x", "alpha&&beta", "alpha&&beta||gamma", "alpha&&prefix==", "alpha&&x", "alpha&beta", "alpha&beta|gamma", "alpha&prefix==", "alpha&x", "alpha(x", "alpha)x", "alpha\\!x", "alpha\\&&beta", "alpha\\&&beta\\||gamma", "alpha\\&&prefix==", "alpha\\&&x", "alpha\\&&x&&code==alpha", "alpha\\(x", "alpha\\)x", "alpha\\||beta", "alpha\\||prefix==", "alpha|beta", "alpha|prefix==", "alpha||beta", "alpha||prefix==", "a|b", "inventory_accessionNumber", "inventory_callNumber", "inventory_itemBarcode", "openAccess", "organizations_vendorCode", "patronRequest", "serialsManagement_patternNumber", "users_patronBarcode"]
+x6 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%29x
+   decoded: code==alpha)x (unescaped)
+   -> HTTP 200 rows=42 codes=["a&b", "ab%cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd", "alpha", "alpha!x", "alpha&&beta", "alpha&&beta||gamma", "alpha&&prefix==", "alpha&&x", "alpha&beta", "alpha&beta|gamma", "alpha&prefix==", "alpha&x", "alpha(x", "alpha)x", "alpha\\!x", "alpha\\&&beta", "alpha\\&&beta\\||gamma", "alpha\\&&prefix==", "alpha\\&&x", "alpha\\&&x&&code==alpha", "alpha\\(x", "alpha\\)x", "alpha\\||beta", "alpha\\||prefix==", "alpha|beta", "alpha|prefix==", "alpha||beta", "alpha||prefix==", "a|b", "inventory_accessionNumber", "inventory_callNumber", "inventory_itemBarcode", "openAccess", "organizations_vendorCode", "patronRequest", "serialsManagement_patternNumber", "users_patronBarcode"]
+l1 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Da%26b
+   decoded: code==a&b (lone &)
+   -> HTTP 200 rows=1 codes=["a&b"]
+l2 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Da%7Cb
+   decoded: code==a|b (lone |)
+   -> HTTP 200 rows=1 codes=["a|b"]
+m1 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%5C%26%26x%26%26code%3D%3Dalpha
+   decoded: code==alpha\&&x&&code==alpha
+   -> HTTP 200 rows=0 codes=[]
+m2 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%5C%26%26x%7C%7Ccode%3D%3Dalpha
+   decoded: code==alpha\&&x||code==alpha
+   -> HTTP 200 rows=2 codes=["alpha", "alpha\\&&x"]
+
+== Phase D (dx): directed disambiguation ==
+CREATE "\"alpha&&beta\"" -> 201
+CREATE "\"ab%cd\"" -> 201
+CREATE "a%b" -> 201
+CREATE "a\\b" -> 201
+CREATE "a\\\\b" -> 201
+BASELINE unfiltered perPage=100 -> HTTP 200 rows=47
+dq1 GET /servint/numberGenerators?perPage=100&filters=code%3D%3D%22alpha%26%26beta%22
+   decoded: code=="alpha&&beta" (row with literal quotes now exists)
+   -> HTTP 200 rows=1 codes=["\"alpha&&beta\""]
+dq2 GET /servint/numberGenerators?perPage=100&filters=code%3D%3D%22alpha%5C%26%26beta%22
+   decoded: code=="alpha\&&beta" (does a quoted escape match a quoted-raw row?)
+   -> HTTP 200 rows=0 codes=[]
+db1 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Da%5Cb
+   decoded: code==a\b (backslash before non-special char; rows a\b and a\\b exist)
+   -> HTTP 200 rows=1 codes=["a\\b"]
+db2 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Da%5C%5Cb
+   decoded: code==a\\b (double backslash)
+   -> HTTP 200 rows=1 codes=["a\\\\b"]
+
+== Phase M (mech): SQL-bind capture for the == path ==
+mb4 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%5C%26%26prefix%3D%3D
+   decoded: code==alpha\&&prefix== (F-38 row 1 with bind)
+   -> HTTP 200 rows=1 codes=["alpha\\&&prefix=="]
+   sql-bind: [alpha\&&prefix==]
+mb5 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Da%5Cb
+   decoded: code==a\b
+   -> HTTP 200 rows=1 codes=["a\\b"]
+   sql-bind: [a\b]
+
+== Phase S: operator tokens inside values (no structural/escaped tokens) ==
+CREATE "alpha==" -> 201
+CREATE "alpha=~" -> 201
+CREATE "alpha<" -> 201
+CREATE "alpha==beta" -> 201
+CREATE "alpha=~beta" -> 201
+CREATE "alpha<beta" -> 201
+CREATE "alpha>5" -> 201
+BASELINE unfiltered perPage=100 -> HTTP 200 rows=55
+s1 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%3D%3D
+   decoded: code==alpha==
+   -> HTTP 200 rows=1 codes=["alpha=="]
+s2 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%3D~
+   decoded: code==alpha=~
+   -> HTTP 200 rows=1 codes=["alpha=~"]
+s3 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%3C
+   decoded: code==alpha<
+   -> HTTP 200 rows=55 codes=["\"ab%cd\"", "\"alpha&&beta\"", "a%b", "a&b", "a\\\\b", "a\\b", "ab$2cd", "ab%cd", "abXYcd", "abXcd", "ab\\%cd", "ab_cd", "abcd", "alpha", "alpha!x", "alpha&&beta", "alpha&&beta||gamma", "alpha&&prefix==", "alpha&&x", "alpha&beta", "alpha&beta|gamma", "alpha&prefix==", "alpha&x", "alpha(x", "alpha)x", "alpha<", "alpha<beta", "alpha==", "alpha==beta", "alpha=~", "alpha=~beta", "alpha>5", "alpha\\!x", "alpha\\&&beta", "alpha\\&&beta\\||gamma", "alpha\\&&prefix==", "alpha\\&&x", "alpha\\&&x&&code==alpha", "alpha\\(x", "alpha\\)x", "alpha\\||beta", "alpha\\||prefix==", "alpha|beta", "alpha|prefix==", "alpha||beta", "alpha||prefix==", "a|b", "inventory_accessionNumber", "inventory_callNumber", "inventory_itemBarcode", "openAccess", "organizations_vendorCode", "patronRequest", "serialsManagement_patternNumber", "users_patronBarcode"]
+s4 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%3D%3Dbeta
+   decoded: code==alpha==beta
+   -> HTTP 200 rows=1 codes=["alpha==beta"]
+s5 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%3D~beta
+   decoded: code==alpha=~beta
+   -> HTTP 200 rows=1 codes=["alpha=~beta"]
+s6 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%3Cbeta
+   decoded: code==alpha<beta
+   -> HTTP 400 rows=-
+s7 GET /servint/numberGenerators?perPage=100&filters=code%3D~alpha%3D%3D
+   decoded: code=~alpha==
+   -> HTTP 200 rows=2 codes=["alpha==", "alpha==beta"]
+s8 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%3E5
+   decoded: code==alpha>5
+   -> HTTP 500 rows=-
+
+== Phase S2: absorbability per operator spelling ==
+CREATE "alpha=beta" -> 201
+CREATE "alpha!=beta" -> 201
+CREATE "alpha!~beta" -> 201
+CREATE "alpha=i=beta" -> 201
+CREATE "alpha<=beta" -> 201
+CREATE "alpha\"beta" -> 201
+BASELINE unfiltered perPage=100 -> HTTP 200 rows=61
+s9 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%3Dbeta
+   decoded: code==alpha=beta
+   -> HTTP 400 rows=-
+s10 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%21%3Dbeta
+   decoded: code==alpha!=beta
+   -> HTTP 200 rows=1 codes=["alpha!=beta"]
+s11 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%21~beta
+   decoded: code==alpha!~beta
+   -> HTTP 200 rows=1 codes=["alpha!~beta"]
+s12 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%3Di%3Dbeta
+   decoded: code==alpha=i=beta
+   -> HTTP 200 rows=1 codes=["alpha=i=beta"]
+s13 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%3C%3Dbeta
+   decoded: code==alpha<=beta
+   -> HTTP 200 rows=1 codes=["alpha<=beta"]
+s14 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%22beta
+   decoded: code==alpha"beta
+   -> HTTP 200 rows=1 codes=["alpha\"beta"]
+
+== Phase S3: >= / <> spellings + escaped-empty-RHS inside a real compound ==
+CREATE "alpha>=beta" -> 201
+CREATE "alpha<>beta" -> 201
+CREATE "alpha\\&&prefix==&&code==alpha" -> 201
+s15 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%3E%3Dbeta
+   decoded: code==alpha>=beta
+   -> HTTP 200 rows=1 codes=["alpha>=beta"]
+s16 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%3C%3Ebeta
+   decoded: code==alpha<>beta
+   -> HTTP 200 rows=1 codes=["alpha<>beta"]
+s17 GET /servint/numberGenerators?perPage=100&filters=code%3D%3Dalpha%5C%26%26prefix%3D%3D%26%26code%3D%3Dalpha
+   decoded: code==alpha\&&prefix==&&code==alpha (whole-absorb vs compound-split vs 400)
+   -> HTTP 200 rows=0 codes=[]

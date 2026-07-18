@@ -1,0 +1,51 @@
+diff-runs: A=/home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rver/harness/legacy  B=/home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rver/harness/port-adopt-rvl
+diff-runs: allowlist=/home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/harness/deviation-allowlist.tsv
+
+  dashboard-displaydata        byte-equal   
+  dashboard-users              byte-equal   
+  dashboard-widgets            sorted-equal array order only (D-4)
+  f04-bad-sort                 sorted-equal array order only (D-4)
+  f04-filter-nextvalue-gt5     byte-equal   
+  f04-perpage-0                sorted-equal array order only (D-4)
+  f04-perpage-101              sorted-equal array order only (D-4)
+  f14-duplicate-code           allowed      registered deviation D-24 — status 500 vs 409
+  f14-invalid-boolean          allowed      registered deviation D-28 — status 500 vs 200
+  f14-malformed-json           allowed      registered deviation D-22 — status 500 vs 400
+  f14-missing-tenant           allowed      registered deviation D-23 — status 500 vs 400
+  f14-perpage-nonnumeric       sorted-equal array order only (D-4)
+  f14-stats-notabool           sorted-equal array order only (D-4)
+  f21-10k-filter               allowed      registered deviation D-31 — body differs (status 400 on both); diff /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rver/harness/legacy/f21-10k-filter.json /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rver/harness/port-adopt-rvl/f21-10k-filter.json
+  f21-empty-rhs                byte-equal   
+  f21-escaped-literal          byte-equal   
+  f21-gt-notanumber            allowed      registered deviation D-30 — status 500 vs 200
+  f21-unbalanced-paren         allowed      registered deviation D-30 — status 500 vs 200
+  my-dashboards-A              sorted-equal array order only (D-4)
+  my-dashboards-B              byte-equal   
+  my-widgets-A                 allowed      registered deviation D-1 — status 500 vs 404
+  numgen                       sorted-equal array order only (D-4)
+  numgen-sequences             byte-equal   
+  r22-empty-and-trailing       byte-equal   
+  r22-empty-dotted-top         byte-equal   
+  r22-empty-leading            allowed      registered deviation D-32 — body differs (status 400 on both); diff /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rver/harness/legacy/r22-empty-leading.json /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rver/harness/port-adopt-rvl/r22-empty-leading.json
+  r22-empty-not                allowed      registered deviation D-32 — status 500 vs 200
+  r22-empty-or-paren           byte-equal   
+  r22-empty-top-unknown        byte-equal   
+  r22-uncoercible-compound     allowed      registered deviation D-30 — status 500 vs 200
+  r31-esc-and-empty            byte-equal   
+  r31-single-gt-numeric        allowed      registered deviation D-30 — status 500 vs 200
+  r31-single-lt-identifier     allowed      registered deviation D-32 — body differs (status 400 on both); diff /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rver/harness/legacy/r31-single-lt-identifier.json /home/taras_spashchenko/TS/github/mod-service-interaction/docs/migration/evidence/rver/harness/port-adopt-rvl/r31-single-lt-identifier.json
+  r32-cieq-pct                 byte-equal   
+  r32-contains-esc-pct         byte-equal   
+  r32-contains-pct             byte-equal   
+  r32-contains-underscore      byte-equal   
+  r32-match-multiterm          allowed      registered deviation D-33 — status 500 vs 200
+  r32-match-pct                byte-equal   
+  refdata-categories           sorted-equal array order only (D-4)
+  refdata-lookup-checkdigit    byte-equal   
+  settings                     byte-equal   
+  widget-defs                  byte-equal   
+  widget-types                 byte-equal   
+
+diff-runs: byte-equal=21 sorted-equal=9 allowed=14 diverged=0
+diff-runs: OK — no unregistered divergence
+diff-runs exit code: 0

@@ -1,0 +1,45 @@
+{
+  "side": "legacy",
+  "base_url": "http://localhost:8080",
+  "tenant": "rcw2bad",
+  "captured_at": "2026-07-22T19:06:50Z",
+  "probe_list": {
+    "file": "pre-probes.tsv",
+    "sha256": "3bbc48724e61f3554fde5daedffad9651f5ac61616f6c9d08b5bf59acaf67250"
+  },
+  "harness_git_rev": "63c8b2f",
+  "probe_count": 2,
+  "failed_probes": [],
+  "probes": [
+    {
+      "id": "numgen",
+      "request": {
+        "method": "GET",
+        "path": "/servint/numberGenerators?perPage=100&sort=code%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "numgen.json",
+      "body_sha256": "35790026954dc1e81be2152411dd29f5072ad78b11872d04d58a5b7eea18112b",
+      "normalization": "jq-S",
+      "result": "pass"
+    },
+    {
+      "id": "settings",
+      "request": {
+        "method": "GET",
+        "path": "/servint/settings/appSettings?perPage=100&sort=key%3Basc",
+        "user": "A",
+        "body": null
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "response_file": "settings.json",
+      "body_sha256": "91187617991b776f3bd0f89cad5ad81ad41f938ff369754a9b23ddcc140adbf0",
+      "normalization": "jq-S",
+      "result": "pass"
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+[
+  {
+    "code": "ab$2cd",
+    "id": "e8e37624-1d80-47bd-8215-ca40c3d3d706",
+    "name": "r32 broken-transform positive proof",
+    "sequences": []
+  },
+  {
+    "code": "ab%cd",
+    "id": "8afe2a86-b976-4680-825a-a5504efdd261",
+    "name": "r32 literal-percent discriminator",
+    "sequences": []
+  },
+  {
+    "code": "ab_cd",
+    "id": "a2782042-3d8e-4165-83bb-b713d2cd8c68",
+    "name": "r32 underscore discriminator",
+    "sequences": []
+  },
+  {
+    "code": "abXcd",
+    "id": "2171527a-f4bc-4d46-a927-f906b961a1e1",
+    "name": "r32 single-char discriminator",
+    "sequences": []
+  },
+  {
+    "code": "alpha\\&&prefix==",
+    "id": "08fd9347-7600-40b7-b53f-4faf4a53611f",
+    "name": "r31 raw absorb discriminator",
+    "sequences": []
+  },
+  {
+    "code": "inventory_accessionNumber",
+    "id": "56320c01-4e3b-4ca4-9cec-0c218c2bd5d2",
+    "name": "Inventory: Accession number",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f8f04e3019f906331810017",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f8f04e3019f9063317e0016",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "accessionNumber",
+        "enabled": true,
+        "format": "00000",
+        "id": "07b5a572-947c-43d4-9b0f-43f89fc3bdee",
+        "lastUsedYear": "2026",
+        "name": "Accession number",
+        "nextValue": 2,
+        "outputTemplate": "31A-2023-${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "inventory_callNumber",
+    "id": "f1b376a4-1628-4430-b8c4-688fc52aa04a",
+    "name": "Inventory: Call number",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f8f04e3019f906331810017",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f8f04e3019f9063317e0016",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "callNumber",
+        "enabled": true,
+        "format": "00000",
+        "id": "24c85d5b-edfc-44ac-bc04-f0d6ed7fadd2",
+        "name": "Call number",
+        "nextValue": 1,
+        "outputTemplate": "B 2023 / ${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "inventory_itemBarcode",
+    "id": "d57731a0-fd7d-4981-9b83-739a3814cf69",
+    "name": "Inventory: Item barcode",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f8f04e3019f906331810017",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f8f04e3019f9063317e0016",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "itemBarcode",
+        "enabled": true,
+        "format": "0000000000",
+        "id": "58986a0f-e6ce-4af3-a340-4b625aa06435",
+        "name": "Item barcode",
+        "nextValue": 1,
+        "outputTemplate": "${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "m4gen",
+    "id": "4597621d-8e51-48ea-90a4-b57da781aab1",
+    "name": "M4 Generator",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f8f04e3019f906331840018",
+          "label": "31-RTL-mod10-I (EAN)",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f8f04e3019f9063317e0016",
+            "internal": true
+          },
+          "value": "ean13"
+        },
+        "code": "checked",
+        "enabled": true,
+        "format": "000000000",
+        "id": "9f1efa44-1ad9-4764-8d20-b23bb7dc50b8",
+        "lastUsedYear": "2026",
+        "name": "checked",
+        "nextValue": 2,
+        "outputTemplate": "0698${generated_number}${checksum}",
+        "resetOnYearChange": false
+      },
+      {
+        "code": "plain",
+        "enabled": true,
+        "format": "00000",
+        "id": "1b90f45e-00cf-4430-b2d4-5286668245a0",
+        "lastUsedYear": "2026",
+        "name": "plain",
+        "nextValue": 4,
+        "prefix": "m4-",
+        "resetOnYearChange": false
+      }
+    ]
+  },
+  {
+    "code": "openAccess",
+    "id": "07e34e13-458f-474d-8949-e3de0e12d65e",
+    "name": "Open access: Publication request number",
+    "sequences": [
+      {
+        "checkDigitAlgo": {
+          "id": "ff8081819f8f04e3019f906331810017",
+          "label": "None",
+          "owner": {
+            "desc": "NumberGeneratorSequence.CheckDigitAlgo",
+            "id": "ff8081819f8f04e3019f9063317e0016",
+            "internal": true
+          },
+          "value": "none"
+        },
+        "code": "requestSequence",
+        "enabled": true,
+        "format": "000000000",
+        "id": "46366e50-506a-421c-87e6-40fbd3c8803b",
+        "name": "Request sequence",
+        "nextValue": 1,
+        "outputTemplate": "oa-${generated_number}",
+        "resetOnYearChange": false
+      }
+    ]
+  }
+]

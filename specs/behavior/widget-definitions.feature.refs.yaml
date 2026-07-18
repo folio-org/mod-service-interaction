@@ -1,0 +1,20 @@
+# Sidecar for widget-definitions.feature — local catalog coverage.
+
+source: specs/behavior/widget-definitions.feature
+mappings:
+  - element: "#/feature/Widget definitions/scenario/List local widget definitions"
+    refs:
+      - specs/api/servint-widgets.yaml#/paths/~1servint~1widgets~1definitions/get
+      - specs/requirements/widget-definitions.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Widget definitions/scenario/Fetch a single widget definition"
+    refs:
+      - specs/api/servint-widgets.yaml#/paths/~1servint~1widgets~1definitions~1{id}/get
+      - specs/requirements/widget-definitions.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Widget definitions/scenario/Serve definitions permission-free on the dashboard interface"
+    refs:
+      - specs/api/servint-widgets.yaml#/paths/~1dashboard~1definitions/get
+      - specs/requirements/widget-definitions.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Widget definitions/scenario/Definition wire shape renames and parses fields"
+    refs:
+      - specs/api/servint-widgets.yaml#/paths/~1servint~1widgets~1definitions~1{id}/get
+      - specs/requirements/widget-definitions.yaml#/acceptance_criteria/AC4

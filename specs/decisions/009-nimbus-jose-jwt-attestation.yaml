@@ -1,0 +1,41 @@
+# ADR-009 — RFC 8693 attested assertions are signed with nimbus-jose-jwt;
+# per-tenant RSA key pairs stay in the adopted db_key_pair table.
+
+id: ADR-009
+title: nimbus-jose-jwt RS256 attestation with adopted key-pair storage
+date: "2026-07-17"
+status: accepted
+
+context: >
+  REQ-016 defines the attested-assertion contract: short-lived RS256 JWTs
+  with a fixed claim set, signed with the tenant's earliest still-valid
+  RSA-2048 key pair, generating a key pair on demand when none is valid.
+  The legacy module stores key pairs per tenant in the db_key_pair table
+  (an internal model — api_surface: internal) and signs via Groovy JWT
+  tooling. Tokens already issued by the legacy module may still be within
+  their validity window at cutover, so verifiers must be able to validate
+  legacy-issued and Java-issued tokens interchangeably.
+
+decision: >
+  Sign attestation JWTs with nimbus-jose-jwt (the de-facto JOSE library in
+  the Spring ecosystem): RSA keys handled as JWK objects, RS256 signing,
+  claim set assembled exactly per the spec. Key pairs are persisted in the
+  unchanged db_key_pair table via a JPA entity, preserving the legacy
+  encoding so keys created by either module are readable by both.
+  Selection keeps the earliest-valid-key rule; generation uses RSA-2048
+  via the JCA provider. No key rotation policy change in the parity
+  release.
+
+consequences:
+  positive:
+    - Cutover is seamless for token verifiers — same keys, same claims,
+      same algorithm, regardless of which module signed.
+    - nimbus-jose-jwt is actively maintained and audited, replacing
+      bespoke Groovy signing code.
+  negative:
+    - The legacy private-key persistence encoding must be reverse-verified
+      byte-level in M4 before adoption is trusted.
+
+refs:
+  - specs/requirements/attested-assertions.yaml#/id
+  - specs/requirements/nfr-data-continuity.yaml#/id

@@ -1,0 +1,41 @@
+id: TRC-020
+title: Tenant lifecycle implementation
+description: "folio-spring `_tenant` 2.0 lifecycle (ADR-012): enable/upgrade with the\
+  \ legacy-identical schema name and the Liquibase master changelog chaining the adoption\
+  \ baseline; purge via blank module_to + purge=true; disable via module_from-only\
+  \ purge=false POST intercepted by ServintTenantController.postTenant and answered 204\
+  \ through ServintTenantService.disableTenant with no Liquibase, no seeding, and\
+  \ tenant-cache eviction (D-26); operation-status routes answered synchronously.\
+  \ TenantEnableIT proves all five declared behaviors (enable 204 + schema, idempotent\
+  \ repeat, GET/DELETE operation routes, side-effect-free disable via\
+  \ okapiShapedDisableIsSideEffectFree, purge drop)."
+spec_ref: specs/requirements/tenant-lifecycle.yaml#/id
+refs:
+- specs/decisions/003-spring-boot-folio-spring-stack.yaml#/id
+- specs/decisions/006-schema-per-tenant-resolution.yaml#/id
+- specs/decisions/012-tenant-interface-2-0.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.ServiceInteractionApplication
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.service.ServintTenantService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.service.ServintTenantService#disableTenant
+  kind: method
+- language: java
+  qualified_name: org.folio.servint.controller.ServintTenantController
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.controller.ServintTenantController#postTenant
+  kind: method
+- language: xml
+  qualified_name: src/main/resources/db/changelog/changelog-master.xml
+  kind: liquibase-changelog
+- language: java
+  qualified_name: org.folio.servint.TenantEnableIT
+  kind: integration-test
+- language: java
+  qualified_name: org.folio.servint.SchemaNameParityTest
+  kind: integration-test

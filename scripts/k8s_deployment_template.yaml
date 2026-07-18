@@ -46,8 +46,24 @@ spec:
             - name: EVENTS_CONSUMER_ZK_CONNECT
               value: "reshare-zookeeper-release:2181"
           ports:
-            - containerPort: 8080
+            - containerPort: 8081
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /admin/health
+              port: 8081
+            initialDelaySeconds: 45
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /admin/health
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           resources:
             requests:
               memory: 768Mi
@@ -64,4 +80,34 @@ spec:
   selector:
     app: $MOD_DEPLOY_AS
   ports:
-    - port: 8080
+    - port: 8081
+      targetPort: 8081
+---
+# Attestation trust boundary (DP-3(a)): the module trusts the
+# X-Okapi-User-Id header on /servint/attestation/token, so the module port
+# must be reachable ONLY from the Okapi gateway. Direct module-port exposure
+# voids the assertion trust — see the attestation trust-boundary ADR and the
+# README security section.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: $MOD_DEPLOY_AS-okapi-only
+  namespace: "reshare"
+spec:
+  podSelector:
+    matchLabels:
+      app: $MOD_DEPLOY_AS
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        # PLACEHOLDER: replace with the label selector that identifies the
+        # Okapi gateway pods in YOUR cluster (the value below matches a
+        # deployment where Okapi pods carry app: okapi). Widening this
+        # selector re-opens the trust boundary.
+        - podSelector:
+            matchLabels:
+              app: okapi
+      ports:
+        - protocol: TCP
+          port: 8081

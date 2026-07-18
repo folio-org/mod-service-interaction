@@ -1,0 +1,39 @@
+# NFR: production data continuity. Validated by migration rehearsal against
+# production-shaped schemas (M4), not by behavior scenarios.
+
+id: NFR-002
+title: Data continuity
+description: >
+  The Java module shall adopt existing production tenant schemas without
+  transformation or data loss: the legacy tables and columns (uuid2
+  char(36) identifiers, legacy column prefixes) are mapped as-is, the
+  Liquibase changelog history is adopted so no changeset re-runs, and no
+  destructive migration is introduced. Critical live state must survive
+  cutover: sequence nextValue counters (no number ever issued twice),
+  stored signing key pairs, and every dashboard, widget, access, refdata,
+  and settings row.
+
+ears_pattern: ubiquitous
+priority: high
+no_api_coverage_expected: true
+
+refs:
+  - specs/project/project.yaml#/goals/3
+  - specs/decisions/001-spec-first-parity-migration.yaml#/id
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      The new module starts against an untouched legacy tenant schema —
+      same tables and columns, adopted changelog history, no destructive
+      migration.
+  - id: AC2
+    text: >
+      Sequence nextValue state survives cutover exactly: the first number
+      generated after the upgrade continues the legacy count and no number
+      is ever issued twice across the boundary.
+  - id: AC3
+    text: >
+      Stored key pairs continue signing and verifying after cutover, and
+      all dashboard, widget, access, refdata, and settings rows remain
+      readable with their legacy identifiers.

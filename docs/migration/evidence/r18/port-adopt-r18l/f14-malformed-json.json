@@ -1,0 +1,8 @@
+{
+  "errors": [
+    {
+      "code": "malformed.json",
+      "message": "JSON request body could not be parsed"
+    }
+  ]
+}

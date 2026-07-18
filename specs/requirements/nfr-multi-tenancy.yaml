@@ -1,0 +1,35 @@
+# NFR: schema-per-tenant isolation parity. Validated by tenant lifecycle
+# and isolation testing, not by behavior scenarios.
+
+id: NFR-003
+title: Multi-tenancy
+description: >
+  The Java module shall preserve schema-per-tenant multi-tenancy: every
+  request resolves its tenant schema from the x-okapi-tenant header using
+  the legacy OkapiTenantResolver naming convention, tenant data is fully
+  isolated per schema, and timer-driven operations (the year-reset timer)
+  execute per tenant.
+
+ears_pattern: ubiquitous
+priority: high
+no_api_coverage_expected: true
+
+refs:
+  - specs/project/project.yaml#/goals/3
+  - specs/decisions/001-spec-first-parity-migration.yaml#/id
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      Every request resolves its tenant schema from the x-okapi-tenant
+      header with the legacy schema naming convention, so existing schemas
+      are addressed unchanged.
+  - id: AC2
+    text: >
+      Tenant data is fully isolated: no operation can read or write another
+      tenant's schema.
+  - id: AC3
+    text: >
+      Timer-driven operations run once per tenant (the Okapi _timer
+      interface drives resetYearSequences per tenant, hourly unit with
+      delay 24).

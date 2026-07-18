@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generic Widget Definition Schema",
+  "type": "object",
+  "description": "The generic shape a widget definition must contain",
+  "additionalProperties": false,
+  "required": ["type", "name", "version", "definition"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the WidgetDefinition, eg ERM Agreements"
+    },
+    "version": {
+      "type": "string",
+      "description": "The version of this WidgetDefinition, of the form 1.0",
+      "pattern": "^(0|(?:[1-9]\\d*))\\.(0|(?:[1-9]\\d*))$"
+    },
+    "type": { "$ref": "#/$defs/type" },
+    "definition": { "$ref": "#/$defs/definition" }
+  },
+  "$defs": {
+    "type": {
+      "type": "object",
+      "title": "Widget Definition Type",
+      "description": "The WidgetType that this definition is created for",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the relevant WidgetType"
+        },
+        "version": {
+          "type": "string",
+          "description": "The version of the relevant WidgetType, of the form 1.0",
+          "pattern": "^(0|(?:[1-9]\\d*))\\.(0|(?:[1-9]\\d*))$"
+        }
+      }
+    },
+    "definition": {
+      "type": "object",
+      "title": "Widget Definition",
+      "description": "The actual JSON definition of an example widget for the specified type",
+      "additionalProperties": true
+    }
+  }
+}

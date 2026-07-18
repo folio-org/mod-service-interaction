@@ -1,0 +1,57 @@
+server:
+  port: 8081
+spring:
+  application:
+    # MUST stay exactly "mod-service-interaction": folio-spring derives the
+    # per-tenant DB schema as <tenant>_mod_service_interaction from this name,
+    # which must match the schemas the legacy Grails module created (ADR-006).
+    name: mod-service-interaction
+  datasource:
+    username: ${DB_USERNAME:folio_admin}
+    password: ${DB_PASSWORD:folio_admin}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_DATABASE:okapi_modules}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog-master.xml
+  jackson:
+    default-property-inclusion: non_null
+    deserialization:
+      fail-on-unknown-properties: false
+folio:
+  okapi-url: ${OKAPI_URL:http://localhost:9130}
+  # Enables folio-spring's RestClient/HttpServiceProxyFactory stack with
+  # Okapi URL + header enrichment — the federation transport (ADR-008).
+  exchange:
+    enabled: true
+  tenant:
+    validation:
+      enabled: true
+  widgets:
+    definition-cache:
+      # Bounds the per-tenant widget-definition harvest cache (re-review
+      # finding F-23): size eviction above max-tenants plus expiry after
+      # inactivity. Metrics: cache.* meters tagged
+      # cache=widget-definition-tenant-cache.
+      max-tenants: 500
+      expire-after-access: 30m
+management:
+  endpoints:
+    web:
+      base-path: /admin
+      exposure:
+        # metrics added per review F-36: the cache.* meters (widget-definition
+        # tenant cache, F-23) must be scrapeable over the admin surface, not
+        # only visible to the in-process registry. No exporter dependency —
+        # the plain metrics endpoint under /admin is the deployment contract.
+        # loggers dropped per review-4 F-43 (DP-2(a)): this surface is
+        # unauthenticated, and an exposed loggers endpoint allows anyone who
+        # can reach the module port to flip log levels. Re-enablement is a
+        # per-deployment decision at that deployment's own risk — see the
+        # README ops section. ManagementSurfaceIT pins this exact surface.
+        include: health, metrics

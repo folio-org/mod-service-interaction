@@ -1,0 +1,21 @@
+138a139,158
+> widget_definition|wdef_definition|text|YES|
+> widget_definition|wdef_definition_version|character varying|YES|
+> widget_definition|wdef_id|character varying|NO|
+> widget_definition|wdef_name|character varying|YES|
+> widget_definition|wdef_type_name|character varying|YES|
+> widget_definition|wdef_type_version|character varying|YES|
+> widget_definition|wdef_version|bigint|NO|
+> widget_instance|wins_configuration|text|YES|
+> widget_instance|wins_definition_name|character varying|YES|
+> widget_instance|wins_definition_version|character varying|YES|
+> widget_instance|wins_id|character varying|NO|
+> widget_instance|wins_name|character varying|YES|
+> widget_instance|wins_owner_fk|character varying|YES|
+> widget_instance|wins_version|bigint|NO|
+> widget_instance|wins_weight|bigint|YES|
+> widget_type|wtype_id|character varying|NO|
+> widget_type|wtype_name|character varying|YES|
+> widget_type|wtype_schema|text|YES|
+> widget_type|wtype_type_version|character varying|YES|
+> widget_type|wtype_version|bigint|NO|

@@ -1,0 +1,38 @@
+# Dashboard aggregate — a named widget canvas. Legacy persistence:
+# cols dshb_*, id uuid2 char(36); widgets cascade all-delete-orphan.
+
+id: dashboard
+name: Dashboard
+description: >-
+  A user-configurable dashboard: a named canvas owning an ordered set of
+  widget instances. Access is governed per (dashboard, user) through
+  DashboardAccess objects; layout lives in a separate DashboardDisplayData
+  record keyed by dashId. Persisted per tenant (schema-per-tenant).
+  Legacy columns: dshb_id, dshb_version, dshb_name, dshb_description.
+fields:
+  - name: id
+    type: uuid
+    required: true
+    description: Unique identifier (36-char UUID, column dshb_id).
+  - name: name
+    type: string
+    required: false
+    nullable: true
+    description: Display name (column dshb_name).
+  - name: description
+    type: string
+    required: false
+    nullable: true
+    description: Optional free-text description (column dshb_description).
+relationships:
+  - name: widgets
+    type: has_many
+    target: WidgetInstance
+    description: >-
+      Owned widget instances; deleting the dashboard cascades to them
+      (all-delete-orphan). Rendered on the wire only as summaries
+      {id, weight, name}.
+refs:
+  - specs/requirements/dashboard-crud.yaml#/id
+  - specs/requirements/dashboard-access-control.yaml#/id
+  - specs/requirements/dashboard-provisioning.yaml#/id

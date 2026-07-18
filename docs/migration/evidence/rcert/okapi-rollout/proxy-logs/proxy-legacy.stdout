@@ -1,0 +1,1 @@
+proxy :18080 -> localhost:8080 side=legacy

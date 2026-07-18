@@ -1,0 +1,151 @@
+# The web-toolkit (kiwt) listing grammar — the authoritative definition of
+# the filter/match/sort/paging semantics that every per-domain "collection
+# GETs honour the web-toolkit listing conventions" acceptance criterion
+# delegates to. Derived from web-toolkit-ce 10.6.4 SimpleLookupWtk.g4 +
+# SimpleLookupServiceListenerWtk and pinned by review findings F-04/F-14.
+
+id: REQ-022
+title: Web-toolkit listing grammar
+description: >
+  When a collection GET carries web-toolkit listing parameters, the module
+  shall evaluate the full legacy filter grammar — equality and inequality,
+  ordering comparisons, case-insensitive equality and containment,
+  null/set/empty predicates, conjunction, disjunction, negation,
+  parenthesized groups, middle-subject ranges, and repeated filters
+  parameters combined with AND, with any comparison lacking a right side
+  dropped as legacy drops it — against dotted property paths with values
+  coerced to the target property type, shall honour the
+  legacy paging contract (default page size 10, silent clamp to 100,
+  page/max aliases), shall tolerate bad sort and malformed filter input
+  without failing the request, and shall answer stats requests with the
+  legacy envelope.
+
+ears_pattern: event-driven
+priority: high
+
+refs:
+  - specs/project/project.yaml#/goals/1
+  - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators/get
+  - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGeneratorSequences/get
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      Filter operators behave as in legacy: == and = are equality and !=
+      and <> inequality, comparing the RAW value literally (%, _ and
+      backslashes included); > >= < <= compare with values coerced to the
+      property type; =~ is case-insensitive containment, !~ its negation,
+      and =i= the same case-insensitive match WITHOUT the containment
+      wrap, and all three share the measured legacy ilike pipeline
+      (empirical anchor docs/migration/evidence/r32-wildcard-oracle,
+      bind-level proof): every % preceded by a non-backslash character is
+      replaced, scanning left to right without overlap, by the literal
+      two characters $2 — legacy's broken escape replacement, replicated
+      bug for bug under DP-1(a) — while a LEADING % survives as a live
+      wildcard, _ is always a live single-character wildcard (even under
+      =i= "equality"), \% and \_ are escaped literals, and remaining
+      backslashes act as LIKE escapes in the pattern; a comparison whose
+      right side is empty (a==,
+      a!=, a=i=, a=~ and so on) is dropped like any malformed clause and
+      the request answers 200 with the unfiltered result — the drop
+      precedes property validation and join planning, so an empty right
+      side on an unknown property (notAProp==) or on a dotted association
+      path (checkDigitAlgo.value==) drops identically and leaves no join
+      behind — nullness is expressed only through the dedicated
+      predicates: is null, is not null, is set, is not set, is empty,
+      and is not empty; dotted property paths traverse associations.
+  - id: AC2
+    text: >
+      Filter expressions compose as in legacy: && conjunction, ||
+      disjunction, ! negation, parenthesized groups, middle-subject ranges
+      (v1<prop<v2), and each repeated filters query parameter is combined
+      with AND. Same-level chains of three or more && or || terms associate
+      as a flat N-ary conjunction or disjunction (the legacy top-two
+      pairing quirk is deliberately not replicated; registered deviation).
+  - id: AC3
+    text: >
+      Paging follows the legacy contract: page size defaults to 10 when
+      perPage is absent or 0; values above 100 are silently clamped to 100
+      and the request still answers 200; max is honoured as a perPage
+      alias; page is 1-based and takes precedence over offset, which is
+      otherwise used to derive the page; stats=true answers the envelope
+      with exactly results, pageSize, page, totalPages, meta, totalRecords,
+      and total, where total equals totalRecords and meta is empty.
+  - id: AC4
+    text: >
+      Bad input is tolerated: an unknown or non-sortable sort property is
+      silently skipped and the request answers 200; a syntactically
+      malformed filter clause is dropped and the request answers 200; a
+      well-formed filter naming an unknown property answers 400 with an
+      invalid-property message; match properties that are unknown are
+      skipped; a filter value that cannot be coerced to a numeric, UUID,
+      or date property drops the whole filters parameter — alone or
+      inside a compound — and answers 200, and a boolean property
+      compared to a non-boolean value coerces to false and answers 200
+      (legacy answered 500 on both, alone or inside a compound — a defect
+      deliberately not replicated; registered deviation); and
+      unparseable values of the
+      stats, perPage, max, page, and offset parameters behave as if the
+      parameter were absent (the Grails params.boolean/params.int
+      leniency), never rejecting the request.
+  - id: AC6
+    text: >
+      A && or || expression in which a comparison leaf has an empty right
+      side is not evaluated as a compound, matching the legacy grammar's
+      greedy value consumption (registered deviation D-32; empirical
+      anchor docs/migration/evidence/r22-legacy-compound): when text
+      follows the empty right side, that comparison absorbs the entire
+      remainder of the parameter as its literal value —
+      code==alpha&&prefix==&&code==gamma evaluates as code==alpha
+      combined by AND with prefix equal to the literal "&&code==gamma" —
+      and when the empty right side ends the parameter, the whole
+      parameter, outer parentheses stripped, collapses into a single
+      comparison of the first subject and first operator against the
+      literal remainder — code==alpha&&prefix== evaluates as code equal
+      to the literal "alpha&&prefix==", and (code==alpha||prefix==) the
+      same way; the resulting comparisons then follow the normal rules,
+      including the 400 invalid-property answer when an absorbed subject
+      is not a property of the listed entity; a negated (!) expression
+      containing an empty right side drops the whole parameter and
+      answers 200 (legacy answers 500 — a defect deliberately not
+      replicated; registered deviation D-32).
+  - id: AC5
+    text: >
+      Text matching follows legacy getTextMatches: the term is split on
+      whitespace with double-quoted phrases kept intact; each term must
+      match (AND) within a property as case-insensitive containment in
+      which % and _ pass through as LIVE wildcards and \% and \_ as
+      escaped literals — the term is never transformed or escaped
+      (empirical anchor docs/migration/evidence/r32-wildcard-oracle
+      t1-t5/mp8/d12); the
+      per-property clauses combine with OR across the match properties; the
+      whole text block combines with AND against the filter block; results
+      are distinct.
+  - id: AC7
+    text: >
+      A filter value is the RAW source text between its comparison
+      operator and the next unescaped && or || at the same level (or the
+      end of the parameter): backslashes are RETAINED — legacy never
+      unescapes, so code==a\b matches only a row literally holding a\b —
+      quote characters are ordinary literal value text with no grouping
+      or escaping power, lone & and | are legal value characters, and an
+      escape's only effect is at the lexer, where \& or \| consumes one
+      character so a structural && or || cannot pair
+      (code==alpha\&&prefix== is ONE comparison against the literal
+      alpha\&&prefix==). The operator spellings == =~ =i= != !~ <= >= <>
+      are legal INSIDE a value: a leaf whose remainder carries them
+      collapses into one comparison against that raw remainder
+      (code==alpha==beta matches the literal alpha==beta), while a REAL
+      unescaped && or || whose right side stands alone still splits the
+      compound — absorption never crosses it. A single = < or > cannot
+      live inside a value: when the text after the last one is
+      identifier-shaped the expression re-shapes so that text becomes the
+      subject and answers 400 invalid-property (code==alpha<beta answers
+      Invalid property: beta); a bare trailing single operator voids the
+      whole filter and answers 200 unfiltered, and a non-identifier tail
+      voids it likewise where legacy answers an uncaught 500 (a defect
+      deliberately not replicated; registered deviation, D-30 family).
+      An unescaped ! ( or ) inside a value voids the whole filter and
+      answers 200 unfiltered, exactly as legacy drops it. Empirical
+      anchor: docs/migration/evidence/r31-escaped-oracle (Phases B, S,
+      S2, S3 with legacy parse trees and SQL binds).

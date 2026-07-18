@@ -1,0 +1,51 @@
+# Maximum-value guard rails on sequences: hard ceiling, warning threshold,
+# and the derived maximumCheck refdata state. Dossier §5.5 step 4, §3.
+
+id: REQ-005
+title: Sequence maximum limits and warnings
+description: >
+  While a sequence defines maximumNumber and optionally
+  maximumNumberThreshold, the module shall guard every generation against
+  those bounds — refusing values beyond the maximum and warning as the
+  sequence approaches or hits it — and shall maintain the derived
+  maximumCheck refdata state on the sequence.
+
+ears_pattern: state-driven
+priority: medium
+
+refs:
+  - specs/project/project.yaml#/goals/0
+
+acceptance_criteria:
+  - id: AC1
+    text: >
+      A raw next value greater than maximumNumber yields ERROR/MaxReached
+      with no nextValue; the transaction rolls back so nothing is persisted
+      and the sequence value is not consumed.
+  - id: AC2
+    text: >
+      A raw next value equal to maximumNumber generates the number and
+      yields WARNING/HitMaximum (also when maximumNumberThreshold equals
+      maximumNumber).
+  - id: AC3
+    text: >
+      A raw next value at or above maximumNumberThreshold but below
+      maximumNumber generates the number and yields WARNING/OverThreshold.
+  - id: AC4
+    text: >
+      A raw next value below the threshold (or with no threshold set, below
+      the maximum) yields status OK.
+  - id: AC5
+    text: >
+      When the generation call cannot compute a raw next value (the
+      computed next number comes back null — the sequence vanished or
+      generation failed mid-request), the envelope is ERROR/NoNextValue
+      with the message "Unable to determine next value in the sequence"
+      and the transaction rolls back. A stored null nextValue is not this
+      case: it issues 1, per REQ-002 AC3.
+  - id: AC6
+    text: >
+      On every save the sequence's maximumCheck refdata value is derived:
+      at_maximum when nextValue exceeds maximumNumber; over_threshold when
+      it exceeds maximumNumberThreshold; below_threshold when both bounds
+      are set but not crossed; null when maximumNumber is unset.

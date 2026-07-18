@@ -1,0 +1,13 @@
+f21-invalid-boolean	GET	500	application/json;charset=UTF-8	101	"-"	/servint/numberGeneratorSequences
+f21-empty-rhs	GET	200	application/json;charset=UTF-8	5693	11	/servint/numberGeneratorSequences
+f21-escaped-literal	GET	200	application/json;charset=UTF-8	2	0	/servint/numberGeneratorSequences
+f21-unbalanced-paren	GET	500	application/json;charset=UTF-8	101	"-"	/servint/numberGeneratorSequences
+f21-gt-notanumber	GET	500	application/json;charset=UTF-8	101	"-"	/servint/numberGeneratorSequences
+f21-10k-filter	GET	400	-	0		/servint/numberGeneratorSequences
+f21-baseline-plain	GET	200	application/json;charset=UTF-8	277	1	/servint/numberGeneratorSequences
+f14-malformed-json	POST	500	application/json;charset=UTF-8	101	"-"	/servint/numberGenerators
+f14-missing-tenant	GET	500	application/json;charset=UTF-8	101	"-"	/servint/numberGenerators?perPage=10
+f14-stats-notabool	GET	200	application/json;charset=UTF-8	5542	9	/servint/numberGenerators?stats=notabool&perPage=100&sort=code%3Basc
+f14-perpage-nonnumeric	GET	200	application/json;charset=UTF-8	5542	9	/servint/numberGenerators?perPage=abc&sort=code%3Basc
+f14-duplicate-code	POST	500	application/json;charset=UTF-8	101	"-"	/servint/numberGenerators
+widget-def-create-duplicate	POST	500	text/html; charset=UTF-8	101	"-"	/servint/widgets/definitions

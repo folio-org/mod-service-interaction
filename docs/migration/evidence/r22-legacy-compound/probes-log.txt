@@ -1,0 +1,116 @@
+# R22 Phase 1 — legacy compound/empty-RHS oracle, tenant r22o, 2026-07-21.
+# Execution order: setup (below) -> populate.sh (populate-legacy/) -> pre-matrix
+# fixture additions -> probe matrix -> phase-2 discriminators + stability re-runs.
+== setup: tenant create
+curl -sS --connect-timeout 5 --max-time 60 -X POST 'http://localhost:8080/_/tenant' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' -H 'Content-Type: application/json' --data '{"module_to":"mod-service-interaction-4.4.0-SNAPSHOT","parameters":[{"key":"loadReference","value":"true"}]}'
+  status=201 -> fixture/tenant-create-response.json
+== setup: populate.sh SIDE=legacy TENANT=r22o OUT_DIR=<evidence dir> — all steps passed (see populate-legacy/)
+== pre-matrix fixture additions
+curl -sS --connect-timeout 5 --max-time 60 -X POST 'http://localhost:8080/servint/numberGenerators' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' -H 'Content-Type: application/json' --data '{"code":"alpha","name":"alpha"}'
+  status=201 (id d11433a5-42a4-412f-9ba7-ff94c8604b7f)
+curl -sS --connect-timeout 5 --max-time 60 -X POST 'http://localhost:8080/servint/numberGeneratorSequences' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' -H 'Content-Type: application/json' --data '{"owner":{"id":"75bb7caa-ef20-4d23-8ffb-8fbf89f03e08"},"code":"emptypfx","name":"emptypfx","prefix":"","format":"000","nextValue":1}'
+  status=201 (id 62be7367-4297-4f3a-a751-87dab0b2e266; prefix "" stored as NULL — DB-audited, see fixture/db-prefix-checkdigit-audit.txt)
+== probe matrix (phase 1)
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'perPage=100' --data-urlencode 'sort=code;asc' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=10 -> c1-fixture-unfiltered.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=code==alpha' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=1 -> c2-code-alpha.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=code==alpha&&code==alpha' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=1 -> c3-and-same-leaf.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=code==alpha||code==zzznot' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=1 -> c4-or-valid.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'perPage=100' --data-urlencode 'sort=code;asc' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=12 -> c5-fixture-unfiltered.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=code==plain' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=1 -> c6-code-plain.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=checkDigitAlgo.value==ean13' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=4 -> c7-dotted-ean13.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=code==alpha&&prefix==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=0 -> p1-and-empty-prefix.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=(code==alpha||prefix==)' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=0 -> p2-paren-or-empty-prefix.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=prefix==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=10 -> p3-empty-prefix-alone.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=notAProp==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=10 -> p6-unknown-empty-alone.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=code==alpha&&notAProp==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=0 -> p7-and-unknown-empty.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=!(prefix==)' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=500 rows=- -> p8-not-empty-prefix.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=code==alpha&&prefix==&&code==alpha' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=400 rows=- -> p9-three-leaves-middle-empty.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=code==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=10 -> p10-code-empty-alone.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=prefix==&&code==alpha' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=400 rows=- -> d1-order-swap.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=code==alpha||prefix==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=0 -> d2-or-no-paren.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=code==zzznot||prefix==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=0 -> d3-or-nonmatching.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=notAProp==x' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=400 rows=- -> d4-unknown-nonempty.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=checkDigitAlgo.value==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=12 -> p4-dotted-empty-alone.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=code==plain&&checkDigitAlgo.value==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=0 -> p5-and-dotted-empty.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=code==plain&&prefix==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=0 -> s1-and-empty-prefix.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=(code==plain||prefix==)' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=0 -> s2-paren-or-empty-prefix.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=prefix==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=12 -> s3-empty-prefix-alone.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=!(prefix==)' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=500 rows=- -> s8-not-empty-prefix.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=code==plain&&prefix==&&code==plain' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=0 -> s9-three-leaves-middle-empty.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=prefix==&&code==plain' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=0 -> sd1-order-swap.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=code==plain||prefix==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=0 -> sd2-or-no-paren.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=code==zzznot||prefix==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=0 -> sd3-or-nonmatching.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=code==plain&&nextValue==abc' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=500 rows=- -> x1-and-uncoercible-eq.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=nextValue==abc' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=500 rows=- -> x2-uncoercible-eq-alone.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=code==plain&&nextValue>notanumber' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=500 rows=- -> x3-and-uncoercible-gt.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'perPage=100' --data-urlencode 'sort=code;asc' --data-urlencode 'stats=true' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 -> fixture/gen-unfiltered-stats.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'perPage=100' --data-urlencode 'sort=code;asc' --data-urlencode 'stats=true' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 -> fixture/seq-unfiltered-stats.json
+== fixture additions for absorption proof
+curl -sS -X POST 'http://localhost:8080/servint/numberGenerators' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' -H 'Content-Type: application/json' --data '{"code":"alpha&&prefix==","name":"absorption probe AND"}' --connect-timeout 5 --max-time 60
+  status=201 -> dx0-create-gen-and.json
+curl -sS -X POST 'http://localhost:8080/servint/numberGenerators' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' -H 'Content-Type: application/json' --data '{"code":"alpha||prefix==","name":"absorption probe OR"}' --connect-timeout 5 --max-time 60
+  status=201 -> dx0-create-gen-or.json
+curl -sS -X POST 'http://localhost:8080/servint/numberGeneratorSequences' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' -H 'Content-Type: application/json' --data '{"owner":{"id":"75bb7caa-ef20-4d23-8ffb-8fbf89f03e08"},"code":"absorbpfx","name":"absorbpfx","prefix":"&&code==plain","format":"000","nextValue":1}' --connect-timeout 5 --max-time 60
+  status=201 -> dx0-create-seq-absorbpfx.json
+== post-addition baselines + absorption probes
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'perPage=100' --data-urlencode 'sort=code;asc' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=12 -> dx1-baseline-gen-after.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=code==alpha&&prefix==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=1 -> dx2-p1-rerun.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=(code==alpha||prefix==)' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=1 -> dx3-p2-rerun.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=code==alpha||prefix==' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=1 -> dx4-d2-rerun.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=prefix==&&code==plain' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=1 -> dx5-sd1-rerun.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=code==plain&&prefix==&&code==plain' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=200 rows=0 -> dx6-p9-style-seq.json
+== stability re-runs of anomalous statuses
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=!(prefix==)' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=500 rows=- -> rr1-p8-rerun.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=code==alpha&&prefix==&&code==alpha' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=400 rows=- -> rr2-p9-rerun.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=prefix==&&code==alpha' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=400 rows=- -> rr3-d1-rerun.json
+curl -sS -G 'http://localhost:8080/servint/numberGenerators' --data-urlencode 'filters=notAProp==x' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=400 rows=- -> rr4-d4-rerun.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=code==plain&&nextValue==abc' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=500 rows=- -> rr5-x1-rerun.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=nextValue==abc' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=500 rows=- -> rr6-x2-rerun.json
+curl -sS -G 'http://localhost:8080/servint/numberGeneratorSequences' --data-urlencode 'filters=code==plain&&nextValue>notanumber' --data-urlencode 'perPage=100' -H 'X-Okapi-Tenant: r22o' -H 'X-Okapi-Token: dummy' --connect-timeout 5 --max-time 60
+  status=500 rows=- -> rr7-x3-rerun.json

@@ -1,0 +1,32 @@
+id: TRC-017
+title: Refdata management implementation
+description: Refdata category CRUD with all-delete-orphan value binding, the domain/property lookup over
+  the 13-entity legacy domain registry, and the owner-bearing standalone value render.
+spec_ref: specs/requirements/refdata-management.yaml#/id
+refs:
+- specs/decisions/007-bespoke-refdata-and-settings.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.controller.RefdataSettingsController
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.domain.entity.RefdataCategory
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.domain.entity.RefdataValue
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.RefdataCategoryRepository
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.RefdataValueRepository
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.service.refdata.RefdataService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.mapper.RefdataSettingsMapper
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.RefdataSettingsParityIT
+  kind: integration-test

@@ -1,0 +1,20 @@
+# Reference stub for a FOLIO user. Legacy persistence: cols eu_*; the id is
+# ASSIGNED (not generated) — it IS the FOLIO user UUID from mod-users.
+
+id: external-user
+name: ExternalUser
+description: >-
+  A pure reference stub representing a FOLIO user inside this module's
+  schema. The id is assigned by the caller context (the x-okapi-user-id of
+  the requesting user) rather than generated, so it equals the platform
+  user UUID. Carries no profile data. Legacy columns: eu_id, eu_version.
+fields:
+  - name: id
+    type: uuid
+    required: true
+    description: >-
+      FOLIO user UUID (assigned identifier, column eu_id) — identical to the
+      platform user id.
+refs:
+  - specs/requirements/dashboard-access-control.yaml#/id
+  - specs/requirements/dashboard-user-management.yaml#/id

@@ -1,0 +1,32 @@
+# Sidecar for refdata-management.feature — refdata surface coverage.
+
+source: specs/behavior/refdata-management.feature
+mappings:
+  - element: "#/feature/Reference data management/scenario/List categories with their values"
+    refs:
+      - specs/api/servint-refdata-settings.yaml#/paths/~1servint~1refdata/get
+      - specs/requirements/refdata-management.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Reference data management/scenario/Create a category"
+    refs:
+      - specs/api/servint-refdata-settings.yaml#/paths/~1servint~1refdata/post
+      - specs/requirements/refdata-management.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Reference data management/scenario/Fetch a single category"
+    refs:
+      - specs/api/servint-refdata-settings.yaml#/paths/~1servint~1refdata~1{id}/get
+      - specs/requirements/refdata-management.yaml#/acceptance_criteria/AC5
+  - element: "#/feature/Reference data management/scenario/Update a category"
+    refs:
+      - specs/api/servint-refdata-settings.yaml#/paths/~1servint~1refdata~1{id}/put
+      - specs/requirements/refdata-management.yaml#/acceptance_criteria/AC6
+  - element: "#/feature/Reference data management/scenario/Delete a category"
+    refs:
+      - specs/api/servint-refdata-settings.yaml#/paths/~1servint~1refdata~1{id}/delete
+      - specs/requirements/refdata-management.yaml#/acceptance_criteria/AC6
+  - element: "#/feature/Reference data management/scenario/Look up values by domain and property"
+    refs:
+      - specs/api/servint-refdata-settings.yaml#/paths/~1servint~1refdata~1{domain}~1{property}/get
+      - specs/requirements/refdata-management.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Reference data management/scenario/Unknown domain and property returns 404"
+    refs:
+      - specs/api/servint-refdata-settings.yaml#/paths/~1servint~1refdata~1{domain}~1{property}/get
+      - specs/requirements/refdata-management.yaml#/acceptance_criteria/AC4

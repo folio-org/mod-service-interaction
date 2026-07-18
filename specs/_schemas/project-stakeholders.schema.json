@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/project-stakeholders.schema.json",
+  "title": "SDD Project Stakeholders Specification",
+  "description": "Schema for specs/project/stakeholders.(yaml|yml|json) documents.",
+  "type": "object",
+  "required": ["stakeholders"],
+  "additionalProperties": false,
+  "properties": {
+    "stakeholders": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/stakeholder" }
+    },
+    "refs": { "$ref": "#/$defs/ref_list" }
+  },
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "pattern": "^\\S+#(?!#)\\S+$"
+    },
+    "ref_list": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ref" },
+      "uniqueItems": true
+    },
+    "stakeholder": {
+      "type": "object",
+      "required": ["id", "name", "role"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "role": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "key_capabilities": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "success_criteria": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

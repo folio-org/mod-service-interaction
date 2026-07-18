@@ -1,0 +1,39 @@
+# ADR-002 — governs every RuleExemption of category spec-introduced-envelope:
+# response envelopes that exist only on the wire and are assembled per
+# request, never persisted, therefore have no model to map from.
+
+id: ADR-002
+title: DTO-mapping exemptions for wire-only response envelopes
+date: "2026-07-17"
+status: accepted
+
+context: >
+  The cross-reference rules require every ApiDtoProperty to be covered by a
+  DtoMapping from a model entity. Several legacy responses are pure wire
+  envelopes assembled per request in controller/service code — e.g. the
+  getNextNumber result (status/warningCode/errorCode discriminators around a
+  transient rendered value), the resetYearSequences summary, admin action
+  acknowledgements, and the attestation token wrapper. They are never
+  persisted and have no backing model, so a DtoMapping would be an invented
+  artifact that misleads implementers.
+
+decision: >
+  Wire-only response envelopes are documented as standalone DTO schemas and
+  exempted from DtoMapping coverage via RuleExemption nodes of category
+  spec-introduced-envelope, one exemption per envelope DTO using a
+  properties prefix-pattern target. Each exemption names this ADR as
+  governed_by. An envelope qualifies only if (a) it is assembled per request,
+  (b) no field is read back from the wire into persistent state, and (c) the
+  legacy module has no corresponding domain class. DTOs with a persisted
+  backing entity must use real mappings — partial envelopes are not split.
+
+consequences:
+  positive:
+    - The coverage rule stays meaningful for genuinely persisted resources.
+    - Every exemption is auditable and traceable to this governing decision.
+  negative:
+    - Envelope field semantics live only in the DTO schema and behavior
+      scenarios, without a model-level anchor.
+
+refs:
+  - specs/decisions/001-spec-first-parity-migration.yaml#/id

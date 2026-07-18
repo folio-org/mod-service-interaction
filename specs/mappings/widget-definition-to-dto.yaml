@@ -1,0 +1,38 @@
+# WidgetDefinition entity → wire DTO. Legacy renderer:
+# widgetDefinition/_widgetDefinition.gson (includes:[] — block-only render
+# with renamed and composed fields, definition parsed; the entity id is
+# never rendered).
+
+id: widget-definition-to-dto
+name: WidgetDefinition to WidgetDefinitionDto
+description: >
+  Projects the definition entity onto its wire shape: definitionVersion is
+  renamed to version, typeName/typeVersion compose the type object, and the
+  persisted definition string is parsed to a JSON object. The entity id is
+  never rendered.
+source:
+  type: model
+  ref: specs/models/widget-definition.yaml#/id
+target:
+  type: dto
+  ref: specs/api/widget-definition-dto.yaml#/$id
+field_mappings:
+  - source_field: name
+    target_field: name
+    transform: identity
+  - source_field: definitionVersion
+    target_field: version
+    transform: rename
+  - source_field: typeName
+    target_field: type
+    transform: "compose(name: typeName, version: typeVersion)"
+  - source_field: definition
+    target_field: definition
+    transform: parse-json
+refs:
+  - specs/models/widget-definition.yaml#/id
+  - specs/api/widget-definition-dto.yaml#/type
+  - specs/api/widget-definition-dto.yaml#/properties/name
+  - specs/api/widget-definition-dto.yaml#/properties/version
+  - specs/api/widget-definition-dto.yaml#/properties/type
+  - specs/api/widget-definition-dto.yaml#/properties/definition

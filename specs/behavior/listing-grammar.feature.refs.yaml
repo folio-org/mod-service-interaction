@@ -1,0 +1,37 @@
+# Sidecar for listing-grammar.feature — the kiwt grammar matrix runs
+# against the number generator listings where the review probed it.
+
+source: specs/behavior/listing-grammar.feature
+mappings:
+  - element: "#/feature/Listing grammar/scenario/Comparison and containment operators filter the listings"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGeneratorSequences/get
+      - specs/requirements/listing-grammar.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Listing grammar/scenario/Compound expressions and ranges combine filters"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators/get
+      - specs/requirements/listing-grammar.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Listing grammar/scenario/Empty right sides inside compounds absorb greedily as in legacy"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators/get
+      - specs/requirements/listing-grammar.yaml#/acceptance_criteria/AC6
+  - element: "#/feature/Listing grammar/scenario/Paging clamps silently and honours the legacy aliases"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators/get
+      - specs/requirements/listing-grammar.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Listing grammar/scenario/Stats envelope carries the legacy fields"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators/get
+      - specs/requirements/listing-grammar.yaml#/acceptance_criteria/AC3
+  - element: "#/feature/Listing grammar/scenario/Bad sort and malformed filters are tolerated"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators/get
+      - specs/requirements/listing-grammar.yaml#/acceptance_criteria/AC4
+  - element: "#/feature/Listing grammar/scenario/Term matching combines quoted phrases across match properties"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators/get
+      - specs/requirements/listing-grammar.yaml#/acceptance_criteria/AC5
+  - element: "#/feature/Listing grammar/scenario/Escaped tokens are raw literal value text and operator spellings absorb"
+    refs:
+      - specs/api/servint-number-generators.yaml#/paths/~1servint~1numberGenerators/get
+      - specs/requirements/listing-grammar.yaml#/acceptance_criteria/AC7

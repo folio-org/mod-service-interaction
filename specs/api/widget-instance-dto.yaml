@@ -1,0 +1,58 @@
+# Wire shape of a widget instance. Legacy render
+# (widgetInstance/_widgetInstance.gson): full render minus
+# definitionName/definitionVersion, plus definition {name, version}.
+# Requests are asymmetric: the legacy binder (and ui-dashboard) submits the
+# FLAT definitionName/definitionVersion strings — never the composed
+# definition object — so those properties are declared here for request
+# binding while responses render only the composed definition.
+$id: widget-instance-dto
+title: WidgetInstanceDto
+type: object
+required: [name]
+properties:
+  id:
+    type: string
+    description: Instance identifier (UUID).
+  name:
+    type: string
+    description: Display name of the placed widget.
+  weight:
+    type: integer
+    description: Ordering weight within the dashboard (auto-assigned when omitted).
+  definition:
+    type: object
+    description: >-
+      The widget definition instantiated — replaces the entity's
+      definitionName/definitionVersion pair on the wire. Rendered on every
+      response; requests carry the flat definitionName/definitionVersion
+      properties instead.
+    required: [name, version]
+    properties:
+      name:
+        type: string
+        description: Widget definition name.
+      version:
+        type: string
+        description: Widget definition MAJOR.MINOR version.
+  definitionName:
+    type: string
+    description: >-
+      Request-side binding of the instantiated definition's name (flat
+      string, as submitted by ui-dashboard and bound by the legacy kiwt
+      binder). Never rendered on responses.
+  definitionVersion:
+    type: string
+    description: >-
+      Request-side binding of the instantiated definition's MAJOR.MINOR
+      version. Never rendered on responses.
+  configuration:
+    type: string
+    description: The instance's configuration payload (JSON string).
+  owner:
+    type: object
+    description: Owning dashboard reference.
+    required: [id]
+    properties:
+      id:
+        type: string
+        description: Dashboard identifier (UUID).

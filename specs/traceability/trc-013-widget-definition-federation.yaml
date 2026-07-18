@@ -1,0 +1,26 @@
+id: TRC-013
+title: Widget definition federation implementation
+description: Cross-module definition harvesting via Spring HTTP-interface clients with Okapi header enrichment
+  and X-Okapi-Module-Id per-provider addressing, plus the /dashboard/definitions provider endpoint.
+spec_ref: specs/requirements/widget-definition-federation.yaml#/id
+refs:
+- specs/decisions/008-feign-federation-client.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.client.DashboardDefinitionsClient
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.client.OkapiProxyClient
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.config.HttpClientConfiguration
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.controller.DashboardDefinitionsController
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.service.widget.WidgetDefinitionService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.WidgetFederationParityIT
+  kind: integration-test

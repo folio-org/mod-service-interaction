@@ -1,0 +1,126 @@
+{
+  "errors": [
+    {
+      "details": {
+        "branch": "main-final",
+        "source_file": "specs/decisions/013-attestation-trust-boundary.yaml",
+        "source_spec_id": "ADR-013",
+        "source_type": "Adr",
+        "target_type": "ArchitectureComponent"
+      },
+      "error_code": "cross-ref.orphan-node",
+      "file_path": "specs/decisions/013-attestation-trust-boundary.yaml",
+      "message": "Adr 'ADR-013' in 'specs/decisions/013-attestation-trust-boundary.yaml' has no ArchitectureComponent context in branch 'main-final'.",
+      "rule_id": "adr-has-architecture-context",
+      "severity": "warning"
+    }
+  ],
+  "files_checked": 166,
+  "metadata": {
+    "branch": "main-final",
+    "elapsed_ms": 24441,
+    "sdd_spec_version": "0.4.51",
+    "stage_timings": {
+      "graph_ms": 20612,
+      "parse_ms": 443,
+      "rules_ms": 218,
+      "schema_ms": 2849
+    },
+    "timestamp": "2026-07-23T19:03:00.450Z"
+  },
+  "pass": true,
+  "rule_coverage": [
+    {
+      "covered": 106,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "acceptance-criterion-has-scenario-coverage"
+    },
+    {
+      "covered": 12,
+      "exempt": 0,
+      "failing": 1,
+      "rule_id": "adr-has-architecture-context"
+    },
+    {
+      "covered": 13,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "adr-has-requirement-context"
+    },
+    {
+      "covered": 70,
+      "exempt": 18,
+      "failing": 0,
+      "rule_id": "api-dto-property-has-dto-mapping-coverage"
+    },
+    {
+      "covered": 51,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "api-operation-has-behavior-coverage"
+    },
+    {
+      "covered": 51,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "api-operation-has-requirement-backing"
+    },
+    {
+      "covered": 6,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "architecture-component-has-requirement-context"
+    },
+    {
+      "covered": 11,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "dto-mapping-has-api-dto-coverage"
+    },
+    {
+      "covered": 11,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "dto-mapping-has-model-coverage"
+    },
+    {
+      "covered": 125,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "gherkin-scenario-has-api-backing"
+    },
+    {
+      "covered": 0,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "gherkin-scenario-outline-has-api-backing"
+    },
+    {
+      "covered": 4,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "goal-has-requirement-coverage"
+    },
+    {
+      "covered": 12,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "model-entity-has-dto-mapping-coverage"
+    },
+    {
+      "covered": 22,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "requirement-has-api-coverage"
+    },
+    {
+      "covered": 25,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "requirement-has-goal-coverage"
+    }
+  ],
+  "total_errors": 0,
+  "total_warnings": 1
+}

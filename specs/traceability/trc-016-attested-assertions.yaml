@@ -1,0 +1,29 @@
+id: TRC-016
+title: RFC 8693 attested assertions implementation
+description: RS256 attestation tokens over nimbus-jose-jwt with per-tenant adopted key-pair storage, earliest-valid-key
+  selection, and on-demand RSA-2048 creation.
+spec_ref: specs/requirements/attested-assertions.yaml#/id
+refs:
+- specs/decisions/009-nimbus-jose-jwt-attestation.yaml#/id
+code_symbols:
+- language: java
+  qualified_name: org.folio.servint.service.attestation.AttestationService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.service.attestation.KeyPairService
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.controller.AttestationController
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.domain.entity.DbKeyPair
+  kind: class
+- language: java
+  qualified_name: org.folio.servint.repository.DbKeyPairRepository
+  kind: class
+- language: xml
+  qualified_name: src/main/resources/db/changelog/changes/adoption-baseline-keypair.xml
+  kind: liquibase-changelog
+- language: java
+  qualified_name: org.folio.servint.AttestationParityIT
+  kind: integration-test

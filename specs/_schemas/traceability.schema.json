@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdd.dev/schemas/traceability.schema.json",
+  "title": "SDD Traceability Entry",
+  "description": "Schema for specs/traceability/*.(yaml|yml|json) documents. One traceability entry per file.",
+  "type": "object",
+  "required": ["id", "spec_ref", "code_symbols"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "spec_ref": { "$ref": "#/$defs/ref" },
+    "refs": { "$ref": "#/$defs/ref_list" },
+    "code_symbols": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/code_symbol" }
+    }
+  },
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "pattern": "^[^#\\s]+#(?!#)(?:/(?:[^#~\\u0000-\\u001F\\u007F]|~[01])+|[^#/\\s\\u0000-\\u001F\\u007F][^#\\s\\u0000-\\u001F\\u007F]*)$"
+    },
+    "ref_list": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ref" },
+      "uniqueItems": true
+    },
+    "code_symbol": {
+      "type": "object",
+      "required": ["language", "qualified_name", "kind"],
+      "additionalProperties": false,
+      "properties": {
+        "language": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "qualified_name": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "kind": { "type": "string", "minLength": 1, "pattern": "\\S" }
+      }
+    }
+  }
+}

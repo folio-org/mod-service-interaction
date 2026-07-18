@@ -1,0 +1,17 @@
+[
+  {
+    "id": "2a42bf0c-88e6-405e-84ab-80e79a23d1fc",
+    "key": "alpha",
+    "section": "m4",
+    "settingType": "String",
+    "value": "one"
+  },
+  {
+    "hidden": true,
+    "id": "d9a903d7-cfb8-427f-85d5-7f64393b659b",
+    "key": "secret",
+    "section": "m4",
+    "settingType": "Password",
+    "value": "s3cr3t"
+  }
+]

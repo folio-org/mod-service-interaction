@@ -1,0 +1,14 @@
+# Exemption: NFR acceptance criteria are validated by migration rehearsal,
+# descriptor diffing, and parity-fixture comparison during M4/M5 — outside
+# the behavior (Gherkin) layer, which is bound to API operations.
+
+id: EX-nfr-acceptance-criteria
+rule_id: acceptance-criterion-has-scenario-coverage
+target: specs/requirements/nfr-wire-compatibility.yaml#/acceptance_criteria/*
+category: validated-outside-behavior-layer
+reason: >
+  NFR-001's criteria assert whole-surface properties (route-for-route
+  byte compatibility, descriptor equality, fixture parity) that are
+  verified by cutover tooling and cross-module comparison, not by
+  per-operation Gherkin scenarios.
+governed_by: specs/decisions/001-spec-first-parity-migration.yaml#/id

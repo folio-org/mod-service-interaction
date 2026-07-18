@@ -1,0 +1,16 @@
+# Sidecar for dashboard-display-data.feature — display-data coverage.
+
+source: specs/behavior/dashboard-display-data.feature
+mappings:
+  - element: "#/feature/Dashboard display data/scenario/Fetch display data with view access"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}~1displayData/get
+      - specs/requirements/dashboard-display-data.yaml#/acceptance_criteria/AC1
+  - element: "#/feature/Dashboard display data/scenario/Update layout data with edit access"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}~1displayData/put
+      - specs/requirements/dashboard-display-data.yaml#/acceptance_criteria/AC2
+  - element: "#/feature/Dashboard display data/scenario/View-only user cannot update display data"
+    refs:
+      - specs/api/servint-dashboards.yaml#/paths/~1servint~1dashboard~1{id}~1displayData/put
+      - specs/requirements/dashboard-display-data.yaml#/acceptance_criteria/AC3

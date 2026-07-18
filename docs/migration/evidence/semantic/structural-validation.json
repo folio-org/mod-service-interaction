@@ -1,0 +1,111 @@
+{
+  "errors": [],
+  "files_checked": 165,
+  "metadata": {
+    "branch": "main-final",
+    "elapsed_ms": 22057,
+    "sdd_spec_version": "0.4.51",
+    "stage_timings": {
+      "graph_ms": 18265,
+      "parse_ms": 319,
+      "rules_ms": 389,
+      "schema_ms": 2640
+    },
+    "timestamp": "2026-07-22T17:43:35.016Z"
+  },
+  "pass": true,
+  "rule_coverage": [
+    {
+      "covered": 105,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "acceptance-criterion-has-scenario-coverage"
+    },
+    {
+      "covered": 12,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "adr-has-architecture-context"
+    },
+    {
+      "covered": 12,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "adr-has-requirement-context"
+    },
+    {
+      "covered": 70,
+      "exempt": 18,
+      "failing": 0,
+      "rule_id": "api-dto-property-has-dto-mapping-coverage"
+    },
+    {
+      "covered": 51,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "api-operation-has-behavior-coverage"
+    },
+    {
+      "covered": 51,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "api-operation-has-requirement-backing"
+    },
+    {
+      "covered": 6,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "architecture-component-has-requirement-context"
+    },
+    {
+      "covered": 11,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "dto-mapping-has-api-dto-coverage"
+    },
+    {
+      "covered": 11,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "dto-mapping-has-model-coverage"
+    },
+    {
+      "covered": 123,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "gherkin-scenario-has-api-backing"
+    },
+    {
+      "covered": 0,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "gherkin-scenario-outline-has-api-backing"
+    },
+    {
+      "covered": 4,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "goal-has-requirement-coverage"
+    },
+    {
+      "covered": 12,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "model-entity-has-dto-mapping-coverage"
+    },
+    {
+      "covered": 22,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "requirement-has-api-coverage"
+    },
+    {
+      "covered": 25,
+      "exempt": 0,
+      "failing": 0,
+      "rule_id": "requirement-has-goal-coverage"
+    }
+  ],
+  "total_errors": 0,
+  "total_warnings": 0
+}
