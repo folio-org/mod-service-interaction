@@ -190,6 +190,19 @@ public class HousekeepingService {
               ]
             ],
             [
+              name:'Inventory: Instance identifier',
+              code:'inventory_instanceIdentifier',
+              sequences: [
+                [
+                  name: 'Instance identifier',
+                  code: 'instanceIdentifier',
+                  format:'0000000000',
+                  checkDigitAlgo:'None',
+                  outputTemplate:'${generated_number}'
+                ],
+              ]
+            ],
+            [
               name:'Serials management: Pattern number',
               code:'serialsManagement_patternNumber',
               sequences: [
