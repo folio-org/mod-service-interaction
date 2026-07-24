@@ -4,62 +4,63 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-`mod-service-interaction` is a FOLIO backend module (Grails 6 / Groovy) providing cross-app connectivity for the FOLIO ecosystem. Its main responsibilities:
+`mod-service-interaction` is a FOLIO backend module (Java 21 / Spring Boot / folio-spring-base) providing cross-app connectivity for the FOLIO ecosystem:
 
-- **Dashboards & widgets** — user-configurable dashboards (`Dashboard`, `DashboardAccess`, `DashboardDisplayData`) composed of widgets (`WidgetDefinition`, `WidgetType`, `WidgetInstance`), with per-dashboard access levels (`view`/`edit`/`manage`).
-- **Number generators** (`org.olf.numgen`) — configurable sequence generators used across other FOLIO modules (barcodes, request numbers, vendor codes, etc.), supporting prefixes/postfixes, check digits (EAN13, ISBN10, ISSN, Luhn, mod10 variants), max-value thresholds/warnings, and a `${current_year}`-token year-based reset mechanism.
-- **RFC 8693 attested assertions** (`org.olf.rfc8693`) — signs short-lived JWTs (RS256) to support module-to-module federated trust, backed by per-tenant `DBKeyPair` storage.
+- **Dashboards & widgets** — user-configurable dashboards composed of widgets, with per-dashboard access levels (`view`/`edit`/`manage`).
+- **Number generators** — configurable sequence generators used across other FOLIO modules (barcodes, request numbers, vendor codes, etc.), supporting prefixes/postfixes, check digits (EAN13, ISBN10, ISSN, Luhn, mod10 variants), max-value thresholds/warnings, and a `${current_year}`-token year-based reset mechanism.
+- **RFC 8693 attested assertions** — signs short-lived RS256 JWTs for module-to-module federated trust, backed by per-tenant keypair storage in the DB (nimbus-jose-jwt).
 
-All business logic lives under `service/` (the actual Grails app); the repo root only holds packaging/CI/docs.
+The module is **spec-first**: `specs/` is the governed source of truth (requirements, decisions, OpenAPI contracts, models, behavior, traceability). The served API surface is generated at build time from `specs/api/*.yaml`, consumed unmodified (ADR-004).
+
+`service/` (the retired Grails implementation) and `docs/migration/` are scheduled for removal — never modify or build against them. Until that cleanup lands, note that `AdoptedSchemaUpgradeIT` loads its ground-truth fixture from `docs/migration/evidence/r13-legacy/` — relocate the fixture before deleting that tree or the build breaks.
 
 ## Commands
 
-All Gradle commands are run from `service/`:
+All Maven commands run from the repo root:
 
 ```bash
-cd service
-
-./gradlew bootRun                 # run the app (needs OKAPI_SERVICE_HOST/PORT + a Postgres db; see README env vars)
-./gradlew assemble                # compile + package (no tests)
-./gradlew buildImage               # build the Docker image (uses com.bmuschko docker plugin)
-
-./gradlew integrationTest                                   # run the full Spock/Geb integration suite
-./gradlew integrationTest --tests "org.olf.NumberGeneratorSpec"   # run a single spec
+mvn clean verify                               # full build: unit tests (*Test) + integration tests (*IT)
+mvn verify -Dit.test=NumberGeneratorParityIT   # run a single integration test
+mvn clean verify -DskipITs                     # compile + unit tests only
+mvn spring-boot:run                            # run locally (env vars below)
+docker build -t mod-service-interaction .      # image from target/*.jar (build the jar first)
 ```
 
-There is no meaningful unit test suite — all tests are integration specs under `src/integration-test/groovy` that boot the full app against a real Postgres instance. Before running `integrationTest`, start the DB (and the `run-int-tests.yml` CI job does this via docker-compose):
-
-```bash
-cd tools/testing
-docker compose up -d
-# ... run tests from service/ ...
-docker compose down -v
-```
-
-Local dev against a full Okapi stack (vagrant) is documented in the root `README.md`; `scripts/register_and_enable*.sh` and `scripts/run_external_reg.sh` handle module registration against a running Okapi.
+- Integration tests boot the full app against a Testcontainers Postgres (`postgres:16-alpine`) — Docker must be running; no manual DB setup or docker-compose needed.
+- Runtime env: `DB_HOST`/`DB_PORT`/`DB_DATABASE`/`DB_USERNAME`/`DB_PASSWORD`, `OKAPI_URL`. The app serves on port 8081.
+- `target/ModuleDescriptor.json` is generated at build time from `descriptors/ModuleDescriptor-template.json` (maven-resources filtering + copy-rename; the output is deterministic — byte-identical across rebuilds of the same source). Edit the template, never a generated file.
 
 ## Architecture
 
-### Okapi module conventions
+### Layout (`src/main/java/org/folio/servint`)
 
-- Controllers extend `OkapiTenantAwareController<T>` (from `com.k_int.okapi:grails-okapi` / `com.k_int.grails:web-toolkit-ce`) and are annotated `@CurrentTenant`. Common inherited helpers used throughout: `doTheLookup(DomainClass) { ...criteria... }` for filtered listing, `getObjectToBind()` for the parsed request body, `updateResource(instance)`, and `getPatron()` for the calling user.
-- Routing is centralized in `grails-app/controllers/org/olf/UrlMappings.groovy` — REST resources plus bespoke collection sub-routes (e.g. `/servint/dashboard/my-dashboards`, `/servint/numberGenerators/getNextNumber`).
-- The Okapi `ModuleDescriptor` is generated at build time from `src/main/okapi/ModuleDescriptor-template.json` (interpolated with `appVersion`/`okapiInterfaceVersion` from `gradle.properties`) — permission names follow `servint.<area>.<verb>`. Edit the template, not a generated file.
-- `BootStrap.groovy` fails loudly (logs, doesn't throw) if `module-tenant-changelog.groovy` isn't on the classpath — that's the signal a build didn't package migrations correctly.
+- `controller/` — implements the openapi-generator interfaces produced from `specs/api/`; error-envelope shapes are centralized in `ServintExceptionHandlers`.
+- `service/{dashboard,widget,numgen,attestation,refdata}/` — business logic per area.
+- `domain/entity/`, `repository/`, `mapper/` — JPA entities, Spring Data repositories, MapStruct mappers.
+- `web/` — the KIWT listing grammar (`KiwtListing`, `KiwtFilterParser`): the legacy-compatible `filters=`/`match=`/`term=`/`sort=`/`stats=` query surface shared by all listing endpoints. `KiwtListingGrammarIT` is its executable documentation — check it before touching parser logic.
+- `client/` — cross-module federation calls via folio-spring's Okapi-enriched RestClient stack (`folio.exchange.enabled`, ADR-008).
 
-### Multi-tenancy
+### Multi-tenancy & migrations
 
-- GORM multi-tenancy mode is `SCHEMA` (one Postgres schema per tenant), resolved via `com.k_int.okapi.OkapiTenantResolver`. Domain classes implement `grails.gorm.MultiTenant<T>`.
-- `HousekeepingService` runs at the **module** level (no tenant context) and subscribes to `okapi:dataload:reference` (`@Subscriber`) to seed refdata/default number generators into a tenant schema on load — it manually enters tenant context via `Tenants.withId(...)`.
-- Cross-cutting controlled-vocabulary fields use the `com.k_int.web.toolkit.refdata` pattern: `@CategoryId`/`@Defaults` annotations on domain fields, `RefdataValue.lookupOrCreate(category, label, value)` to seed/fetch values.
-- Liquibase changesets live in `grails-app/migrations/`, chained from the master changelog `module-tenant-changelog.groovy`.
+- Schema-per-tenant via folio-spring: the schema name `<tenant>_mod_service_interaction` derives from `spring.application.name`, which must stay exactly `mod-service-interaction` (ADR-006).
+- Liquibase master changelog: `src/main/resources/db/changelog/changelog-master.xml`. The `adoption-baseline*` changesets are precondition-guarded so that enabling the module on a schema created by the previous Grails implementation marks them as already run and adopts the existing data losslessly (`AdoptedSchemaUpgradeIT` proves this against a populated ground-truth fixture). Never edit shipped changesets — add new ones.
+- The `/_/tenant` surface is folio-spring-base's `TenantController` (intentionally **not** generated from a spec): enable runs Liquibase and seeds refdata + default number generators; disable evicts per-tenant caches; purge is strictly gated — it must be an explicit boolean `purge: true`, anything else is rejected rather than defaulting to destruction.
 
-### Known operational gotchas (see root `README.md` for full detail)
+### Operational surface
 
-- Federated changelog locks (`federation_lock`, `system_changelog_lock` tables) and Hikari connection-pool starvation are recurring upgrade-time failure modes on this module — documented at length in the README if you're debugging a stuck tenant upgrade rather than writing new code.
+- Unauthenticated management endpoints under `/admin`: **health + metrics only**. `loggers` is deliberately excluded (an unauthenticated loggers endpoint lets anyone reaching the port flip log levels); `ManagementSurfaceIT` pins the exact surface — extend it as a conscious decision, not by config drift.
+- The per-tenant widget-definition cache (Caffeine) is bounded by `folio.widgets.definition-cache.*` (max tenants + expiry); its `cache.*` meters are tagged `cache=widget-definition-tenant-cache` and scrapeable via `/admin/metrics`.
+- `scripts/k8s_deployment_template.yaml` is kept in lockstep with `application.yml` (port, probes, NetworkPolicy) by `K8sDeploymentTemplateTest`.
 
-### Testing conventions
+## Spec governance (SDD)
 
-- Specs extend `BaseSpec` (`src/integration-test/groovy/org/olf/BaseSpec.groovy`), which extends `HttpSpec` (web-toolkit testing support) and is `@Stepwise` — test methods within a spec run in declaration order and share state (e.g. entities created in one `void "..."` method are used in later ones). Don't reorder test methods assuming independence.
-- `BaseSpec` purges and recreates a fresh tenant per spec class (named after the spec's simple class name) in `setupSpec`/the first two stepwise methods.
-- Number generator tests in particular double as executable documentation of check-digit algorithms and templating (`outputTemplate`, `preChecksumTemplate`, `${current_year}` token) — check `NumberGeneratorSpec` for expected input/output pairs before changing generator logic.
+- **Never hand-edit files under `specs/`.** Every spec change goes through a governed SDD session — invoke the `sdd-session` skill (or `sdd-ingest` / `sdd-impl-trace` for their respective workflows), which stages, validates, and commits atomically.
+- Run `sdd validate --semantic --branch <branch>` **from the repo root**. Run from anywhere else, the semantic lane goes silently inert — exit 0 with `gate_status: UNCALIBRATED` — so never trust the exit code alone; check the reported gate status.
+- `sdd.config.yaml` at the root configures the spec graph (Neo4j) and the semantic judge lane.
+
+## Testing conventions
+
+- All tests live under `src/test/java/org/folio/servint`. Failsafe runs `*IT` classes (full app + Testcontainers Postgres); Surefire runs `*Test` classes (no container, e.g. `K8sDeploymentTemplateTest`, `SchemaNameParityTest`).
+- Many ITs use `@TestMethodOrder(OrderAnnotation.class)` and share container/tenant state across methods in declared order — don't reorder test methods assuming independence.
+- Parity ITs double as executable documentation: `KiwtListingGrammarIT` (listing grammar, including deliberately preserved legacy quirks), `NumberGeneratorParityIT` (check-digit algorithms, `outputTemplate`/`preChecksumTemplate`, `${current_year}` token — check expected input/output pairs before changing generator logic), `ErrorEnvelopeMatrixIT` (error shapes).
+- Some legacy behaviors are **contracts, not bugs**: e.g. missing primary keys on `dashboard_access`/`dashboard_display_data`, or the broken `$`-wildcard transform in the listing grammar. They are pinned by tests and registered as deliberate decisions — don't "fix" them without a spec-level decision.
