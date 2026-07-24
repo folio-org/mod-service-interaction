@@ -83,28 +83,41 @@ public class TenantPurgeFlagAdvice extends RequestBodyAdviceAdapter {
       if (parser.nextToken() != JsonToken.START_OBJECT) {
         return PurgeWire.EXPLICIT_BOOLEAN;
       }
-      int purgeMembers = 0;
-      JsonToken purgeValue = null;
-      while (parser.nextToken() == JsonToken.PROPERTY_NAME) {
-        String member = parser.currentName();
-        JsonToken value = parser.nextToken();
-        if ("purge".equals(member)) {
-          purgeMembers++;
-          purgeValue = value;
-        }
-        parser.skipChildren();
-      }
-      if (purgeMembers == 0 || (purgeMembers == 1 && purgeValue == JsonToken.VALUE_NULL)) {
-        return PurgeWire.ABSENT;
-      }
-      if (purgeMembers == 1
-          && (purgeValue == JsonToken.VALUE_TRUE || purgeValue == JsonToken.VALUE_FALSE)) {
-        return PurgeWire.EXPLICIT_BOOLEAN;
-      }
-      return PurgeWire.INVALID;
+      return classify(scanTopLevelPurge(parser));
     } catch (JacksonException e) {
       return PurgeWire.EXPLICIT_BOOLEAN;
     }
+  }
+
+  /** Count of top-level {@code purge} members and the value token of the last one seen. */
+  private record PurgeMembers(int count, JsonToken value) { }
+
+  /** Walks the top-level members, recording every {@code purge} occurrence. */
+  private static PurgeMembers scanTopLevelPurge(JsonParser parser) {
+    int count = 0;
+    JsonToken value = null;
+    while (parser.nextToken() == JsonToken.PROPERTY_NAME) {
+      String member = parser.currentName();
+      JsonToken memberValue = parser.nextToken();
+      if ("purge".equals(member)) {
+        count++;
+        value = memberValue;
+      }
+      parser.skipChildren();
+    }
+    return new PurgeMembers(count, value);
+  }
+
+  /** Only exactly one top-level Boolean purge is explicit; a single null is absent; anything else invalid. */
+  private static PurgeWire classify(PurgeMembers purge) {
+    if (purge.count() == 0 || (purge.count() == 1 && purge.value() == JsonToken.VALUE_NULL)) {
+      return PurgeWire.ABSENT;
+    }
+    if (purge.count() == 1
+        && (purge.value() == JsonToken.VALUE_TRUE || purge.value() == JsonToken.VALUE_FALSE)) {
+      return PurgeWire.EXPLICIT_BOOLEAN;
+    }
+    return PurgeWire.INVALID;
   }
 
   private record WireBody(HttpHeaders wireHeaders, byte[] rawBody, boolean purgeExplicit)

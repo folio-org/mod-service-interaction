@@ -422,39 +422,38 @@ public class KiwtListing {
   }
 
   /**
-   * Coerces the raw filter value to the JPA attribute's Java type; failure
-   * (or an unsupported target type) drops the clause per REQ-022 AC4.
+   * Per-type coercers keyed by the JPA attribute's Java type. Strings pass
+   * through verbatim (no trim); every other target trims first. Boxed and
+   * primitive class literals map to the same coercer. Any target type absent
+   * here is unsupported (e.g. association equality) and drops the clause.
    */
-  private static Object coerce(Class<?> type, String raw) {
+  private static final Map<Class<?>, Function<String, Object>> COERCERS = Map.ofEntries(
+      Map.entry(String.class, raw -> raw),
+      Map.entry(Boolean.class, raw -> Boolean.valueOf(raw.trim())),
+      Map.entry(boolean.class, raw -> Boolean.valueOf(raw.trim())),
+      Map.entry(Long.class, raw -> Long.valueOf(raw.trim())),
+      Map.entry(long.class, raw -> Long.valueOf(raw.trim())),
+      Map.entry(Integer.class, raw -> Integer.valueOf(raw.trim())),
+      Map.entry(int.class, raw -> Integer.valueOf(raw.trim())),
+      Map.entry(UUID.class, raw -> UUID.fromString(raw.trim())),
+      Map.entry(Instant.class, raw -> Instant.parse(raw.trim())),
+      Map.entry(LocalDate.class, raw -> LocalDate.parse(raw.trim())),
+      Map.entry(LocalDateTime.class, raw -> LocalDateTime.parse(raw.trim())));
+
+  /**
+   * Coerces the raw filter value to the JPA attribute's Java type; failure
+   * (or an unsupported/unresolved target type) drops the clause per REQ-022 AC4.
+   */
+  static Object coerce(Class<?> type, String raw) {
+    var coercer = type == null ? null : COERCERS.get(type);
+    if (coercer == null) {
+      throw new DroppedClauseException(); // unsupported target type (e.g. association equality)
+    }
     try {
-      if (type == String.class) {
-        return raw;
-      }
-      if (type == Boolean.class || type == boolean.class) {
-        return Boolean.valueOf(raw.trim());
-      }
-      if (type == Long.class || type == long.class) {
-        return Long.valueOf(raw.trim());
-      }
-      if (type == Integer.class || type == int.class) {
-        return Integer.valueOf(raw.trim());
-      }
-      if (type == UUID.class) {
-        return UUID.fromString(raw.trim());
-      }
-      if (type == Instant.class) {
-        return Instant.parse(raw.trim());
-      }
-      if (type == LocalDate.class) {
-        return LocalDate.parse(raw.trim());
-      }
-      if (type == LocalDateTime.class) {
-        return LocalDateTime.parse(raw.trim());
-      }
+      return coercer.apply(raw);
     } catch (RuntimeException notCoercible) {
       throw new DroppedClauseException();
     }
-    throw new DroppedClauseException(); // unsupported target type (e.g. association equality)
   }
 
   /**
@@ -472,6 +471,6 @@ public class KiwtListing {
   }
 
   /** Internal signal: this clause can't apply to the typed property — dropped, request answers 200. */
-  private static final class DroppedClauseException extends RuntimeException {
+  static final class DroppedClauseException extends RuntimeException {
   }
 }

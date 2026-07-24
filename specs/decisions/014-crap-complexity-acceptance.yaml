@@ -1,0 +1,75 @@
+# ADR-014 — governs the deliberate acceptance of CRAP-metric complexity for
+# methods whose complexity is a preserved-parity contract: the CRAP quality
+# gate references this decision as the governed rationale for every method it
+# reports above threshold that this ADR names.
+
+id: ADR-014
+title: Accept CRAP complexity for preserved-parity parser and check-digit methods
+date: "2026-07-24"
+status: accepted
+
+context: >
+  The codebase is measured by a CRAP gate (crap4java): for each method
+  CRAP = CC^2 * (1 - coverage)^3 + CC, threshold 8.0. At full coverage CRAP
+  equals cyclomatic complexity, so any method with CC >= 9 stays above 8.0 no
+  matter how thoroughly it is tested — only decomposition can lower it. Under
+  ADR-001 the acceptance bar for this rewrite is bug-for-bug wire and data
+  parity with the legacy module, proven by the parity integration suites
+  (KiwtListingGrammarIT for the KIWT listing grammar of REQ-022, and
+  NumberGeneratorParityIT for the check-digit algorithms of REQ-003), whose
+  fixtures are the executable specification. A handful of methods carry
+  irreducible branching precisely because they reproduce that legacy behavior:
+  the KIWT tokenizer and empty-right-side / operator-absorption logic
+  (KiwtFilterParser.tokenize, legalAbsorbedValue, absorbEmptyRightSides), the
+  criteria-building and sort/text-match evaluators (KiwtListing
+  buildOrientedComparison, buildTextMatch, applySort), and the check-digit
+  dispatch (CheckDigitService.calculate). KiwtListing.probeAttribute is CC 8
+  but its null/empty-path guards and collection-descent branch are defensive
+  and unreachable through the public grammar, so full branch coverage is not
+  attainable without contorting inputs. Decomposing any of these to chase the
+  numeric threshold would fragment the very logic the parity suites pin and
+  risk silent behavioral drift from the legacy contract.
+
+decision: >
+  Formally accept the CRAP scores of the following methods as a
+  preserved-parity contract rather than decompose them:
+  KiwtFilterParser.tokenize, KiwtFilterParser.legalAbsorbedValue,
+  KiwtFilterParser.absorbEmptyRightSides, KiwtListing.buildOrientedComparison,
+  KiwtListing.buildTextMatch, KiwtListing.applySort,
+  KiwtListing.probeAttribute, and CheckDigitService.calculate. This ADR is the
+  governed equivalent of a CRAP suppression: the gate treats a method it
+  reports above threshold as accepted only when that method is named here.
+  Acceptance is conditional on the method staying fully covered by its parity
+  suite; a method qualifies only when (a) its complexity reproduces a legacy
+  behavior pinned by KiwtListingGrammarIT or NumberGeneratorParityIT, and (b)
+  no behavior-preserving extraction can lower its complexity without splitting
+  logic those suites verify as a unit. Methods whose CRAP was driven by thin
+  coverage or by incidental (non-parity) structure were reduced under the
+  threshold first — by adding tests (coerce, validateDefinition,
+  deleteWidgetInstance, updateDashboard, resolveAccess, bindSetting, hasAccess)
+  or by behavior-preserving extraction (deriveMaximumCheck, bindSequence,
+  purgeOnTheWire, updateAccessToDashboard, updateUserDashboards) — and are NOT
+  accepted here. New methods do not inherit this acceptance; each addition to
+  the list is a spec-level decision.
+
+consequences:
+  positive:
+    - The gate stays meaningful for genuinely reducible complexity because only
+      parity-pinned methods are exempt, and each exemption is auditable to this
+      ADR and to the suite that pins the behavior.
+    - Parity is protected — the KIWT parser/evaluator and check-digit dispatch
+      are not fragmented to satisfy a numeric target, so the legacy contract
+      the parity suites guarantee cannot drift silently.
+    - Coverage-reducible and refactorable findings were resolved first, so the
+      accepted set is minimal and defensible rather than a blanket waiver.
+  negative:
+    - The accepted methods remain above the CRAP threshold, so the gate cannot
+      be configured to fail on any breach; it must consult this ADR's named set.
+    - A future post-parity major version that is free to diverge from legacy
+      behavior would need to revisit and likely shrink this acceptance.
+
+refs:
+  - specs/requirements/listing-grammar.yaml#/id
+  - specs/requirements/numgen-checksums.yaml#/id
+  - specs/requirements/nfr-wire-compatibility.yaml#/id
+  - specs/decisions/001-spec-first-parity-migration.yaml#/id

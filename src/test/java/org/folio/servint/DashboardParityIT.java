@@ -75,6 +75,12 @@ class DashboardParityIT {
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
+  @Autowired
+  private org.folio.servint.service.dashboard.DashboardService dashboardService;
+
+  @Autowired
+  private org.folio.spring.FolioModuleMetadata moduleMetadata;
+
   private final ObjectMapper json = new ObjectMapper();
 
   @BeforeEach
@@ -547,5 +553,132 @@ class DashboardParityIT {
         .andExpect(status().isOk()).andReturn());
     assertThat(served).hasSize(1);
     assertThat(served.get(0).path("definition").path("baseUrl").asText()).isEqualTo("/erm/sas");
+  }
+
+  @Test
+  @Order(11)
+  void deleteWidgetInstanceEnforcesNotFoundThenEditAccess() throws Exception {
+    var board = createDashboard(USER_1, "Delete-instance board");
+    var body = json.createObjectNode()
+        .put("name", "doomed")
+        .put("definitionName", "ERM Agreements")
+        .put("definitionVersion", "1.0");
+    body.putObject("owner").put("id", board);
+    var instance = read(mockMvc.perform(as(post("/servint/widgets/instances"), USER_1)
+            .contentType(MediaType.APPLICATION_JSON).content(body.toString()))
+        .andExpect(status().isCreated()).andReturn()).path("id").asText();
+
+    // Unknown instance -> 404, checked before any access decision.
+    mockMvc.perform(as(delete("/servint/widgets/instances/" + UUID.randomUUID()), USER_1))
+        .andExpect(status().isNotFound());
+
+    // A user without edit on the owning dashboard -> 403.
+    mockMvc.perform(as(delete("/servint/widgets/instances/" + instance), USER_2))
+        .andExpect(status().isForbidden());
+
+    // The owner (manage ⊃ edit) deletes -> 204, and the instance is gone.
+    mockMvc.perform(as(delete("/servint/widgets/instances/" + instance), USER_1))
+        .andExpect(status().isNoContent());
+    mockMvc.perform(as(get("/servint/widgets/instances/" + instance), USER_1))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @Order(12)
+  void updateDashboardAppliesNameAndDescriptionWithAdminOverride() throws Exception {
+    var board = createDashboard(USER_1, "Update board");
+    var update = json.createObjectNode().put("name", "renamed").put("description", "desc-set");
+    var updated = read(mockMvc.perform(as(put("/servint/dashboard/" + board), USER_1)
+            .contentType(MediaType.APPLICATION_JSON).content(update.toString()))
+        .andExpect(status().isOk()).andReturn());
+    assertThat(updated.path("name").asText()).isEqualTo("renamed");
+    assertThat(updated.path("description").asText()).isEqualTo("desc-set");
+
+    // Admin authority bypasses per-dashboard access; an unknown dashboard is then a true 404.
+    mockMvc.perform(asAdmin(put("/servint/dashboard/" + UUID.randomUUID()), USER_3)
+            .contentType(MediaType.APPLICATION_JSON).content(update.toString()))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @Order(13)
+  void editDashboardUsersResolvesEveryAccessBindingShape() throws Exception {
+    var board = createDashboard(USER_1, "resolveAccess board");
+    // A real refdata id in the access category: created lazily on the manage grant above.
+    var manageId = jdbcTemplate.queryForObject(
+        "select v.rdv_id from " + SCHEMA + ".refdata_value v "
+            + "join " + SCHEMA + ".refdata_category c on v.rdv_owner = c.rdc_id "
+            + "where c.rdc_description = 'DashboardAccess.Access' and v.rdv_value = 'manage'",
+        String.class);
+    var user4 = UUID.randomUUID().toString();
+
+    var items = json.createArrayNode();
+    // {id:...} binding -> resolved by refdata id.
+    var byId = items.addObject();
+    byId.putObject("user").put("id", USER_2);
+    byId.putObject("access").put("id", manageId);
+    // {value:...} binding -> resolved by refdata value within the access category.
+    var byValue = items.addObject();
+    byValue.putObject("user").put("id", USER_3);
+    byValue.putObject("access").put("value", "manage");
+    // access omitted -> null binding, a null access object (legacy allows it).
+    items.addObject().putObject("user").put("id", user4);
+
+    var users = postUsers(board, USER_1, items);
+
+    String ownAccessId = null;
+    for (var access : users) {
+      var uid = access.path("user").path("id").asText();
+      if (uid.equals(USER_2) || uid.equals(USER_3)) {
+        assertThat(access.path("access").path("value").asText()).isEqualTo("manage");
+      }
+      if (uid.equals(user4)) {
+        assertThat(access.path("access").isMissingNode() || access.path("access").isNull()).isTrue();
+      }
+      if (uid.equals(USER_1)) {
+        ownAccessId = access.path("id").asText();
+      }
+    }
+    assertThat(ownAccessId).isNotNull();
+
+    // id-bearing edge cases, all ignored per legacy contract (no 4xx/5xx):
+    // (1) an id referencing a nonexistent access object -> silently skipped;
+    // (2) an item carrying the caller's OWN access id -> refused (own access
+    //     "can not currently be changed").
+    var edges = json.createArrayNode();
+    var ghost = edges.addObject();
+    ghost.put("id", UUID.randomUUID().toString());
+    ghost.putObject("user").put("id", USER_2);
+    ghost.putObject("access").put("value", "view");
+    var own = edges.addObject();
+    own.put("id", ownAccessId);
+    own.putObject("user").put("id", USER_1);
+    own.putObject("access").put("value", "view");
+    var afterEdges = postUsers(board, USER_1, edges);
+    for (var access : afterEdges) {
+      if (access.path("user").path("id").asText().equals(USER_1)) {
+        // the caller's own access is unchanged (still manage)
+        assertThat(access.path("access").path("value").asText()).isEqualTo("manage");
+      }
+    }
+  }
+
+  @Test
+  @Order(14)
+  void hasAccessRejectsUnknownDesiredLevel() {
+    // USER_1 holds manage on dash1, so accessLevel is non-null and the switch
+    // reaches its default arm; an unrecognized desired level is denied. No HTTP
+    // endpoint passes an arbitrary level, so this covers the arm directly — and
+    // the service reads the DB via JPA, so it must run inside the tenant's
+    // FolioExecutionContext for the schema search-path to resolve.
+    var okapiHeaders = java.util.Map.<String, java.util.Collection<String>>of(
+        org.folio.spring.integration.XOkapiHeaders.TENANT, java.util.List.of(TENANT));
+    try (var ignored = new org.folio.spring.scope.FolioExecutionContextSetter(
+        moduleMetadata, okapiHeaders)) {
+      assertThat(dashboardService.hasAccess("bogus", dash1, USER_1)).isFalse();
+      // Sanity: the same holder resolves the known levels as granted.
+      assertThat(dashboardService.hasAccess("manage", dash1, USER_1)).isTrue();
+      assertThat(dashboardService.hasAccess("view", dash1, USER_1)).isTrue();
+    }
   }
 }

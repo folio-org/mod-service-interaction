@@ -248,4 +248,30 @@ class RefdataSettingsParityIT {
     getJson("/servint/settings/appSettings/" + settingId, 404);
     assertThat(getJson("/servint/settings/appSettings", 200)).isEmpty();
   }
+
+  @Test
+  @Order(5)
+  void appSettingBindsVocabAndDefValue() throws Exception {
+    // Create with every bindable field so vocab/defValue (the two settings not
+    // touched by @Order(4)) are exercised on both create and partial update.
+    var created = send(post("/servint/settings/appSettings"),
+        "{\"section\": \"pickList\", \"key\": \"unit\", \"settingType\": \"Refdata\","
+            + " \"vocab\": \"Measure.Unit\", \"defValue\": \"cm\", \"value\": \"mm\","
+            + " \"hidden\": true}",
+        201);
+    var id = created.path("id").asText();
+    assertThat(created.path("vocab").asText()).isEqualTo("Measure.Unit");
+    assertThat(created.path("defValue").asText()).isEqualTo("cm");
+
+    // Partial PUT touching only vocab and defValue; other fields survive.
+    var updated = send(put("/servint/settings/appSettings/" + id),
+        "{\"vocab\": \"Measure.Unit2\", \"defValue\": \"m\"}", 200);
+    assertThat(updated.path("vocab").asText()).isEqualTo("Measure.Unit2");
+    assertThat(updated.path("defValue").asText()).isEqualTo("m");
+    assertThat(updated.path("key").asText()).isEqualTo("unit");
+    assertThat(updated.path("value").asText()).isEqualTo("mm");
+
+    mockMvc.perform(tenanted(delete("/servint/settings/appSettings/" + id)))
+        .andExpect(status().isNoContent());
+  }
 }

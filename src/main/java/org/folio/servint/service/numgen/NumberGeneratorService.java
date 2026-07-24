@@ -156,18 +156,27 @@ public class NumberGeneratorService {
   }
 
   private void deriveMaximumCheck(NumberGeneratorSequence s) {
-    var max = s.getMaximumNumber();
-    var threshold = s.getMaximumNumberThreshold();
-    var next = s.getNextValue();
-    if (max != null && next != null && next > max) {
-      s.setMaximumCheck(refdata.find(CAT_MAX_CHECK, "at_maximum").orElse(null));
-    } else if (max != null && threshold != null && next != null && next > threshold) {
-      s.setMaximumCheck(refdata.find(CAT_MAX_CHECK, "over_threshold").orElse(null));
-    } else if (max != null && threshold != null) {
-      s.setMaximumCheck(refdata.find(CAT_MAX_CHECK, "below_threshold").orElse(null));
-    } else {
-      s.setMaximumCheck(null);
+    var value = maximumCheckValue(s.getMaximumNumber(), s.getMaximumNumberThreshold(), s.getNextValue());
+    s.setMaximumCheck(value == null ? null : refdata.find(CAT_MAX_CHECK, value).orElse(null));
+  }
+
+  /**
+   * Legacy save-time classification of a sequence against its maximum: the
+   * MaximumCheck refdata value, or null when no maximum is configured.
+   * {@code next > max} wins outright; otherwise a configured threshold splits
+   * over/below; a null next is treated as below both.
+   */
+  static String maximumCheckValue(Long max, Long threshold, Long next) {
+    if (max == null) {
+      return null;
     }
+    if (next != null && next > max) {
+      return "at_maximum";
+    }
+    if (threshold == null) {
+      return null;
+    }
+    return next != null && next > threshold ? "over_threshold" : "below_threshold";
   }
 
   /**

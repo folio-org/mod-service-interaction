@@ -141,48 +141,60 @@ public class DashboardService {
     for (var access : userAccess) {
       itemTx.executeWithoutResult(status -> {
         var id = (String) access.get("id");
-        var userMap = asMap(access.get("user"));
-        var userId = userMap == null ? null : (String) userMap.get("id");
         if (id == null) {
-          if (userId != null && userId.equals(currentUserId)) {
-            log.warn("DashboardAccess can not currently be changed for the currently logged in user");
-          }
-          if (hasAccess("view", dashboardId, userId)) {
-            log.warn("Ignoring DashboardAccess creation request since a DashboardAccess object "
-                + "already exists for this user ({})", userId);
-          } else {
-            var user = externalUsers.resolveUser(userId);
-            var dashboardCount = countUserDashboards(user);
-            var created = new DashboardAccess();
-            created.setUser(user);
-            created.setDashboard(dash);
-            created.setAccess(resolveAccess(access.get("access")));
-            created.setUserDashboardWeight((int) dashboardCount);
-            created.setDefaultUserDashboard(dashboardCount == 0);
-            accessObjects.saveAndFlush(created);
-          }
+          createDashboardAccess(dash, dashboardId, access, currentUserId);
         } else {
-          var existing = accessObjects.findById(id).orElse(null);
-          if (existing == null) {
-            return;
-          }
-          if (existing.getUser().getId().equals(currentUserId)) {
-            log.warn("DashboardAccess can not currently be changed for the currently logged in user");
-          } else if (!existing.getDashboard().getId().equals(dashboardId)) {
-            log.warn("Dashboard access object ({}) dashboard id mismatch. Expected {}. "
-                + "Ignoring any requested changes", id, dashboardId);
-          } else if (Boolean.TRUE.equals(access.get("_delete"))) {
-            accessObjects.delete(existing);
-          } else {
-            var previousAccessId = existing.getAccess() == null ? null : existing.getAccess().getId();
-            var newAccess = resolveAccess(access.get("access"));
-            if (newAccess != null && !newAccess.getId().equals(previousAccessId)) {
-              existing.setAccess(newAccess);
-              accessObjects.saveAndFlush(existing);
-            }
-          }
+          updateDashboardAccess(id, dashboardId, access, currentUserId);
         }
       });
+    }
+  }
+
+  /** id-less item: grant new access unless it targets the caller or an already-granted user. */
+  private void createDashboardAccess(Dashboard dash, String dashboardId,
+                                     Map<String, Object> access, String currentUserId) {
+    var userMap = asMap(access.get("user"));
+    var userId = userMap == null ? null : (String) userMap.get("id");
+    if (userId != null && userId.equals(currentUserId)) {
+      log.warn("DashboardAccess can not currently be changed for the currently logged in user");
+    }
+    if (hasAccess("view", dashboardId, userId)) {
+      log.warn("Ignoring DashboardAccess creation request since a DashboardAccess object "
+          + "already exists for this user ({})", userId);
+      return;
+    }
+    var user = externalUsers.resolveUser(userId);
+    var dashboardCount = countUserDashboards(user);
+    var created = new DashboardAccess();
+    created.setUser(user);
+    created.setDashboard(dash);
+    created.setAccess(resolveAccess(access.get("access")));
+    created.setUserDashboardWeight((int) dashboardCount);
+    created.setDefaultUserDashboard(dashboardCount == 0);
+    accessObjects.saveAndFlush(created);
+  }
+
+  /** id-bearing item: delete, or change ONLY the access level; the caller's own and mismatches are ignored. */
+  private void updateDashboardAccess(String id, String dashboardId,
+                                     Map<String, Object> access, String currentUserId) {
+    var existing = accessObjects.findById(id).orElse(null);
+    if (existing == null) {
+      return;
+    }
+    if (existing.getUser().getId().equals(currentUserId)) {
+      log.warn("DashboardAccess can not currently be changed for the currently logged in user");
+    } else if (!existing.getDashboard().getId().equals(dashboardId)) {
+      log.warn("Dashboard access object ({}) dashboard id mismatch. Expected {}. "
+          + "Ignoring any requested changes", id, dashboardId);
+    } else if (Boolean.TRUE.equals(access.get("_delete"))) {
+      accessObjects.delete(existing);
+    } else {
+      var previousAccessId = existing.getAccess() == null ? null : existing.getAccess().getId();
+      var newAccess = resolveAccess(access.get("access"));
+      if (newAccess != null && !newAccess.getId().equals(previousAccessId)) {
+        existing.setAccess(newAccess);
+        accessObjects.saveAndFlush(existing);
+      }
     }
   }
 
@@ -195,8 +207,7 @@ public class DashboardService {
   public void updateUserDashboards(List<DashboardAccessDto> userAccess, String currentUserId) {
     for (var access : userAccess) {
       itemTx.executeWithoutResult(status -> {
-        if (access.getId() == null || access.getUser() == null || access.getUser().getId() == null
-            || !access.getUser().getId().equals(currentUserId)) {
+        if (!ownsUpdatableItem(access, currentUserId)) {
           log.warn("DashboardAccess item ignored by updateUserDashboards ({})", access.getId());
           return;
         }
@@ -205,30 +216,46 @@ public class DashboardService {
           log.warn("DashboardAccess can not be created through updateUserDashboards, ignoring.");
           return;
         }
-        var previousWeight = existing.getUserDashboardWeight();
-        var previousDefault = existing.isDefaultUserDashboard();
-
-        existing.setUserDashboardWeight(access.getUserDashboardWeight());
-        // Never transitions true -> false; a NEW default clears the others below.
-        existing.setDefaultUserDashboard(previousDefault
-            || Boolean.TRUE.equals(access.getDefaultUserDashboard()));
-
-        if (Boolean.TRUE.equals(access.getDefaultUserDashboard()) && !previousDefault) {
-          for (var other : accessObjects.findByUserId(existing.getUser().getId())) {
-            if (!other.getId().equals(existing.getId()) && other.isDefaultUserDashboard()) {
-              other.setDefaultUserDashboard(false);
-              accessObjects.saveAndFlush(other);
-            }
-          }
-        }
-
-        var weightChanged = previousWeight == null
-            ? existing.getUserDashboardWeight() != null
-            : !previousWeight.equals(existing.getUserDashboardWeight());
-        if (weightChanged || previousDefault != existing.isDefaultUserDashboard()) {
-          accessObjects.saveAndFlush(existing);
-        }
+        applyOrdering(existing, access);
       });
+    }
+  }
+
+  /** The item is the caller's own, existing access object (never creates). */
+  private static boolean ownsUpdatableItem(DashboardAccessDto access, String currentUserId) {
+    return access.getId() != null && access.getUser() != null && access.getUser().getId() != null
+        && access.getUser().getId().equals(currentUserId);
+  }
+
+  /** Applies weight + a false-to-true default transition, clearing the caller's other defaults. */
+  private void applyOrdering(DashboardAccess existing, DashboardAccessDto access) {
+    var previousWeight = existing.getUserDashboardWeight();
+    var previousDefault = existing.isDefaultUserDashboard();
+
+    existing.setUserDashboardWeight(access.getUserDashboardWeight());
+    // Never transitions true -> false; a NEW default clears the others below.
+    existing.setDefaultUserDashboard(previousDefault
+        || Boolean.TRUE.equals(access.getDefaultUserDashboard()));
+
+    if (Boolean.TRUE.equals(access.getDefaultUserDashboard()) && !previousDefault) {
+      clearOtherDefaults(existing);
+    }
+
+    var weightChanged = previousWeight == null
+        ? existing.getUserDashboardWeight() != null
+        : !previousWeight.equals(existing.getUserDashboardWeight());
+    if (weightChanged || previousDefault != existing.isDefaultUserDashboard()) {
+      accessObjects.saveAndFlush(existing);
+    }
+  }
+
+  /** Clears the default flag on every OTHER access object of the same user. */
+  private void clearOtherDefaults(DashboardAccess elected) {
+    for (var other : accessObjects.findByUserId(elected.getUser().getId())) {
+      if (!other.getId().equals(elected.getId()) && other.isDefaultUserDashboard()) {
+        other.setDefaultUserDashboard(false);
+        accessObjects.saveAndFlush(other);
+      }
     }
   }
 

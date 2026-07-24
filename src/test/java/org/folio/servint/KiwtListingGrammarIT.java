@@ -528,4 +528,53 @@ class KiwtListingGrammarIT {
             .header("x-okapi-tenant", TENANT))
         .andExpect(status().isOk());
   }
+
+  // ------------------------- specials-grammar coverage (parseSpecial/buildSpecial)
+
+  @Test
+  @Order(19)
+  void emptinessSpecialsAndMalformedClauses() throws Exception {
+    var unfiltered = codes(list("perPage", "100"));
+
+    // `is empty` / `is not empty` parse (parseSpecial default arm) then route
+    // through buildSpecial: the subject is a scalar, not a collection, so the
+    // clause drops and the listing answers 200 unfiltered.
+    assertThat(codes(list("filters", "code is empty", "perPage", "100"))).isEqualTo(unfiltered);
+    assertThat(codes(list("filters", "code is not empty", "perPage", "100"))).isEqualTo(unfiltered);
+
+    // A bare term with no operator that is not a valid `X is null/set/empty`
+    // special is a malformed clause: dropped, 200 unfiltered (never 400/500).
+    assertThat(codes(list("filters", "justtext", "perPage", "100"))).isEqualTo(unfiltered);
+
+    // `is empty` on an unknown property is an invalid-property 400 (buildSpecial
+    // probes the attribute before the plural check).
+    MvcResult bad = mockMvc.perform(get(SEQUENCES)
+            .param("filters", "notAProp is empty")
+            .header("x-okapi-tenant", TENANT))
+        .andExpect(status().isBadRequest())
+        .andReturn();
+    assertThat(json.readTree(bad.getResponse().getContentAsString())
+        .path("errors").get(0).path("code").asText()).isEqualTo("invalid.property");
+  }
+
+  @Test
+  @Order(20)
+  void malformedRangeAndDottedScalarPaths() throws Exception {
+    var unfiltered = codes(list("perPage", "100"));
+
+    // Two relational operators but an empty high value: the range is malformed
+    // (parseLeaf third-empty arm), the clause is dropped, listing unfiltered.
+    assertThat(codes(list("filters", "3<nextValue<", "perPage", "100"))).isEqualTo(unfiltered);
+
+    // A dotted path descending THROUGH a scalar (code has no sub-attributes):
+    // probeAttribute returns null at the non-managed intermediate segment, so
+    // the well-formed clause names an unknown property -> 400 invalid.property.
+    MvcResult bad = mockMvc.perform(get(SEQUENCES)
+            .param("filters", "code.length==3")
+            .header("x-okapi-tenant", TENANT))
+        .andExpect(status().isBadRequest())
+        .andReturn();
+    assertThat(json.readTree(bad.getResponse().getContentAsString())
+        .path("errors").get(0).path("code").asText()).isEqualTo("invalid.property");
+  }
 }

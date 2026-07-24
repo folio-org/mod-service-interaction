@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.folio.servint.domain.dto.NextNumberResultDto;
 import org.folio.servint.domain.dto.NumberGeneratorDto;
 import org.folio.servint.domain.dto.NumberGeneratorSequenceDto;
+import org.folio.servint.domain.dto.RefdataValueDto;
 import org.folio.servint.domain.dto.YearResetResultDto;
 import org.folio.servint.domain.entity.NumberGenerator;
 import org.folio.servint.domain.entity.NumberGeneratorSequence;
+import org.folio.servint.domain.entity.RefdataValue;
 import org.folio.servint.mapper.NumgenMapper;
 import org.folio.servint.repository.NumberGeneratorRepository;
 import org.folio.servint.repository.NumberGeneratorSequenceRepository;
@@ -178,61 +180,50 @@ public class NumberGeneratorsController implements NumberGeneratorsApi {
   }
 
   private void bindSequence(NumberGeneratorSequence entity, NumberGeneratorSequenceDto dto) {
+    // Legacy partial binding: every present field overwrites, absent fields are
+    // left untouched. The owner and checkDigitAlgo references resolve refdata
+    // (and 404/422 on unknown ids); the scalars just copy through.
     if (dto.getOwner() != null && dto.getOwner().getId() != null) {
-      entity.setOwner(generators.findById(dto.getOwner().getId())
-          .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-              "No number generator " + dto.getOwner().getId())));
+      entity.setOwner(resolveOwner(dto.getOwner().getId()));
     }
-    if (dto.getCode() != null) {
-      entity.setCode(dto.getCode());
-    }
-    if (dto.getName() != null) {
-      entity.setName(dto.getName());
-    }
-    if (dto.getPrefix() != null) {
-      entity.setPrefix(dto.getPrefix());
-    }
-    if (dto.getPostfix() != null) {
-      entity.setPostfix(dto.getPostfix());
-    }
-    if (dto.getFormat() != null) {
-      entity.setFormat(dto.getFormat());
-    }
-    if (dto.getNextValue() != null) {
-      entity.setNextValue(dto.getNextValue());
-    }
-    if (dto.getPreChecksumTemplate() != null) {
-      entity.setPreChecksumTemplate(dto.getPreChecksumTemplate());
-    }
-    if (dto.getOutputTemplate() != null) {
-      entity.setOutputTemplate(dto.getOutputTemplate());
-    }
-    if (dto.getDescription() != null) {
-      entity.setDescription(dto.getDescription());
-    }
-    if (dto.getEnabled() != null) {
-      entity.setEnabled(dto.getEnabled());
-    }
-    if (dto.getResetOnYearChange() != null) {
-      entity.setResetOnYearChange(dto.getResetOnYearChange());
-    }
-    if (dto.getLastUsedYear() != null) {
-      entity.setLastUsedYear(dto.getLastUsedYear());
-    }
-    if (dto.getMaximumNumber() != null) {
-      entity.setMaximumNumber(dto.getMaximumNumber());
-    }
-    if (dto.getMaximumNumberThreshold() != null) {
-      entity.setMaximumNumberThreshold(dto.getMaximumNumberThreshold());
-    }
+    copyIfPresent(dto.getCode(), entity::setCode);
+    copyIfPresent(dto.getName(), entity::setName);
+    copyIfPresent(dto.getPrefix(), entity::setPrefix);
+    copyIfPresent(dto.getPostfix(), entity::setPostfix);
+    copyIfPresent(dto.getFormat(), entity::setFormat);
+    copyIfPresent(dto.getNextValue(), entity::setNextValue);
+    copyIfPresent(dto.getPreChecksumTemplate(), entity::setPreChecksumTemplate);
+    copyIfPresent(dto.getOutputTemplate(), entity::setOutputTemplate);
+    copyIfPresent(dto.getDescription(), entity::setDescription);
+    copyIfPresent(dto.getEnabled(), entity::setEnabled);
+    copyIfPresent(dto.getResetOnYearChange(), entity::setResetOnYearChange);
+    copyIfPresent(dto.getLastUsedYear(), entity::setLastUsedYear);
+    copyIfPresent(dto.getMaximumNumber(), entity::setMaximumNumber);
+    copyIfPresent(dto.getMaximumNumberThreshold(), entity::setMaximumNumberThreshold);
     if (dto.getCheckDigitAlgo() != null) {
-      var ref = dto.getCheckDigitAlgo();
-      var resolved = ref.getId() != null
-          ? refdata.findById(ref.getId())
-          : refdata.find(NumberGeneratorService.CAT_CHECK_DIGIT, ref.getValue());
-      entity.setCheckDigitAlgo(resolved.orElseThrow(() -> new UnknownRefdataValueException(
-          "Unknown check digit algorithm refdata: "
-              + (ref.getId() != null ? ref.getId() : ref.getValue()))));
+      entity.setCheckDigitAlgo(resolveCheckDigitAlgo(dto.getCheckDigitAlgo()));
     }
+  }
+
+  /** Applies a submitted value only when present (legacy partial-binding semantics). */
+  private static <T> void copyIfPresent(T value, java.util.function.Consumer<T> setter) {
+    if (value != null) {
+      setter.accept(value);
+    }
+  }
+
+  private NumberGenerator resolveOwner(String ownerId) {
+    return generators.findById(ownerId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+            "No number generator " + ownerId));
+  }
+
+  private RefdataValue resolveCheckDigitAlgo(RefdataValueDto ref) {
+    var resolved = ref.getId() != null
+        ? refdata.findById(ref.getId())
+        : refdata.find(NumberGeneratorService.CAT_CHECK_DIGIT, ref.getValue());
+    return resolved.orElseThrow(() -> new UnknownRefdataValueException(
+        "Unknown check digit algorithm refdata: "
+            + (ref.getId() != null ? ref.getId() : ref.getValue())));
   }
 }
