@@ -22,7 +22,7 @@ Feature: Reference data seeding
   Scenario: Default generators are seeded on reference load
     Given a tenant enabled with the loadReference parameter set to true
     When the reference load completes
-    Then the eight default generators from openAccess to serialsManagement_patternNumber exist with their legacy sequences, formats, templates, check-digit algorithms, and nextValue 1
+    Then the nine default generators from openAccess to serialsManagement_patternNumber exist with their legacy sequences, formats, templates, check-digit algorithms, and nextValue 1
 
   Scenario: Widget types are imported on sample load
     Given a tenant enabled with the loadSample parameter set to true

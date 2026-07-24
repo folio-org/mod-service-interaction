@@ -13,7 +13,7 @@ description: >
   NumberGeneratorSequence.MaximumCheck refdata vocabularies (two
   categories, six values), with no tenant parameters required — and shall
   seed the reference bucket (the NumberGeneratorSequence.CheckDigitAlgo
-  vocabulary and the eight default number generators with their
+  vocabulary and the nine default number generators with their
   sequences) only when the loadReference tenant parameter carries the
   literal value "true", and shall import the widget types only when the
   loadSample tenant parameter carries the literal value "true"; all
@@ -49,14 +49,14 @@ acceptance_criteria:
       the vocabulary is not seeded at enable time.
   - id: AC3
     text: >
-      When loadReference carries the literal value "true", the eight
+      When loadReference carries the literal value "true", the nine
       default generators — openAccess, patronRequest, users_patronBarcode,
       organizations_vendorCode, inventory_accessionNumber,
       inventory_callNumber, inventory_itemBarcode,
-      serialsManagement_patternNumber — are seeded with their legacy
-      sequences (codes, formats, templates, check-digit algorithms) and
-      nextValue defaulting to 1; with loadReference absent or "false" no
-      generators are seeded.
+      inventory_instanceIdentifier, serialsManagement_patternNumber — are
+      seeded with their legacy sequences (codes, formats, templates,
+      check-digit algorithms) and nextValue defaulting to 1; with
+      loadReference absent or "false" no generators are seeded.
   - id: AC4
     text: >
       Seeding is idempotent across repeat enables and upgrades, including
