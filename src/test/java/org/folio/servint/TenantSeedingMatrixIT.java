@@ -21,7 +21,7 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
  * REQ-019 enable matrix: seeding follows the legacy two-bucket triggers.
  * Every enable seeds only the @Defaults baseline (DashboardAccess.Access +
  * NumberGeneratorSequence.MaximumCheck = 2 categories / 6 values, AC1); the
- * check-digit vocabulary and the 8 default generators require the literal
+ * check-digit vocabulary and the 9 default generators require the literal
  * loadReference="true" (AC2/AC3); widget types require loadSample="true"
  * (AC5); repeat reference loads create nothing new and leave tenant-advanced
  * sequence state untouched (AC4). Each case enables its own tenant so the
@@ -131,7 +131,7 @@ class TenantSeedingMatrixIT {
   private void assertReferenceLoaded(String tenant) {
     assertThat(count(tenant, "refdata_category")).isEqualTo(3);
     assertThat(count(tenant, "refdata_value")).isEqualTo(13);
-    assertThat(count(tenant, "number_generator")).isEqualTo(8);
+    assertThat(count(tenant, "number_generator")).isEqualTo(9);
     assertThat(count(tenant, "widget_type")).isZero();
   }
 

@@ -50,6 +50,8 @@ public class NumgenSeedService {
           new SeqSeed("Call number", "callNumber", "00000", "none", "B 2023 / ${generated_number}"))),
       new GenSeed("Inventory: Item barcode", "inventory_itemBarcode", List.of(
           new SeqSeed("Item barcode", "itemBarcode", "0000000000", "none", "${generated_number}"))),
+      new GenSeed("Inventory: Instance identifier", "inventory_instanceIdentifier", List.of(
+          new SeqSeed("Instance identifier", "instanceIdentifier", "0000000000", "none", "${generated_number}"))),
       new GenSeed("Serials management: Pattern number", "serialsManagement_patternNumber", List.of(
           new SeqSeed("Pattern number", "patternNumber", "000000000", "none", "pattern-${generated_number}"))));
 

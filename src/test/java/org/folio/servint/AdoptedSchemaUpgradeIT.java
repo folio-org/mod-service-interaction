@@ -245,11 +245,18 @@ class AdoptedSchemaUpgradeIT {
   @Order(5)
   void businessRowCountsSurviveTheUpgrade() {
     // 4c. No data loss, across all 37 legacy tables: the adopted rows are
-    // untouched, and re-seeding on this schema creates nothing new (the
-    // legacy 9 generators already include the 8 seeded defaults; the legacy
-    // 15 refdata values already include all 13 the port would seed).
-    preUpgradeRows.forEach((table, before) ->
-        assertThat(rowCount(table)).as("post-upgrade %s rows", table).isEqualTo(before));
+    // untouched. Re-seeding tops up exactly one row in number_generator and
+    // number_generator_sequence — the SI-171 inventory_instanceIdentifier
+    // default, which post-SI-171 legacy would equally seed on this upgrade
+    // and which the pre-SI-171 fixture cannot contain. Everything else
+    // creates nothing new (the legacy 9 generators already include the 8
+    // pre-SI-171 defaults; the legacy 15 refdata values already include all
+    // 13 the port would seed).
+    preUpgradeRows.forEach((table, before) -> {
+      var expected = "number_generator".equals(table) || "number_generator_sequence".equals(table)
+          ? before + 1 : before;
+      assertThat(rowCount(table)).as("post-upgrade %s rows", table).isEqualTo(expected);
+    });
   }
 
   @Test
