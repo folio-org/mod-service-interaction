@@ -402,8 +402,14 @@ FOLIO modules) observe the difference in practice?
   convention.
 
 ### D-17 `_tenant` interface upgraded 1.2 → 2.0 (deliberate; ADR-012)
-- **Legacy**: `_tenant` 1.2 — `POST /_/tenant` (enable/upgrade, 200),
-  `DELETE /_/tenant` (purge), `POST /_/tenant/disable` (soft disable).
+- **Legacy**: `_tenant` 1.2 — `POST /_/tenant` (enable/upgrade, **201**;
+  measured, not 200 as an earlier revision of this row claimed —
+  `evidence/r13-legacy/run1/tenant-enable.headers` is `HTTP/1.1 201 Created`
+  and the rcert rollout's five Okapi-driven legacy calls all record
+  `"response_status": 201` in `evidence/rcert/okapi-rollout/proxy-logs/
+  proxy-legacy.jsonl`), `DELETE /_/tenant` (purge),
+  `POST /_/tenant/disable` (soft disable; status never captured — no
+  disable call against the legacy module appears in any evidence run).
 - **Port**: `_tenant` 2.0 — `POST /_/tenant` (enable/upgrade, disable via
   `module_from` + blank `module_to` + `purge=false` — see D-26 — **and**
   purge via blank `module_to` + `purge=true`; 204 on synchronous
