@@ -59,10 +59,10 @@ exercises over the wire, so drift on either side fails the suite.
 
 A sample k8s deployment and service resource description can be [found in the scripts directory](https://github.com/folio-org/mod-service-interaction/blob/master/scripts/k8s_deployment_template.yaml)
 
-The Spring Boot module listens on port **8081** (`server.port` in
+The Spring Boot module listens on port **8080** (`server.port` in
 `src/main/resources/application.yml`); the template's Deployment
 `containerPort`, Service `port`/`targetPort`, and liveness/readiness probes
-(HTTP GET `/admin/health` on 8081) all target that port, and
+(HTTP GET `/admin/health` on 8080) all target that port, and
 `K8sDeploymentTemplateTest` fails the build if the template and the
 application config ever drift apart. The template's third document is a
 `NetworkPolicy` restricting module-port ingress to the Okapi gateway pods —
@@ -94,7 +94,7 @@ deployment invariant you must enforce:
 
 - Apply the `NetworkPolicy` shipped in the k8s template (third document),
   after adapting its placeholder Okapi pod selector to your cluster.
-- Never expose the module port (8081) directly — no Ingress, LoadBalancer,
+- Never expose the module port (8080) directly — no Ingress, LoadBalancer,
   NodePort, or wide NetworkPolicy in front of it. Anyone who can reach the
   port can mint an attested assertion naming any user id.
 - If your deployment cannot guarantee Okapi-exclusive ingress, treat every

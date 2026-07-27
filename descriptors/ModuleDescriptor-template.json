@@ -958,7 +958,7 @@
       "HostConfig": {
         "Memory": 702293850,
         "PortBindings": {
-          "8081/tcp": [
+          "8080/tcp": [
             {
               "HostPort": "%p"
             }

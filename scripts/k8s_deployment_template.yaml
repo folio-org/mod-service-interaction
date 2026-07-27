@@ -46,12 +46,12 @@ spec:
             - name: EVENTS_CONSUMER_ZK_CONNECT
               value: "reshare-zookeeper-release:2181"
           ports:
-            - containerPort: 8081
+            - containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /admin/health
-              port: 8081
+              port: 8080
             initialDelaySeconds: 45
             periodSeconds: 30
             timeoutSeconds: 5
@@ -59,7 +59,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /admin/health
-              port: 8081
+              port: 8080
             initialDelaySeconds: 15
             periodSeconds: 10
             timeoutSeconds: 5
@@ -80,8 +80,8 @@ spec:
   selector:
     app: $MOD_DEPLOY_AS
   ports:
-    - port: 8081
-      targetPort: 8081
+    - port: 8080
+      targetPort: 8080
 ---
 # Attestation trust boundary (DP-3(a)): the module trusts the
 # X-Okapi-User-Id header on /servint/attestation/token, so the module port
@@ -110,4 +110,4 @@ spec:
               app: okapi
       ports:
         - protocol: TCP
-          port: 8081
+          port: 8080

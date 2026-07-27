@@ -65,10 +65,13 @@ curl -sw '\n%{http_code}\n' -X POST "http://localhost:8080/_/tenant" \
 ./populate.sh
 ./capture.sh legacy
 
-# 5. stop legacy (Ctrl-C the bootRun), then boot the port on the SAME database
+# 5. stop legacy (Ctrl-C the bootRun), then boot the port on the SAME database.
+#    The port serves 8080 by default — the same port legacy uses — so the rig
+#    pins it to 8081 explicitly, keeping LEGACY_URL and PORT_URL distinct and
+#    the recorded evidence reproducible.
 DB_HOST=localhost DB_PORT=54321 DB_DATABASE=okapi_modules \
 DB_USERNAME=folio_admin DB_PASSWORD=folio_admin \
-  java -jar ../../../target/mod-service-interaction-5.0.0-SNAPSHOT.jar &
+  java -Dserver.port=8081 -jar ../../../target/mod-service-interaction-5.0.0-SNAPSHOT.jar &
 
 # 6. enable the tenant on the port (_tenant 2.0 body shape; see D-15/D-17)
 curl -sw '\n%{http_code}\n' -X POST "http://localhost:8081/_/tenant" \
