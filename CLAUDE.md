@@ -27,7 +27,7 @@ docker build -t mod-service-interaction .      # image from target/*.jar (build 
 ```
 
 - Integration tests boot the full app against a Testcontainers Postgres (`postgres:16-alpine`) — Docker must be running; no manual DB setup or docker-compose needed.
-- Runtime env: `DB_HOST`/`DB_PORT`/`DB_DATABASE`/`DB_USERNAME`/`DB_PASSWORD`, `OKAPI_URL`. The app serves on port 8080.
+- Runtime env: `DB_HOST`/`DB_PORT`/`DB_DATABASE`/`DB_USERNAME`/`DB_PASSWORD`, `OKAPI_URL`. The app serves on port 8081.
 - `target/ModuleDescriptor.json` is generated at build time from `descriptors/ModuleDescriptor-template.json` (maven-resources filtering + copy-rename; the output is deterministic — byte-identical across rebuilds of the same source). Edit the template, never a generated file.
 
 ## Architecture

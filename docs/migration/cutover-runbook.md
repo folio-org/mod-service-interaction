@@ -115,10 +115,10 @@ ADR-012).
 Appendix A). Config translation: the port reads
 `DB_HOST`/`DB_PORT`/`DB_DATABASE`/`DB_USERNAME`/`DB_PASSWORD` (folio-spring
 convention) instead of the legacy `db.*` system properties, and listens on
-**8080**. Verify one instance answers:
+**8081**. Verify one instance answers:
 
 ```bash
-curl -s http://<port-instance>:8080/admin/health
+curl -s http://<port-instance>:8081/admin/health
 ```
 Expected: `{"status":"UP"}`. On failure: fix deployment before touching any
 tenant.
@@ -227,7 +227,7 @@ What Okapi does under the hood (run this directly against a port instance
 only on a rig without Okapi):
 
 ```bash
-curl -sw '\n%{http_code}\n' -X POST "http://<port-instance>:8080/_/tenant" \
+curl -sw '\n%{http_code}\n' -X POST "http://<port-instance>:8081/_/tenant" \
   -H "X-Okapi-Tenant: $TENANT" -H 'Content-Type: application/json' \
   -d '{"module_from":"mod-service-interaction-4.4.x","module_to":"mod-service-interaction-5.0.0"}'
 ```
@@ -313,7 +313,7 @@ On any unexpected status/null id: abort → Phase 6. (The calling user needs
 **3.5 Health and logs:**
 
 ```bash
-curl -s http://<port-instance>:8080/admin/health      # expect {"status":"UP"}
+curl -s http://<port-instance>:8081/admin/health      # expect {"status":"UP"}
 ```
 Watch the port instance log (first enable + first traffic). Red flags:
 `ERROR`-level entries on `/servint` routes, `LiquibaseException`,
@@ -375,7 +375,7 @@ cd docs/migration/harness
 # every ledger row, executes nothing, exits 0 on a well-formed config —
 # and exits 2 on a malformed one (bad module id, non-JSON TENANT_PARAMETERS,
 # bad tenant list), so the rehearsal itself is a config gate
-DRY_RUN=true OKAPI_URL=http://<okapi>:9130 PORT_URL=http://<port-instance>:8080 \
+DRY_RUN=true OKAPI_URL=http://<okapi>:9130 PORT_URL=http://<port-instance>:8081 \
   MODULE_TO=mod-service-interaction-5.0.0 MODULE_FROM=mod-service-interaction-4.4.x \
   PGHOST=$DB_HOST PGPORT=$DB_PORT PGDATABASE=$DB_DATABASE PGUSER=$DB_USERNAME \
   OUT_DIR=$PWD/evidence TENANTS_FILE=wave-1.txt \
@@ -500,7 +500,7 @@ As an explicitly-labeled **diagnostic only** (bypasses Okapi routing —
 proves module behavior, not registration), the module-direct call:
 
 ```bash
-curl -sw '\n%{http_code}\n' -X POST "http://<port-instance>:8080/servint/numberGenerators/resetYearSequences" \
+curl -sw '\n%{http_code}\n' -X POST "http://<port-instance>:8081/servint/numberGenerators/resetYearSequences" \
   -H "X-Okapi-Tenant: $TENANT" -H 'Content-Type: application/json'
 ```
 Expected: `200` with `{"currentYear":"2026","sequencesReset":0}` — safe at
@@ -645,7 +645,7 @@ raising `Memory` in the descriptor before batch rollout, not hoping.
 | `permissionSets` (63) | Content-identical |
 | `requires` / `optional` | Identical (`okapi 1.9`; optional `dashboard 1.0`) |
 | Template tokens | Maven `@artifactId@`/`@version@` vs Gradle `${info.app.*}` — resolve to the same module id shape |
-| `launchDescriptor` | Port: folio-spring conventions — port 8080 (same as legacy since the 8081→8080 change), `DB_*` env, 670 MiB/66% (Appendix A); legacy: 8080, 1 GiB, 55%. Deployment-level only |
+| `launchDescriptor` | Port: folio-spring conventions — port 8081, `DB_*` env, 670 MiB/66% (Appendix A); legacy: 8080, 1 GiB, 55%. Deployment-level only |
 
 ## Appendix C — Evidence base and its limits
 
